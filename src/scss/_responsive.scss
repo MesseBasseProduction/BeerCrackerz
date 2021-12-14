@@ -1,0 +1,120 @@
+@media (max-width: 1000px) {
+	nav.site-nav {
+		a {
+			font-size: 1.4rem;
+			padding: 0 .5rem;
+		}
+
+		.socials {
+			display: none;
+		}
+	}	
+
+	main.home {
+		display: inherit;
+		overflow-y: auto;
+	}
+
+	main.creation {
+		.music {
+			padding: 0 5%;
+			text-align: center;
+
+			.band {
+		    align-items: center;
+				display: flex;
+				flex-direction: column;
+				height: auto;
+
+				.band-image {
+					display: none;
+				}
+
+				.band-releases {
+					padding: 1rem;
+					position: inherit;
+					width: 90%;
+
+					.band-header {
+						h2 {
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: nowrap;
+						}
+					}
+
+					.band-albums {
+						.album {
+							img {
+								height: 20rem;
+							}
+
+							p {
+								margin: 1rem 0;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	main.contact {
+		section {
+			display: inherit;
+			padding: 3rem 5%;
+		}
+	}
+
+	.modal.credit {
+		padding: 1rem;
+		max-width: inherit;
+		width: 95%;
+	}
+}
+
+@media (max-width: 512px) {
+	main.creation {
+		.music {
+			.band {
+				.band-image {
+					position: inherit;
+					width: 90%;
+				}
+
+				
+				.band-releases {
+					.band-header {
+						span {
+							display: none;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (max-height: 740px) {
+  /* Typically for screen with zoom factor */
+  main.home {
+		display: inherit;
+		overflow-y: auto;
+
+    img {
+      max-width: 25rem;
+    }
+
+    h2 {
+      margin-bottom: 2%;
+      max-width: inherit;
+    }
+	}
+}
+
+@media (max-height: 512px) {
+  main.home img {
+    margin: 2% 0;
+    max-width: 25rem;
+	}
+}

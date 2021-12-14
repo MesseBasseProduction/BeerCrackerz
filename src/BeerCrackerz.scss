@@ -1,0 +1,86 @@
+@import 'scss/keyframes';
+
+@font-face {
+  font-family: 'Catamaran';
+  src: url('/assets/font/Catamaran.ttf') format('truetype'),
+		url('/assets/font/Catamaran.woff') format('woff');
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	font-size: 62.5%;
+	height: 100%;
+	overflow: hidden;
+	width: 100%;
+}
+
+body {
+	background: #181818;
+	color: #D4D4D4;
+	font-family: sans-serif;
+	position: relative;
+}
+
+nav {
+	bottom: 0;
+	display: flex;
+	left: 0;
+	height: 5rem;
+	justify-content: center;
+	position: absolute;
+	width: 100%;
+	z-index: 100;
+
+	.cmd-bar {
+		background: rgba(245, 245, 245, .95);
+		height: 100%;
+		width: 30rem;
+	}
+}
+
+main.beer-crakerz-map {
+	height: 100%;
+	width: 100%;
+	z-index: 10;
+
+	.new-poi {
+		button {
+			cursor: pointer;
+			display: block;
+			margin: .5rem auto;
+			padding: .5rem;
+		}
+
+		.rating {
+			display: flex;
+
+			img, img:hover ~ img {
+				cursor: pointer;
+				height: 2rem;
+				width: 2rem;
+
+				 img:hover {
+					transform: rotate(50deg);
+				}
+			}
+		}
+	}
+}
+
+img.info-button {
+	bottom: 1rem;
+	cursor: pointer;
+	left: 1rem;
+	height: 2rem;
+	position: absolute;
+	width: 2rem;
+	z-index: 100;
+}
+
+@import 'scss/modal';
+@import 'scss/responsive';

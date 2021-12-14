@@ -1,0 +1,252 @@
+main.home {
+	align-items: center;
+	background-image: radial-gradient(#2D2D2D 0,#202020 45%, #181818 80%);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+
+	img {
+		margin: 5% 0;
+		max-width: 40rem;
+		width: 66%;
+		animation: beating 1.3s infinite;
+	}
+
+	h1 {
+		font-size: 3.8rem;
+		font-style: italic;
+		margin-bottom: 2rem;
+		padding: 0 3rem;
+	}
+
+	h2 {
+		font-size: 2rem;
+		max-width: 120rem;
+		margin-bottom: 5%;
+		padding: 0 3rem;
+	}
+}
+
+main.creation {
+	background-image: radial-gradient(#233C26 0,#202020 45%, #181818 80%);
+	overflow-y: auto;
+	padding: 3rem 0;
+
+	h1 {
+		font-family: 'Catamaran', sans-serif;
+		font-size: 3.8rem;
+		margin-bottom: 2rem;
+	}
+
+	section {
+		margin-bottom: 3rem;
+		padding: 0 15%;
+	}
+
+	.music {
+		text-align: left;
+
+		.band {
+			height: 30rem;
+			margin-bottom: 4rem;
+			position: relative;
+			width: 100%;
+
+			.band-image {
+				align-items: center;
+				display: flex;
+				height: 100%;
+				left: 0;
+				padding: 1rem;
+				position: absolute;
+				width: 35%;
+
+				img {
+					width: 100%;
+				}
+			}
+
+			.band-releases {
+				height: 100%;
+				padding: 1rem;
+				padding-left: 3rem;
+				position: absolute;
+				right: 0;
+				width: 65%;
+
+				.band-header {
+					align-items: center;
+					display: flex;
+					height: 4rem;
+					
+					h2 {
+						font-size: 2rem;
+					}
+
+					span {
+						border: solid 1px #D4D4D4;
+						border-radius: .5rem;
+						font-size: 1rem;
+						font-style: italic;
+						margin-left: 1rem;
+						padding: .4rem;
+					}
+
+					p {
+						display: flex;
+						margin-left: auto;
+
+						a {
+							margin-left: .5rem;
+							margin-bottom: 0;
+							transition: transform .5s;
+
+							&:active,
+							&:focus,
+							&:hover {
+								transform: rotate(-8deg);
+							}
+
+							img {
+								height: 2rem;
+							}
+						}
+					}
+				}
+
+				.band-albums {
+					align-items: center;
+					display: flex;
+					height: calc(100% - 4rem);
+					overflow-x: auto;
+
+					.album {
+						cursor: pointer;
+						height: 90%;
+						margin-right: 2rem;
+						position: relative;
+						text-align: center;
+
+						img {
+							height: calc(100% - 2.1rem); // Substract p height and margin
+						}
+
+						p {
+							font-size: 1.1rem;
+							margin-top: 1rem;
+						}
+
+						&:active .album-overlay,
+						&:focus .album-overlay,
+						&:hover .album-overlay {
+							opacity: 1;
+						}
+
+						.album-overlay {
+							align-items: center;
+							background: linear-gradient(to bottom, rgba(0, 0, 0, .75) 50%, transparent);
+							display: flex;
+							flex-direction: column;
+							height: 90%;
+							justify-content: flex-start;
+							left: 0;
+							opacity: 0;
+							position: absolute;
+							top: 0;
+							width: 100%;
+
+							transition: opacity .2s;
+
+							p {
+								margin-top: inherit;
+
+								&:first-child {
+									margin-top: 2rem;
+								}
+							}
+
+							a {
+								font-size: 1.1rem;
+								font-style: italic;
+								margin-top: 1rem;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+main.merch {
+	align-items: center;
+	background-image: radial-gradient(#3C2323 0,#202020 45%, #181818 80%);
+	display: flex;
+	justify-content: center;
+	text-align: center;
+
+	h2 {
+		font-size: 2rem;
+		max-width: 120rem;
+		margin-bottom: 5%;
+		padding: 0 3rem;
+	}
+}
+
+main.contact {
+	background-image: radial-gradient(#3C3923 0,#202020 45%, #181818 80%);
+	text-align: center;
+
+	h1 {
+		font-family: 'Catamaran', sans-serif;
+		font-size: 3.8rem;
+		margin-bottom: 2rem;
+	}
+
+	p, a {
+		font-size: 1.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	section {
+		align-items: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding: 3rem 15%;
+		height: calc(100% - 3rem);
+		overflow-y: auto;
+
+		p:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	footer {
+		align-items: center;
+		border-top: solid 1px rgba(212, 212, 212, .3);
+		display: flex;
+		flex-direction: column;
+		height: 3rem;
+		justify-content: center;		
+		margin: 0 5%;
+
+		p, a {
+			font-size: 1.3rem;
+		}
+
+		p:first-child {
+			cursor: pointer;
+			margin-bottom: .6rem;
+		}
+
+		p:last-child {
+			margin-bottom: 0;
+		}
+
+		a {
+			display: initial;
+		}
+	}
+}
