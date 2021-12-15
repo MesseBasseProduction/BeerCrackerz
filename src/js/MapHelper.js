@@ -87,7 +87,7 @@ class MapHelper {
       // Submit or cancel event subscriptions
       submit.addEventListener('click', () => {
         _cleanDefineUI();
-        MapHelper.buildSpotUI(name.value).then((dom) => {
+        MapHelper.buildSpotUI(name.value, options).then((dom) => {
           options.name = dom;
           options.type = 'spot';
           MapHelper.placeMarker(options);
@@ -120,7 +120,7 @@ class MapHelper {
       // Submit or cancel event subscriptions
       submit.addEventListener('click', () => {
         _cleanDefineUI();
-        MapHelper.buildStoreUI(name.value).then(dom => {
+        MapHelper.buildStoreUI(name.value, options).then(dom => {
           options.name = dom;
           options.type = 'store';
           MapHelper.placeMarker(options);
@@ -137,24 +137,28 @@ class MapHelper {
   }
 
 
-  static buildSpotUI(name) {
+  static buildSpotUI(name, options) {
     return new Promise(resolve => {
       Utils.fetchTemplate('assets/html/spot.html').then(dom => {
         const element = document.createElement('DIV');
         element.appendChild(dom);
         element.innerHTML = element.innerHTML.replace('{{SPOT_NAME}}', Utils.stripDom(name));
+        element.innerHTML = element.innerHTML.replace('{{SPOT_LAT}}', options.lat);
+        element.innerHTML = element.innerHTML.replace('{{SPOT_LNG}}', options.lng);
         resolve(element);
       });
     });
   }
 
 
-  static buildStoreUI(name) {
+  static buildStoreUI(name, options) {
     return new Promise((resolve) => {
       Utils.fetchTemplate('assets/html/store.html').then((dom) => {
         const element = document.createElement('DIV');
         element.appendChild(dom);
         element.innerHTML = element.innerHTML.replace('{{STORE_NAME}}', Utils.stripDom(name));
+        element.innerHTML = element.innerHTML.replace('{{STORE_LAT}}', options.lat);
+        element.innerHTML = element.innerHTML.replace('{{STORE_LNG}}', options.lng);
         resolve(element);
       });
     });
