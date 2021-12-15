@@ -71,4 +71,12 @@ export default Object.freeze({
     popupAnchor: [1, -34],
     shadowSize: [41, 41],
   }),
+  user: new window.L.Icon({
+    iconUrl: 'assets/img/marker/user-position.png',
+    shadowUrl: 'assets/img/marker/marker-shadow.png',
+    iconSize: [32, 32],
+    iconAnchor: [16, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [32, 32],
+  }),
 });
