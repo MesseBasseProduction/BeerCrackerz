@@ -14,8 +14,8 @@ class BeerCrackerz {
     };
     this._newMarker = null;
 
-    this._initMap()
-      .then(this._initGeolocation.bind(this))
+    this._initGeolocation()
+      .then(this._initMap.bind(this))
       .then(this._initCmdBar.bind(this));
   }
 
@@ -24,20 +24,15 @@ class BeerCrackerz {
   _initGeolocation() {
     return new Promise((resolve) => {
       if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(position => {
-          this._user.lat = position.coords.latitude;
-          this._user.lng = position.coords.longitude;
-					MapHelper.drawUserMarker(this._user);
-					this._map.setView([this._user.lat, this._user.lng], 18);
-
-					navigator.geolocation.watchPosition(position => {
-						this._user.lat = position.coords.latitude;
-						this._user.lng = position.coords.longitude;
+				navigator.geolocation.watchPosition((position) => {
+					this._user.lat = position.coords.latitude;
+					this._user.lng = position.coords.longitude;
+					// Only draw marker if map is already created
+					if (this._map) {
 						MapHelper.drawUserMarker(this._user);
-          });
-
-          resolve();
-        }, resolve);
+					}
+					resolve();
+				}, resolve);
       } else {
         resolve();
       }
@@ -51,6 +46,8 @@ class BeerCrackerz {
 			this._map = window.L.map('beer-crakerz-map').setView([this._user.lat, this._user.lng], 18);
 			// Subscribe to click event on map to react
 			this._map.on('click', this._mapClicked.bind(this));
+			// Place user marker on the map
+			MapHelper.drawUserMarker(this._user);
 			// Add OSM credits to the map next to leaflet credits
 			window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',

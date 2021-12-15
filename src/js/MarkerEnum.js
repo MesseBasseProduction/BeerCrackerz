@@ -1,6 +1,6 @@
 export default Object.freeze({
   blue: new window.L.Icon({
-    iconUrl: 'assets/img/marker/marker-icon-2x-blue.png',
+    iconUrl: 'assets/img/marker/marker-icon-blue.png',
     shadowUrl: 'assets/img/marker/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -8,7 +8,7 @@ export default Object.freeze({
     shadowSize: [41, 41],
   }),
   gold: new window.L.Icon({
-    iconUrl: 'assets/img/marker/marker-icon-2x-gold.png',
+    iconUrl: 'assets/img/marker/marker-icon-gold.png',
     shadowUrl: 'assets/img/marker/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -16,7 +16,7 @@ export default Object.freeze({
     shadowSize: [41, 41],
   }),
   red: new window.L.Icon({
-    iconUrl: 'assets/img/marker/marker-icon-2x-red.png',
+    iconUrl: 'assets/img/marker/marker-icon-red.png',
     shadowUrl: 'assets/img/marker/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -24,7 +24,7 @@ export default Object.freeze({
     shadowSize: [41, 41],
   }),
   green: new window.L.Icon({
-    iconUrl: 'assets/img/marker/marker-icon-2x-green.png',
+    iconUrl: 'assets/img/marker/marker-icon-green.png',
     shadowUrl: 'assets/img/marker/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -32,7 +32,7 @@ export default Object.freeze({
     shadowSize: [41, 41],
   }),
   orange: new window.L.Icon({
-    iconUrl: 'assets/img/marker/marker-icon-2x-orange.png',
+    iconUrl: 'assets/img/marker/marker-icon-orange.png',
     shadowUrl: 'assets/img/marker/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -40,7 +40,7 @@ export default Object.freeze({
     shadowSize: [41, 41],
   }),
   yellow: new window.L.Icon({
-    iconUrl: 'assets/img/marker/marker-icon-2x-yellow.png',
+    iconUrl: 'assets/img/marker/marker-icon-yellow.png',
     shadowUrl: 'assets/img/marker/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -48,7 +48,7 @@ export default Object.freeze({
     shadowSize: [41, 41],
   }),
   violet: new window.L.Icon({
-    iconUrl: 'assets/img/marker/marker-icon-2x-violet.png',
+    iconUrl: 'assets/img/marker/marker-icon-violet.png',
     shadowUrl: 'assets/img/marker/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -56,7 +56,7 @@ export default Object.freeze({
     shadowSize: [41, 41],
   }),
   grey: new window.L.Icon({
-    iconUrl: 'assets/img/marker/marker-icon-2x-grey.png',
+    iconUrl: 'assets/img/marker/marker-icon-grey.png',
     shadowUrl: 'assets/img/marker/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -64,7 +64,7 @@ export default Object.freeze({
     shadowSize: [41, 41],
   }),
   black: new window.L.Icon({
-    iconUrl: 'assets/img/marker/marker-icon-2x-black.png',
+    iconUrl: 'assets/img/marker/marker-icon-black.png',
     shadowUrl: 'assets/img/marker/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -73,9 +73,9 @@ export default Object.freeze({
   }),
   user: new window.L.Icon({
     iconUrl: 'assets/img/marker/user-position.png',
-    shadowUrl: 'assets/img/marker/marker-shadow.png',
+    shadowUrl: 'assets/img/marker/user-position-shadow.png',
     iconSize: [32, 32],
-    iconAnchor: [16, 41],
+    iconAnchor: [16, 16],
     popupAnchor: [1, -34],
     shadowSize: [32, 32],
   }),
