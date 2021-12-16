@@ -64,12 +64,33 @@ class BeerCrackerz {
 
 
   _initCmdBar() {
-		document.getElementById('focus-on').addEventListener('click', this._focusOn.bind(this));
+		document.getElementById('focus-on').addEventListener('click', this._focusOnCmd.bind(this));
+		// Modal material
+		document.getElementById('about').addEventListener('click', this._aboutCmd.bind(this));
+		document.getElementById('overlay').addEventListener('click', this._closeModal.bind(this));
 	}
 
 
-	_focusOn() {
+	_focusOnCmd() {
 		this._map.setView([this._user.lat, this._user.lng], this._map.getZoom());
+	}
+	
+
+	_aboutCmd() {
+		Utils.fetchTemplate('assets/html/about.html').then(dom => {
+			document.getElementById('overlay').appendChild(dom);
+			document.getElementById('overlay').style.display = 'flex';
+			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+		});
+	}
+
+
+	_closeModal() {
+		document.getElementById('overlay').style.opacity = 0;
+		setTimeout(() => {
+			document.getElementById('overlay').style.display = 'none';
+			document.getElementById('overlay').innerHTML = '';
+		}, 300);
 	}
 
 
@@ -97,46 +118,33 @@ class BeerCrackerz {
 
 
 	_updateMarkerCircles() {
-		// Check spots in user's proximity
-		for (let i = 0; i < this._marks.spots.length; ++i) {
-			// Only update circles that are in user view
-			if (this._map.getBounds().contains(this._marks.spots[i].marker.getLatLng())) {
-				const marker = this._marks.spots[i].marker;
-				const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [marker.getLatLng().lat, marker.getLatLng().lng]);
-				// Only show if user distance to marker is under circle radius
-				if (distance < 40) {
-					this._marks.spots[i].circle.setStyle({
-            opacity: 1,
-            fillOpacity: 0.3
-          });
-				} else {
-					this._marks.spots[i].circle.setStyle({
-            opacity: 0,
-            fillOpacity: 0
-          });					
+		const _updateByType = data => {
+			// Check spots in user's proximity
+			for (let i = 0; i < data.length; ++i) {
+				// Only update circles that are in user view
+				if (this._map.getBounds().contains(data[i].marker.getLatLng())) {
+					const marker = data[i].marker;
+					const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [marker.getLatLng().lat, marker.getLatLng().lng]);
+					// Only show if user distance to marker is under circle radius
+					if (distance < 40 && !data[i].circle.visible) {
+            data[i].circle.visible = true;
+            data[i].circle.setStyle({
+              opacity: 1,
+              fillOpacity: 0.3,
+            });
+          } else if (distance >= 40 && data[i].circle.visible) {
+            data[i].circle.visible = false;
+            data[i].circle.setStyle({
+              opacity: 0,
+              fillOpacity: 0,
+            });
+          }
 				}
 			}
-		}
-		// Do aswell for stores
-		for (let i = 0; i < this._marks.stores.length; ++i) {
-			// Only update circles that are in user view
-			if (this._map.getBounds().contains(this._marks.stores[i].marker.getLatLng())) {
-				const marker = this._marks.stores[i].marker;
-				const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [marker.getLatLng().lat, marker.getLatLng().lng]);
-				// Only show if user distance to marker is under circle radius
-				if (distance < 40) {
-					this._marks.stores[i].circle.setStyle({
-            opacity: 1,
-            fillOpacity: 0.3,
-          });
-				} else {
-					this._marks.stores[i].circle.setStyle({
-            opacity: 0,
-            fillOpacity: 0,
-          });					
-				}
-			}
-		}		
+		};
+		
+		_updateByType(this._marks.spots);
+		_updateByType(this._marks.stores);
 	}
 
 
