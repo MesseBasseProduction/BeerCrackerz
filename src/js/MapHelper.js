@@ -145,6 +145,14 @@ class MapHelper {
         element.innerHTML = element.innerHTML.replace('{{SPOT_NAME}}', Utils.stripDom(name));
         element.innerHTML = element.innerHTML.replace('{{SPOT_LAT}}', options.lat);
         element.innerHTML = element.innerHTML.replace('{{SPOT_LNG}}', options.lng);
+        // Append circle around marker
+        options.circle = window.L.circle(options, {
+          color: '#26ad23',
+          fillColor: '#26ad23',
+          opacity: 0,
+          fillOpacity: 0,
+          radius: 40,
+        }).addTo(window.BeerCrackerz.map);
         resolve(element);
       });
     });
@@ -159,6 +167,14 @@ class MapHelper {
         element.innerHTML = element.innerHTML.replace('{{STORE_NAME}}', Utils.stripDom(name));
         element.innerHTML = element.innerHTML.replace('{{STORE_LAT}}', options.lat);
         element.innerHTML = element.innerHTML.replace('{{STORE_LNG}}', options.lng);
+        // Append circle around marker
+        options.circle = window.L.circle(options, {
+          color: '#247dc9',
+          fillColor: '#247dc9',
+          opacity: 0,
+          fillOpacity: 0,
+          radius: 40,
+        }).addTo(window.BeerCrackerz.map);
         resolve(element);
       });
     });

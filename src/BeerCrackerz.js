@@ -1,5 +1,6 @@
 import './BeerCrackerz.scss';
 import MapHelper from './js/MapHelper.js';
+import Utils from './js/Utils.js';
 
 
 class BeerCrackerz {
@@ -12,7 +13,11 @@ class BeerCrackerz {
       lng: 2.3498955769881156, // Paris Notre-Dame longitude
 			marker: null
     };
-    this._newMarker = null;
+    this._newMarker = null; // This marker is temporary for New Spot/New Store mark only
+		this._marks = {
+			spots: [],
+			stores: []
+		};
 
     this._initGeolocation()
       .then(this._initMap.bind(this))
@@ -30,6 +35,7 @@ class BeerCrackerz {
 					// Only draw marker if map is already created
 					if (this._map) {
 						MapHelper.drawUserMarker(this._user);
+						this._updateMarkerCircles();
 					}
 					resolve();
 				}, resolve);
@@ -80,15 +86,68 @@ class BeerCrackerz {
 
 
   _markerSaved(options) {
-    // TODO Save dat server side with user info and stuff
-    console.log(options);
+		if (options.type === 'spot') {
+			this._marks.spots.push(options);
+		} else if (options.type === 'store') {
+			this._marks.stores.push(options);
+		}
+		// Clear new marker to let user add other stuff
     this._newMarker = null;
-  }
+	}
+
+
+	_updateMarkerCircles() {
+		// Check spots in user's proximity
+		for (let i = 0; i < this._marks.spots.length; ++i) {
+			// Only update circles that are in user view
+			if (this._map.getBounds().contains(this._marks.spots[i].marker.getLatLng())) {
+				const marker = this._marks.spots[i].marker;
+				const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [marker.getLatLng().lat, marker.getLatLng().lng]);
+				// Only show if user distance to marker is under circle radius
+				if (distance < 40) {
+					this._marks.spots[i].circle.setStyle({
+            opacity: 1,
+            fillOpacity: 0.3
+          });
+				} else {
+					this._marks.spots[i].circle.setStyle({
+            opacity: 0,
+            fillOpacity: 0
+          });					
+				}
+			}
+		}
+		// Do aswell for stores
+		for (let i = 0; i < this._marks.stores.length; ++i) {
+			// Only update circles that are in user view
+			if (this._map.getBounds().contains(this._marks.stores[i].marker.getLatLng())) {
+				const marker = this._marks.stores[i].marker;
+				const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [marker.getLatLng().lat, marker.getLatLng().lng]);
+				// Only show if user distance to marker is under circle radius
+				if (distance < 40) {
+					this._marks.stores[i].circle.setStyle({
+            opacity: 1,
+            fillOpacity: 0.3,
+          });
+				} else {
+					this._marks.stores[i].circle.setStyle({
+            opacity: 0,
+            fillOpacity: 0,
+          });					
+				}
+			}
+		}		
+	}
 
 
   get map() {
     return this._map;
   }
+
+
+	get user() {
+		return this._user;
+	}
 
 
 }
