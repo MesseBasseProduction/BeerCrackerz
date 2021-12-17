@@ -21,19 +21,8 @@ class MapHelper {
     const marker = window.L.marker([options.lat, options.lng], { icon: icon })
       .addTo(window.BeerCrackerz.map)
       .on('click', () => {
-        if (options.circle) {
-          options.circle.removeFrom(window.BeerCrackerz.map);
-          options.circleRemoved = true;
-        }
         window.BeerCrackerz.map.flyTo([options.lat, options.lng], 18);
       });
-
-    window.BeerCrackerz.map.on('zoomend', () => {
-      if (options.circleRemoved) {
-        options.circleRemoved = false;
-        options.circle.addTo(window.BeerCrackerz.map);
-      }
-    });
 
     if (options.name) {
       marker.bindPopup(options.name);
@@ -217,6 +206,20 @@ class MapHelper {
       fillOpacity: 0,
       radius: Utils.CIRCLE_RADIUS,
     }).addTo(window.BeerCrackerz.map);    
+  }
+
+
+  static hideCircles(marks) {
+    for (let i = 0; i < marks.length; ++i) {
+      marks[i].circle.removeFrom(window.BeerCrackerz.map);
+    }
+  }
+
+
+  static showCircles(marks) {
+    for (let i = 0; i < marks.length; ++i) {
+      marks[i].circle.addTo(window.BeerCrackerz.map);
+    }    
   }
 
 

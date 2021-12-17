@@ -73,6 +73,15 @@ class BeerCrackerz {
 		if (Utils.getPreference('poi-circle-label') === 'true') {
       document.getElementById('label-toggle').classList.add('labels-on');
 		}
+
+    window.BeerCrackerz.map.on('zoomstart', () => {
+			MapHelper.hideCircles(this._marks.spots);
+			MapHelper.hideCircles(this._marks.stores);
+    });
+    window.BeerCrackerz.map.on('zoomend', () => {
+      MapHelper.showCircles(this._marks.spots);
+      MapHelper.showCircles(this._marks.stores);
+    });
 	}
 
 
