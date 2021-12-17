@@ -19,7 +19,21 @@ class MapHelper {
     }
 
     const marker = window.L.marker([options.lat, options.lng], { icon: icon })
-      .addTo(window.BeerCrackerz.map);
+      .addTo(window.BeerCrackerz.map)
+      .on('click', () => {
+        if (options.circle) {
+          options.circle.removeFrom(window.BeerCrackerz.map);
+          options.circleRemoved = true;
+        }
+        window.BeerCrackerz.map.flyTo([options.lat, options.lng], 18);
+      });
+
+    window.BeerCrackerz.map.on('zoomend', () => {
+      if (options.circleRemoved) {
+        options.circleRemoved = false;
+        options.circle.addTo(window.BeerCrackerz.map);
+      }
+    });
 
     if (options.name) {
       marker.bindPopup(options.name);
@@ -146,13 +160,20 @@ class MapHelper {
         element.innerHTML = element.innerHTML.replace('{{SPOT_LAT}}', options.lat);
         element.innerHTML = element.innerHTML.replace('{{SPOT_LNG}}', options.lng);
         // Append circle around marker
-        options.circle = window.L.circle(options, {
-          color: '#26ad23',
-          fillColor: '#26ad23',
-          opacity: 0,
-          fillOpacity: 0,
-          radius: 40,
-        }).addTo(window.BeerCrackerz.map);
+        options.color = '#26ad23';
+        options.circle = MapHelper.drawCircle(options);
+
+        options.tooltip = window.L.tooltip({
+          permanent: true,
+          direction: 'center',
+          className: 'text',
+          interactive: true
+        }).setContent(name)
+          .setLatLng(options.circle.getLatLng());
+
+        if (Utils.getPreference('poi-circle-label') === 'true') {
+          options.tooltip.addTo(window.BeerCrackerz.map);
+        }
         resolve(element);
       });
     });
@@ -168,16 +189,45 @@ class MapHelper {
         element.innerHTML = element.innerHTML.replace('{{STORE_LAT}}', options.lat);
         element.innerHTML = element.innerHTML.replace('{{STORE_LNG}}', options.lng);
         // Append circle around marker
-        options.circle = window.L.circle(options, {
-          color: '#247dc9',
-          fillColor: '#247dc9',
-          opacity: 0,
-          fillOpacity: 0,
-          radius: 40,
-        }).addTo(window.BeerCrackerz.map);
+        options.color = '#247dc9';
+        options.circle = MapHelper.drawCircle(options);
+
+        options.tooltip = window.L.tooltip({
+          permanent: true,
+          direction: 'center',
+          className: 'text',
+          interactive: true
+        }).setContent(name)
+          .setLatLng(options.circle.getLatLng());
+
+        if (Utils.getPreference('poi-circle-label') === 'true') {
+          options.tooltip.addTo(window.BeerCrackerz.map);
+        }
         resolve(element);
       });
     });
+  }
+
+
+  static drawCircle(options) {
+    return window.L.circle(options, {
+      color: options.color,
+      fillColor: options.color,
+      opacity: 0,
+      fillOpacity: 0,
+      radius: Utils.CIRCLE_RADIUS,
+    }).addTo(window.BeerCrackerz.map);    
+  }
+
+
+  static setCircleLabels(marks, visible) {
+    for (let i = 0; i < marks.length; ++i) {
+      if (visible) {
+        marks[i].tooltip.addTo(window.BeerCrackerz.map);
+      } else {
+        marks[i].tooltip.removeFrom(window.BeerCrackerz.map);        
+      }
+    }
   }
 
 

@@ -38,6 +38,20 @@ class Utils {
   }
 
 
+  static getPreference(pref) {
+    return localStorage.getItem(pref) || null;
+  }
+
+
+  static setPreference(pref, value) {
+    localStorage.setItem(pref, value);
+  }
+
+
+  static get CIRCLE_RADIUS() {
+    return 100;
+  }
+
 }
 
 

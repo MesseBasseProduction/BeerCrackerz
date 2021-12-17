@@ -162,6 +162,10 @@ nav {
 				padding: .2rem;
 			}
 		}
+
+		[class$="-on"] {
+			filter: invert(53%) sepia(30%) saturate(1977%) hue-rotate(155deg) brightness(88%) contrast(102%);
+		}
 	}
 }
 

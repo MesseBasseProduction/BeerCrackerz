@@ -64,15 +64,35 @@ class BeerCrackerz {
 
 
   _initCmdBar() {
-		document.getElementById('focus-on').addEventListener('click', this._focusOnCmd.bind(this));
+		document.getElementById('focus-on').addEventListener('click', this.focusOnCmd.bind(this));
+		document.getElementById('label-toggle').addEventListener('click', this.toggleLabel.bind(this));
 		// Modal material
 		document.getElementById('about').addEventListener('click', this._aboutCmd.bind(this));
 		document.getElementById('overlay').addEventListener('click', this._closeModal.bind(this));
+
+		if (Utils.getPreference('poi-circle-label') === 'true') {
+      document.getElementById('label-toggle').classList.add('labels-on');
+		}
 	}
 
 
-	_focusOnCmd() {
-		this._map.setView([this._user.lat, this._user.lng], this._map.getZoom());
+	focusOnCmd() { 
+		this._map.flyTo([this._user.lat, this._user.lng], this._map.getZoom());
+	}
+
+
+	toggleLabel() {
+		if (Utils.getPreference('poi-circle-label') === 'true') {
+      document.getElementById('label-toggle').classList.remove('labels-on');
+      MapHelper.setCircleLabels(this._marks.spots, false);
+      MapHelper.setCircleLabels(this._marks.stores, false);
+			Utils.setPreference('poi-circle-label', 'false');
+    } else {
+      document.getElementById('label-toggle').classList.add('labels-on');
+      MapHelper.setCircleLabels(this._marks.spots, true);
+      MapHelper.setCircleLabels(this._marks.stores, true);
+			Utils.setPreference('poi-circle-label', 'true');
+		}
 	}
 	
 
@@ -126,13 +146,13 @@ class BeerCrackerz {
 					const marker = data[i].marker;
 					const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [marker.getLatLng().lat, marker.getLatLng().lng]);
 					// Only show if user distance to marker is under circle radius
-					if (distance < 40 && !data[i].circle.visible) {
+					if (distance < Utils.CIRCLE_RADIUS && !data[i].circle.visible) {
             data[i].circle.visible = true;
             data[i].circle.setStyle({
               opacity: 1,
               fillOpacity: 0.3,
             });
-          } else if (distance >= 40 && data[i].circle.visible) {
+          } else if (distance >= Utils.CIRCLE_RADIUS && data[i].circle.visible) {
             data[i].circle.visible = false;
             data[i].circle.setStyle({
               opacity: 0,
