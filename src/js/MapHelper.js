@@ -166,7 +166,7 @@ class MapHelper {
         options.tooltip = window.L.tooltip({
           permanent: true,
           direction: 'center',
-          className: 'text',
+          className: 'marker-tooltip',
           interactive: true
         }).setContent(name)
           .setLatLng(options.circle.getLatLng());
@@ -195,7 +195,7 @@ class MapHelper {
         options.tooltip = window.L.tooltip({
           permanent: true,
           direction: 'center',
-          className: 'text',
+          className: 'marker-tooltip',
           interactive: true
         }).setContent(name)
           .setLatLng(options.circle.getLatLng());

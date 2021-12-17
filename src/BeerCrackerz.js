@@ -67,8 +67,8 @@ class BeerCrackerz {
 		document.getElementById('focus-on').addEventListener('click', this.focusOnCmd.bind(this));
 		document.getElementById('label-toggle').addEventListener('click', this.toggleLabel.bind(this));
 		// Modal material
-		document.getElementById('about').addEventListener('click', this._aboutCmd.bind(this));
-		document.getElementById('overlay').addEventListener('click', this._closeModal.bind(this));
+		document.getElementById('about').addEventListener('click', this.aboutCmd.bind(this));
+		document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));
 
 		if (Utils.getPreference('poi-circle-label') === 'true') {
       document.getElementById('label-toggle').classList.add('labels-on');
@@ -77,7 +77,7 @@ class BeerCrackerz {
 
 
 	focusOnCmd() { 
-		this._map.flyTo([this._user.lat, this._user.lng], this._map.getZoom());
+		this._map.flyTo([this._user.lat, this._user.lng], 18);
 	}
 
 
@@ -96,7 +96,7 @@ class BeerCrackerz {
 	}
 	
 
-	_aboutCmd() {
+	aboutCmd() {
 		Utils.fetchTemplate('assets/html/about.html').then(dom => {
 			document.getElementById('overlay').appendChild(dom);
 			document.getElementById('overlay').style.display = 'flex';
@@ -105,7 +105,7 @@ class BeerCrackerz {
 	}
 
 
-	_closeModal() {
+	closeModal() {
 		document.getElementById('overlay').style.opacity = 0;
 		setTimeout(() => {
 			document.getElementById('overlay').style.display = 'none';
