@@ -50,6 +50,8 @@ class BeerCrackerz {
 		return new Promise(resolve => {
 			// Use main div to inject OSM into
 			this._map = window.L.map('beer-crakerz-map').setView([this._user.lat, this._user.lng], 18);
+      // Add meter and feet scale on map
+      window.L.control.scale().addTo(this._map);
 			// Subscribe to click event on map to react
 			this._map.on('click', this._mapClicked.bind(this));
 			// Place user marker on the map
@@ -85,7 +87,7 @@ class BeerCrackerz {
 	}
 
 
-	focusOnCmd() { 
+	focusOnCmd() {
 		this._map.flyTo([this._user.lat, this._user.lng], 18);
 	}
 
@@ -103,7 +105,7 @@ class BeerCrackerz {
 			Utils.setPreference('poi-circle-label', 'true');
 		}
 	}
-	
+
 
 	aboutCmd() {
 		Utils.fetchTemplate('assets/html/about.html').then(dom => {
@@ -159,7 +161,7 @@ class BeerCrackerz {
             data[i].circle.visible = true;
             data[i].circle.setStyle({
               opacity: 1,
-              fillOpacity: 0.3,
+              fillOpacity: 0.1,
             });
           } else if (distance >= Utils.CIRCLE_RADIUS && data[i].circle.visible) {
             data[i].circle.visible = false;
@@ -171,7 +173,7 @@ class BeerCrackerz {
 				}
 			}
 		};
-		
+
 		_updateByType(this._marks.spots);
 		_updateByType(this._marks.stores);
 	}
