@@ -107,10 +107,19 @@ aside {
 		margin-bottom: 1.2rem;
 
 		img {
+      cursor: pointer;
 			height: 2.5rem;
 			margin: 0 .25rem;
 			width: 2.5rem;
-		}		
+
+      &.active {
+        filter: invert(95%) sepia(39%) saturate(3136%) hue-rotate(323deg) brightness(96%) contrast(115%);
+
+        &.selected {
+          filter: invert(75%) sepia(9%) saturate(4002%) hue-rotate(67deg) brightness(81%) contrast(83%);
+        }
+      }
+		}
 	}
 }
 
@@ -126,7 +135,7 @@ main.beer-crakerz-map {
 
 	.marker-tooltip {
 		font-style: italic;
-	}	
+	}
 }
 
 nav {

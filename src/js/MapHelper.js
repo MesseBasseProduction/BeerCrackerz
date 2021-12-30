@@ -1,10 +1,11 @@
 import Markers from './MarkerEnum.js';
+import Rating from './Rating.js';
 import Utils from './Utils.js';
 
 
 class MapHelper {
-  
-  
+
+
   constructor() {}
 
 
@@ -54,7 +55,7 @@ class MapHelper {
     options.name = poiWrapper; // Update popup content with DOM elements
     const marker = MapHelper.placeMarker(options).openPopup();
     options.marker = marker; // Attach marker to option so it can be manipulated in clicked callbacks
-    newSpot.addEventListener('click', () => { 
+    newSpot.addEventListener('click', () => {
       marker.isBeingDefined = true;
       marker.closePopup();
       MapHelper.defineNewSpot(options);
@@ -73,13 +74,14 @@ class MapHelper {
     return marker;
   }
 
-  
+
   static defineNewSpot(options) {
     Utils.fetchTemplate('assets/html/newspot.html').then(dom => {
       const name = dom.querySelector('#spot-name');
       const submit = dom.querySelector('#submit-spot');
       const cancel = dom.querySelector('#cancel-spot');
       const close = dom.querySelector('#close-aside');
+      const starRating = new Rating(dom.querySelector('#star-rating'));
       // Method to clear aside and hide it, and remove temporary marker on the map
       const _cleanDefineUI = () => {
         options.marker.isBeingDefined = false;
@@ -93,6 +95,7 @@ class MapHelper {
         MapHelper.buildSpotUI(name.value, options).then((dom) => {
           options.name = dom;
           options.type = 'spot';
+          options.rate = starRating.currentRate;
           MapHelper.placeMarker(options);
           options.marker.addedCallback(options);
         });
@@ -113,6 +116,7 @@ class MapHelper {
       const submit = dom.querySelector('#submit-store');
       const cancel = dom.querySelector('#cancel-store');
       const close = dom.querySelector('#close-aside');
+      const dollarRating = new Rating(dom.querySelector('#price-rating'));
       // Method to clear aside and hide it, and remove temporary marker on the map
       const _cleanDefineUI = () => {
         options.marker.isBeingDefined = false;
@@ -126,6 +130,7 @@ class MapHelper {
         MapHelper.buildStoreUI(name.value, options).then(dom => {
           options.name = dom;
           options.type = 'store';
+          options.price = dollarRating.currentRate;
           MapHelper.placeMarker(options);
           options.marker.addedCallback(options);
         });
@@ -205,7 +210,7 @@ class MapHelper {
       opacity: 0,
       fillOpacity: 0,
       radius: Utils.CIRCLE_RADIUS,
-    }).addTo(window.BeerCrackerz.map);    
+    }).addTo(window.BeerCrackerz.map);
   }
 
 
@@ -219,7 +224,7 @@ class MapHelper {
   static showCircles(marks) {
     for (let i = 0; i < marks.length; ++i) {
       marks[i].circle.addTo(window.BeerCrackerz.map);
-    }    
+    }
   }
 
 
@@ -228,7 +233,7 @@ class MapHelper {
       if (visible) {
         marks[i].tooltip.addTo(window.BeerCrackerz.map);
       } else {
-        marks[i].tooltip.removeFrom(window.BeerCrackerz.map);        
+        marks[i].tooltip.removeFrom(window.BeerCrackerz.map);
       }
     }
   }
