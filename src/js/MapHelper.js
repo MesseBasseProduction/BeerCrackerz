@@ -78,6 +78,7 @@ class MapHelper {
   static defineNewSpot(options) {
     Utils.fetchTemplate('assets/html/newspot.html').then(dom => {
       const name = dom.querySelector('#spot-name');
+      const description = dom.querySelector('#spot-desc');
       const submit = dom.querySelector('#submit-spot');
       const cancel = dom.querySelector('#cancel-spot');
       const close = dom.querySelector('#close-aside');
@@ -93,8 +94,9 @@ class MapHelper {
       submit.addEventListener('click', () => {
         _cleanDefineUI();
         MapHelper.buildSpotUI(name.value, options).then((dom) => {
-          options.name = dom;
           options.type = 'spot';
+          options.name = dom;
+          options.description = description.value;
           options.rate = starRating.currentRate;
           MapHelper.placeMarker(options);
           options.marker.addedCallback(options);
@@ -128,8 +130,8 @@ class MapHelper {
       submit.addEventListener('click', () => {
         _cleanDefineUI();
         MapHelper.buildStoreUI(name.value, options).then(dom => {
-          options.name = dom;
           options.type = 'store';
+          options.name = dom;
           options.price = dollarRating.currentRate;
           MapHelper.placeMarker(options);
           options.marker.addedCallback(options);

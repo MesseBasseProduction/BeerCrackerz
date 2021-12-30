@@ -6,8 +6,8 @@
 
 - tags (liste finie ; chill, view, animated, nature, city, parc, seeside, sea; port (a elargir au besoin))
 - photo (pas obligatoire)
-- note
-- description (faculattive)
+-[x] note
+-[x] description (faculattive)
 - type de posage ; bench, chair, on the floor, camping chair required, toilet nearby
 - availability : often use, often free
 
@@ -27,7 +27,7 @@
 
 - tags (epicerie, maasin, etc)
 - dispose de frigo
-- prix cher, moy ou pas
+-[x] prix cher, moy ou pas
 
 ### Affichage du Vendeur
 
