@@ -57,6 +57,6 @@
 - ajouter layers de map satelite
 - fond de carte plus smooth, moins informatif
 - légende sur les cercles pour indiquer la distance
-- ajouter pp user en haut droite pour accéder profil
-- ajouter BeerCrackerz a coté pp coté gauche
+-[x] ajouter pp user en haut droite pour accéder profil
+-[x] ajouter BeerCrackerz a coté pp coté gauche
 - logo beercrackerz

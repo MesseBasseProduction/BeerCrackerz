@@ -139,6 +139,42 @@ main.beer-crakerz-map {
 }
 
 nav {
+  display: flex;
+  flex-direction: row-reverse;
+  height: 3.5rem;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  z-index: 20;
+
+  img {
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px #424242;
+    height: 100%;
+
+    &:active + h1,
+    &:focus + h1,
+    &:hover + h1 {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    margin: 0;
+    opacity: 0;
+    padding-right: 1rem;
+    text-align: right;
+
+    transform: scale(.8);
+    transform-origin: center right;
+    transition: opacity .3s, transform .3s;
+  }
+}
+
+footer {
 	bottom: 0;
 	display: flex;
 	left: 0;

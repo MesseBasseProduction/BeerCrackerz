@@ -22,6 +22,7 @@ class Rating {
 
   _events() {
     this._container.addEventListener('mouseover', this._containerHovered.bind(this), false);
+    this._container.addEventListener('mouseout', this._pointerExit.bind(this), false);
     for (let i = 0; i < this._items.length; ++i) {
       this._items[i].addEventListener('click', this._starClicked.bind(this), false);
     }
@@ -34,6 +35,13 @@ class Rating {
       this._container.dataset.rate = this._currentRate;
       this.updateStars();
     }
+  }
+
+
+  _pointerExit(event) {
+    this._currentRate = (this._clicked === -1) ? 0 : this._clicked;
+    this._container.dataset.rate = this._currentRate;
+    this.updateStars();
   }
 
 
