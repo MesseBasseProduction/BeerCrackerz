@@ -68,12 +68,17 @@ class BeerCrackerz {
   _initCmdBar() {
 		document.getElementById('focus-on').addEventListener('click', this.focusOnCmd.bind(this));
 		document.getElementById('label-toggle').addEventListener('click', this.toggleLabel.bind(this));
+		document.getElementById('circle-toggle').addEventListener('click', this.toggleCircle.bind(this));
 		// Modal material
 		document.getElementById('about').addEventListener('click', this.aboutCmd.bind(this));
 		document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));
 
 		if (Utils.getPreference('poi-circle-label') === 'true') {
       document.getElementById('label-toggle').classList.add('labels-on');
+		}
+
+    if (Utils.getPreference('poi-circle-hide') === 'true') {
+      document.getElementById('circle-toggle').classList.add('labels-on');
 		}
 
     window.BeerCrackerz.map.on('zoomstart', () => {
@@ -105,6 +110,21 @@ class BeerCrackerz {
 			Utils.setPreference('poi-circle-label', 'true');
 		}
 	}
+
+
+  toggleCircle() {
+    if (Utils.getPreference('poi-circle-hide') === 'true') {
+      document.getElementById('circle-toggle').classList.remove('labels-on');
+      MapHelper.showCircles(this._marks.spots);
+      MapHelper.showCircles(this._marks.stores);
+			Utils.setPreference('poi-circle-hide', 'false');
+    } else {
+      document.getElementById('circle-toggle').classList.add('labels-on');
+      MapHelper.hideCircles(this._marks.spots);
+      MapHelper.hideCircles(this._marks.stores);
+			Utils.setPreference('poi-circle-hide', 'true');
+		}
+  }
 
 
 	aboutCmd() {
@@ -173,9 +193,11 @@ class BeerCrackerz {
 				}
 			}
 		};
-
-		_updateByType(this._marks.spots);
-		_updateByType(this._marks.stores);
+    
+    if (Utils.getPreference('poi-circle-hide') === 'false') {
+      _updateByType(this._marks.spots);
+      _updateByType(this._marks.stores);
+    }
 	}
 
 

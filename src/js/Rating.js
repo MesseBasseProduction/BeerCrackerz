@@ -38,7 +38,7 @@ class Rating {
   }
 
 
-  _pointerExit(event) {
+  _pointerExit() {
     this._currentRate = (this._clicked === -1) ? 0 : this._clicked;
     this._container.dataset.rate = this._currentRate;
     this.updateStars();
