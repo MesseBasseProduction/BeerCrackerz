@@ -241,4 +241,19 @@ footer {
 	}
 }
 
+.debug-container {
+	background-color: rgba(255, 255, 255, .5);
+	border-radius: .5rem;
+	color: black;
+	left: .5rem;
+	padding: 1rem;
+	position: absolute;
+	top: .5rem;
+	z-index: 20;
+
+	p {
+		margin-bottom: .2rem;
+	}
+}
+
 @import 'scss/responsive';
