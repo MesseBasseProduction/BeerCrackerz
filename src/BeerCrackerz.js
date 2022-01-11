@@ -20,11 +20,18 @@ class BeerCrackerz {
 			bars: []
 		};
 
+		this._isZooming = false;
+
 		this._initDebug()
-			.then(this._initGeolocation.bind(this))
-			.then(this._initMap.bind(this))
-			.then(this._initCmdBar.bind(this));
+      .then(this._initGeolocation.bind(this))
+      .then(this._initMap.bind(this))
+      .then(this._initEvents.bind(this));
 	}
+
+
+  // ======================================================================== //
+  // ----------------- Application initialization sequence ------------------ //
+  // ======================================================================== //
 
 
 	_initDebug() {
@@ -49,9 +56,8 @@ class BeerCrackerz {
 	}
 
 
-	// Use geolocation API to get user position if allowed
 	_initGeolocation() {
-		return new Promise((resolve) => {
+		return new Promise(resolve => {
 			if ('geolocation' in navigator) {
 				navigator.geolocation.watchPosition(position => {
 					// Update saved user position
@@ -60,7 +66,11 @@ class BeerCrackerz {
 					// Only draw marker if map is already created
 					if (this._map) {
 						MapHelper.drawUserMarker(this._user);
-						this._updateMarkerCircles();
+						this.updateMarkerCirclesVisibility();
+						// Update map position if focus lock is active
+						if (Utils.getPreference('lock-center-on') === 'true' && !this._isZooming) {
+							this._map.setView(this._user);
+            }
 					}
 					// Updating debug info if url contains ?debug
 					if (window.DEBUG === true) {
@@ -71,7 +81,7 @@ class BeerCrackerz {
 					}
 					resolve();
 				}, resolve, {
-					enableHighAccuracy: false, // More consuption, better results
+					enableHighAccuracy: true, // More consuption, better results
 					maximumAge: 30000, // A position will last 30s maximum
 					timeout: 29000 // A position is update in 29s maximum
 				});
@@ -100,45 +110,44 @@ class BeerCrackerz {
 				minZoom: 2 // Don't allow dezooming too far from map
 			}).addTo(this._map);
 			// Prevent panning outside of the world's edge
-			const mapBounds = window.L.latLngBounds(
-				window.L.latLng(-89.98155760646617, -180),
-				window.L.latLng(89.99346179538875, 180)
-			);
-			this._map.setMaxBounds(mapBounds);
-			this._map.on('drag', () => {
-				this._map.panInsideBounds(mapBounds, { animate: true });
-			});
+			this._map.setMaxBounds(Utils.MAP_BOUNDS);
 			resolve();
 		});
 	}
 
 
-	_initCmdBar() {
+	_initEvents() {
 		return new Promise(resolve => {
-			document.getElementById('focus-on').addEventListener('click', this.focusOnCmd.bind(this));
-			document.getElementById('label-toggle').addEventListener('click', this.toggleLabel.bind(this));
-			document.getElementById('circle-toggle').addEventListener('click', this.toggleCircle.bind(this));
+			document.getElementById('center-on').addEventListener('click', this.toggleFocusLock.bind(this));
+			document.getElementById('hide-show').addEventListener('click', this.hidShowModal.bind(this));
 			// Modal material
-			document.getElementById('about').addEventListener('click', this.aboutCmd.bind(this));
+			document.getElementById('about').addEventListener('click', this.aboutModal.bind(this));
 			document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));
+			// Map is dragged by user mouse/finger
+			this._map.on('drag', () => {
+				// Constrain pan to the map bounds
+				this._map.panInsideBounds(Utils.MAP_BOUNDS, { animate: true });
+				// Disable lock focus if user drags the map
+				if (Utils.getPreference('lock-center-on') === 'true') {
+					this.toggleFocusLock();
+				}
+			});
 
-			if (Utils.getPreference('poi-circle-label') === 'true') {
-				document.getElementById('label-toggle').classList.add('labels-on');
-			}
-
-			if (Utils.getPreference('poi-circle-hide') === 'true') {
-				document.getElementById('circle-toggle').classList.add('labels-on');
+			if (Utils.getPreference('lock-center-on') === 'true') {
+				document.getElementById('center-on').classList.add('lock-center-on');
 			}
 
 			window.BeerCrackerz.map.on('zoomstart', () => {
-				MapHelper.hideCircles(this._marks.spots);
-				MapHelper.hideCircles(this._marks.stores);
-				MapHelper.hideCircles(this._marks.bars);
+				this._isZooming = true;
+				MapHelper.setMarkerCircles(this._marks.spots, false);
+				MapHelper.setMarkerCircles(this._marks.stores, false);
+				MapHelper.setMarkerCircles(this._marks.bars, false);
 			});
 			window.BeerCrackerz.map.on('zoomend', () => {
-				MapHelper.showCircles(this._marks.spots);
-				MapHelper.showCircles(this._marks.stores);
-				MapHelper.showCircles(this._marks.bars);
+				this._isZooming = false;
+				MapHelper.setMarkerCircles(this._marks.spots, true);
+				MapHelper.setMarkerCircles(this._marks.stores, true);
+				MapHelper.setMarkerCircles(this._marks.bars, true);
 			});
 			
 			resolve();
@@ -146,46 +155,63 @@ class BeerCrackerz {
 	}
 
 
-	focusOnCmd() {
-		this._map.flyTo([this._user.lat, this._user.lng], 18);
+  // ======================================================================== //
+  // ----------------- Events callbacks and public methods ------------------ //
+  // ======================================================================== //	
+
+
+	toggleFocusLock() {
+		if (Utils.getPreference('lock-center-on') === 'true') {
+			document.getElementById('center-on').classList.remove('lock-center-on');
+			Utils.setPreference('lock-center-on', 'false');
+		} else {
+			document.getElementById('center-on').classList.add('lock-center-on');
+			this._map.flyTo([this._user.lat, this._user.lng], 18);
+			Utils.setPreference('lock-center-on', 'true');
+		}
 	}
 
 
 	toggleLabel() {
-		if (Utils.getPreference('poi-circle-label') === 'true') {
-			document.getElementById('label-toggle').classList.remove('labels-on');
-			MapHelper.setCircleLabels(this._marks.spots, false);
-			MapHelper.setCircleLabels(this._marks.stores, false);
-			MapHelper.setCircleLabels(this._marks.bars, false);
-			Utils.setPreference('poi-circle-label', 'false');
-		} else {
-			document.getElementById('label-toggle').classList.add('labels-on');
-			MapHelper.setCircleLabels(this._marks.spots, true);
-			MapHelper.setCircleLabels(this._marks.stores, true);
-			MapHelper.setCircleLabels(this._marks.bars, true);
-			Utils.setPreference('poi-circle-label', 'true');
-		}
+		let visible = !(Utils.getPreference('poi-marker-label') === 'true');
+		MapHelper.setMarkerLabels(this._marks.spots, visible);
+		MapHelper.setMarkerLabels(this._marks.stores, visible);
+		MapHelper.setMarkerLabels(this._marks.bars, visible);
+		Utils.setPreference('poi-marker-label', visible);
 	}
 
 
 	toggleCircle() {
-		if (Utils.getPreference('poi-circle-hide') === 'true') {
-			document.getElementById('circle-toggle').classList.remove('labels-on');
-			MapHelper.showCircles(this._marks.spots);
-			MapHelper.showCircles(this._marks.stores);
-			MapHelper.showCircles(this._marks.bars);
-			Utils.setPreference('poi-circle-hide', 'false');
-		} else {
-			document.getElementById('circle-toggle').classList.add('labels-on');
-			MapHelper.hideCircles(this._marks.spots);
-			MapHelper.hideCircles(this._marks.stores);
-			MapHelper.hideCircles(this._marks.bars);
-			Utils.setPreference('poi-circle-hide', 'true');
-		}
+		let visible = !(Utils.getPreference('poi-show-circle') === 'true');
+		MapHelper.setMarkerCircles(this._marks.spots, visible);
+		MapHelper.setMarkerCircles(this._marks.stores, visible);
+		MapHelper.setMarkerCircles(this._marks.bars, visible);
+		Utils.setPreference('poi-show-circle', visible);
 	}
 
 
-	aboutCmd() {
+	hidShowModal() {
+		Utils.fetchTemplate('assets/html/hideshow.html').then(dom => {
+			document.getElementById('overlay').appendChild(dom);
+			document.getElementById('overlay').style.display = 'flex';
+			// Init modal checkbox state according to local storage preferences
+			if (Utils.getPreference('poi-marker-label') === 'true') {
+        document.getElementById('label-toggle').checked = true;
+      }
+
+			if (Utils.getPreference('poi-show-circle') === 'true') {
+        document.getElementById('circle-toggle').checked = true;
+      }
+
+			document.getElementById('label-toggle').addEventListener('change', this.toggleLabel.bind(this));
+			document.getElementById('circle-toggle').addEventListener('change', this.toggleCircle.bind(this));
+
+			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+		});
+	}
+
+
+	aboutModal() {
 		Utils.fetchTemplate('assets/html/about.html').then(dom => {
 			document.getElementById('overlay').appendChild(dom);
 			document.getElementById('overlay').style.display = 'flex';
@@ -194,12 +220,14 @@ class BeerCrackerz {
 	}
 
 
-	closeModal() {
-		document.getElementById('overlay').style.opacity = 0;
-		setTimeout(() => {
-			document.getElementById('overlay').style.display = 'none';
-			document.getElementById('overlay').innerHTML = '';
-		}, 300);
+	closeModal(e) {
+		if (e.target.id === 'overlay') {
+			document.getElementById('overlay').style.opacity = 0;
+			setTimeout(() => {
+				document.getElementById('overlay').style.display = 'none';
+				document.getElementById('overlay').innerHTML = '';
+			}, 300);
+		}
 	}
 
 
@@ -223,12 +251,14 @@ class BeerCrackerz {
     } else if (options.type === 'bar') {
       this._marks.bars.push(options);
     }
+		// Update marker circles visibility according to user position
+		this.updateMarkerCirclesVisibility();
 		// Clear new marker to let user add other stuff
 		this._newMarker = null;
 	}
 
 
-	_updateMarkerCircles() {
+	updateMarkerCirclesVisibility() {
 		const _updateByType = data => {
 			// Check spots in user's proximity
 			for (let i = 0; i < data.length; ++i) {
@@ -254,11 +284,11 @@ class BeerCrackerz {
 			}
 		};
 
-		if (Utils.getPreference('poi-circle-hide') === 'false') {
-			_updateByType(this._marks.spots);
-			_updateByType(this._marks.stores);
-			_updateByType(this._marks.bars);
-		}
+		if (Utils.getPreference('poi-show-circle') === 'true') {
+      _updateByType(this._marks.spots);
+      _updateByType(this._marks.stores);
+      _updateByType(this._marks.bars);
+    }
 	}
 
 

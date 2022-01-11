@@ -105,7 +105,7 @@ class MapHelper {
       // Submit or cancel event subscriptions
       submit.addEventListener('click', () => {
         _cleanDefineUI();
-        MapHelper.buildSpotUI(name.value, options).then((dom) => {
+        MapHelper.buildSpotUI(name.value, options).then(dom => {
           options.type = 'spot';
           options.name = dom;
           options.description = description.value;
@@ -214,7 +214,7 @@ class MapHelper {
         }).setContent(name)
           .setLatLng(options.circle.getLatLng());
 
-        if (Utils.getPreference('poi-circle-label') === 'true') {
+        if (Utils.getPreference('poi-marker-label') === 'true') {
           options.tooltip.addTo(window.BeerCrackerz.map);
         }
         resolve(element);
@@ -243,7 +243,7 @@ class MapHelper {
         }).setContent(name)
           .setLatLng(options.circle.getLatLng());
 
-        if (Utils.getPreference('poi-circle-label') === 'true') {
+        if (Utils.getPreference('poi-marker-label') === 'true') {
           options.tooltip.addTo(window.BeerCrackerz.map);
         }
         resolve(element);
@@ -272,7 +272,7 @@ class MapHelper {
         }).setContent(name)
           .setLatLng(options.circle.getLatLng());
 
-        if (Utils.getPreference('poi-circle-label') === 'true') {
+        if (Utils.getPreference('poi-marker-label') === 'true') {
           options.tooltip.addTo(window.BeerCrackerz.map);
         }
         resolve(element);
@@ -285,28 +285,25 @@ class MapHelper {
     return window.L.circle(options, {
       color: options.color,
       fillColor: options.color,
-      opacity: 0,
-      fillOpacity: 0,
+      opacity: 0, // This needs to be updated according to user proximity
+      fillOpacity: 0, // Same for this parameter
       radius: Utils.CIRCLE_RADIUS
     }).addTo(window.BeerCrackerz.map);
   }
 
 
-  static hideCircles(marks) {
+  static setMarkerCircles(marks, visible) {
     for (let i = 0; i < marks.length; ++i) {
-      marks[i].circle.removeFrom(window.BeerCrackerz.map);
+      if (visible) {
+        marks[i].circle.addTo(window.BeerCrackerz.map);
+      } else {
+        marks[i].circle.removeFrom(window.BeerCrackerz.map);
+      }
     }
   }
 
 
-  static showCircles(marks) {
-    for (let i = 0; i < marks.length; ++i) {
-      marks[i].circle.addTo(window.BeerCrackerz.map);
-    }
-  }
-
-
-  static setCircleLabels(marks, visible) {
+  static setMarkerLabels(marks, visible) {
     for (let i = 0; i < marks.length; ++i) {
       if (visible) {
         marks[i].tooltip.addTo(window.BeerCrackerz.map);
