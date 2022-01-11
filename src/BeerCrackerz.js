@@ -15,14 +15,15 @@ class BeerCrackerz {
 		};
 		this._newMarker = null; // This marker is temporary for New Spot/New Store mark only
 		this._marks = {
-			spots: [],
-			stores: [],
-			bars: []
+			spot: [],
+			store: [],
+			bar: []
 		};
 
 		this._isZooming = false;
 
 		this._initDebug()
+      .then(this._initPreferences.bind(this))
       .then(this._initGeolocation.bind(this))
       .then(this._initMap.bind(this))
       .then(this._initEvents.bind(this));
@@ -51,6 +52,25 @@ class BeerCrackerz {
 				debugContainer.appendChild(userLng);
 				document.body.appendChild(debugContainer);
 			}
+			resolve();
+		});
+	}
+
+
+	_initPreferences() {
+		return new Promise(resolve => {
+			if (Utils.getPreference('poi-show-spot') === null) {
+				Utils.setPreference('poi-show-spot', true);
+			}
+
+			if (Utils.getPreference('poi-show-store') === null) {
+        Utils.setPreference('poi-show-store', true);
+      }
+
+			if (Utils.getPreference('poi-show-bar') === null) {
+        Utils.setPreference('poi-show-bar', true);
+      }
+			
 			resolve();
 		});
 	}
@@ -139,15 +159,15 @@ class BeerCrackerz {
 
 			window.BeerCrackerz.map.on('zoomstart', () => {
 				this._isZooming = true;
-				MapHelper.setMarkerCircles(this._marks.spots, false);
-				MapHelper.setMarkerCircles(this._marks.stores, false);
-				MapHelper.setMarkerCircles(this._marks.bars, false);
+				MapHelper.setMarkerCircles(this._marks.spot, false);
+				MapHelper.setMarkerCircles(this._marks.store, false);
+				MapHelper.setMarkerCircles(this._marks.bar, false);
 			});
 			window.BeerCrackerz.map.on('zoomend', () => {
 				this._isZooming = false;
-				MapHelper.setMarkerCircles(this._marks.spots, true);
-				MapHelper.setMarkerCircles(this._marks.stores, true);
-				MapHelper.setMarkerCircles(this._marks.bars, true);
+				MapHelper.setMarkerCircles(this._marks.spot, true);
+				MapHelper.setMarkerCircles(this._marks.store, true);
+				MapHelper.setMarkerCircles(this._marks.bar, true);
 			});
 			
 			resolve();
@@ -156,7 +176,7 @@ class BeerCrackerz {
 
 
   // ======================================================================== //
-  // ----------------- Events callbacks and public methods ------------------ //
+  // ------------------------- Toggle for map items ------------------------- //
   // ======================================================================== //	
 
 
@@ -173,21 +193,40 @@ class BeerCrackerz {
 
 
 	toggleLabel() {
-		let visible = !(Utils.getPreference('poi-marker-label') === 'true');
-		MapHelper.setMarkerLabels(this._marks.spots, visible);
-		MapHelper.setMarkerLabels(this._marks.stores, visible);
-		MapHelper.setMarkerLabels(this._marks.bars, visible);
+		const visible = !(Utils.getPreference('poi-marker-label') === 'true');
+		MapHelper.setMarkerLabels(this._marks.spot, visible);
+		MapHelper.setMarkerLabels(this._marks.store, visible);
+		MapHelper.setMarkerLabels(this._marks.bar, visible);
 		Utils.setPreference('poi-marker-label', visible);
 	}
 
 
 	toggleCircle() {
-		let visible = !(Utils.getPreference('poi-show-circle') === 'true');
-		MapHelper.setMarkerCircles(this._marks.spots, visible);
-		MapHelper.setMarkerCircles(this._marks.stores, visible);
-		MapHelper.setMarkerCircles(this._marks.bars, visible);
+		const visible = !(Utils.getPreference('poi-show-circle') === 'true');
+		MapHelper.setMarkerCircles(this._marks.spot, visible);
+		MapHelper.setMarkerCircles(this._marks.store, visible);
+		MapHelper.setMarkerCircles(this._marks.bar, visible);
 		Utils.setPreference('poi-show-circle', visible);
+		this.updateMarkerCirclesVisibility();
 	}
+
+
+	toggleMarkers(type) {
+		const visible = !(Utils.getPreference(`poi-show-${type}`) === 'true');
+		for (let i = 0; i < this._marks[type].length; ++i) {
+			if (visible === true) {
+        this._marks[type][i].marker.addTo(this._map);
+			} else {
+        this._marks[type][i].marker.removeFrom(this._map);
+			}
+		}
+		Utils.setPreference(`poi-show-${type}`, visible);
+	}
+
+
+  // ======================================================================== //
+  // ----------------- App modals display and interaction ------------------- //
+  // ======================================================================== //	
 
 
 	hidShowModal() {
@@ -203,8 +242,25 @@ class BeerCrackerz {
         document.getElementById('circle-toggle').checked = true;
       }
 
+			if (Utils.getPreference('poi-show-spot') === 'true') {
+        document.getElementById('show-spots').checked = true;
+      }
+
+			if (Utils.getPreference('poi-show-store') === 'true') {
+        document.getElementById('show-stores').checked = true;
+      }
+
+			if (Utils.getPreference('poi-show-bar') === 'true') {
+        document.getElementById('show-bars').checked = true;
+      }
+
+			document.getElementById('modal-close').addEventListener('click', this.closeModal.bind(this));
+			document.getElementById('modal-close-button').addEventListener('click', this.closeModal.bind(this));
 			document.getElementById('label-toggle').addEventListener('change', this.toggleLabel.bind(this));
 			document.getElementById('circle-toggle').addEventListener('change', this.toggleCircle.bind(this));
+			document.getElementById('show-spots').addEventListener('change', this.toggleMarkers.bind(this, 'spot'));
+			document.getElementById('show-stores').addEventListener('change', this.toggleMarkers.bind(this, 'store'));
+			document.getElementById('show-bars').addEventListener('change', this.toggleMarkers.bind(this, 'bar'));
 
 			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
 		});
@@ -221,13 +277,13 @@ class BeerCrackerz {
 
 
 	closeModal(e) {
-		if (e.target.id === 'overlay') {
-			document.getElementById('overlay').style.opacity = 0;
-			setTimeout(() => {
-				document.getElementById('overlay').style.display = 'none';
-				document.getElementById('overlay').innerHTML = '';
-			}, 300);
-		}
+		if (e.target.id === 'overlay' || e.target.id.indexOf('close') !== -1) {
+      document.getElementById('overlay').style.opacity = 0;
+      setTimeout(() => {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('overlay').innerHTML = '';
+      }, 300);
+    }
 	}
 
 
@@ -237,20 +293,23 @@ class BeerCrackerz {
 			this._newMarker = null;
 		} else if (this._newMarker === null || !this._newMarker.isBeingDefined) {
 			// Only create new marker if none is in progress
-			this._newMarker = MapHelper.definePOI(event.latlng);
-			this._newMarker.addedCallback = this._markerSaved.bind(this);
+			this._newMarker = MapHelper.definePOI(event.latlng, this._markerSaved.bind(this));
 		}
 	}
 
 
 	_markerSaved(options) {
 		if (options.type === 'spot') {
-      this._marks.spots.push(options);
+      this._marks.spot.push(options);
     } else if (options.type === 'store') {
-      this._marks.stores.push(options);
+      this._marks.store.push(options);
     } else if (options.type === 'bar') {
-      this._marks.bars.push(options);
+      this._marks.bar.push(options);
     }
+		// Update marker visibility according to preferences
+		if (Utils.getPreference(`poi-show-${options.type}`) === 'false') {
+			options.marker.removeFrom(this._map);
+		}
 		// Update marker circles visibility according to user position
 		this.updateMarkerCirclesVisibility();
 		// Clear new marker to let user add other stuff
@@ -285,9 +344,9 @@ class BeerCrackerz {
 		};
 
 		if (Utils.getPreference('poi-show-circle') === 'true') {
-      _updateByType(this._marks.spots);
-      _updateByType(this._marks.stores);
-      _updateByType(this._marks.bars);
+      _updateByType(this._marks.spot);
+      _updateByType(this._marks.store);
+      _updateByType(this._marks.bar);
     }
 	}
 

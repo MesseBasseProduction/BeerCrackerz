@@ -47,13 +47,13 @@ class MapHelper {
   }
 
 
-  static definePOI(options) {
+  static definePOI(options, callback) {
 		const poiWrapper = document.createElement('DIV');
     const newSpot = document.createElement('BUTTON');
     const newStore = document.createElement('BUTTON');
     const newBar = document.createElement('BUTTON');
     newSpot.innerHTML = 'Ajouter un spot';
-    newStore.innerHTML = 'Ajouter un vendeur';
+    newStore.innerHTML = 'Ajouter un magasin';
     newBar.innerHTML = 'Ajouter un bar';
     poiWrapper.className = 'new-poi';
     poiWrapper.appendChild(newSpot);
@@ -62,6 +62,7 @@ class MapHelper {
     options.name = poiWrapper; // Update popup content with DOM elements
     const marker = MapHelper.placeMarker(options).openPopup();
     options.marker = marker; // Attach marker to option so it can be manipulated in clicked callbacks
+    options.addedCallback = callback; // Attach callback to be called when marker addition is done
     newSpot.addEventListener('click', () => {
       marker.isBeingDefined = true;
       marker.closePopup();
@@ -80,7 +81,7 @@ class MapHelper {
     marker.on('popupclose', () => {
       if (!marker.isBeingDefined) {
         marker.popupClosed = true;
-        window.BeerCrackerz.map.removeLayer(marker);
+        marker.removeFrom(window.BeerCrackerz.map);
       }
     });
     return marker;
@@ -98,7 +99,7 @@ class MapHelper {
       // Method to clear aside and hide it, and remove temporary marker on the map
       const _cleanDefineUI = () => {
         options.marker.isBeingDefined = false;
-        window.BeerCrackerz.map.removeLayer(options.marker);
+        options.marker.removeFrom(window.BeerCrackerz.map); // Clear temporary black marker
         document.getElementById('aside').style.opacity = 0;
         setTimeout(() => document.getElementById('aside').innerHTML = '', 200); // Match CSS transition duration
       };
@@ -110,8 +111,9 @@ class MapHelper {
           options.name = dom;
           options.description = description.value;
           options.rate = starRating.currentRate;
-          MapHelper.placeMarker(options);
-          options.marker.addedCallback(options);
+          options.marker.removeFrom(window.BeerCrackerz.map); // Clear temporary black marker
+          options.marker = MapHelper.placeMarker(options); // Create final marker
+          options.addedCallback(options);
         });
       });
       cancel.addEventListener('click', _cleanDefineUI);
@@ -134,7 +136,7 @@ class MapHelper {
       // Method to clear aside and hide it, and remove temporary marker on the map
       const _cleanDefineUI = () => {
         options.marker.isBeingDefined = false;
-        window.BeerCrackerz.map.removeLayer(options.marker);
+        options.marker.removeFrom(window.BeerCrackerz.map); // Clear temporary black marker
         document.getElementById('aside').style.opacity = 0;
         setTimeout(() => document.getElementById('aside').innerHTML = '', 200); // Match CSS transition duration
       };
@@ -145,8 +147,9 @@ class MapHelper {
           options.type = 'store';
           options.name = dom;
           options.price = dollarRating.currentRate;
-          MapHelper.placeMarker(options);
-          options.marker.addedCallback(options);
+          options.marker.removeFrom(window.BeerCrackerz.map); // Clear temporary black marker
+          options.marker = MapHelper.placeMarker(options); // Create final marker
+          options.addedCallback(options);
         });
       });
       cancel.addEventListener('click', _cleanDefineUI);
@@ -169,7 +172,7 @@ class MapHelper {
       // Method to clear aside and hide it, and remove temporary marker on the map
       const _cleanDefineUI = () => {
         options.marker.isBeingDefined = false;
-        window.BeerCrackerz.map.removeLayer(options.marker);
+        options.marker.removeFrom(window.BeerCrackerz.map); // Clear temporary black marker
         document.getElementById('aside').style.opacity = 0;
         setTimeout(() => document.getElementById('aside').innerHTML = '', 200); // Match CSS transition duration
       };
@@ -180,8 +183,9 @@ class MapHelper {
           options.type = 'bar';
           options.name = dom;
           options.price = dollarRating.currentRate;
-          MapHelper.placeMarker(options);
-          options.marker.addedCallback(options);
+          options.marker.removeFrom(window.BeerCrackerz.map); // Clear temporary black marker
+          options.marker = MapHelper.placeMarker(options); // Create final marker
+          options.addedCallback(options);
         });
       });
       cancel.addEventListener('click', _cleanDefineUI);

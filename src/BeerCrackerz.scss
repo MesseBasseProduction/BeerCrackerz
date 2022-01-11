@@ -140,81 +140,50 @@ main.beer-crakerz-map {
 
 nav {
   display: flex;
-  flex-direction: row-reverse;
-  height: 3.5rem;
+  flex-direction: column;
   position: absolute;
   right: 1rem;
   top: 1rem;
-  z-index: 20;
+	width: 3.5rem;
+	z-index: 20;
 
   img {
     cursor: pointer;
     border-radius: 50%;
     box-shadow: 0px 0px 10px #424242;
-    height: 100%;
-
-    &:active + h1,
-    &:focus + h1,
-    &:hover + h1 {
-      opacity: 1;
-      transform: scale(1);
-    }
+    width: 100%;
   }
-
-  h1 {
-    font-size: 2.4rem;
-    margin: 0;
-    opacity: 0;
-    padding-right: 1rem;
-    text-shadow: 0px 0px 10px #424242;
-    text-align: right;
-
-    transform: scale(.8);
-    transform-origin: center right;
-    transition: opacity .3s, transform .3s;
-  }
-}
-
-footer {
-	bottom: 0;
-	display: flex;
-	left: 0;
-	height: 5rem;
-	justify-content: center;
-	position: absolute;
-	width: 100%;
-	z-index: 20;
 
 	.cmd-bar {
-		align-items: center;
-		background: white;
-		border-top-left-radius: .5rem;
-		border-top-right-radius: .5rem;
-		box-shadow: 0px 0px 10px #424242;
-		display: flex;
-		height: 100%;
-		justify-content: center;
-		padding: .75rem;
-		width: auto;
+		margin-top: 1rem;
 
-		img {
-			cursor: pointer;
-			height: 100%;
-			margin: 0 .5rem;
+		.cmd-wrapper {
+			align-items: center;
+			background: white;			
+			border-radius: .5rem;
+			display: flex;
+			justify-content: center;
+			margin: 1rem 0;
+			padding: .2rem;
 
-			transition: all .2s;
+			img {
+				box-shadow: inherit;
+				transition: all .2s;
 
-			&:active,
-			&:focus,
-			&:hover {
-				border: solid 1px rgb(185, 185, 185);
-				border-radius: .5rem;
-				padding: .2rem;
-			}
-		}
+				&:active,
+				&:focus,
+				&:hover {
+					border: solid 1px rgb(185, 185, 185);
+					border-radius: .5rem;
+					padding: .2rem;
 
-		[class$="-on"] {
-			filter: invert(53%) sepia(30%) saturate(1977%) hue-rotate(155deg) brightness(88%) contrast(102%);
+					filter: invert(70%) sepia(67%) saturate(455%) hue-rotate(67deg) brightness(163%) contrast(85%);
+				}
+
+				&[class$="-on"] {
+					filter: invert(53%) sepia(30%) saturate(1977%) hue-rotate(155deg) brightness(88%) contrast(102%);
+				}		
+			}			
 		}
 	}
 }
@@ -233,11 +202,56 @@ footer {
 
 	transition: opacity .3s;
 
-	.about-modal {
-		background: white;
+	[class$="-modal"] {
+		background: rgba(255, 255, 255, .8);
 		border-radius: .5rem;
 		box-shadow: 0px 0px 10px #424242;
-		padding: 2rem;
+		padding: 3rem 4rem;
+		position: relative;
+
+		h1 {
+			margin-bottom: 3rem;
+		}
+
+		button {
+			margin-top: 3rem;
+		}
+
+		.modal-close {
+			color: #999;
+			cursor: pointer;
+			font-size: 2.2rem;
+			font-weight: bold;
+			line-height: 1.4rem; // Because the cross symbol doesn't fit font height
+			right: 1rem;
+			position: absolute;
+			top: 1rem;
+		}		
+	}
+
+	.hide-show-modal {
+		.item {
+			align-items: center;
+			display: flex;
+			justify-content: space-between;
+			margin: 1rem auto;
+			max-width: 15rem;
+
+			img {
+				margin-right: 2rem;
+				height: 2rem;
+			}
+
+			label {
+				margin-bottom: 0;
+				margin-right: 2rem;	
+			}
+
+			input {
+				margin: 0;
+				width: auto;
+			}
+		}
 	}
 }
 
@@ -245,10 +259,10 @@ footer {
 	background-color: rgba(255, 255, 255, .8);
 	border-radius: .5rem;
 	color: black;
-	left: .5rem;
+	left: 1rem;
 	padding: 1rem;
 	position: absolute;
-	top: .5rem;
+	top: 1rem;
 	z-index: 20;
 
 	p {
