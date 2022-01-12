@@ -270,4 +270,32 @@ nav {
 	}
 }
 
+/* Needs to override some leaflet styles to match BeerVCrackerz interface */
+.leaflet-control-layers-expanded {
+	padding: 2rem !important;
+
+	label {
+		margin: 0;
+
+		div {
+			align-items: center;
+			display: flex;
+			flex-direction: row-reverse;
+			justify-content: space-between;
+
+			input {
+				width: auto;
+			}
+
+			input, p {
+				margin: 0;
+			}
+
+			p {
+				margin-right: 1rem;
+			}
+		}
+	}
+}
+
 @import 'scss/responsive';

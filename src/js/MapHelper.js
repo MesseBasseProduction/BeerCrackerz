@@ -6,7 +6,7 @@ import Utils from './Utils.js';
 class MapHelper {
 
 
-  constructor() {}
+  constructor() { /* Not meant to be instantiated, all methods should be static */ }
 
 
   static placeMarker(options) {
@@ -39,10 +39,21 @@ class MapHelper {
     if (!options.marker) { // Create user marker if not existing
       options.type = 'user';
       options.marker = MapHelper.placeMarker(options);
+      // Append circle around marker
+      options.radius = options.accuracy;
+      options.circle = MapHelper.drawCircle(options);
+      // Update circle opacity if pref is at true
+      if (Utils.getPreference('poi-show-circle') === 'true') {
+        options.circle.setStyle({
+          opacity: 1,
+          fillOpacity: 0.1,
+        });
+      }
       // Callback on marker clicked to add marker on user position
       options.marker.on('click', window.BeerCrackerz.mapClicked.bind(window.BeerCrackerz));
     } else { // Update user marker position
       options.marker.setLatLng(options);
+      options.circle.setLatLng(options);
     }
   }
 
@@ -207,7 +218,7 @@ class MapHelper {
         element.innerHTML = element.innerHTML.replace('{{SPOT_LAT}}', options.lat);
         element.innerHTML = element.innerHTML.replace('{{SPOT_LNG}}', options.lng);
         // Append circle around marker
-        options.color = '#26ad23';
+        options.color = Utils.SPOT_COLOR;
         options.circle = MapHelper.drawCircle(options);
 
         options.tooltip = window.L.tooltip({
@@ -236,7 +247,7 @@ class MapHelper {
         element.innerHTML = element.innerHTML.replace('{{STORE_LAT}}', options.lat);
         element.innerHTML = element.innerHTML.replace('{{STORE_LNG}}', options.lng);
         // Append circle around marker
-        options.color = '#247dc9';
+        options.color = Utils.STORE_COLOR;
         options.circle = MapHelper.drawCircle(options);
 
         options.tooltip = window.L.tooltip({
@@ -265,7 +276,7 @@ class MapHelper {
         element.innerHTML = element.innerHTML.replace('{{BAR_LAT}}', options.lat);
         element.innerHTML = element.innerHTML.replace('{{BAR_LNG}}', options.lng);
         // Append circle around marker
-        options.color = '#ca2a3d';
+        options.color = Utils.BAR_COLOR;
         options.circle = MapHelper.drawCircle(options);
 
         options.tooltip = window.L.tooltip({
@@ -291,7 +302,7 @@ class MapHelper {
       fillColor: options.color,
       opacity: 0, // This needs to be updated according to user proximity
       fillOpacity: 0, // Same for this parameter
-      radius: Utils.CIRCLE_RADIUS
+      radius: options.radius ? options.radius : Utils.CIRCLE_RADIUS
     }).addTo(window.BeerCrackerz.map);
   }
 

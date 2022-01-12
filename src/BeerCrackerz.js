@@ -11,7 +11,10 @@ class BeerCrackerz {
 		this._user = {
 			lat: 48.853121540141096, // Paris Notre-Dame latitude
 			lng: 2.3498955769881156, // Paris Notre-Dame longitude
-			marker: null
+			accuracy: 0,
+			marker: null,
+			circle: null,
+			color: Utils.USER_COLOR
 		};
 		this._newMarker = null; // This marker is temporary for New Spot/New Store mark only
 		this._marks = {
@@ -20,6 +23,7 @@ class BeerCrackerz {
 			bar: []
 		};
 
+		this._watchId = null;
 		this._isZooming = false;
 
 		this._initDebug()
@@ -40,14 +44,17 @@ class BeerCrackerz {
 			if (window.DEBUG === true) {
 				const debugContainer = document.createElement('DIV');
 				const updatesAmount = document.createElement('P');
+				const userAccuracy = document.createElement('P');
 				const userLat = document.createElement('P');
 				const userLng = document.createElement('P');
 				debugContainer.classList.add('debug-container');
 				updatesAmount.classList.add('debug-updates-amount');
 				userLat.classList.add('debug-user-lat');
 				userLng.classList.add('debug-user-lng');
+				userAccuracy.classList.add('debug-user-accuracy');
 				updatesAmount.innerHTML = '<b>Updates</b> : 0';
 				debugContainer.appendChild(updatesAmount);
+				debugContainer.appendChild(userAccuracy);
 				debugContainer.appendChild(userLat);
 				debugContainer.appendChild(userLng);
 				document.body.appendChild(debugContainer);
@@ -79,10 +86,11 @@ class BeerCrackerz {
 	_initGeolocation() {
 		return new Promise(resolve => {
 			if ('geolocation' in navigator) {
-				navigator.geolocation.watchPosition(position => {
+				this._watchId = navigator.geolocation.watchPosition(position => {
 					// Update saved user position
 					this._user.lat = position.coords.latitude;
 					this._user.lng = position.coords.longitude;
+					this._user.accuracy = position.coords.accuracy;
 					// Only draw marker if map is already created
 					if (this._map) {
 						MapHelper.drawUserMarker(this._user);
@@ -96,6 +104,7 @@ class BeerCrackerz {
 					if (window.DEBUG === true) {
 						const updates = parseInt(document.querySelector('.debug-updates-amount').innerHTML.split(' : ')[1]) + 1;
 						document.querySelector('.debug-updates-amount').innerHTML = `<b>Updates</b> : ${updates}`;
+						document.querySelector('.debug-user-accuracy').innerHTML = `<b>Accuracy</b> : ${this._user.accuracy}m`;
 						document.querySelector('.debug-user-lat').innerHTML = `<b>Lat</b> : ${this._user.lat}`;
 						document.querySelector('.debug-user-lng').innerHTML = `<b>Lng</b> : ${this._user.lng}`;
 					}
@@ -106,6 +115,7 @@ class BeerCrackerz {
 					timeout: 29000 // A position is update in 29s maximum
 				});
       } else {
+				console.error("Your browser doesn't implement the geolocation API. BeerCrackerz is unusable.");
 				resolve();
 			}
 		});
@@ -125,12 +135,22 @@ class BeerCrackerz {
 			// Place user marker on the map
 			MapHelper.drawUserMarker(this._user);
 			// Add OSM credits to the map next to leaflet credits
-			window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			const osm = window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 				minZoom: 2 // Don't allow dezooming too far from map
 			}).addTo(this._map);
+			const esri = window.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+				attribution: '&copy; <a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9">Esri</a>',
+				minZoom: 2 // Don't allow dezooming too far from map
+			});
 			// Prevent panning outside of the world's edge
 			this._map.setMaxBounds(Utils.MAP_BOUNDS);
+			// Add layer group to interface
+			const baseMaps = {
+        '<p>Plan</p>': osm,
+        '<p>Satellite</p>': esri
+      };
+			window.L.control.layers(baseMaps, {}, { position: 'bottomright' }).addTo(this._map);
 			resolve();
 		});
 	}
@@ -138,10 +158,11 @@ class BeerCrackerz {
 
 	_initEvents() {
 		return new Promise(resolve => {
-			document.getElementById('center-on').addEventListener('click', this.toggleFocusLock.bind(this));
-			document.getElementById('hide-show').addEventListener('click', this.hidShowModal.bind(this));
-			// Modal material
+			// Command events
+			document.getElementById('user-profile').addEventListener('click', this.userProfileModal.bind(this));
 			document.getElementById('about').addEventListener('click', this.aboutModal.bind(this));
+			document.getElementById('hide-show').addEventListener('click', this.hidShowModal.bind(this));
+			document.getElementById('center-on').addEventListener('click', this.toggleFocusLock.bind(this));
 			document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));
 			// Map is dragged by user mouse/finger
 			this._map.on('drag', () => {
@@ -162,12 +183,14 @@ class BeerCrackerz {
 				MapHelper.setMarkerCircles(this._marks.spot, false);
 				MapHelper.setMarkerCircles(this._marks.store, false);
 				MapHelper.setMarkerCircles(this._marks.bar, false);
+				MapHelper.setMarkerCircles([this._user], false);
 			});
 			window.BeerCrackerz.map.on('zoomend', () => {
 				this._isZooming = false;
 				MapHelper.setMarkerCircles(this._marks.spot, true);
 				MapHelper.setMarkerCircles(this._marks.store, true);
 				MapHelper.setMarkerCircles(this._marks.bar, true);
+				MapHelper.setMarkerCircles([this._user], true);
 			});
 			
 			resolve();
@@ -206,6 +229,7 @@ class BeerCrackerz {
 		MapHelper.setMarkerCircles(this._marks.spot, visible);
 		MapHelper.setMarkerCircles(this._marks.store, visible);
 		MapHelper.setMarkerCircles(this._marks.bar, visible);
+		MapHelper.setMarkerCircles([this._user], visible);
 		Utils.setPreference('poi-show-circle', visible);
 		this.updateMarkerCirclesVisibility();
 	}
@@ -227,6 +251,24 @@ class BeerCrackerz {
   // ======================================================================== //
   // ----------------- App modals display and interaction ------------------- //
   // ======================================================================== //	
+
+
+	userProfileModal() {
+		Utils.fetchTemplate('assets/html/user.html').then(dom => {
+			document.getElementById('overlay').appendChild(dom);
+			document.getElementById('overlay').style.display = 'flex';
+			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+		});
+	}
+
+
+	aboutModal() {
+		Utils.fetchTemplate('assets/html/about.html').then(dom => {
+			document.getElementById('overlay').appendChild(dom);
+			document.getElementById('overlay').style.display = 'flex';
+			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+		});
+	}
 
 
 	hidShowModal() {
@@ -267,15 +309,6 @@ class BeerCrackerz {
 	}
 
 
-	aboutModal() {
-		Utils.fetchTemplate('assets/html/about.html').then(dom => {
-			document.getElementById('overlay').appendChild(dom);
-			document.getElementById('overlay').style.display = 'flex';
-			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
-		});
-	}
-
-
 	closeModal(e) {
 		if (e.target.id === 'overlay' || e.target.id.indexOf('close') !== -1) {
       document.getElementById('overlay').style.opacity = 0;
@@ -287,13 +320,23 @@ class BeerCrackerz {
 	}
 
 
+  // ======================================================================== //
+  // -------------------------- Map interaction ----------------------------- //
+  // ======================================================================== //
+
+
 	mapClicked(event) {
 		if (this._newMarker && this._newMarker.popupClosed) {
 			// Avoid to open new marker right after popup closing
 			this._newMarker = null;
 		} else if (this._newMarker === null || !this._newMarker.isBeingDefined) {
-			// Only create new marker if none is in progress
-			this._newMarker = MapHelper.definePOI(event.latlng, this._markerSaved.bind(this));
+			// Only create new marker if none is in progress, and that click is max range to add a marker
+			const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [event.latlng.lat, event.latlng.lng]);
+			if (distance < Utils.NEW_MARKER_RANGE) {
+				this._newMarker = MapHelper.definePOI(event.latlng, this._markerSaved.bind(this));
+			} else {
+				console.log('New marker out of range');
+			}
 		}
 	}
 
@@ -330,13 +373,13 @@ class BeerCrackerz {
 						data[i].circle.visible = true;
 						data[i].circle.setStyle({
 							opacity: 1,
-							fillOpacity: 0.1,
+							fillOpacity: 0.1
 						});
 					} else if (distance >= Utils.CIRCLE_RADIUS && data[i].circle.visible) {
 						data[i].circle.visible = false;
 						data[i].circle.setStyle({
 							opacity: 0,
-							fillOpacity: 0,
+							fillOpacity: 0
 						});
 					}
 				}
@@ -347,6 +390,7 @@ class BeerCrackerz {
       _updateByType(this._marks.spot);
       _updateByType(this._marks.store);
       _updateByType(this._marks.bar);
+      _updateByType([this._user]);
     }
 	}
 

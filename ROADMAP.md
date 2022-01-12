@@ -53,7 +53,7 @@
 
 ### Interface
 
-- [] ajouter layers de map satelite
+- [x] ajouter layers de map satelite
 - [] fond de carte plus smooth, moins informatif
 - [] légende sur les cercles pour indiquer la distance
 - [x] ajouter pp user en haut droite pour accéder profil

@@ -1,7 +1,7 @@
 class Utils {
 
 
-  constructor() {}
+  constructor() { /* Not meant to be instantiated, all methods should be static */ }
 
 
   static fetchTemplate(url) {
@@ -48,8 +48,33 @@ class Utils {
   }
 
 
+  static get USER_COLOR() {
+    return '#63fff5';
+  }
+
+
+  static get SPOT_COLOR() {
+    return '#26ad23';
+  }
+
+
+  static get STORE_COLOR() {
+    return '#247dc9';
+  }
+
+
+  static get BAR_COLOR() {
+    return '#ca2a3d';
+  }
+
+
   static get CIRCLE_RADIUS() {
     return 100;
+  }
+
+
+  static get NEW_MARKER_RANGE() {
+    return 200;
   }
 
 
@@ -58,6 +83,24 @@ class Utils {
       window.L.latLng(-89.98155760646617, -180),
       window.L.latLng(89.99346179538875, 180)
     );
+  }
+
+
+  static get HIGH_ACCURACY() {
+    return {
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+      timeout: 900,
+    };
+  }
+
+
+  static get OPTIMIZED_ACCURACY() {
+    return {
+      enableHighAccuracy: false,
+      maximumAge: 30000,
+      timeout: 29000
+    };
   }
 
 }
