@@ -54,6 +54,8 @@ class MapHelper {
     } else { // Update user marker position
       options.marker.setLatLng(options);
       options.circle.setLatLng(options);
+	options.circle.setRadius(options.accuracy);
+
     }
   }
 
