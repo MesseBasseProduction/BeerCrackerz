@@ -1,0 +1,61 @@
+{
+  "debug": {
+    "lat": "Latitude",
+    "lng": "Longitude",
+    "updates": "Mises à jour",
+    "accuracy": "Précision",
+    "highAccuracy": "Haute précision",
+    "posAge": "Fréquence de rafraichissement",
+    "posTimeout": "Validité de la position",
+    "zoom": "Niveau de zoom",
+    "enabled": "Activée",
+    "disabled": "Désactivée"
+  },
+  "nav": {
+    "add": "Ajouter",
+    "cancel": "Annuler",
+    "close": "Fermer"
+  },
+  "map": {
+    "newTitle": "Nouveau marqueur",
+    "newSpot": "Ajouter un spot",
+    "newStore": "Ajouter un magasin",
+    "newBar": "Ajouter un bar",
+    "planLayer": "Plan",
+    "satLayer": "Satellite"
+  },
+  "spot": {
+    "title": "Nouveau spot",
+    "subtitle": "Un spot est un endroit remarquable pour cracker une bière en tout quiétude! Faites en profiter la communauté, que ce soit pour le calme exceptionnel, pour la vue incroyable ou pour tout autre source de ravissement houblonné.",
+    "nameLabel": "Nommer ce spot",
+    "descLabel": "Pourquoi ne pas le décrire",
+    "rateLabel": "Lui attribuer une note"
+  },
+  "store": {
+    "title": "Nouveau magasin",
+    "subtitle": "C'est un indispensable pour se ravitailler des meilleurs breuvages houblonnés. Rensigner la gamme de prix et surtout si fraicheur il y a!",
+    "nameLabel": "Nom du magasin",
+    "descLabel": "Pourquoi ne pas le décrire",
+    "rateLabel": "Lui attribuer une note"
+  },
+  "bar": {
+    "title": "Nouveau bar",
+    "subtitle": "Un bar est un endroit convivial ou le houblons coule des saintes tireuses à pression.",
+    "nameLabel": "Nom du bar",
+    "descLabel": "Pourquoi ne pas le décrire",
+    "rateLabel": "Lui attribuer une note"
+  },
+  "modal": {
+    "userTitle": "Compte utilisateur",
+    "userAccuracyPref": "Haute précision",
+    "userDebugPref": "Interface de debug",
+    "aboutTitle": "À propos de BeerCrackerz",
+    "aboutDesc": "Une idée brillante de David Béché!<br>BeerCrackerz, c'est la communauté incontournable d'amoureux du houblons, de pourfendeurs de pintes, d'aficionados de céréales!",
+    "hideShowTitle": "Options de carte",
+    "hideShowLabels": "Étiquettes",
+    "hideShowCircles": "Cercles",
+    "hideShowSpots": "Spots",
+    "hideShowStores": "Magasins",
+    "hideShowBars": "Bars"
+  }
+}

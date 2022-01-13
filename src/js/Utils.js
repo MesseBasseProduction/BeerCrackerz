@@ -15,9 +15,25 @@ class Utils {
   }
 
 
+  static fetchFile(url) {
+    return new Promise((resolve, reject) => {
+			fetch(url).then(data => {
+        data.text().then(string => {
+          resolve(string);
+        }).catch(reject);
+			}).catch(reject);
+		});    
+  }
+
+
   static stripDom(html){
     let doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent || '';
+  }
+
+
+  static replaceString(element, string, value) {
+    element.innerHTML = element.innerHTML.replace(string, value);
   }
 
 
@@ -35,6 +51,94 @@ class Utils {
     var c = 2 * Math.asin(Math.sqrt(a));
     var EARTH_RADIUS = 6371;
     return c * EARTH_RADIUS * 1000;
+  }
+
+
+  /** @method
+   * @name precisionRound
+   * @public
+   * @memberof Utils
+   * @author Arthur Beaulieu
+   * @since September 2018
+   * @description Do a Math.round with a given precision (ie amount of integers after the coma)
+   * @param {nunmber} value - The value to precisely round
+   * @param {number} precision - The number of integers after the coma
+   * @return {number} - The rounded value */
+  static precisionRound(value, precision) {
+    const multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+  }
+
+
+  static initDebugInterface() {
+    const lang = window.BeerCrackerz.nls.debug.bind(window.BeerCrackerz.nls);
+    const debugContainer = document.createElement('DIV');
+    const userLat = document.createElement('P');
+    const userLng = document.createElement('P');
+    const updatesAmount = document.createElement('P');
+    const userAccuracy = document.createElement('P');
+    const highAccuracy = document.createElement('P');
+    const maxAge = document.createElement('P');
+    const posTimeout = document.createElement('P');
+    const zoomLevel = document.createElement('P');
+    debugContainer.classList.add('debug-container');
+    userLat.classList.add('debug-user-lat');
+    userLng.classList.add('debug-user-lng');
+    updatesAmount.classList.add('debug-updates-amount');
+    userAccuracy.classList.add('debug-user-accuracy');
+    highAccuracy.classList.add('debug-high-accuracy');
+    maxAge.classList.add('debug-pos-max-age');
+    posTimeout.classList.add('debug-pos-timeout');
+    zoomLevel.classList.add('debug-zoom-level');
+    userLat.innerHTML = `<b>${lang('lat')}</b> : -`;
+    userLng.innerHTML = `<b>${lang('lng')}</b> : -`;
+    updatesAmount.innerHTML = `<b>${lang('updates')}</b> : 0`;
+    userAccuracy.innerHTML = `<b>${lang('accuracy')}</b> : -`;
+    highAccuracy.innerHTML = `<b>${lang('highAccuracy')}</b> : -`;
+    maxAge.innerHTML = `<b>${lang('posAge')}</b> : -`;
+    posTimeout.innerHTML = `<b>${lang('posTimeout')}</b> : -`;
+    zoomLevel.innerHTML = `<b>${lang('zoom')}</b> : -`;
+    debugContainer.appendChild(userLat);
+    debugContainer.appendChild(userLng);
+    debugContainer.appendChild(updatesAmount);
+    debugContainer.appendChild(userAccuracy);
+    debugContainer.appendChild(highAccuracy);
+    debugContainer.appendChild(maxAge);
+    debugContainer.appendChild(posTimeout);
+    debugContainer.appendChild(zoomLevel);
+    return debugContainer;
+  }
+
+
+  static updateDebugInterface(element, user, options) {
+    if (window.DEBUG === true) {
+      const lang = window.BeerCrackerz.nls.debug.bind(window.BeerCrackerz.nls);
+      const updates = parseInt(element.querySelector('.debug-updates-amount').innerHTML.split(' : ')[1]) + 1;
+      element.querySelector('.debug-user-lat').innerHTML = `
+        <b>${lang('lat')}</b> : ${user.lat}
+      `;
+      element.querySelector('.debug-user-lng').innerHTML = `
+        <b>${lang('lng')}</b> : ${user.lng}
+      `;
+      element.querySelector('.debug-updates-amount').innerHTML = `
+        <b>${lang('updates')}</b> : ${updates}
+      `;
+      element.querySelector('.debug-user-accuracy').innerHTML = `
+        <b>${lang('accuracy')}</b> : ${Utils.precisionRound(user.accuracy, 2)}m
+      `;
+      element.querySelector('.debug-high-accuracy').innerHTML = `
+        <b>${lang('highAccuracy')}</b> : ${options.enableHighAccuracy === true ? lang('enabled') : lang('disabled')}
+      `;
+      element.querySelector('.debug-pos-max-age').innerHTML = `
+        <b>${lang('posAge')}</b> : ${options.maximumAge / 1000}s
+      `;
+      element.querySelector('.debug-pos-timeout').innerHTML = `
+        <b>${lang('posTimeout')}</b> : ${options.timeout / 1000}s
+      `;
+      element.querySelector('.debug-zoom-level').innerHTML = `
+        <b>${lang('zoom')}</b> : ${window.BeerCrackerz.map.getZoom()}
+      `;
+    }
   }
 
 
@@ -88,18 +192,18 @@ class Utils {
 
   static get HIGH_ACCURACY() {
     return {
-      enableHighAccuracy: true,
-      maximumAge: 1000,
-      timeout: 900,
+      enableHighAccuracy: true, // More consuption, better position
+      maximumAge: 1000, // A position will last 1s maximum
+      timeout: 900, // A position is updated in 0.9s maximum
     };
   }
 
 
   static get OPTIMIZED_ACCURACY() {
     return {
-      enableHighAccuracy: false,
-      maximumAge: 30000,
-      timeout: 29000
+      enableHighAccuracy: false, // Less consuption
+      maximumAge: 30000, // A position will last 30s maximum
+      timeout: 29000 // A position is updated in 29s maximum
     };
   }
 

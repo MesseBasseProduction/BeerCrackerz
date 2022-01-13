@@ -1,12 +1,14 @@
 import './BeerCrackerz.scss';
 import MapHelper from './js/MapHelper.js';
+import LangManager from './js/LangManager.js';
 import Utils from './js/Utils.js';
 
 
-class BeerCrackerz {
+class BeerCrackerz extends MapHelper {
 
 
 	constructor() {
+		super();
 		this._map = null;
 		this._user = {
 			lat: 48.853121540141096, // Paris Notre-Dame latitude
@@ -25,12 +27,9 @@ class BeerCrackerz {
 
 		this._watchId = null;
 		this._isZooming = false;
+		this._debugElement = null;
 
-		this._initDebug()
-      .then(this._initPreferences.bind(this))
-      .then(this._initGeolocation.bind(this))
-      .then(this._initMap.bind(this))
-      .then(this._initEvents.bind(this));
+		this._lang = new LangManager('en', this._init.bind(this));		
 	}
 
 
@@ -39,28 +38,12 @@ class BeerCrackerz {
   // ======================================================================== //
 
 
-	_initDebug() {
-		return new Promise(resolve => {
-			if (window.DEBUG === true) {
-				const debugContainer = document.createElement('DIV');
-				const updatesAmount = document.createElement('P');
-				const userAccuracy = document.createElement('P');
-				const userLat = document.createElement('P');
-				const userLng = document.createElement('P');
-				debugContainer.classList.add('debug-container');
-				updatesAmount.classList.add('debug-updates-amount');
-				userLat.classList.add('debug-user-lat');
-				userLng.classList.add('debug-user-lng');
-				userAccuracy.classList.add('debug-user-accuracy');
-				updatesAmount.innerHTML = '<b>Updates</b> : 0';
-				debugContainer.appendChild(updatesAmount);
-				debugContainer.appendChild(userAccuracy);
-				debugContainer.appendChild(userLat);
-				debugContainer.appendChild(userLng);
-				document.body.appendChild(debugContainer);
-			}
-			resolve();
-		});
+	_init() {
+		this._debugElement = Utils.initDebugInterface();
+    this._initPreferences()
+      .then(this._initGeolocation.bind(this))
+      .then(this._initMap.bind(this))
+      .then(this._initEvents.bind(this));
 	}
 
 
@@ -77,7 +60,21 @@ class BeerCrackerz {
 			if (Utils.getPreference('poi-show-bar') === null) {
         Utils.setPreference('poi-show-bar', true);
       }
-			
+
+			if (Utils.getPreference('map-plan-layer') === null) {
+        Utils.setPreference('map-plan-layer', true);
+      }
+
+			if (window.DEBUG === true || (Utils.getPreference('app-debug') === 'true')) {
+				window.DEBUG = true; // Ensure to set global flag if preference comes from local storage
+				Utils.setPreference('app-debug', true); // Ensure to set local storage preference if debug flag was added to the url
+				this.addDebugUI();
+      }
+			// Update icon class if center on preference is set to true
+			if (Utils.getPreference('map-center-on-user') === 'true') {
+        document.getElementById('center-on').classList.add('lock-center-on');
+      }
+
 			resolve();
 		});
 	}
@@ -86,6 +83,7 @@ class BeerCrackerz {
 	_initGeolocation() {
 		return new Promise(resolve => {
 			if ('geolocation' in navigator) {
+				const options = (Utils.getPreference('map-high-accuracy') === 'true') ? Utils.HIGH_ACCURACY : Utils.OPTIMIZED_ACCURACY;
 				this._watchId = navigator.geolocation.watchPosition(position => {
 					// Update saved user position
 					this._user.lat = position.coords.latitude;
@@ -93,27 +91,17 @@ class BeerCrackerz {
 					this._user.accuracy = position.coords.accuracy;
 					// Only draw marker if map is already created
 					if (this._map) {
-						MapHelper.drawUserMarker(this._user);
+						this.drawUserMarker();
 						this.updateMarkerCirclesVisibility();
 						// Update map position if focus lock is active
-						if (Utils.getPreference('lock-center-on') === 'true' && !this._isZooming) {
+						if (Utils.getPreference('map-center-on-user') === 'true' && !this._isZooming) {
 							this._map.setView(this._user);
             }
-					}
-					// Updating debug info if url contains ?debug
-					if (window.DEBUG === true) {
-						const updates = parseInt(document.querySelector('.debug-updates-amount').innerHTML.split(' : ')[1]) + 1;
-						document.querySelector('.debug-updates-amount').innerHTML = `<b>Updates</b> : ${updates}`;
-						document.querySelector('.debug-user-accuracy').innerHTML = `<b>Accuracy</b> : ${this._user.accuracy}m`;
-						document.querySelector('.debug-user-lat').innerHTML = `<b>Lat</b> : ${this._user.lat}`;
-						document.querySelector('.debug-user-lng').innerHTML = `<b>Lng</b> : ${this._user.lng}`;
+						// Updating debug info
+						this.updateDebugUI();
 					}
 					resolve();
-				}, resolve, {
-					enableHighAccuracy: true, // More consuption, better results
-					maximumAge: 30000, // A position will last 30s maximum
-					timeout: 29000 // A position is update in 29s maximum
-				});
+				}, resolve, options);
       } else {
 				console.error("Your browser doesn't implement the geolocation API. BeerCrackerz is unusable.");
 				resolve();
@@ -133,23 +121,33 @@ class BeerCrackerz {
 			// Subscribe to click event on map to react
 			this._map.on('click', this.mapClicked.bind(this));
 			// Place user marker on the map
-			MapHelper.drawUserMarker(this._user);
+			this.drawUserMarker();
 			// Add OSM credits to the map next to leaflet credits
 			const osm = window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-				minZoom: 2 // Don't allow dezooming too far from map
-			}).addTo(this._map);
+				maxZoom: 21,
+				maxNativeZoom: 19, // To ensure tiles are not unloaded when zooming after 19
+				minZoom: 2 // Don't allow dezooming too far from map so it always stay fully visible
+			});
 			const esri = window.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-				attribution: '&copy; <a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9">Esri</a>',
-				minZoom: 2 // Don't allow dezooming too far from map
+				attribution: '&copy; <a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9">Esri Imagery</a>',
+				maxZoom: 21,
+				maxNativeZoom: 19, // To ensure tiles are not unloaded when zooming after 19
+				minZoom: 2 // Don't allow dezooming too far from map so it always stay fully visible
 			});
 			// Prevent panning outside of the world's edge
 			this._map.setMaxBounds(Utils.MAP_BOUNDS);
 			// Add layer group to interface
-			const baseMaps = {
-        '<p>Plan</p>': osm,
-        '<p>Satellite</p>': esri
-      };
+			const baseMaps = {};
+			baseMaps[`<p>${this.nls.map('planLayer')}</p>`] = osm;
+			baseMaps[`<p>${this.nls.map('satLayer')}</p>`] = esri;
+			// Append layer depending on user preference
+			if (Utils.getPreference('map-plan-layer') === 'true') {
+				osm.addTo(this._map);
+      } else {
+				esri.addTo(this._map);
+			}
+
 			window.L.control.layers(baseMaps, {}, { position: 'bottomright' }).addTo(this._map);
 			resolve();
 		});
@@ -169,30 +167,31 @@ class BeerCrackerz {
 				// Constrain pan to the map bounds
 				this._map.panInsideBounds(Utils.MAP_BOUNDS, { animate: true });
 				// Disable lock focus if user drags the map
-				if (Utils.getPreference('lock-center-on') === 'true') {
+				if (Utils.getPreference('map-center-on-user') === 'true') {
 					this.toggleFocusLock();
 				}
 			});
-
-			if (Utils.getPreference('lock-center-on') === 'true') {
-				document.getElementById('center-on').classList.add('lock-center-on');
-			}
-
-			window.BeerCrackerz.map.on('zoomstart', () => {
+			// Map events
+			this._map.on('zoomstart', () => {
 				this._isZooming = true;
-				MapHelper.setMarkerCircles(this._marks.spot, false);
-				MapHelper.setMarkerCircles(this._marks.store, false);
-				MapHelper.setMarkerCircles(this._marks.bar, false);
-				MapHelper.setMarkerCircles([this._user], false);
+				this.setMarkerCircles(this._marks.spot, false);
+				this.setMarkerCircles(this._marks.store, false);
+				this.setMarkerCircles(this._marks.bar, false);
+				this.setMarkerCircles([this._user], false);
 			});
-			window.BeerCrackerz.map.on('zoomend', () => {
-				this._isZooming = false;
-				MapHelper.setMarkerCircles(this._marks.spot, true);
-				MapHelper.setMarkerCircles(this._marks.store, true);
-				MapHelper.setMarkerCircles(this._marks.bar, true);
-				MapHelper.setMarkerCircles([this._user], true);
-			});
-			
+			this._map.on('zoomend', () => {
+        this._isZooming = false;
+        this.setMarkerCircles(this._marks.spot, true);
+        this.setMarkerCircles(this._marks.store, true);
+        this.setMarkerCircles(this._marks.bar, true);
+        this.setMarkerCircles([this._user], true);
+        // Updating debug info
+        this.updateDebugUI();
+      });
+			this._map.on('baselayerchange', event => {
+				const planActive = (Utils.stripDom(event.name) === this.nls.map('planLayer'));
+				Utils.setPreference('map-plan-layer', planActive);
+      });
 			resolve();
 		});
 	}
@@ -204,32 +203,32 @@ class BeerCrackerz {
 
 
 	toggleFocusLock() {
-		if (Utils.getPreference('lock-center-on') === 'true') {
-			document.getElementById('center-on').classList.remove('lock-center-on');
-			Utils.setPreference('lock-center-on', 'false');
-		} else {
-			document.getElementById('center-on').classList.add('lock-center-on');
-			this._map.flyTo([this._user.lat, this._user.lng], 18);
-			Utils.setPreference('lock-center-on', 'true');
-		}
+		if (Utils.getPreference('map-center-on-user') === 'true') {
+      document.getElementById('center-on').classList.remove('lock-center-on');
+      Utils.setPreference('map-center-on-user', 'false');
+    } else {
+      document.getElementById('center-on').classList.add('lock-center-on');
+      this._map.flyTo([this._user.lat, this._user.lng], 18);
+      Utils.setPreference('map-center-on-user', 'true');
+    }
 	}
 
 
 	toggleLabel() {
 		const visible = !(Utils.getPreference('poi-marker-label') === 'true');
-		MapHelper.setMarkerLabels(this._marks.spot, visible);
-		MapHelper.setMarkerLabels(this._marks.store, visible);
-		MapHelper.setMarkerLabels(this._marks.bar, visible);
+		this.setMarkerLabels(this._marks.spot, visible);
+		this.setMarkerLabels(this._marks.store, visible);
+		this.setMarkerLabels(this._marks.bar, visible);
 		Utils.setPreference('poi-marker-label', visible);
 	}
 
 
 	toggleCircle() {
 		const visible = !(Utils.getPreference('poi-show-circle') === 'true');
-		MapHelper.setMarkerCircles(this._marks.spot, visible);
-		MapHelper.setMarkerCircles(this._marks.store, visible);
-		MapHelper.setMarkerCircles(this._marks.bar, visible);
-		MapHelper.setMarkerCircles([this._user], visible);
+		this.setMarkerCircles(this._marks.spot, visible);
+		this.setMarkerCircles(this._marks.store, visible);
+		this.setMarkerCircles(this._marks.bar, visible);
+		this.setMarkerCircles([this._user], visible);
 		Utils.setPreference('poi-show-circle', visible);
 		this.updateMarkerCirclesVisibility();
 	}
@@ -248,22 +247,63 @@ class BeerCrackerz {
 	}
 
 
+	toggleHighAccuracy() {
+		const high = !(Utils.getPreference('map-high-accuracy') === 'true');
+		Utils.setPreference('map-high-accuracy', high);
+		navigator.geolocation.clearWatch(this._watchId);
+		this._initGeolocation().then(this.updateDebugUI.bind(this));
+	}
+
+
+	toggleDebug() {
+		const visible = !window.DEBUG;
+		window.DEBUG = visible;
+		Utils.setPreference('app-debug', visible);
+		if (visible) {
+			this.addDebugUI();
+		} else {
+			this.removeDebugUI();
+		}
+	}
+
+
   // ======================================================================== //
   // ----------------- App modals display and interaction ------------------- //
   // ======================================================================== //	
 
 
 	userProfileModal() {
-		Utils.fetchTemplate('assets/html/user.html').then(dom => {
+		Utils.fetchTemplate('assets/html/modal/user.html').then(dom => {
+			// Update nls for template
+      Utils.replaceString(dom.querySelector(`#nls-user-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('userTitle'));
+      Utils.replaceString(dom.querySelector(`#nls-user-modal-accuracy`), `{{ACCURACY_USER_MODAL}}`, this.nls.modal('userAccuracyPref'));
+      Utils.replaceString(dom.querySelector(`#nls-user-modal-debug`), `{{DEBUG_USER_MODAL}}`, this.nls.modal('userDebugPref'));
+
 			document.getElementById('overlay').appendChild(dom);
-			document.getElementById('overlay').style.display = 'flex';
+      document.getElementById('overlay').style.display = 'flex';
+			// Init modal checkbox state according to local storage preferences
+			if (Utils.getPreference('map-high-accuracy') === 'true') {
+        document.getElementById('high-accuracy-toggle').checked = true;
+      }
+
+			if (window.DEBUG === true || (Utils.getPreference('app-debug') === 'true')) {
+        document.getElementById('debug-toggle').checked = true;
+      }
+
+			document.getElementById('high-accuracy-toggle').addEventListener('change', this.toggleHighAccuracy.bind(this));
+			document.getElementById('debug-toggle').addEventListener('change', this.toggleDebug.bind(this));
+
 			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
 		});
 	}
 
 
 	aboutModal() {
-		Utils.fetchTemplate('assets/html/about.html').then(dom => {
+		Utils.fetchTemplate('assets/html/modal/about.html').then(dom => {
+			// Update nls for template
+			Utils.replaceString(dom.querySelector(`#nls-about-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('aboutTitle'));
+      Utils.replaceString(dom.querySelector(`#nls-about-modal-desc`), `{{DESC_ABOUT_MODAL}}`, this.nls.modal('aboutDesc'));
+			
 			document.getElementById('overlay').appendChild(dom);
 			document.getElementById('overlay').style.display = 'flex';
 			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
@@ -272,7 +312,16 @@ class BeerCrackerz {
 
 
 	hidShowModal() {
-		Utils.fetchTemplate('assets/html/hideshow.html').then(dom => {
+		Utils.fetchTemplate('assets/html/modal/hideshow.html').then(dom => {
+			// Update template nls
+			Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('hideShowTitle'));
+			Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-labels`), `{{LABELS_HIDESHOW_MODAL}}`, this.nls.modal('hideShowLabels'));
+			Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-circles`), `{{CIRCLES_HIDESHOW_MODAL}}`, this.nls.modal('hideShowCircles'));
+			Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-spots`), `{{SPOTS_HIDESHOW_MODAL}}`, this.nls.modal('hideShowSpots'));
+			Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-stores`), `{{STORES_HIDESHOW_MODAL}}`, this.nls.modal('hideShowStores'));
+			Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-bars`), `{{BARS_HIDESHOW_MODAL}}`, this.nls.modal('hideShowBars'));
+			Utils.replaceString(dom.querySelector(`#modal-close-button`), `{{MODAL_CLOSE}}`, this.nls.nav('close'));
+
 			document.getElementById('overlay').appendChild(dom);
 			document.getElementById('overlay').style.display = 'flex';
 			// Init modal checkbox state according to local storage preferences
@@ -296,8 +345,6 @@ class BeerCrackerz {
         document.getElementById('show-bars').checked = true;
       }
 
-			document.getElementById('modal-close').addEventListener('click', this.closeModal.bind(this));
-			document.getElementById('modal-close-button').addEventListener('click', this.closeModal.bind(this));
 			document.getElementById('label-toggle').addEventListener('change', this.toggleLabel.bind(this));
 			document.getElementById('circle-toggle').addEventListener('change', this.toggleCircle.bind(this));
 			document.getElementById('show-spots').addEventListener('change', this.toggleMarkers.bind(this, 'spot'));
@@ -333,7 +380,7 @@ class BeerCrackerz {
 			// Only create new marker if none is in progress, and that click is max range to add a marker
 			const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [event.latlng.lat, event.latlng.lng]);
 			if (distance < Utils.NEW_MARKER_RANGE) {
-				this._newMarker = MapHelper.definePOI(event.latlng, this._markerSaved.bind(this));
+				this._newMarker = this.definePOI(event.latlng, this._markerSaved.bind(this));
 			} else {
 				console.log('New marker out of range');
 			}
@@ -395,6 +442,32 @@ class BeerCrackerz {
 	}
 
 
+  // ======================================================================== //
+  // ---------------------------- Debug methods ----------------------------- //
+  // ======================================================================== //	
+
+
+	addDebugUI() {
+		document.body.appendChild(this._debugElement);
+	}
+
+
+	removeDebugUI() {
+		document.body.removeChild(this._debugElement);
+	}
+
+
+	updateDebugUI() {
+		const options = (Utils.getPreference('map-high-accuracy') === 'true') ? Utils.HIGH_ACCURACY : Utils.OPTIMIZED_ACCURACY;
+		Utils.updateDebugInterface(this._debugElement, this._user, options);
+	}
+
+
+  // ======================================================================== //
+  // ---------------------------- Class accessors --------------------------- //
+  // ======================================================================== //	
+
+
 	get map() {
 		return this._map;
 	}
@@ -403,6 +476,11 @@ class BeerCrackerz {
 	get user() {
 		return this._user;
 	}
+
+
+	get nls() {
+		return this._lang;
+	}	
 
 
 }

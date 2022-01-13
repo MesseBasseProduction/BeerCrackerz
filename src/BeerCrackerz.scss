@@ -1,11 +1,5 @@
 @import 'scss/keyframes';
 
-@font-face {
-  font-family: 'Catamaran';
-  src: url('/assets/font/Catamaran.ttf') format('truetype'),
-		url('/assets/font/Catamaran.woff') format('woff');
-}
-
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -73,18 +67,16 @@ button {
 
 aside {
 	background: white;
-	border-top-right-radius: .5rem;
-	border-bottom-right-radius: .5rem;
+	border-radius: .5rem;
 	box-shadow: 0px 0px 10px #181818;
-	height: 50%;
-	left: 0;
-	max-width: 30rem;
+	height: calc(100% - 2rem);
+	left: 1rem;
 	opacity: 0;
 	padding: 2.5rem 1.5rem;
 	position: absolute;
-	top: 25%;
-	width: auto;
-	z-index: 20;
+	top: 1rem;
+	width: calc(100% - 2rem);
+	z-index: -1; /* Needs to be updated in Js */ 
 
 	transition: opacity .2s ease-out;
 
@@ -128,9 +120,17 @@ main.beer-crakerz-map {
 	width: 100%;
 	z-index: 10;
 
-	.new-poi button {
-		margin: 1.2rem 0;
-		padding: .8rem 2.2rem;
+	.new-poi {
+		text-align: center;
+
+		p {
+			font-size: 1.6rem;
+			font-weight: bold;
+		}
+
+		button {
+			margin: 1.2rem 0;		
+		}
 	}
 
 	.marker-tooltip {
@@ -144,7 +144,7 @@ nav {
   position: absolute;
   right: 1rem;
   top: 1rem;
-	width: 3.5rem;
+	width: 4.4rem;
 	z-index: 20;
 
   img {
@@ -253,6 +253,35 @@ nav {
 			}
 		}
 	}
+
+
+	.user-profile-modal {
+		height: calc(100% - 2rem);
+		width: calc(100% - 2rem);
+
+		.item {
+			align-items: center;
+			display: flex;
+			justify-content: space-between;
+			margin: 1rem auto;
+			max-width: 25rem;
+
+			img {
+				margin-right: 2rem;
+				height: 2rem;
+			}
+
+			label {
+				margin-bottom: 0;
+				margin-right: 2rem;	
+			}
+
+			input {
+				margin: 0;
+				width: auto;
+			}
+		}
+	}
 }
 
 .debug-container {
@@ -270,7 +299,7 @@ nav {
 	}
 }
 
-/* Needs to override some leaflet styles to match BeerVCrackerz interface */
+/* Needs to override some leaflet styles to match BeerCrackerz interface */
 .leaflet-control-layers-expanded {
 	padding: 2rem !important;
 

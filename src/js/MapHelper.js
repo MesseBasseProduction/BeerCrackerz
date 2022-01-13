@@ -6,11 +6,16 @@ import Utils from './Utils.js';
 class MapHelper {
 
 
-  constructor() { /* Not meant to be instantiated, all methods should be static */ }
+  constructor() {}
 
 
-  static placeMarker(options) {
-		let icon = Markers.black;
+  // ======================================================================== //
+  // --------------------------- Marker helpers ----------------------------- //
+  // ======================================================================== //
+
+
+  placeMarker(options) {
+    let icon = Markers.black;
     if (options.type === 'store') {
       icon = Markers.blue;
     } else if (options.type === 'spot') {
@@ -22,9 +27,9 @@ class MapHelper {
     }
 
     const marker = window.L.marker([options.lat, options.lng], { icon: icon })
-      .addTo(window.BeerCrackerz.map)
+      .addTo(this.map)
       .on('click', () => {
-        window.BeerCrackerz.map.flyTo([options.lat, options.lng], 18);
+        this.map.flyTo([options.lat, options.lng], 18);
       });
 
     if (options.name) {
@@ -35,97 +40,122 @@ class MapHelper {
   }
 
 
-  static drawUserMarker(options) {
-    if (!options.marker) { // Create user marker if not existing
-      options.type = 'user';
-      options.marker = MapHelper.placeMarker(options);
+  drawUserMarker() {
+    if (!this.user.marker) { // Create user marker if not existing
+      this.user.type = 'user';
+      this.user.marker = this.placeMarker(this.user);
       // Append circle around marker
-      options.radius = options.accuracy;
-      options.circle = MapHelper.drawCircle(options);
+      this.user.radius = this.user.accuracy;
+      this.user.circle = this.drawCircle(this.user);
       // Update circle opacity if pref is at true
       if (Utils.getPreference('poi-show-circle') === 'true') {
-        options.circle.setStyle({
+        this.user.circle.setStyle({
           opacity: 1,
           fillOpacity: 0.1,
         });
       }
       // Callback on marker clicked to add marker on user position
-      options.marker.on('click', window.BeerCrackerz.mapClicked.bind(window.BeerCrackerz));
+      this.user.marker.on('click', this.mapClicked.bind(this));
     } else { // Update user marker position
-      options.marker.setLatLng(options);
-      options.circle.setLatLng(options);
-	options.circle.setRadius(options.accuracy);
-
+      this.user.marker.setLatLng(this.user);
+      this.user.circle.setLatLng(this.user);
+      this.user.circle.setRadius(this.user.accuracy);
     }
   }
 
 
-  static definePOI(options, callback) {
-		const poiWrapper = document.createElement('DIV');
-    const newSpot = document.createElement('BUTTON');
-    const newStore = document.createElement('BUTTON');
-    const newBar = document.createElement('BUTTON');
-    newSpot.innerHTML = 'Ajouter un spot';
-    newStore.innerHTML = 'Ajouter un magasin';
-    newBar.innerHTML = 'Ajouter un bar';
-    poiWrapper.className = 'new-poi';
-    poiWrapper.appendChild(newSpot);
-    poiWrapper.appendChild(newStore);
-    poiWrapper.appendChild(newBar);
-    options.name = poiWrapper; // Update popup content with DOM elements
-    const marker = MapHelper.placeMarker(options).openPopup();
+  definePOI(options, callback) {
+    const dom = {
+      wrapper: document.createElement('DIV'),
+      title: document.createElement('P'),
+      spot: document.createElement('BUTTON'),
+      store: document.createElement('BUTTON'),
+      bar: document.createElement('BUTTON'),
+    };
+    // Update class and inner HTMl content according to user's nls
+    dom.wrapper.className = 'new-poi';
+    dom.title.innerHTML = this.nls.map('newTitle');
+    dom.spot.innerHTML = this.nls.map('newSpot');
+    dom.store.innerHTML = this.nls.map('newStore');
+    dom.bar.innerHTML = this.nls.map('newBar');
+    // Atach data type to each button (to be used in clicked callback)
+    dom.spot.dataset.type = 'spot';
+    dom.store.dataset.type = 'store';
+    dom.bar.dataset.type = 'bar';
+    // DOM chaining
+    dom.wrapper.appendChild(dom.title);
+    dom.wrapper.appendChild(dom.spot);
+    dom.wrapper.appendChild(dom.store);
+    dom.wrapper.appendChild(dom.bar);
+    // Update popup content with DOM elements
+    options.name = dom.wrapper;
+    // Create temporary mark with wrapper content and open it to offer user the creation menu
+    const marker = this.placeMarker(options).openPopup();
     options.marker = marker; // Attach marker to option so it can be manipulated in clicked callbacks
     options.addedCallback = callback; // Attach callback to be called when marker addition is done
-    newSpot.addEventListener('click', () => {
+    // Callback on button clicked (to open aside and define a new mark)
+    const _fillAside = (e) => {
       marker.isBeingDefined = true;
       marker.closePopup();
-      MapHelper.defineNewSpot(options);
-    });
-    newStore.addEventListener('click', () => {
-      marker.isBeingDefined = true;
-      marker.closePopup();
-      MapHelper.defineNewStore(options);
-    });
-    newBar.addEventListener('click', () => {
-      marker.isBeingDefined = true;
-      marker.closePopup();
-      MapHelper.defineNewBar(options);
-    });
+      this.defineMarkFactory(e.target.dataset.type, options);
+    };
+    // Buttons click events
+    dom.spot.addEventListener('click', _fillAside);
+    dom.store.addEventListener('click', _fillAside);
+    dom.bar.addEventListener('click', _fillAside);
+    // Listen to clicks outside of popup to close new mark
     marker.on('popupclose', () => {
       if (!marker.isBeingDefined) {
         marker.popupClosed = true;
-        marker.removeFrom(window.BeerCrackerz.map);
+        marker.removeFrom(this.map);
       }
     });
+
     return marker;
   }
 
 
-  static defineNewSpot(options) {
-    Utils.fetchTemplate('assets/html/newspot.html').then(dom => {
-      const name = dom.querySelector('#spot-name');
-      const description = dom.querySelector('#spot-desc');
-      const submit = dom.querySelector('#submit-spot');
-      const cancel = dom.querySelector('#cancel-spot');
+  // ======================================================================== //
+  // ---------------------- New mark in aside helper ------------------------ //
+  // ======================================================================== //  
+
+
+  defineMarkFactory(type, options) {
+    Utils.fetchTemplate(`assets/html/aside/new${type}.html`).then(dom => {
+      const name = dom.querySelector(`#${type}-name`);
+      const description = dom.querySelector(`#${type}-desc`);
+      const rating = new Rating(dom.querySelector(`#${type}-rating`));
+      const submit = dom.querySelector(`#${type}-submit`);
+      const cancel = dom.querySelector(`#${type}-cancel`);
       const close = dom.querySelector('#close-aside');
-      const starRating = new Rating(dom.querySelector('#star-rating'));
+      // Update nls for template
+      Utils.replaceString(dom.querySelector(`#nls-${type}-title`), `{{${type.toUpperCase()}_TITLE}}`, this.nls[type]('title'));
+      Utils.replaceString(dom.querySelector(`#nls-${type}-subtitle`), `{{${type.toUpperCase()}_SUBTITLE}}`, this.nls[type]('subtitle'));
+      Utils.replaceString(dom.querySelector(`#nls-${type}-name`), `{{${type.toUpperCase()}_NAME}}`, this.nls[type]('nameLabel'));
+      Utils.replaceString(dom.querySelector(`#nls-${type}-desc`), `{{${type.toUpperCase()}_DESC}}`, this.nls[type]('descLabel'));
+      Utils.replaceString(dom.querySelector(`#nls-${type}-rate`), `{{${type.toUpperCase()}_RATE}}`, this.nls[type]('rateLabel'));
+      Utils.replaceString(submit, `{{${type.toUpperCase()}_SUBMIT}}`, this.nls.nav('add'));
+      Utils.replaceString(cancel, `{{${type.toUpperCase()}_CANCEL}}`, this.nls.nav('cancel'));
       // Method to clear aside and hide it, and remove temporary marker on the map
       const _cleanDefineUI = () => {
         options.marker.isBeingDefined = false;
-        options.marker.removeFrom(window.BeerCrackerz.map); // Clear temporary black marker
+        options.marker.removeFrom(this.map); // Clear temporary black marker
         document.getElementById('aside').style.opacity = 0;
-        setTimeout(() => document.getElementById('aside').innerHTML = '', 200); // Match CSS transition duration
+        setTimeout(() => {
+          document.getElementById('aside').innerHTML = '';
+          document.getElementById('aside').style.zIndex = -1;
+        }, 200); // Match CSS transition duration
       };
       // Submit or cancel event subscriptions
       submit.addEventListener('click', () => {
+        // TODO check input validity
         _cleanDefineUI();
-        MapHelper.buildSpotUI(name.value, options).then(dom => {
-          options.type = 'spot';
+        this.markPopupFactory(type, name.value, options).then((dom) => {
+          options.type = type;
           options.name = dom;
           options.description = description.value;
-          options.rate = starRating.currentRate;
-          options.marker.removeFrom(window.BeerCrackerz.map); // Clear temporary black marker
-          options.marker = MapHelper.placeMarker(options); // Create final marker
+          options.rate = rating.currentRate;
+          options.marker = this.placeMarker(options); // Create final marker
           options.addedCallback(options);
         });
       });
@@ -134,95 +164,44 @@ class MapHelper {
       // Append new DOM element at the end to keep its scope while building events and co.
       document.getElementById('aside').innerHTML = '';
       document.getElementById('aside').appendChild(dom);
+      document.getElementById('aside').style.zIndex = 50;
       document.getElementById('aside').style.opacity = 1;
     });
   }
 
 
-  static defineNewStore(options) {
-    Utils.fetchTemplate('assets/html/newstore.html').then(dom => {
-      const name = dom.querySelector('#store-name');
-      const submit = dom.querySelector('#submit-store');
-      const cancel = dom.querySelector('#cancel-store');
-      const close = dom.querySelector('#close-aside');
-      const dollarRating = new Rating(dom.querySelector('#price-rating'));
-      // Method to clear aside and hide it, and remove temporary marker on the map
-      const _cleanDefineUI = () => {
-        options.marker.isBeingDefined = false;
-        options.marker.removeFrom(window.BeerCrackerz.map); // Clear temporary black marker
-        document.getElementById('aside').style.opacity = 0;
-        setTimeout(() => document.getElementById('aside').innerHTML = '', 200); // Match CSS transition duration
-      };
-      // Submit or cancel event subscriptions
-      submit.addEventListener('click', () => {
-        _cleanDefineUI();
-        MapHelper.buildStoreUI(name.value, options).then(dom => {
-          options.type = 'store';
-          options.name = dom;
-          options.price = dollarRating.currentRate;
-          options.marker.removeFrom(window.BeerCrackerz.map); // Clear temporary black marker
-          options.marker = MapHelper.placeMarker(options); // Create final marker
-          options.addedCallback(options);
-        });
-      });
-      cancel.addEventListener('click', _cleanDefineUI);
-      close.addEventListener('click', _cleanDefineUI);
-      // Append new DOM element at the end to keep its scope while building events and co.
-      document.getElementById('aside').innerHTML = '';
-      document.getElementById('aside').appendChild(dom);
-      document.getElementById('aside').style.opacity = 1;
-    });
+  defineNewSpot(options) {
+    this.defineMarkFactory('spot', options);
   }
 
 
-  static defineNewBar(options) {
-    Utils.fetchTemplate('assets/html/newbar.html').then(dom => {
-      const name = dom.querySelector('#bar-name');
-      const submit = dom.querySelector('#submit-bar');
-      const cancel = dom.querySelector('#cancel-bar');
-      const close = dom.querySelector('#close-aside');
-      const dollarRating = new Rating(dom.querySelector('#price-rating'));
-      // Method to clear aside and hide it, and remove temporary marker on the map
-      const _cleanDefineUI = () => {
-        options.marker.isBeingDefined = false;
-        options.marker.removeFrom(window.BeerCrackerz.map); // Clear temporary black marker
-        document.getElementById('aside').style.opacity = 0;
-        setTimeout(() => document.getElementById('aside').innerHTML = '', 200); // Match CSS transition duration
-      };
-      // Submit or cancel event subscriptions
-      submit.addEventListener('click', () => {
-        _cleanDefineUI();
-        MapHelper.buildBarUI(name.value, options).then((dom) => {
-          options.type = 'bar';
-          options.name = dom;
-          options.price = dollarRating.currentRate;
-          options.marker.removeFrom(window.BeerCrackerz.map); // Clear temporary black marker
-          options.marker = MapHelper.placeMarker(options); // Create final marker
-          options.addedCallback(options);
-        });
-      });
-      cancel.addEventListener('click', _cleanDefineUI);
-      close.addEventListener('click', _cleanDefineUI);
-      // Append new DOM element at the end to keep its scope while building events and co.
-      document.getElementById('aside').innerHTML = '';
-      document.getElementById('aside').appendChild(dom);
-      document.getElementById('aside').style.opacity = 1;
-    });
+  defineNewStore(options) {
+    this.defineMarkFactory('store', options);
   }
 
 
-  static buildSpotUI(name, options) {
+  defineNewBar(options) {
+    this.defineMarkFactory('bar', options);
+  }
+
+
+  // ======================================================================== //
+  // ------------------------- Mark popup helper ---------------------------- //
+  // ======================================================================== //    
+
+
+  markPopupFactory(type, name, options) {
     return new Promise(resolve => {
-      Utils.fetchTemplate('assets/html/spot.html').then(dom => {
+      Utils.fetchTemplate(`assets/html/popup/${type}.html`).then(dom => {
         const element = document.createElement('DIV');
         element.appendChild(dom);
-        element.innerHTML = element.innerHTML.replace('{{SPOT_NAME}}', Utils.stripDom(name));
-        element.innerHTML = element.innerHTML.replace('{{SPOT_LAT}}', options.lat);
-        element.innerHTML = element.innerHTML.replace('{{SPOT_LNG}}', options.lng);
+        Utils.replaceString(element, `{{${type.toUpperCase()}_NAME}}`, Utils.stripDom(name));
+        Utils.replaceString(element, `{{${type.toUpperCase()}_LAT}}`, options.lat);
+        Utils.replaceString(element, `{{${type.toUpperCase()}_LNG}}`, options.lng);
         // Append circle around marker
-        options.color = Utils.SPOT_COLOR;
-        options.circle = MapHelper.drawCircle(options);
-
+        options.color = Utils[`${type.toUpperCase()}_COLOR`];
+        options.circle = this.drawCircle(options);
+        // Create label for new marker
         options.tooltip = window.L.tooltip({
           permanent: true,
           direction: 'center',
@@ -230,102 +209,45 @@ class MapHelper {
           interactive: true
         }).setContent(name)
           .setLatLng(options.circle.getLatLng());
-
+        // Only make it visible if preference is to true
         if (Utils.getPreference('poi-marker-label') === 'true') {
-          options.tooltip.addTo(window.BeerCrackerz.map);
+          options.tooltip.addTo(this.map);
         }
+        // Send back the popup
         resolve(element);
       });
     });
   }
 
 
-  static buildStoreUI(name, options) {
-    return new Promise((resolve) => {
-      Utils.fetchTemplate('assets/html/store.html').then((dom) => {
-        const element = document.createElement('DIV');
-        element.appendChild(dom);
-        element.innerHTML = element.innerHTML.replace('{{STORE_NAME}}', Utils.stripDom(name));
-        element.innerHTML = element.innerHTML.replace('{{STORE_LAT}}', options.lat);
-        element.innerHTML = element.innerHTML.replace('{{STORE_LNG}}', options.lng);
-        // Append circle around marker
-        options.color = Utils.STORE_COLOR;
-        options.circle = MapHelper.drawCircle(options);
-
-        options.tooltip = window.L.tooltip({
-          permanent: true,
-          direction: 'center',
-          className: 'marker-tooltip',
-          interactive: true
-        }).setContent(name)
-          .setLatLng(options.circle.getLatLng());
-
-        if (Utils.getPreference('poi-marker-label') === 'true') {
-          options.tooltip.addTo(window.BeerCrackerz.map);
-        }
-        resolve(element);
-      });
-    });
-  }
-
-
-  static buildBarUI(name, options) {
-    return new Promise((resolve) => {
-      Utils.fetchTemplate('assets/html/bar.html').then((dom) => {
-        const element = document.createElement('DIV');
-        element.appendChild(dom);
-        element.innerHTML = element.innerHTML.replace('{{BAR_NAME}}', Utils.stripDom(name));
-        element.innerHTML = element.innerHTML.replace('{{BAR_LAT}}', options.lat);
-        element.innerHTML = element.innerHTML.replace('{{BAR_LNG}}', options.lng);
-        // Append circle around marker
-        options.color = Utils.BAR_COLOR;
-        options.circle = MapHelper.drawCircle(options);
-
-        options.tooltip = window.L.tooltip({
-          permanent: true,
-          direction: 'center',
-          className: 'marker-tooltip',
-          interactive: true
-        }).setContent(name)
-          .setLatLng(options.circle.getLatLng());
-
-        if (Utils.getPreference('poi-marker-label') === 'true') {
-          options.tooltip.addTo(window.BeerCrackerz.map);
-        }
-        resolve(element);
-      });
-    });
-  }
-
-
-  static drawCircle(options) {
+  drawCircle(options) {
     return window.L.circle(options, {
       color: options.color,
       fillColor: options.color,
       opacity: 0, // This needs to be updated according to user proximity
       fillOpacity: 0, // Same for this parameter
-      radius: options.radius ? options.radius : Utils.CIRCLE_RADIUS
-    }).addTo(window.BeerCrackerz.map);
+      radius: options.radius ? options.radius : Utils.CIRCLE_RADIUS,
+    }).addTo(this.map);
   }
 
 
-  static setMarkerCircles(marks, visible) {
+  setMarkerCircles(marks, visible) {
     for (let i = 0; i < marks.length; ++i) {
       if (visible) {
-        marks[i].circle.addTo(window.BeerCrackerz.map);
+        marks[i].circle.addTo(this.map);
       } else {
-        marks[i].circle.removeFrom(window.BeerCrackerz.map);
+        marks[i].circle.removeFrom(this.map);
       }
     }
   }
 
 
-  static setMarkerLabels(marks, visible) {
+  setMarkerLabels(marks, visible) {
     for (let i = 0; i < marks.length; ++i) {
       if (visible) {
-        marks[i].tooltip.addTo(window.BeerCrackerz.map);
+        marks[i].tooltip.addTo(this.map);
       } else {
-        marks[i].tooltip.removeFrom(window.BeerCrackerz.map);
+        marks[i].tooltip.removeFrom(this.map);
       }
     }
   }
