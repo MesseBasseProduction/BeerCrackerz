@@ -8,7 +8,8 @@
     "build": "webpack --config webpack/webpack.prod.js",
     "watch": "webpack --watch --config webpack/webpack.dev.js",
     "server": "http-server -p 1337 -c-1 -o index.html",
-    "beforecommit": "npm run test && npm run doc && npm run build"
+    "doc": "jsdoc -c doc/jsDoc.json",
+    "beforecommit": "npm run doc && npm run build"
   },
   "homepage": "https://github.com/MesseBasseProduction/BeerCrackerz/README.md",
   "repository": {
@@ -31,6 +32,7 @@
     "eslint-webpack-plugin": "^3.1.1",
     "file-loader": "^6.2.0",
     "http-server": "^14.1.0",
+    "jsdoc": "^3.6.7",
     "mini-css-extract-plugin": "^2.4.6",
     "node-sass": "^7.0.1",
     "postcss": "^8.4.5",
