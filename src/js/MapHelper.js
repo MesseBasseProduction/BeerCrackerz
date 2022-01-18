@@ -6,7 +6,7 @@ import Utils from './Utils.js';
 class MapHelper {
 
 
-  constructor() {}
+  constructor() { /* Mixin to be extended from the BeerCrackerz main class */ }
 
 
   // ======================================================================== //
@@ -29,11 +29,16 @@ class MapHelper {
     const marker = window.L.marker([options.lat, options.lng], { icon: icon })
       .addTo(this.map)
       .on('click', () => {
+        // Disable center on lock if previously set to true
+        if (Utils.getPreference('map-center-on-user') === 'true') {
+          this.toggleFocusLock();
+        }
+        // Actual fly to the marker
         this.map.flyTo([options.lat, options.lng], 18);
       });
 
-    if (options.name) {
-      marker.bindPopup(options.name);
+    if (options.dom) {
+      marker.bindPopup(options.dom);
     }
 
     return marker;
@@ -44,20 +49,31 @@ class MapHelper {
     if (!this.user.marker) { // Create user marker if not existing
       this.user.type = 'user';
       this.user.marker = this.placeMarker(this.user);
-      // Append circle around marker
+      // Append circle around marker for accuracy and range for new marker
       this.user.radius = this.user.accuracy;
       this.user.circle = this.drawCircle(this.user);
+      this.user.range = this.drawCircle({
+        lat: this.user.lat,
+        lng: this.user.lng,
+        radius: Utils.NEW_MARKER_RANGE,
+        color: Utils.RANGE_COLOR
+      });
       // Update circle opacity if pref is at true
       if (Utils.getPreference('poi-show-circle') === 'true') {
         this.user.circle.setStyle({
           opacity: 1,
           fillOpacity: 0.1,
         });
+        this.user.range.setStyle({
+          opacity: 1,
+          fillOpacity: 0.1,
+        });
       }
       // Callback on marker clicked to add marker on user position
       this.user.marker.on('click', this.mapClicked.bind(this));
-    } else { // Update user marker position
+    } else { // Update user marker position, range, and accuracy circle
       this.user.marker.setLatLng(this.user);
+      this.user.range.setLatLng(this.user);
       this.user.circle.setLatLng(this.user);
       this.user.circle.setRadius(this.user.accuracy);
     }
@@ -88,13 +104,13 @@ class MapHelper {
     dom.wrapper.appendChild(dom.store);
     dom.wrapper.appendChild(dom.bar);
     // Update popup content with DOM elements
-    options.name = dom.wrapper;
+    options.dom = dom.wrapper;
     // Create temporary mark with wrapper content and open it to offer user the creation menu
     const marker = this.placeMarker(options).openPopup();
     options.marker = marker; // Attach marker to option so it can be manipulated in clicked callbacks
     options.addedCallback = callback; // Attach callback to be called when marker addition is done
     // Callback on button clicked (to open aside and define a new mark)
-    const _fillAside = (e) => {
+    const _fillAside = e => {
       marker.isBeingDefined = true;
       marker.closePopup();
       this.defineMarkFactory(e.target.dataset.type, options);
@@ -150,9 +166,9 @@ class MapHelper {
       submit.addEventListener('click', () => {
         // TODO check input validity
         _cleanDefineUI();
-        this.markPopupFactory(type, name.value, options).then((dom) => {
+        this.markPopupFactory(type, name.value, options).then(dom => {
           options.type = type;
-          options.name = dom;
+          options.dom = dom;
           options.description = description.value;
           options.rate = rating.currentRate;
           options.marker = this.placeMarker(options); // Create final marker

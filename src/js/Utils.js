@@ -81,6 +81,7 @@ class Utils {
     const maxAge = document.createElement('P');
     const posTimeout = document.createElement('P');
     const zoomLevel = document.createElement('P');
+    const marks = document.createElement('P');
     debugContainer.classList.add('debug-container');
     userLat.classList.add('debug-user-lat');
     userLng.classList.add('debug-user-lng');
@@ -90,6 +91,7 @@ class Utils {
     maxAge.classList.add('debug-pos-max-age');
     posTimeout.classList.add('debug-pos-timeout');
     zoomLevel.classList.add('debug-zoom-level');
+    marks.classList.add('debug-marks-amount');
     userLat.innerHTML = `<b>${lang('lat')}</b> : -`;
     userLng.innerHTML = `<b>${lang('lng')}</b> : -`;
     updatesAmount.innerHTML = `<b>${lang('updates')}</b> : 0`;
@@ -98,6 +100,7 @@ class Utils {
     maxAge.innerHTML = `<b>${lang('posAge')}</b> : -`;
     posTimeout.innerHTML = `<b>${lang('posTimeout')}</b> : -`;
     zoomLevel.innerHTML = `<b>${lang('zoom')}</b> : -`;
+    marks.innerHTML = `<b>${lang('marks')}</b> : -`;
     debugContainer.appendChild(userLat);
     debugContainer.appendChild(userLng);
     debugContainer.appendChild(updatesAmount);
@@ -106,14 +109,17 @@ class Utils {
     debugContainer.appendChild(maxAge);
     debugContainer.appendChild(posTimeout);
     debugContainer.appendChild(zoomLevel);
+    debugContainer.appendChild(marks);
     return debugContainer;
   }
 
 
   static updateDebugInterface(element, user, options) {
     if (window.DEBUG === true) {
-      const lang = window.BeerCrackerz.nls.debug.bind(window.BeerCrackerz.nls);
+      const bc = window.BeerCrackerz;
+      const lang = bc.nls.debug.bind(bc.nls);
       const updates = parseInt(element.querySelector('.debug-updates-amount').innerHTML.split(' : ')[1]) + 1;
+      const marks = bc.marks.spot.length + bc.marks.store.length + bc.marks.bar.length;
       element.querySelector('.debug-user-lat').innerHTML = `
         <b>${lang('lat')}</b> : ${user.lat}
       `;
@@ -136,7 +142,10 @@ class Utils {
         <b>${lang('posTimeout')}</b> : ${options.timeout / 1000}s
       `;
       element.querySelector('.debug-zoom-level').innerHTML = `
-        <b>${lang('zoom')}</b> : ${window.BeerCrackerz.map.getZoom()}
+        <b>${lang('zoom')}</b> : ${bc.map.getZoom()}
+      `;
+      element.querySelector('.debug-marks-amount').innerHTML = `
+        <b>${lang('marks')}</b> : ${marks}
       `;
     }
   }
@@ -149,6 +158,11 @@ class Utils {
 
   static setPreference(pref, value) {
     localStorage.setItem(pref, value);
+  }
+
+
+  static get RANGE_COLOR() {
+    return '#ffd87d';
   }
 
 
@@ -205,6 +219,11 @@ class Utils {
       maximumAge: 30000, // A position will last 30s maximum
       timeout: 29000 // A position is updated in 29s maximum
     };
+  }
+
+
+  static get SUPPORTED_LANGUAGE() {
+    return ['en', 'fr'];
   }
 
 }

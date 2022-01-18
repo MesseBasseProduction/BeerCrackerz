@@ -5,7 +5,7 @@ class LangManager {
 
 
   constructor(lang, cb) {
-    this._lang = lang || 'en';
+    this._lang = (Utils.SUPPORTED_LANGUAGE.indexOf(lang) !== -1) ? lang : 'en';
     this._values = {};
     this._init().then(cb);
   }
@@ -23,6 +23,11 @@ class LangManager {
 
   debug(key) {
     return this._values.debug[key] || '';
+  }
+
+
+  notif(key) {
+    return this._values.notif[key] || '';
   }
 
 

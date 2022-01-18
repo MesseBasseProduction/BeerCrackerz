@@ -1,0 +1,7 @@
+/**
+ * @class
+ * @constructor
+ * @public
+ * @extends MapHelper
+ * @licence GPL-v3.0
+**/

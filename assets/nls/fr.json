@@ -9,7 +9,15 @@
     "posTimeout": "Validité de la position",
     "zoom": "Niveau de zoom",
     "enabled": "Activée",
-    "disabled": "Désactivée"
+    "disabled": "Désactivée",
+    "marks": "Marqueurs"
+  },
+  "notif": {
+    "geolocationError": "Votre navigateur ne peux utiliser votre localisation",
+    "newMarkerOutside": "Nouveau marqueur hors de la carte",
+    "spotAdded": "Nouveau spot ajouté à la carte",
+    "storeAdded": "Nouveau magasin ajouté à la carte",
+    "barAdded": "Nouveau bar ajouté à la carte"
   },
   "nav": {
     "add": "Ajouter",

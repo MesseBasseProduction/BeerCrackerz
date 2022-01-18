@@ -1,6 +1,8 @@
 import './BeerCrackerz.scss';
 import MapHelper from './js/MapHelper.js';
+import ZoomSlider from './js/ZoomSlider.js';
 import LangManager from './js/LangManager.js';
+import Notification from './js/Notification.js';
 import Utils from './js/Utils.js';
 
 
@@ -29,14 +31,26 @@ class BeerCrackerz extends MapHelper {
 	constructor() {
     super();
     /**
-		 * The core Leaflet.js map
-		 * @type {boolean}
+     * The core Leaflet.js map
+     * @type {Object}
      * @private
      **/
     this._map = null;
     /**
-		 * The user object holds everything useful to ensure a proper session
-		 * @type {Object}
+     * The zoom slider handler
+     * @type {Object}
+     * @private
+     **/
+    this._zoomSlider = null;
+    /**
+     * The notification handler
+     * @type {Object}
+     * @private
+     **/
+    this._notification = null;
+    /**
+     * The user object holds everything useful to ensure a proper session
+     * @type {Object}
      * @private
      **/
     this._user = {
@@ -45,48 +59,50 @@ class BeerCrackerz extends MapHelper {
       accuracy: 0, // Accuracy in meter given by geolocation API
       marker: null, // The user marker on map
       circle: null, // The accuracy circle around the user marker
-      color: Utils.USER_COLOR, // The color to use for circle (match the user marker color)
+			range: null, // The range in which user can add a new marker
+      color: Utils.USER_COLOR // The color to use for circle (match the user marker color)
     };
     /**
-		 * The stored marks for spots, stores and bars
-		 * @type {Object}
+     * The stored marks for spots, stores and bars
+     * @type {Object}
      * @private
      **/
     this._marks = {
       spot: [],
       store: [],
-      bar: [],
+      bar: []
     };
     /**
-		 * The temporary marker for new marks only
-		 * @type {Object}
+     * The temporary marker for new marks only
+     * @type {Object}
      * @private
      **/
     this._newMarker = null;
     /**
-		 * The debug DOM object
-		 * @type {Object}
+     * The debug DOM object
+     * @type {Object}
      * @private
      **/
     this._debugElement = null;
     /**
-		 * ID for geolocation watch callback
-		 * @type {Number}
+     * ID for geolocation watch callback
+     * @type {Number}
      * @private
      **/
     this._watchId = null;
     /**
-		 * Flag to know if a zoom action is occuring on map
-		 * @type {Boolean}
+     * Flag to know if a zoom action is occuring on map
+     * @type {Boolean}
      * @private
      **/
     this._isZooming = false;
     /**
-		 * The LangManager must be instantiated to handle nls accross the app
-		 * @type {Boolean}
+     * The LangManager must be instantiated to handle nls accross the app
+     * @type {Boolean}
      * @private
      **/
-    this._lang = new LangManager('en', this._init.bind(this)); // The BeerCrackerz app is only initialized once nls are set up
+		// The BeerCrackerz app is only initialized once nls are set up
+    this._lang = new LangManager(window.navigator.language.substring(0,2), this._init.bind(this));
   }
 
 
@@ -111,10 +127,36 @@ class BeerCrackerz extends MapHelper {
 	 **/
 	_init() {
 		this._debugElement = Utils.initDebugInterface();
-    this._initPreferences()
+		this._notification = new Notification();
+    this._initUser()
+      .then(this._initPreferences.bind(this))
       .then(this._initGeolocation.bind(this))
       .then(this._initMap.bind(this))
-      .then(this._initEvents.bind(this));
+      .then(this._initEvents.bind(this))
+      .then(this._initMarkers.bind(this));
+	}
+
+
+	/**
+	 * @method
+   * @name _initUser
+   * @private
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+	 * @since January 2022
+   * @description
+	 * <blockquote>
+	 * The _init() method initialize the user object according to its information
+	 * and statistic so the UI can be properly built.
+	 * </blockquote>
+	 * @returns {Promise} A Promise resolved when preferences are set
+	 **/
+	_initUser() {
+		return new Promise(resolve => {
+			// TODO fill user information from server
+			// Username, stats
+			resolve();
+		});
 	}
 
 
@@ -205,7 +247,7 @@ class BeerCrackerz extends MapHelper {
 					resolve();
 				}, resolve, options);
       } else {
-				console.error("Your browser doesn't implement the geolocation API. BeerCrackerz is unusable.");
+				this._notification.raise(this.nls.notif('geolocationError'));
 				resolve();
 			}
 		});
@@ -261,8 +303,10 @@ class BeerCrackerz extends MapHelper {
       } else {
 				esri.addTo(this._map);
 			}
-
+			// Add layer switch radio on bottom right of the map
 			window.L.control.layers(baseMaps, {}, { position: 'bottomright' }).addTo(this._map);
+			// Init zoom slider when map has been created
+			this._zoomSlider = new ZoomSlider(this._map);			
 			resolve();
 		});
 	}
@@ -304,17 +348,23 @@ class BeerCrackerz extends MapHelper {
 			// Map events
 			this._map.on('zoomstart', () => {
 				this._isZooming = true;
-				this.setMarkerCircles(this._marks.spot, false);
-				this.setMarkerCircles(this._marks.store, false);
-				this.setMarkerCircles(this._marks.bar, false);
-				this.setMarkerCircles([this._user], false);
+				if (Utils.getPreference('poi-show-circle') === 'true') {
+					this.setMarkerCircles(this._marks.spot, false);
+					this.setMarkerCircles(this._marks.store, false);
+					this.setMarkerCircles(this._marks.bar, false);
+					this.setMarkerCircles([this._user], false);
+					this.setMarkerCircles([{ circle: this._user.range }], false);
+				}
 			});
 			this._map.on('zoomend', () => {
         this._isZooming = false;
-        this.setMarkerCircles(this._marks.spot, true);
-        this.setMarkerCircles(this._marks.store, true);
-        this.setMarkerCircles(this._marks.bar, true);
-        this.setMarkerCircles([this._user], true);
+				if (Utils.getPreference('poi-show-circle') === 'true') {
+					this.setMarkerCircles(this._marks.spot, true);
+					this.setMarkerCircles(this._marks.store, true);
+					this.setMarkerCircles(this._marks.bar, true);
+					this.setMarkerCircles([this._user], true);
+					this.setMarkerCircles([{ circle: this._user.range }], true);
+				}
         // Updating debug info
         this.updateDebugUI();
       });
@@ -322,6 +372,53 @@ class BeerCrackerz extends MapHelper {
 				const planActive = (Utils.stripDom(event.name) === this.nls.map('planLayer'));
 				Utils.setPreference('map-plan-layer', planActive);
       });
+			resolve();
+		});
+	}
+
+
+	/**
+	 * @method
+   * @name _initMarkers
+   * @private
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+	 * @since January 2022
+   * @description
+	 * <blockquote>
+	 * The _initEvents() method will initialize all saved marker into the map. 
+	 * Markers must be retrieved from server with a specific format to ensure it works
+	 * </blockquote>
+	 * @returns {Promise} A Promise resolved when preferences are set
+	 **/	
+	_initMarkers() {
+		return new Promise(resolve => {
+			const test = [{ // Test data with minimal keys to work
+				type: 'spot',
+				lat: 48.853121540141096,
+				lng: 2.3498955769881156,
+				name: 'My great spot',
+				description: 'Grand succès',
+				dom: null,
+				rate: 4,
+				marker: null,
+				circle: null,
+			}];
+
+			for (let i = 0; i < test.length; ++i) {
+        this.markPopupFactory(test[i].type, test[i].name, test[i]).then(dom => {
+          test[i].dom = dom;
+          test[i].marker = this.placeMarker(test[i]);
+					if (test[i].type === 'spot') {
+						this._marks.spot.push(test[i]);
+					} else if (test[i].type === 'store') {
+						this._marks.store.push(test[i]);
+					} else if (test[i].type === 'bar') {
+						this._marks.bar.push(test[i]);
+					}
+				});
+			}
+
 			resolve();
 		});
 	}
@@ -401,8 +498,8 @@ class BeerCrackerz extends MapHelper {
 		this.setMarkerCircles(this._marks.store, visible);
 		this.setMarkerCircles(this._marks.bar, visible);
 		this.setMarkerCircles([this._user], visible);
+		this.setMarkerCircles([{ circle: this._user.range }], visible);
 		Utils.setPreference('poi-show-circle', visible);
-		this.updateMarkerCirclesVisibility();
 	}
 
 
@@ -665,7 +762,7 @@ class BeerCrackerz extends MapHelper {
 			if (distance < Utils.NEW_MARKER_RANGE) {
 				this._newMarker = this.definePOI(event.latlng, this._markerSaved.bind(this));
 			} else {
-				console.log('New marker out of range');
+				this._notification.raise(this.nls.notif('newMarkerOutside'));
 			}
 		}
 	}
@@ -687,12 +784,14 @@ class BeerCrackerz extends MapHelper {
 	 **/
 	_markerSaved(options) {
 		if (options.type === 'spot') {
-      this._marks.spot.push(options);
+			this._marks.spot.push(options);
     } else if (options.type === 'store') {
       this._marks.store.push(options);
     } else if (options.type === 'bar') {
       this._marks.bar.push(options);
     }
+		// Notify user that new marker has been saved
+		this._notification.raise(this.nls.notif(`${options.type}Added`));
 		// Update marker visibility according to preferences
 		if (Utils.getPreference(`poi-show-${options.type}`) === 'false') {
 			options.marker.removeFrom(this._map);
@@ -821,6 +920,11 @@ class BeerCrackerz extends MapHelper {
 	 **/
 	get map() {
 		return this._map;
+	}
+
+
+	get marks() {
+		return this._marks;
 	}
 
 

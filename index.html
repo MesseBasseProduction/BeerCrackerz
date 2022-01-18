@@ -43,6 +43,9 @@
 </head>
 <body>
   <aside id="aside"></aside>
+  <div id="notification-wrapper" class="notification-wrapper">
+    <p id="notification-message" class="notification-message"></p>
+  </div>
   <nav>
     <img src="assets/img/logo.png" alt="user-profile" id="user-profile">
     <div class="cmd-bar">
@@ -58,6 +61,13 @@
     </div>
   </nav>
   <main id="beer-crakerz-map" class="beer-crakerz-map"></main>
+  <div id="zoom-slider" class="zoom-slider">
+    <p>&plus;</p>
+    <div id="slider-wrapper" class="slider-wrapper">
+      <div id="slider-position" class="slider-position"></div>
+    </div>
+    <p>&minus;</p>
+  </div>
   <div id="overlay" class="overlay"></div>
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
   <script type="text/javascript" src="assets/dist/BeerCrackerz.bundle.js"></script>

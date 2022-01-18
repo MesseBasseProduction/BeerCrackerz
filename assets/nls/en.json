@@ -9,7 +9,15 @@
     "posTimeout": "Position timeout",
     "zoom": "Zoom level",
     "enabled": "Enabled",
-    "disabled": "Disabled"
+    "disabled": "Disabled",
+    "marks": "Marks"
+  },
+  "notif": {
+    "geolocationError": "Your browser doesn't implement the geolocation API",
+    "newMarkerOutside": "New marker out of range",
+    "spotAdded": "New spot saved to map",
+    "storeAdded": "New store saved to map",
+    "barAdded": "New bar saved to map"
   },
   "nav": {
     "add": "Add",
