@@ -1,0 +1,69 @@
+{
+  "debug": {
+    "lat": "Latitude",
+    "lng": "Longitude",
+    "updates": "Updates",
+    "accuracy": "Accuracy",
+    "highAccuracy": "High accuracy",
+    "posAge": "Position max age",
+    "posTimeout": "Position timeout",
+    "zoom": "Zoom level",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "marks": "Marks"
+  },
+  "notif": {
+    "geolocationError": "Your browser doesn't implement the geolocation API",
+    "newMarkerOutside": "New marker out of range",
+    "spotAdded": "New spot saved to map",
+    "storeAdded": "New store saved to map",
+    "barAdded": "New bar saved to map"
+  },
+  "nav": {
+    "add": "Add",
+    "cancel": "Cancel",
+    "close": "Close"
+  },
+  "map": {
+    "newTitle": "New marker",
+    "newSpot": "Add a spot",
+    "newStore": "Add a shop",
+    "newBar": "Add a bar",
+    "planLayer": "Plan",
+    "satLayer": "Satellite"
+  },
+  "spot": {
+    "title": "New spot",
+    "subtitle": "A spot is a remarkable place to crack a beer ! Share it with the community, wether it is for the astonishing view of for whatever it is enjoyable to drink a beer!",
+    "nameLabel": "Name that spot",
+    "descLabel": "Why don't you describe it",
+    "rateLabel": "Give it a note"
+  },
+  "store": {
+    "title": "New store",
+    "subtitle": "The must have place to refill your beer stock. The more info you provide, the better you help your fellow beer crackerz!",
+    "nameLabel": "Store name",
+    "descLabel": "Why don't you describe it",
+    "rateLabel": "Give it a note"
+  },
+  "bar": {
+    "title": "New bar",
+    "subtitle": "A bar is a holly place where you can get some nicely colded draft beers!",
+    "nameLabel": "Bar name",
+    "descLabel": "Why don't you describe it",
+    "rateLabel": "Give it a note"
+  },
+  "modal": {
+    "userTitle": "User account",
+    "userAccuracyPref": "High precision",
+    "userDebugPref": "Debug interface",
+    "aboutTitle": "About BeerCrackerz",
+    "aboutDesc": "A brilliant idea from David Béché!<br>BeerCrackerz is the beer lovers comunity, filled with pint slayers and cereals lovers",
+    "hideShowTitle": "Map options",
+    "hideShowLabels": "Labels",
+    "hideShowCircles": "Circles",
+    "hideShowSpots": "Spots",
+    "hideShowStores": "Stores",
+    "hideShowBars": "Bars"
+  }
+}
