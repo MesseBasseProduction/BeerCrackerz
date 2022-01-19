@@ -223,7 +223,7 @@ class Utils {
 
 
   static get SUPPORTED_LANGUAGE() {
-    return ['en', 'fr'];
+    return ['en', 'fr', 'es'];
   }
 
 }
