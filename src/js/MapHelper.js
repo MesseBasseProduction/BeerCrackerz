@@ -26,19 +26,21 @@ class MapHelper {
       icon = Markers.user;
     }
 
-    const marker = window.L.marker([options.lat, options.lng], { icon: icon })
-      .addTo(this.map)
-      .on('click', () => {
-        // Disable center on lock if previously set to true
-        if (Utils.getPreference('map-center-on-user') === 'true') {
-          this.toggleFocusLock();
-        }
-        // Actual fly to the marker
-        this.map.flyTo([options.lat, options.lng], 18);
-      });
+    const marker = window.L.marker([options.lat, options.lng], { icon: icon }).on('click', () => {
+      // Disable center on lock if previously set to true
+      if (Utils.getPreference('map-center-on-user') === 'true') {
+        this.toggleFocusLock();
+      }
+      // Actual fly to the marker
+      this.map.flyTo([options.lat, options.lng], 18);
+    });
 
     if (options.dom) {
       marker.bindPopup(options.dom);
+    }
+    // All markers that are not spot/store/bar should be appended to the map
+    if (['spot', 'store', 'bar'].indexOf(options.type) === -1) {
+      marker.addTo(this.map);
     }
 
     return marker;
@@ -62,11 +64,11 @@ class MapHelper {
       if (Utils.getPreference('poi-show-circle') === 'true') {
         this.user.circle.setStyle({
           opacity: 1,
-          fillOpacity: 0.1,
+          fillOpacity: 0.1
         });
         this.user.range.setStyle({
           opacity: 1,
-          fillOpacity: 0.1,
+          fillOpacity: 0.1
         });
       }
       // Callback on marker clicked to add marker on user position
@@ -249,9 +251,18 @@ class MapHelper {
 
   setMarkerCircles(marks, visible) {
     for (let i = 0; i < marks.length; ++i) {
+      // Here we update both opacity and add/remove circle from map
       if (visible) {
+        marks[i].circle.setStyle({
+          opacity: 1,
+          fillOpacity: 0.1
+        });
         marks[i].circle.addTo(this.map);
       } else {
+        marks[i].circle.setStyle({
+          opacity: 0,
+          fillOpacity: 0
+        });
         marks[i].circle.removeFrom(this.map);
       }
     }

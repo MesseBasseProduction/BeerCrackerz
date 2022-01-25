@@ -18,6 +18,11 @@ class ZoomSlider {
       this._slider.style.height = `${(correctedZoom * 100) / this._zoomRange}%`;
       this._timeoutId = setTimeout(() => this._container.classList.remove('opened'), 1200);
     });
+
+    this._map.on('zoom', () => {
+      const correctedZoom = this._map.getZoom() - this._map.getMinZoom();
+      this._slider.style.height = `${(correctedZoom * 100) / this._zoomRange}%`;
+    });    
   }
 
 

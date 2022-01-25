@@ -39,7 +39,6 @@ import Utils from './js/Utils.js';
  * @constructor
  * @public
  * @extends MapHelper
- * @licence GPL-v3.0
 **/
 class BeerCrackerz extends MapHelper {
 
@@ -87,8 +86,8 @@ class BeerCrackerz extends MapHelper {
       accuracy: 0, // Accuracy in meter given by geolocation API
       marker: null, // The user marker on map
       circle: null, // The accuracy circle around the user marker
-			range: null, // The range in which user can add a new marker
-      color: Utils.USER_COLOR // The color to use for circle (match the user marker color)
+      range: null, // The range in which user can add a new marker
+      color: Utils.USER_COLOR, // The color to use for circle (match the user marker color)
     };
     /**
      * The stored marks for spots, stores and bars
@@ -98,7 +97,17 @@ class BeerCrackerz extends MapHelper {
     this._marks = {
       spot: [],
       store: [],
-      bar: []
+      bar: [],
+    };
+    /**
+     * The stored clusters for markers, see Leaflet.markercluster plugin
+     * @type {Object}
+     * @private
+     **/
+    this._clusters = {
+      spot: {},
+      store: {},
+      bar: {},
     };
     /**
      * The temporary marker for new marks only
@@ -129,8 +138,11 @@ class BeerCrackerz extends MapHelper {
      * @type {Boolean}
      * @private
      **/
-		// The BeerCrackerz app is only initialized once nls are set up
-    this._lang = new LangManager(window.navigator.language.substring(0,2), this._init.bind(this));
+    // The BeerCrackerz app is only initialized once nls are set up
+    this._lang = new LangManager(
+      window.navigator.language.substring(0, 2),
+      this._init.bind(this)
+    );
   }
 
 
@@ -421,7 +433,24 @@ class BeerCrackerz extends MapHelper {
 	 **/	
 	_initMarkers() {
 		return new Promise(resolve => {
-			const test = [{ // Test data with minimal keys to work
+			// Init map clusters for marks to be displayed
+			this._clusters.spot = new window.L.MarkerClusterGroup();
+			this._clusters.store = new window.L.MarkerClusterGroup();
+			this._clusters.bar = new window.L.MarkerClusterGroup();
+
+			if (Utils.getPreference(`poi-show-spot`) === 'true') {
+				this._map.addLayer(this._clusters.spot);
+			}
+
+			if (Utils.getPreference(`poi-show-store`) === 'true') {
+        this._map.addLayer(this._clusters.store);
+      }
+
+			if (Utils.getPreference(`poi-show-bar`) === 'true') {
+        this._map.addLayer(this._clusters.bar);
+      }
+			// Test data with minimal keys to work, will be retrieved from server when plugged
+			const test = [{
 				type: 'spot',
 				lat: 48.853121540141096,
 				lng: 2.3498955769881156,
@@ -437,13 +466,8 @@ class BeerCrackerz extends MapHelper {
         this.markPopupFactory(test[i].type, test[i].name, test[i]).then(dom => {
           test[i].dom = dom;
           test[i].marker = this.placeMarker(test[i]);
-					if (test[i].type === 'spot') {
-						this._marks.spot.push(test[i]);
-					} else if (test[i].type === 'store') {
-						this._marks.store.push(test[i]);
-					} else if (test[i].type === 'bar') {
-						this._marks.bar.push(test[i]);
-					}
+					this._marks[test[i].type].push(test[i]);
+					this._clusters[test[i].type].addLayer(test[i].marker);
 				});
 			}
 
@@ -548,12 +572,10 @@ class BeerCrackerz extends MapHelper {
 	 **/
 	toggleMarkers(type) {
 		const visible = !(Utils.getPreference(`poi-show-${type}`) === 'true');
-		for (let i = 0; i &lt; this._marks[type].length; ++i) {
-			if (visible === true) {
-        this._marks[type][i].marker.addTo(this._map);
-			} else {
-        this._marks[type][i].marker.removeFrom(this._map);
-			}
+		if (visible === true) {
+			this._map.addLayer(this._clusters[type]);
+		} else {
+			this._map.removeLayer(this._clusters[type]);
 		}
 		Utils.setPreference(`poi-show-${type}`, visible);
 	}
@@ -811,19 +833,11 @@ class BeerCrackerz extends MapHelper {
 	 * @param {Object} options The new marker options
 	 **/
 	_markerSaved(options) {
-		if (options.type === 'spot') {
-			this._marks.spot.push(options);
-    } else if (options.type === 'store') {
-      this._marks.store.push(options);
-    } else if (options.type === 'bar') {
-      this._marks.bar.push(options);
-    }
+		// Save marke in marks and clusters
+		this._marks[options.type].push(options);
+		this._clusters[options.type].addLayer(options.marker);
 		// Notify user that new marker has been saved
 		this._notification.raise(this.nls.notif(`${options.type}Added`));
-		// Update marker visibility according to preferences
-		if (Utils.getPreference(`poi-show-${options.type}`) === 'false') {
-			options.marker.removeFrom(this._map);
-		}
 		// Update marker circles visibility according to user position
 		this.updateMarkerCirclesVisibility();
 		// Clear new marker to let user add other stuff
@@ -951,6 +965,11 @@ class BeerCrackerz extends MapHelper {
 	}
 
 
+	/**
+	 * @public
+	 * @property {Object} marks
+	 * Leaflet.js marks that holds spot/store/bar marks as subkeys
+	 **/	
 	get marks() {
 		return this._marks;
 	}
@@ -996,7 +1015,7 @@ export default BeerCrackerz;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Jan 18 2022 16:22:39 GMT+0100 (GMT+01:00)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jan 25 2022 14:47:37 GMT+0100 (GMT+01:00)
 </footer>
 
 <script> prettyPrint(); </script>

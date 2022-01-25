@@ -14,7 +14,7 @@
   },
   "notif": {
     "geolocationError": "Votre navigateur ne peux utiliser votre localisation",
-    "newMarkerOutside": "Nouveau marqueur hors de la carte",
+    "newMarkerOutside": "Nouveau marqueur hors de votre portée",
     "spotAdded": "Nouveau spot ajouté à la carte",
     "storeAdded": "Nouveau magasin ajouté à la carte",
     "barAdded": "Nouveau bar ajouté à la carte"

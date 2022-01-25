@@ -6,3 +6,5 @@ https://github.com/pointhi/leaflet-color-markers
 https://leafletjs.com/
 
 https://www.svgrepo.com/svg/287438/info
+
+https://github.com/Leaflet/Leaflet.markercluster 
