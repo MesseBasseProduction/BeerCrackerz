@@ -380,6 +380,44 @@ nav {
 	}
 }
 
+.popup {
+	h1, h2, p {
+		margin: 0;
+	}
+
+	h1 {
+		font-size: 2rem;
+		text-align: center;
+	}
+
+	p {
+		font-style: italic;
+		text-align: center;
+	}
+
+	h2 {
+		font-size: 1.3rem;
+		font-weight: inherit;
+		margin-top: 1.2rem;
+	}
+
+	footer {
+		align-items: center;
+		display: flex;
+		position: relative;
+		justify-content: space-between;
+		margin-top: 1.2rem;
+
+		.edit {
+			img {
+				cursor: pointer;
+				height: 2rem;
+				margin-left: .5rem;
+			}
+		}
+	}
+}
+
 /* Needs to override some leaflet styles to match BeerCrackerz interface */
 .leaflet-control-layers-expanded {
 	padding: 2rem !important;

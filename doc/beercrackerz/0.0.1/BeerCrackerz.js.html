@@ -88,6 +88,8 @@ class BeerCrackerz extends MapHelper {
       circle: null, // The accuracy circle around the user marker
       range: null, // The range in which user can add a new marker
       color: Utils.USER_COLOR, // The color to use for circle (match the user marker color)
+			id: -1,
+			username: ''
     };
     /**
      * The stored marks for spots, stores and bars
@@ -194,7 +196,8 @@ class BeerCrackerz extends MapHelper {
 	_initUser() {
 		return new Promise(resolve => {
 			// TODO fill user information from server
-			// Username, stats
+			this._user.id = 42;
+			this._user.username = 'messmaker';
 			resolve();
 		});
 	}
@@ -399,11 +402,25 @@ class BeerCrackerz extends MapHelper {
 			this._map.on('zoomend', () => {
         this._isZooming = false;
 				if (Utils.getPreference('poi-show-circle') === 'true') {
-					this.setMarkerCircles(this._marks.spot, true);
-					this.setMarkerCircles(this._marks.store, true);
-					this.setMarkerCircles(this._marks.bar, true);
-					this.setMarkerCircles([this._user], true);
-					this.setMarkerCircles([{ circle: this._user.range }], true);
+					if (this._map.getZoom() >= 15) {
+						this.setMarkerCircles(this._marks.spot, true);
+						this.setMarkerCircles(this._marks.store, true);
+						this.setMarkerCircles(this._marks.bar, true);
+						this.setMarkerCircles([this._user], true);
+						this.setMarkerCircles([{ circle: this._user.range }], true);
+					}
+				}
+				// Auto hide labels if zoom level is too high (and restore it when needed)
+				if (Utils.getPreference('poi-marker-label') === 'true') {
+					if (this._map.getZoom() &lt; 15) {
+						this.setMarkerLabels(this._marks.spot, false);
+						this.setMarkerLabels(this._marks.store, false);
+						this.setMarkerLabels(this._marks.bar, false);
+					} else {
+						this.setMarkerLabels(this._marks.spot, true);
+            this.setMarkerLabels(this._marks.store, true);
+            this.setMarkerLabels(this._marks.bar, true);
+					}
 				}
         // Updating debug info
         this.updateDebugUI();
@@ -433,42 +450,45 @@ class BeerCrackerz extends MapHelper {
 	 **/	
 	_initMarkers() {
 		return new Promise(resolve => {
-			// Init map clusters for marks to be displayed
-			this._clusters.spot = new window.L.MarkerClusterGroup();
-			this._clusters.store = new window.L.MarkerClusterGroup();
-			this._clusters.bar = new window.L.MarkerClusterGroup();
-
+			// Init map clusters for marks to be displayed (disable clustering at opened popup zoom level)
+			const clusterOptions = {
+				animateAddingMarkers: true,
+				disableClusteringAtZoom: 18,
+				spiderfyOnMaxZoom: false
+			};
+			this._clusters.spot = new window.L.MarkerClusterGroup(clusterOptions);
+			this._clusters.store = new window.L.MarkerClusterGroup(clusterOptions);
+			this._clusters.bar = new window.L.MarkerClusterGroup(clusterOptions);
+			// Append clusters to the map depending on user preferences
 			if (Utils.getPreference(`poi-show-spot`) === 'true') {
 				this._map.addLayer(this._clusters.spot);
 			}
-
 			if (Utils.getPreference(`poi-show-store`) === 'true') {
         this._map.addLayer(this._clusters.store);
       }
-
 			if (Utils.getPreference(`poi-show-bar`) === 'true') {
         this._map.addLayer(this._clusters.bar);
       }
-			// Test data with minimal keys to work, will be retrieved from server when plugged
-			const test = [{
-				type: 'spot',
-				lat: 48.853121540141096,
-				lng: 2.3498955769881156,
-				name: 'My great spot',
-				description: 'Grand succès',
-				dom: null,
-				rate: 4,
-				marker: null,
-				circle: null,
-			}];
-
-			for (let i = 0; i &lt; test.length; ++i) {
-        this.markPopupFactory(test[i].type, test[i].name, test[i]).then(dom => {
-          test[i].dom = dom;
-          test[i].marker = this.placeMarker(test[i]);
-					this._marks[test[i].type].push(test[i]);
-					this._clusters[test[i].type].addLayer(test[i].marker);
+			// Load data from local storage, later to be fetched from server
+			const iterateMarkers = mark => {
+        this.markPopupFactory(mark).then(dom => {
+          mark.dom = dom;
+          mark.marker = this.placeMarker(mark);
+					this._marks[mark.type].push(mark);
+					this._clusters[mark.type].addLayer(mark.marker);
 				});
+			};
+			let marks = JSON.parse(Utils.getPreference('saved-spot')) || [];
+			for (let i = 0; i &lt; marks.length; ++i) {
+				iterateMarkers(marks[i]);
+			}
+			marks = JSON.parse(Utils.getPreference('saved-store')) || [];
+			for (let i = 0; i &lt; marks.length; ++i) {
+				iterateMarkers(marks[i]);
+			}
+			marks = JSON.parse(Utils.getPreference('saved-bar')) || [];
+			for (let i = 0; i &lt; marks.length; ++i) {
+				iterateMarkers(marks[i]);
 			}
 
 			resolve();
@@ -652,7 +672,7 @@ class BeerCrackerz extends MapHelper {
 	userProfileModal() {
 		Utils.fetchTemplate('assets/html/modal/user.html').then(dom => {
 			// Update nls for template
-      Utils.replaceString(dom.querySelector(`#nls-user-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('userTitle'));
+      Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('userTitle'));
       Utils.replaceString(dom.querySelector(`#nls-user-modal-accuracy`), `{{ACCURACY_USER_MODAL}}`, this.nls.modal('userAccuracyPref'));
       Utils.replaceString(dom.querySelector(`#nls-user-modal-debug`), `{{DEBUG_USER_MODAL}}`, this.nls.modal('userDebugPref'));
 
@@ -691,8 +711,8 @@ class BeerCrackerz extends MapHelper {
 	aboutModal() {
 		Utils.fetchTemplate('assets/html/modal/about.html').then(dom => {
 			// Update nls for template
-			Utils.replaceString(dom.querySelector(`#nls-about-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('aboutTitle'));
-      Utils.replaceString(dom.querySelector(`#nls-about-modal-desc`), `{{DESC_ABOUT_MODAL}}`, this.nls.modal('aboutDesc'));
+			Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('aboutTitle'));
+      Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{{MODAL_DESC}}`, this.nls.modal('aboutDesc'));
 			
 			document.getElementById('overlay').appendChild(dom);
 			document.getElementById('overlay').style.display = 'flex';
@@ -724,7 +744,6 @@ class BeerCrackerz extends MapHelper {
 			Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-stores`), `{{STORES_HIDESHOW_MODAL}}`, this.nls.modal('hideShowStores'));
 			Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-bars`), `{{BARS_HIDESHOW_MODAL}}`, this.nls.modal('hideShowBars'));
 			Utils.replaceString(dom.querySelector(`#modal-close-button`), `{{MODAL_CLOSE}}`, this.nls.nav('close'));
-
 			document.getElementById('overlay').appendChild(dom);
 			document.getElementById('overlay').style.display = 'flex';
 			// Init modal checkbox state according to local storage preferences
@@ -755,6 +774,43 @@ class BeerCrackerz extends MapHelper {
 			document.getElementById('show-bars').addEventListener('change', this.toggleMarkers.bind(this, 'bar'));
 
 			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+		});
+	}
+
+
+	/**
+	 * @method
+   * @name deleteMarkModal
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+	 * @since February 2022
+   * @description
+	 * &lt;blockquote>
+	 * The deleteMarkModal() method will request the mark delete modal, which prompts
+	 * the user a confirmation to actually delete the mark
+	 * &lt;/blockquote>
+	 * @param {Function} cb The function to callback with true or false depending on user's choice
+	 **/
+	deleteMarkModal(cb) {
+		Utils.fetchTemplate('assets/html/modal/deletemark.html').then(dom => {
+			// Update nls for template
+			Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('deleteMarkTitle'));
+      Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{{MODAL_DESC}}`, this.nls.modal('deleteMarkDesc'));
+      Utils.replaceString(dom.querySelector(`#cancel-close`), `{{MODAL_CANCEL}}`, this.nls.nav('cancel'));
+      Utils.replaceString(dom.querySelector(`#delete-close`), `{{MODAL_DELETE}}`, this.nls.nav('delete'));
+			document.getElementById('overlay').appendChild(dom);
+      document.getElementById('overlay').style.display = 'flex';
+			// Setup callback for confirm/cancel buttons
+			document.getElementById('cancel-close').addEventListener('click', e => {
+				this.closeModal(e);
+				cb(false);
+			}, false);
+			document.getElementById('delete-close').addEventListener('click', e => {
+				this.closeModal(e);
+				cb(true);
+			}, false);			
+			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);		
 		});
 	}
 
@@ -833,7 +889,7 @@ class BeerCrackerz extends MapHelper {
 	 * @param {Object} options The new marker options
 	 **/
 	_markerSaved(options) {
-		// Save marke in marks and clusters
+		// Save marke in marks and clusters for the map
 		this._marks[options.type].push(options);
 		this._clusters[options.type].addLayer(options.marker);
 		// Notify user that new marker has been saved
@@ -842,6 +898,10 @@ class BeerCrackerz extends MapHelper {
 		this.updateMarkerCirclesVisibility();
 		// Clear new marker to let user add other stuff
 		this._newMarker = null;
+		// Save new marker in local storage, later to be sent to the server
+		const marks = JSON.parse(Utils.getPreference(`saved-${options.type}`)) || [];
+		marks.push(this.formatSavedmarker(options));
+		Utils.setPreference(`saved-${options.type}`, JSON.stringify(marks));
 	}
 
 
@@ -890,6 +950,103 @@ class BeerCrackerz extends MapHelper {
       _updateByType(this._marks.bar);
       _updateByType([this._user]);
     }
+	}
+
+
+  // ======================================================================== //
+  // -------------------------- Marker edition ------------------------------ //
+  // ======================================================================== //
+
+
+	/**
+	 * @method
+   * @name formatSavedmarker
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+	 * @since February 2022
+   * @description
+	 * &lt;blockquote>
+	 * This method formats a mark returned from MapHelper so it can be parsed
+	 * using JSON.parse (in order to store it in local storage/database)
+	 * &lt;/blockquote>
+	 * @param {Object} mark The mark options from internal this._marks[type]
+	 **/
+	formatSavedmarker(mark) {
+		return {
+      type: mark.type,
+      lat: mark.lat,
+      lng: mark.lng,
+      name: mark.name,
+      description: mark.description,
+      user: mark.username || this.user.username,
+      userId: mark.userId || this.user.id,
+      dom: null,
+      rate: mark.rate,
+      marker: null,
+      circle: null,
+    };
+	}
+
+
+	/**
+	 * @method
+   * @name editMarker
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+	 * @since February 2022
+   * @description
+	 * &lt;blockquote>
+	 * This method will open a mark edition modal
+	 * &lt;/blockquote>
+	 * @param {Object} options The mark options to edit
+	 **/
+	editMarker(options) {
+		console.log(options);
+	}
+
+
+	/**
+	 * @method
+   * @name deleteMarker
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+	 * @since February 2022
+   * @description
+	 * &lt;blockquote>
+	 * This method will delete a mark after prompting the user if he trully wants to
+	 * &lt;/blockquote>
+	 * @param {Object} options The mark options to delete
+	 **/	
+	deleteMarker(options) {
+		this.deleteMarkModal(confirm => {
+			if (confirm === true) {
+				// Iterate through marks to find matching one (by coord as marks coordinates are unique)
+				const marks = this._marks[options.type];
+				for (let i = 0; i &lt; marks.length; ++i) {
+					// We found, remove circle, label and marker from map/clusters
+					if (options.lat === marks[i].lat &amp;&amp; options.lng === marks[i].lng) {
+						this.setMarkerCircles([ marks[i] ], false);
+						this.setMarkerLabels([marks[i]], false);
+						this._clusters[options.type].removeLayer(marks[i].marker);
+						marks.splice(i, 1);
+						break;
+					}
+				}
+				// Update internal marks array
+				this._marks[options.type] = marks;
+				// Format marks to be saved and then update user preference with
+				const formattedMarks = [];
+				for (let i = 0; i &lt; this._marks[options.type].length; ++i) {
+					formattedMarks.push(this.formatSavedmarker(this._marks[options.type][i]));
+				}
+				Utils.setPreference(`saved-${options.type}`, JSON.stringify(formattedMarks));
+				// Notify user through UI that marker has been successfully deleted
+				this._notification.raise(this.nls.notif(`${options.type}Deleted`));				
+			}
+		});
 	}
 
 
@@ -1015,7 +1172,7 @@ export default BeerCrackerz;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jan 25 2022 14:47:37 GMT+0100 (GMT+01:00)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Feb 10 2022 17:00:51 GMT+0100 (GMT+01:00)
 </footer>
 
 <script> prettyPrint(); </script>

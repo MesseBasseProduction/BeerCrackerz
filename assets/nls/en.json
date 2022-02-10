@@ -17,12 +17,16 @@
     "newMarkerOutside": "New marker out of your range",
     "spotAdded": "New spot saved to map",
     "storeAdded": "New store saved to map",
-    "barAdded": "New bar saved to map"
+    "barAdded": "New bar saved to map",
+    "spotDeleted": "Spot has been successfully deleted from map",
+    "storeDeleted": "Store has been successfully deleted from map",
+    "barDeleted": "Bar has been successfully deleted from map"
   },
   "nav": {
     "add": "Add",
     "cancel": "Cancel",
-    "close": "Close"
+    "close": "Close",
+    "delete": "Delete"
   },
   "map": {
     "newTitle": "New marker",
@@ -64,6 +68,14 @@
     "hideShowCircles": "Circles",
     "hideShowSpots": "Spots",
     "hideShowStores": "Stores",
-    "hideShowBars": "Bars"
+    "hideShowBars": "Bars",
+    "deleteMarkTitle": "Delete mark",
+    "deleteMarkDesc": "Are you sure you want to delete this mark? This action is permanent and can not be reverted."
+  },
+  "popup": {
+    "mapOpen": "Open in a map app",
+    "spotFoundBy": "A spot discovered by",
+    "storeFoundBy": "A store added by",
+    "barFoundBy": "A bar added by"
   }
 }

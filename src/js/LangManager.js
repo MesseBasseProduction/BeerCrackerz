@@ -50,8 +50,14 @@ class LangManager {
     return this._values.store[key] || '';
   }
 
+
   bar(key) {
     return this._values.bar[key] || '';
+  }
+
+
+  popup(key) {
+    return this._values.popup[key] || '';    
   }
 
 

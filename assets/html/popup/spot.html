@@ -1,3 +1,12 @@
-<h1>{{SPOT_NAME}}</h1>
-<h2>Un spot découvert par {{SPOT_FINDER}}</h2>
-<p><a href="geo:{{SPOT_LAT}},{{SPOT_LNG}}">Ouvrir dans une carte</a></p>
+<div class="popup">
+  <h1>{{SPOT_NAME}}</h1>
+  <p>{{SPOT_FOUND_BY}} <b>{{SPOT_FINDER}}</b></p>
+  <h2>{{SPOT_DESC}}</h2>
+  <footer>
+    <p><a href="geo:{{SPOT_LAT}},{{SPOT_LNG}}">{{MAP_OPEN}}</a></p>
+    <div id="popup-edit" class="edit">
+      <img src="assets/img/logo/edit.svg" id="edit-mark" alt="edit-mark">
+      <img src="assets/img/logo/delete.svg" id="delete-mark" alt="delete-mark">
+    </div>
+  </footer>
+</div>

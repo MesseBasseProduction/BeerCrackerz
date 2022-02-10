@@ -168,11 +168,12 @@ class MapHelper {
       submit.addEventListener('click', () => {
         // TODO check input validity
         _cleanDefineUI();
-        this.markPopupFactory(type, name.value, options).then(dom => {
-          options.type = type;
+        options.type = type;
+        options.name = name.value,
+        options.description = description.value;
+        options.rate = rating.currentRate;
+        this.markPopupFactory(options).then(dom => {
           options.dom = dom;
-          options.description = description.value;
-          options.rate = rating.currentRate;
           options.marker = this.placeMarker(options); // Create final marker
           options.addedCallback(options);
         });
@@ -208,16 +209,29 @@ class MapHelper {
   // ======================================================================== //    
 
 
-  markPopupFactory(type, name, options) {
+  markPopupFactory(options) {
     return new Promise(resolve => {
-      Utils.fetchTemplate(`assets/html/popup/${type}.html`).then(dom => {
+      Utils.fetchTemplate(`assets/html/popup/${options.type}.html`).then(dom => {
         const element = document.createElement('DIV');
         element.appendChild(dom);
-        Utils.replaceString(element, `{{${type.toUpperCase()}_NAME}}`, Utils.stripDom(name));
-        Utils.replaceString(element, `{{${type.toUpperCase()}_LAT}}`, options.lat);
-        Utils.replaceString(element, `{{${type.toUpperCase()}_LNG}}`, options.lng);
+        const user = options.user || this.user.username;
+        Utils.replaceString(element, `{{${options.type.toUpperCase()}_NAME}}`, Utils.stripDom(options.name));
+        Utils.replaceString(element, `{{${options.type.toUpperCase()}_FINDER}}`, user);
+        Utils.replaceString(element, `{{${options.type.toUpperCase()}_DESC}}`, Utils.stripDom(options.description));
+        Utils.replaceString(element, `{{${options.type.toUpperCase()}_LAT}}`, options.lat);
+        Utils.replaceString(element, `{{${options.type.toUpperCase()}_LNG}}`, options.lng);
+        Utils.replaceString(element, `{{MAP_OPEN}}`, this.nls.popup('mapOpen'));
+        Utils.replaceString(element, `{{${options.type.toUpperCase()}_FOUND_BY}}`, this.nls.popup(`${options.type}FoundBy`));
+        // Remove edition buttons if marker is not user's one, this does not replace a server test for edition...
+        if (user !== this.user.username) {
+          element.removeChild(element.querySelector('#popup-edit'));
+        } else {
+          element.querySelector('#edit-mark').addEventListener('click', this.editMarker.bind(this, options), false);
+          element.querySelector('#delete-mark').addEventListener('click', this.deleteMarker.bind(this, options), false);
+        }
+
         // Append circle around marker
-        options.color = Utils[`${type.toUpperCase()}_COLOR`];
+        options.color = Utils[`${options.type.toUpperCase()}_COLOR`];
         options.circle = this.drawCircle(options);
         // Create label for new marker
         options.tooltip = window.L.tooltip({
@@ -225,7 +239,7 @@ class MapHelper {
           direction: 'center',
           className: 'marker-tooltip',
           interactive: true
-        }).setContent(name)
+        }).setContent(options.name)
           .setLatLng(options.circle.getLatLng());
         // Only make it visible if preference is to true
         if (Utils.getPreference('poi-marker-label') === 'true') {
