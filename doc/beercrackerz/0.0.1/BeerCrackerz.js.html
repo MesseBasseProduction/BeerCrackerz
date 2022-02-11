@@ -28,10 +28,11 @@
         <article>
             <pre class="prettyprint source linenums"><code>import './BeerCrackerz.scss';
 import MapHelper from './js/MapHelper.js';
-import ZoomSlider from './js/ZoomSlider.js';
-import LangManager from './js/LangManager.js';
-import Notification from './js/Notification.js';
-import Utils from './js/Utils.js';
+import ZoomSlider from './js/ui/ZoomSlider.js';
+import LangManager from './js/utils/LangManager.js';
+import Notification from './js/ui/Notification.js';
+import Rating from './js/ui/Rating.js';
+import Utils from './js/utils/Utils.js';
 
 
 /**
@@ -656,6 +657,102 @@ class BeerCrackerz extends MapHelper {
   // ======================================================================== //	
 
 
+	newMarkModal(dom) {
+		document.getElementById('overlay').appendChild(dom);
+		document.getElementById('overlay').style.display = 'flex';
+		setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+	}
+
+
+	editMarkModal(options) {	
+		Utils.fetchTemplate(`assets/html/modal/edit${options.type}.html`).then(dom => {
+			const name = dom.querySelector(`#${options.type}-name`);
+      const description = dom.querySelector(`#${options.type}-desc`);
+			const submit = dom.querySelector(`#${options.type}-submit`);
+			const cancel = dom.querySelector(`#${options.type}-cancel`);
+			const rate = dom.querySelector(`#${options.type}-rating`);
+			const rating = new Rating(rate, options.rate);
+			// Update nls for template
+			Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal(`${options.type}EditTitle`));
+      Utils.replaceString(dom.querySelector(`#nls-${options.type}-name`), `{{${options.type.toUpperCase()}_NAME}}`, this.nls[options.type]('nameLabel'));
+      Utils.replaceString(dom.querySelector(`#nls-${options.type}-desc`), `{{${options.type.toUpperCase()}_DESC}}`, this.nls[options.type]('descLabel'));
+      Utils.replaceString(dom.querySelector(`#nls-${options.type}-rate`), `{{${options.type.toUpperCase()}_RATE}}`, this.nls[options.type]('rateLabel'));
+      Utils.replaceString(submit, `{{${options.type.toUpperCase()}_SUBMIT}}`, this.nls.nav('add'));
+      Utils.replaceString(cancel, `{{${options.type.toUpperCase()}_CANCEL}}`, this.nls.nav('cancel'));
+			name.value = options.name;		
+			description.value = options.description;
+			submit.addEventListener('click', () => {
+				// Iterate through marks to find matching one (by coord as marks coordinates are unique)
+				for (let i = 0; i &lt; this._marks[options.type].length; ++i) {
+          // We found, remove circle, label and marker from map/clusters
+          if (options.lat === this._marks[options.type][i].lat &amp;&amp; options.lng === this._marks[options.type][i].lng) {
+            this._marks[options.type][i].name = name.value;
+            this._marks[options.type][i].description = description.value;
+            this._marks[options.type][i].rate = rating.currentRate;
+						options.tooltip.removeFrom(this.map);
+						this.markPopupFactory(options).then(dom => {
+							options.dom = dom;
+							options.marker.setPopupContent(options.dom);
+						});
+            break;
+          }
+        }
+				// Format marks to be saved and then update user preference with
+				const formattedMarks = [];
+				for (let i = 0; i &lt; this._marks[options.type].length; ++i) {
+					formattedMarks.push(this.formatSavedMarker(this._marks[options.type][i]));
+				}
+				Utils.setPreference(`saved-${options.type}`, JSON.stringify(formattedMarks));
+				// Notify user through UI that marker has been successfully deleted
+				this._notification.raise(this.nls.notif(`${options.type}Deleted`));
+				this.closeModal(null, true);
+      });
+
+			cancel.addEventListener('click', this.closeModal.bind(this, null, true));
+			document.getElementById('overlay').appendChild(dom);
+      document.getElementById('overlay').style.display = 'flex';
+			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+		});	
+	}
+
+
+	/**
+	 * @method
+   * @name deleteMarkModal
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+	 * @since February 2022
+   * @description
+	 * &lt;blockquote>
+	 * The deleteMarkModal() method will request the mark delete modal, which prompts
+	 * the user a confirmation to actually delete the mark
+	 * &lt;/blockquote>
+	 * @param {Function} cb The function to callback with true or false depending on user's choice
+	 **/
+	deleteMarkModal(cb) {
+		Utils.fetchTemplate('assets/html/modal/deletemark.html').then(dom => {
+			// Update nls for template
+			Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('deleteMarkTitle'));
+      Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{{MODAL_DESC}}`, this.nls.modal('deleteMarkDesc'));
+      Utils.replaceString(dom.querySelector(`#cancel-close`), `{{MODAL_CANCEL}}`, this.nls.nav('cancel'));
+      Utils.replaceString(dom.querySelector(`#delete-close`), `{{MODAL_DELETE}}`, this.nls.nav('delete'));
+			document.getElementById('overlay').appendChild(dom);
+      document.getElementById('overlay').style.display = 'flex';
+			// Setup callback for confirm/cancel buttons
+			document.getElementById('cancel-close').addEventListener('click', e => {
+				this.closeModal(e);
+				cb(false);
+			}, false);
+			document.getElementById('delete-close').addEventListener('click', e => {
+				this.closeModal(e);
+				cb(true);
+			}, false);			
+			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);		
+		});
+	}
+
+
 	/**
 	 * @method
    * @name userProfileModal
@@ -780,43 +877,6 @@ class BeerCrackerz extends MapHelper {
 
 	/**
 	 * @method
-   * @name deleteMarkModal
-   * @public
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-	 * @since February 2022
-   * @description
-	 * &lt;blockquote>
-	 * The deleteMarkModal() method will request the mark delete modal, which prompts
-	 * the user a confirmation to actually delete the mark
-	 * &lt;/blockquote>
-	 * @param {Function} cb The function to callback with true or false depending on user's choice
-	 **/
-	deleteMarkModal(cb) {
-		Utils.fetchTemplate('assets/html/modal/deletemark.html').then(dom => {
-			// Update nls for template
-			Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('deleteMarkTitle'));
-      Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{{MODAL_DESC}}`, this.nls.modal('deleteMarkDesc'));
-      Utils.replaceString(dom.querySelector(`#cancel-close`), `{{MODAL_CANCEL}}`, this.nls.nav('cancel'));
-      Utils.replaceString(dom.querySelector(`#delete-close`), `{{MODAL_DELETE}}`, this.nls.nav('delete'));
-			document.getElementById('overlay').appendChild(dom);
-      document.getElementById('overlay').style.display = 'flex';
-			// Setup callback for confirm/cancel buttons
-			document.getElementById('cancel-close').addEventListener('click', e => {
-				this.closeModal(e);
-				cb(false);
-			}, false);
-			document.getElementById('delete-close').addEventListener('click', e => {
-				this.closeModal(e);
-				cb(true);
-			}, false);			
-			setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);		
-		});
-	}
-
-
-	/**
-	 * @method
    * @name closeModal
    * @public
    * @memberof BeerCrackerz
@@ -829,8 +889,8 @@ class BeerCrackerz extends MapHelper {
 	 * &lt;/blockquote>
 	 * @param {Event} event The click event
 	 **/
-	closeModal(event) {
-		if (event.target.id === 'overlay' || event.target.id.indexOf('close') !== -1) {
+	closeModal(event, force) {
+		if (force === true || event.target.id === 'overlay' || event.target.id.indexOf('close') !== -1) {
       document.getElementById('overlay').style.opacity = 0;
       setTimeout(() => {
         document.getElementById('overlay').style.display = 'none';
@@ -900,7 +960,7 @@ class BeerCrackerz extends MapHelper {
 		this._newMarker = null;
 		// Save new marker in local storage, later to be sent to the server
 		const marks = JSON.parse(Utils.getPreference(`saved-${options.type}`)) || [];
-		marks.push(this.formatSavedmarker(options));
+		marks.push(this.formatSavedMarker(options));
 		Utils.setPreference(`saved-${options.type}`, JSON.stringify(marks));
 	}
 
@@ -960,7 +1020,7 @@ class BeerCrackerz extends MapHelper {
 
 	/**
 	 * @method
-   * @name formatSavedmarker
+   * @name formatSavedMarker
    * @public
    * @memberof BeerCrackerz
    * @author Arthur Beaulieu
@@ -972,7 +1032,7 @@ class BeerCrackerz extends MapHelper {
 	 * &lt;/blockquote>
 	 * @param {Object} mark The mark options from internal this._marks[type]
 	 **/
-	formatSavedmarker(mark) {
+	formatSavedMarker(mark) {
 		return {
       type: mark.type,
       lat: mark.lat,
@@ -1003,7 +1063,8 @@ class BeerCrackerz extends MapHelper {
 	 * @param {Object} options The mark options to edit
 	 **/
 	editMarker(options) {
-		console.log(options);
+		this._map.closePopup();
+		this.editMarkModal(options);
 	}
 
 
@@ -1040,7 +1101,7 @@ class BeerCrackerz extends MapHelper {
 				// Format marks to be saved and then update user preference with
 				const formattedMarks = [];
 				for (let i = 0; i &lt; this._marks[options.type].length; ++i) {
-					formattedMarks.push(this.formatSavedmarker(this._marks[options.type][i]));
+					formattedMarks.push(this.formatSavedMarker(this._marks[options.type][i]));
 				}
 				Utils.setPreference(`saved-${options.type}`, JSON.stringify(formattedMarks));
 				// Notify user through UI that marker has been successfully deleted
@@ -1172,7 +1233,7 @@ export default BeerCrackerz;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Feb 10 2022 17:00:51 GMT+0100 (GMT+01:00)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Feb 11 2022 16:38:03 GMT+0100 (GMT+01:00)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1,6 +1,6 @@
-import Markers from './MarkerEnum.js';
-import Rating from './Rating.js';
-import Utils from './Utils.js';
+import Markers from './utils/MarkerEnum.js';
+import Rating from './ui/Rating.js';
+import Utils from './utils/Utils.js';
 
 
 class MapHelper {
@@ -111,16 +111,16 @@ class MapHelper {
     const marker = this.placeMarker(options).openPopup();
     options.marker = marker; // Attach marker to option so it can be manipulated in clicked callbacks
     options.addedCallback = callback; // Attach callback to be called when marker addition is done
-    // Callback on button clicked (to open aside and define a new mark)
-    const _fillAside = e => {
+    // Callback on button clicked (to open modal and define a new mark)
+    const _prepareNewMark = e => {
       marker.isBeingDefined = true;
       marker.closePopup();
       this.defineMarkFactory(e.target.dataset.type, options);
     };
     // Buttons click events
-    dom.spot.addEventListener('click', _fillAside);
-    dom.store.addEventListener('click', _fillAside);
-    dom.bar.addEventListener('click', _fillAside);
+    dom.spot.addEventListener('click', _prepareNewMark);
+    dom.store.addEventListener('click', _prepareNewMark);
+    dom.bar.addEventListener('click', _prepareNewMark);
     // Listen to clicks outside of popup to close new mark
     marker.on('popupclose', () => {
       if (!marker.isBeingDefined) {
@@ -134,18 +134,18 @@ class MapHelper {
 
 
   // ======================================================================== //
-  // ---------------------- New mark in aside helper ------------------------ //
+  // ---------------------- New mark in modal helper ------------------------ //
   // ======================================================================== //  
 
 
   defineMarkFactory(type, options) {
-    Utils.fetchTemplate(`assets/html/aside/new${type}.html`).then(dom => {
+    Utils.fetchTemplate(`assets/html/modal/new${type}.html`).then(dom => {
       const name = dom.querySelector(`#${type}-name`);
       const description = dom.querySelector(`#${type}-desc`);
       const rating = new Rating(dom.querySelector(`#${type}-rating`));
       const submit = dom.querySelector(`#${type}-submit`);
       const cancel = dom.querySelector(`#${type}-cancel`);
-      const close = dom.querySelector('#close-aside');
+      const close = dom.querySelector('#modal-close');
       // Update nls for template
       Utils.replaceString(dom.querySelector(`#nls-${type}-title`), `{{${type.toUpperCase()}_TITLE}}`, this.nls[type]('title'));
       Utils.replaceString(dom.querySelector(`#nls-${type}-subtitle`), `{{${type.toUpperCase()}_SUBTITLE}}`, this.nls[type]('subtitle'));
@@ -154,37 +154,32 @@ class MapHelper {
       Utils.replaceString(dom.querySelector(`#nls-${type}-rate`), `{{${type.toUpperCase()}_RATE}}`, this.nls[type]('rateLabel'));
       Utils.replaceString(submit, `{{${type.toUpperCase()}_SUBMIT}}`, this.nls.nav('add'));
       Utils.replaceString(cancel, `{{${type.toUpperCase()}_CANCEL}}`, this.nls.nav('cancel'));
-      // Method to clear aside and hide it, and remove temporary marker on the map
+      // Method to clear modal and hide it, and remove temporary marker on the map
       const _cleanDefineUI = () => {
         options.marker.isBeingDefined = false;
         options.marker.removeFrom(this.map); // Clear temporary black marker
-        document.getElementById('aside').style.opacity = 0;
-        setTimeout(() => {
-          document.getElementById('aside').innerHTML = '';
-          document.getElementById('aside').style.zIndex = -1;
-        }, 200); // Match CSS transition duration
+        this.closeModal(null, true);
       };
       // Submit or cancel event subscriptions
       submit.addEventListener('click', () => {
-        // TODO check input validity
-        _cleanDefineUI();
-        options.type = type;
-        options.name = name.value,
-        options.description = description.value;
-        options.rate = rating.currentRate;
-        this.markPopupFactory(options).then(dom => {
-          options.dom = dom;
-          options.marker = this.placeMarker(options); // Create final marker
-          options.addedCallback(options);
-        });
+        if (name.value === '') {
+          this._notification.raise(this.nls.notif('markNameEmpty'));
+        } else {
+          _cleanDefineUI();
+          options.type = type;
+          options.name = name.value,
+          options.description = description.value;
+          options.rate = rating.currentRate;
+          this.markPopupFactory(options).then(dom => {
+            options.dom = dom;
+            options.marker = this.placeMarker(options); // Create final marker
+            options.addedCallback(options);
+          });
+        }
       });
       cancel.addEventListener('click', _cleanDefineUI);
       close.addEventListener('click', _cleanDefineUI);
-      // Append new DOM element at the end to keep its scope while building events and co.
-      document.getElementById('aside').innerHTML = '';
-      document.getElementById('aside').appendChild(dom);
-      document.getElementById('aside').style.zIndex = 50;
-      document.getElementById('aside').style.opacity = 1;
+      this.newMarkModal(dom);
     });
   }
 
@@ -215,13 +210,23 @@ class MapHelper {
         const element = document.createElement('DIV');
         element.appendChild(dom);
         const user = options.user || this.user.username;
+        const desc = Utils.stripDom(options.description) || this.nls.popup(`${options.type}NoDesc`);
         Utils.replaceString(element, `{{${options.type.toUpperCase()}_NAME}}`, Utils.stripDom(options.name));
         Utils.replaceString(element, `{{${options.type.toUpperCase()}_FINDER}}`, user);
-        Utils.replaceString(element, `{{${options.type.toUpperCase()}_DESC}}`, Utils.stripDom(options.description));
-        Utils.replaceString(element, `{{${options.type.toUpperCase()}_LAT}}`, options.lat);
-        Utils.replaceString(element, `{{${options.type.toUpperCase()}_LNG}}`, options.lng);
-        Utils.replaceString(element, `{{MAP_OPEN}}`, this.nls.popup('mapOpen'));
+        Utils.replaceString(element, `{{${options.type.toUpperCase()}_RATE}}`, options.rate + 1);
+        Utils.replaceString(element, `{{${options.type.toUpperCase()}_DESC}}`, desc);
         Utils.replaceString(element, `{{${options.type.toUpperCase()}_FOUND_BY}}`, this.nls.popup(`${options.type}FoundBy`));
+        // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
+        const rate = element.querySelector(`#${options.type}-rating`);
+        for (let i = 0; i < options.rate + 1; ++i) {
+          rate.children[i].classList.add('active');
+        }
+        // Remove picture icon if user is not in range
+        const distance = Utils.getDistanceBetweenCoords([this.user.lat, this.user.lng], [options.lat, options.lng]);
+        if (distance > Utils.CIRCLE_RADIUS) {
+          console.log('Too far');
+          //element.removeChild(element.querySelector(''));
+        }
         // Remove edition buttons if marker is not user's one, this does not replace a server test for edition...
         if (user !== this.user.username) {
           element.removeChild(element.querySelector('#popup-edit'));

@@ -1,11 +1,11 @@
 class Rating {
 
 
-  constructor(domList) {
+  constructor(domList, rate) {
     this._container = null;
     this._items = [];
-    this._currentRate = 0; // Mostly for hover operations
-    this._clicked = -1; // To know when user clicked on a given star
+    this._currentRate = rate || 0; // Mostly for hover operations
+    this._clicked = rate || - 1; // To know when user clicked on a given star
 
     this._init(domList);
     this._events();
@@ -16,6 +16,11 @@ class Rating {
     this._container = domList;
     for (let i = 0; i < domList.children.length; ++i) {
       this._items.push(domList.children[i]);
+    }
+    // Init Rating with given rate
+    for (let i = 0; i < this._currentRate + 1; ++i) {
+      this._items[i].classList.add('active');
+      this._items[i].classList.add('selected');
     }
   }
 

@@ -65,56 +65,6 @@ button {
 	}
 }
 
-aside {
-	background: white;
-	border-radius: .5rem;
-	box-shadow: 0px 0px 10px #181818;
-	height: calc(100% - 2rem);
-	left: 1rem;
-	opacity: 0;
-	padding: 2.5rem 1.5rem;
-	position: absolute;
-	top: 1rem;
-	width: calc(100% - 2rem);
-	z-index: -1; /* Needs to be updated in Js */ 
-
-	transition: opacity .2s ease-out;
-
-	h1, p {
-		text-align: center;
-	}
-
-	.close-aside {
-		color: #999;
-		cursor: pointer;
-		font-size: 2.2rem;
-		font-weight: bold;
-		line-height: 1.4rem; /* Because the cross symbol doesn't fit font height */
-		right: 1rem;
-		position: absolute;
-		top: 1rem;
-	}
-
-	.rating {
-		margin-bottom: 1.2rem;
-
-		img {
-      cursor: pointer;
-			height: 2.5rem;
-			margin: 0 .25rem;
-			width: 2.5rem;
-
-      &.active {
-        filter: invert(95%) sepia(39%) saturate(3136%) hue-rotate(323deg) brightness(96%) contrast(115%);
-
-        &.selected {
-          filter: invert(75%) sepia(9%) saturate(4002%) hue-rotate(67deg) brightness(81%) contrast(83%);
-        }
-      }
-		}
-	}
-}
-
 main.beer-crakerz-map {
 	height: 100%;
 	width: 100%;
@@ -202,7 +152,7 @@ nav {
 	position: absolute;
 	top: -4rem;
 	width: 30rem;
-	z-index: 20;
+	z-index: 40;
 
 	transition: top .3s, opacity .2s ease-out;
 
@@ -241,9 +191,11 @@ nav {
 	}
 
 	p {
+		cursor: pointer;
 		font-size: 1.6rem;
 		font-weight: bold;
 		margin: .5rem 0;
+		user-select: none;
 
 		&:last-child {
 			margin-bottom: 0;
@@ -289,6 +241,7 @@ nav {
 		box-shadow: 0px 0px 10px #424242;
 		padding: 3rem 4rem;
 		position: relative;
+		text-align: center;
 
 		h1 {
 			margin-bottom: 3rem;
@@ -307,7 +260,46 @@ nav {
 			right: 1rem;
 			position: absolute;
 			top: 1rem;
-		}		
+		}
+
+		.button-wrapper {
+			align-items: center;
+			display: flex;
+			justify-content: center;
+
+			button {
+				margin-left: 1rem;
+				margin-right: 1rem;
+			}
+		}
+	}
+
+	.new-mark-modal,
+	.edit-mark-modal {
+		width: calc(100% - 2rem);
+
+		h1, p {
+			text-align: center;
+		}
+
+		.rating {
+			margin-bottom: 1.2rem;
+
+			img {
+				cursor: pointer;
+				height: 2.5rem;
+				margin: 0 .25rem;
+				width: 2.5rem;
+
+				&.active {
+					filter: invert(95%) sepia(39%) saturate(3136%) hue-rotate(323deg) brightness(96%) contrast(115%);
+
+					&.selected {
+						filter: invert(75%) sepia(9%) saturate(4002%) hue-rotate(67deg) brightness(81%) contrast(83%);
+					}
+				}
+			}
+		}
 	}
 
 	.hide-show-modal {
@@ -334,7 +326,6 @@ nav {
 			}
 		}
 	}
-
 
 	.user-profile-modal {
 		height: calc(100% - 2rem);
@@ -383,16 +374,36 @@ nav {
 .popup {
 	h1, h2, p {
 		margin: 0;
+		text-align: center;		
 	}
 
 	h1 {
 		font-size: 2rem;
-		text-align: center;
+		margin-bottom: 1.2rem;		
+	}
+
+	.rating {
+		align-items: center;
+		display: flex;
+		justify-content: center;		
+		width: 100%;
+		
+		img {
+			height: 1.2rem;
+
+      &.active {
+        filter: invert(95%) sepia(39%) saturate(3136%) hue-rotate(323deg) brightness(96%) contrast(115%);
+      }
+		}
+
+		p {
+			font-style: inherit;
+			margin-left: .5rem;
+		}
 	}
 
 	p {
 		font-style: italic;
-		text-align: center;
 	}
 
 	h2 {
@@ -408,12 +419,10 @@ nav {
 		justify-content: space-between;
 		margin-top: 1.2rem;
 
-		.edit {
-			img {
-				cursor: pointer;
-				height: 2rem;
-				margin-left: .5rem;
-			}
+		img {
+			cursor: pointer;
+			height: 2rem;
+			margin-left: .5rem;
 		}
 	}
 }

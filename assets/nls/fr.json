@@ -20,7 +20,8 @@
     "barAdded": "Nouveau bar ajouté à la carte",
     "spotDeleted": "Le spot a été supprimé de la carte avec succès",
     "storeDeleted": "Le magasin a été supprimé de la carte avec succès",
-    "barDeleted": "Le bar a été supprimé de la carte avec succès"
+    "barDeleted": "Le bar a été supprimé de la carte avec succès",
+    "markNameEmpty": "Vous devez specifier un nom pour le marqueur"
   },
   "nav": {
     "add": "Ajouter",
@@ -70,12 +71,17 @@
     "hideShowStores": "Magasins",
     "hideShowBars": "Bars",
     "deleteMarkTitle": "Supprimer le marqueur",
-    "deleteMarkDesc": "Êtes-vous sûr de vouloir supprimer ce marqueur? Cette action est permanente et irréversible."
+    "deleteMarkDesc": "Êtes-vous sûr de vouloir supprimer ce marqueur?<br>Cette action est permanente et irréversible.",
+    "spotEditTitle": "Éditer le spot",
+    "storeEditTitle": "Éditer le magasin",
+    "barEditTitle": "Éditer le bar"
   },
   "popup": {
-    "mapOpen": "Ouvrir dans une carte",
     "spotFoundBy": "Un spot découvert par",
     "storeFoundBy": "Un magasin ajouté par",
-    "barFoundBy": "Un bar ajouté par"
+    "barFoundBy": "Un bar ajouté par",
+    "spotNoDesc": "Pas de description disponible pour ce spot",
+    "storeNoDesc": "Pas de description disponible pour ce magasin",
+    "barNoDesc": "Pas de description disponible pour ce bar"
   }
 }

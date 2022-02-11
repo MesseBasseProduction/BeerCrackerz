@@ -1,7 +1,9 @@
-/*@media (max-width: 1000px) {
-
+@media (min-width: 720px) {
+  .overlay [class$="-modal"] {
+    max-width: 50%;
+  }
 }
-
+/*
 @media (max-width: 512px) {
 
 }

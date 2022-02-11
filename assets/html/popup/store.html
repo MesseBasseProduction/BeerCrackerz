@@ -1,9 +1,20 @@
 <div class="popup">
   <h1>{{STORE_NAME}}</h1>
   <p>{{STORE_FOUND_BY}} <b>{{STORE_FINDER}}</b></p>
+  <div id="store-rating" class="rating">
+    <img src="assets/img/logo/star.svg" alt="rating-star">
+    <img src="assets/img/logo/star.svg" alt="rating-star">
+    <img src="assets/img/logo/star.svg" alt="rating-star">
+    <img src="assets/img/logo/star.svg" alt="rating-star">
+    <img src="assets/img/logo/star.svg" alt="rating-star">
+    <p>({{STORE_RATE}}/5)</p>
+  </div>
   <h2>{{STORE_DESC}}</h2>
   <footer>
-    <p><a href="geo:{{STORE_LAT}},{{STORE_LNG}}">{{MAP_OPEN}}</a></p>
+    <div class="info-mark">
+      <img src="assets/img/logo/comment.svg" alt="comment-mark">
+      <img src="assets/img/logo/photo.svg" alt="photo-mark">
+    </div>
     <div id="popup-edit" class="edit">
       <img src="assets/img/logo/edit.svg" id="edit-mark" alt="edit-mark">
       <img src="assets/img/logo/delete.svg" id="delete-mark" alt="delete-mark">
