@@ -6,12 +6,15 @@ const loaders = require('./loaders');
 const plugins = require('./plugins');
 
 module.exports = {
-  entry: ['./src/BeerCrackerz.js'],
+  entry: {
+    BeerCrackerz: ['./src/BeerCrackerz.js'],
+    BeerCrackerzAuth: ['./src/BeerCrackerzAuth.js']
+  },
   module: {
     rules: [loaders.JSLoader, loaders.CSSLoader, loaders.FontLoader],
   },
   output: {
-    filename: 'BeerCrackerz.bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, '../assets/dist'),
     library: 'BeerCrackerz', // We set a library name to bundle the export default of the class
     libraryTarget: 'window', // Make it globally available

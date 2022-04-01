@@ -83,5 +83,10 @@
     "spotNoDesc": "No description available for this spot",
     "storeNoDesc": "No description available for this store",
     "barNoDesc": "No description available for this bar"
+  },
+  "auth": {
+    "login": {
+      "subtitle": "Se connecter"
+    }
   }
 }

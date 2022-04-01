@@ -66,6 +66,16 @@ class LangManager {
   }
 
 
+  login(key) {
+    return this._values.auth.login[key] || '';
+  }
+
+
+  register(key) {
+    return this._values.auth.register[key] || '';
+  }
+
+
 }
 
 

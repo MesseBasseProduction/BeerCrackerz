@@ -18,12 +18,43 @@ class Utils {
   static fetchFile(url) {
     return new Promise((resolve, reject) => {
 			fetch(url).then(data => {
-        data.text().then(string => {
-          resolve(string);
-        }).catch(reject);
+        data.text().then(resolve).catch(reject);
 			}).catch(reject);
 		});    
   }
+
+
+  static getReq(url) {
+    return new Promise((resolve, reject) => {
+      const options = {
+        method: 'GET',
+        headers: new Headers(),
+        mode: 'cors',
+        cache: 'default'
+      };
+
+			fetch(url, options).then(data => {
+        data.json().then(resolve).catch(reject);
+			}).catch(reject);
+		});  
+  }
+
+
+  static postReq(url, data) {
+    return new Promise((resolve, reject) => {
+      const options = {
+        method: 'POST',
+        headers: new Headers(),
+        mode: 'cors',
+        cache: 'default',
+        body: data
+      };
+
+			fetch(url, options).then(data => {
+        data.json().then(resolve).catch(reject);
+			}).catch(reject);
+		});  
+  }  
 
 
   static stripDom(html){
