@@ -6,21 +6,21 @@ class Utils {
 
   static fetchTemplate(url) {
     return new Promise((resolve, reject) => {
-			fetch(url).then(data => {
+      fetch(url).then(data => {
         data.text().then(html => {
           resolve(document.createRange().createContextualFragment(html));
         }).catch(reject);
-			}).catch(reject);
-		});
+      }).catch(reject);
+    });
   }
 
 
   static fetchFile(url) {
     return new Promise((resolve, reject) => {
-			fetch(url).then(data => {
+      fetch(url).then(data => {
         data.text().then(resolve).catch(reject);
-			}).catch(reject);
-		});    
+      }).catch(reject);
+    });
   }
 
 
@@ -33,10 +33,10 @@ class Utils {
         cache: 'default'
       };
 
-			fetch(url, options).then(data => {
+      fetch(url, options).then(data => {
         data.json().then(resolve).catch(reject);
-			}).catch(reject);
-		});  
+      }).catch(reject);
+    });
   }
 
 
@@ -50,11 +50,11 @@ class Utils {
         body: data
       };
 
-			fetch(url, options).then(data => {
+      fetch(url, options).then(data => {
         data.json().then(resolve).catch(reject);
-			}).catch(reject);
-		});  
-  }  
+      }).catch(reject);
+    });
+  }
 
 
   static stripDom(html){
@@ -257,7 +257,7 @@ class Utils {
     return ['en', 'fr', 'es'];
   }
 
-  
+
 }
 
 

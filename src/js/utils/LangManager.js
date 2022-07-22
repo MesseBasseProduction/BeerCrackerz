@@ -32,12 +32,12 @@ class LangManager {
 
 
   nav(key) {
-    return this._values.nav[key] || '';    
+    return this._values.nav[key] || '';
   }
 
 
   map(key) {
-    return this._values.map[key] || '';    
+    return this._values.map[key] || '';
   }
 
 
@@ -57,7 +57,7 @@ class LangManager {
 
 
   popup(key) {
-    return this._values.popup[key] || '';    
+    return this._values.popup[key] || '';
   }
 
 

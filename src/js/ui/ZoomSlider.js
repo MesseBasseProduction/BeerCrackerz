@@ -30,7 +30,7 @@ class ZoomSlider {
       const correctedZoom = this._map.getZoom() - this._map.getMinZoom();
       this._slider.style.height = `${(correctedZoom * 100) / this._zoomRange}%`;
     });
-    
+
     this._container.addEventListener('mouseover', () => {
       clearTimeout(this._timeoutId);
       this._timeoutId = -1;
@@ -45,7 +45,7 @@ class ZoomSlider {
     });
 
     this._container.querySelector('#zoom-less').addEventListener('click', () => {
-      this._map.setZoom(this._map.getZoom() - 1);      
+      this._map.setZoom(this._map.getZoom() - 1);
     });
   }
 

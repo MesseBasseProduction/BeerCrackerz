@@ -31,7 +31,7 @@ class BeerCrackerzAuth {
     Utils.replaceString(document.body, '{{LOGIN_BUTTON}}', this.nls.login('login'));
     Utils.replaceString(document.body, '{{LOGIN_NOT_REGISTERED}}', this.nls.login('notRegistered'));
     Utils.replaceString(document.body, '{{LOGIN_REGISTER}}', this.nls.login('register'));
-    
+
     const error = document.getElementById('login-error');
     const username = document.getElementById('username');
     const password = document.getElementById('password');
@@ -91,7 +91,7 @@ class BeerCrackerzAuth {
     Utils.replaceString(document.body, '{{REGISTER_USERNAME_PASSWORD_2}}', this.nls.register('password2'));
     Utils.replaceString(document.body, '{{REGISTER_BUTTON}}', this.nls.register('register'));
     Utils.replaceString(document.body, '{{REGISTER_ALREADY_DONE}}', this.nls.register('notRegistered'));
-    Utils.replaceString(document.body, '{{REGISTER_LOGIN}}', this.nls.register('login'));    
+    Utils.replaceString(document.body, '{{REGISTER_LOGIN}}', this.nls.register('login'));
     const error = document.getElementById('register-error');
     const username = document.getElementById('username');
     const password1 = document.getElementById('password1');
@@ -146,9 +146,9 @@ class BeerCrackerzAuth {
   }
 
 
-	get nls() {
-		return this._lang;
-	}  
+  get nls() {
+    return this._lang;
+  }
 
 
 }

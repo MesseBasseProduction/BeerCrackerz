@@ -1,88 +1,88 @@
 * {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html, body {
-	font-size: 62.5%;
-	height: 100%;
-	overflow: hidden;
-	width: 100%;
+  font-size: 62.5%;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
 }
 
 body {
-	background: #181818;
-	color: #D4D4D4;
-	font-family: sans-serif;
-	position: relative;
+  background: #181818;
+  color: #D4D4D4;
+  font-family: sans-serif;
+  position: relative;
 }
 
 h1 {
-	color: #181818;
-	font-size: 2.8rem;
-	margin-bottom: 1.2rem;
+  color: #181818;
+  font-size: 2.8rem;
+  margin-bottom: 1.2rem;
 }
 
 h2 {
-	font-size: 2.4rem;
+  font-size: 2.4rem;
 }
 
 a {
-	color: #a1ff86;
-	font-size: 1.2rem;
-	margin-bottom: 1.2rem;	
+  color: #a1ff86;
+  font-size: 1.2rem;
+  margin-bottom: 1.2rem;
 }
 
 p, label {
-	color: #2e2e2e;
-	font-size: 1.2rem;
-	margin-bottom: 1.2rem;
+  color: #2e2e2e;
+  font-size: 1.2rem;
+  margin-bottom: 1.2rem;
 }
 
 label {
-	font-style: italic;
+  font-style: italic;
 }
 
 input, textarea {
-	border: solid 1px #424242;
-	border-radius: .5rem;
-	display: block;
-	margin: .5rem auto;
-	margin-bottom: 1.2rem;
-	padding: .5rem;
-	width: 100%;
+  border: solid 1px #424242;
+  border-radius: .5rem;
+  display: block;
+  margin: .5rem auto;
+  margin-bottom: 1.2rem;
+  padding: .5rem;
+  width: 100%;
 
-	transition: border .2s;
+  transition: border .2s;
 }
 
 input.error {
-	border-color: #ff5454;
+  border-color: #ff5454;
 }
 
 button {
-	background-color: #e9e9e9;
-	border: solid 1px #424242;
-	border-radius: .5rem;
-	cursor: pointer;
-	display: block;
-	margin: .5rem auto;
-	padding: .5rem;
-	width: 100%;
+  background-color: #e9e9e9;
+  border: solid 1px #424242;
+  border-radius: .5rem;
+  cursor: pointer;
+  display: block;
+  margin: .5rem auto;
+  padding: .5rem;
+  width: 100%;
 
-	transition: background-color .2s;
+  transition: background-color .2s;
 
-	&:active,
-	&:focus,
-	&:hover {
-		background-color: #d9d9d9;
-	}
+  &:active,
+  &:focus,
+  &:hover {
+    background-color: #d9d9d9;
+  }
 
-	&.validate {
-		background-color: #a1ff86;
-	}
+  &.validate {
+    background-color: #a1ff86;
+  }
 
-	&.cancel {
-		background-color: #ff9a9a;
-	}
+  &.cancel {
+    background-color: #ff9a9a;
+  }
 }
