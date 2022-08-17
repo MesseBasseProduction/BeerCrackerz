@@ -10,7 +10,8 @@
     "zoom": "Zoom level",
     "enabled": "Enabled",
     "disabled": "Disabled",
-    "marks": "Marks"
+    "marks": "Marks",
+    "export": "Export data"
   },
   "notif": {
     "geolocationError": "Your browser doesn't implement the geolocation API",
@@ -34,8 +35,10 @@
     "newSpot": "Add a spot",
     "newStore": "Add a shop",
     "newBar": "Add a bar",
-    "planLayer": "Plan",
-    "satLayer": "Satellite"
+    "planLayerOSM": "Plan OSM",
+    "planLayerGeo": "Plan GeoPortail",
+    "satLayerEsri": "Satellite ESRI",
+    "satLayerGeo": "Satellite GeoPortail"    
   },
   "spot": {
     "title": "New spot",
@@ -86,7 +89,31 @@
   },
   "auth": {
     "login": {
-      "subtitle": "Se connecter"
+      "headTitle": "Connexion | BeerCrackerz",
+      "subtitle": "Se connecter",
+      "hiddenError": "Oh! Un texte caché!",
+      "username": "Nom d'utilisateur ou Email",
+      "password": "Mot de passe",
+      "login": "Se connecter",
+      "notRegistered": "Pas encore inscrit?",
+      "register": "Créer un compte",
+      "bothEmpty": "Veuillez saisir un nom d'utilisateur et un mot de passe",
+      "usernameEmpty": "Veuillez saisir un nom d'utilisateur",
+      "passwordEmpty": "Veuillez saisir votre mot de passe",
+      "serverError": "Une erreur serveur est survenue, contactez le support"
+    },
+    "register": {
+      "headTitle": "S'inscrire | BeerCrackerz",
+      "subtitle": "S'inscrire",
+      "hiddenError": "Oh! Un texte caché!",
+      "username": "Nom d'utilisateur ou Email",
+      "password1": "Mot de passe",
+      "password2": "Confirmer le mot de passe",
+      "register": "S'inscrire",
+      "notRegistered": "Déjà inscrit?",
+      "login": "Se connecter",
+      "fieldEmpty": "Veuillez remplir tous les champs du formulaire",
+      "notMatchingPassword": "Les deux mots de passe ne correspondent pas"
     }
   }
 }

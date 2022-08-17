@@ -113,6 +113,7 @@ class Utils {
     const posTimeout = document.createElement('P');
     const zoomLevel = document.createElement('P');
     const marks = document.createElement('P');
+    const exportData = document.createElement('BUTTON');
     debugContainer.classList.add('debug-container');
     userLat.classList.add('debug-user-lat');
     userLng.classList.add('debug-user-lng');
@@ -123,6 +124,7 @@ class Utils {
     posTimeout.classList.add('debug-pos-timeout');
     zoomLevel.classList.add('debug-zoom-level');
     marks.classList.add('debug-marks-amount');
+    exportData.classList.add('debug-export-data');
     userLat.innerHTML = `<b>${lang('lat')}</b> : -`;
     userLng.innerHTML = `<b>${lang('lng')}</b> : -`;
     updatesAmount.innerHTML = `<b>${lang('updates')}</b> : 0`;
@@ -132,6 +134,7 @@ class Utils {
     posTimeout.innerHTML = `<b>${lang('posTimeout')}</b> : -`;
     zoomLevel.innerHTML = `<b>${lang('zoom')}</b> : -`;
     marks.innerHTML = `<b>${lang('marks')}</b> : -`;
+    exportData.innerHTML = lang('export');
     debugContainer.appendChild(userLat);
     debugContainer.appendChild(userLng);
     debugContainer.appendChild(updatesAmount);
@@ -141,6 +144,8 @@ class Utils {
     debugContainer.appendChild(posTimeout);
     debugContainer.appendChild(zoomLevel);
     debugContainer.appendChild(marks);
+    debugContainer.appendChild(exportData);
+    exportData.addEventListener('click', window.BeerCrackerz.downloadData.bind(window.BeerCrackerz));
     return debugContainer;
   }
 
@@ -254,7 +259,7 @@ class Utils {
 
 
   static get SUPPORTED_LANGUAGE() {
-    return ['en', 'fr', 'es'];
+    return ['en', 'fr', 'es', 'de'];
   }
 
 

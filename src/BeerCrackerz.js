@@ -1,5 +1,6 @@
 import './BeerCrackerz.scss';
 import MapHelper from './js/MapHelper.js';
+import Providers from './js/utils/ProviderEnum.js';
 import ZoomSlider from './js/ui/ZoomSlider.js';
 import LangManager from './js/utils/LangManager.js';
 import Notification from './js/ui/Notification.js';
@@ -295,29 +296,37 @@ class BeerCrackerz extends MapHelper {
       // Place user marker on the map
       this.drawUserMarker();
       // Add OSM credits to the map next to leaflet credits
-      const osm = window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 21,
-        maxNativeZoom: 19, // To ensure tiles are not unloaded when zooming after 19
-        minZoom: 2 // Don't allow dezooming too far from map so it always stay fully visible
-      });
-      const esri = window.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: '&copy; <a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9">Esri Imagery</a>',
-        maxZoom: 21,
-        maxNativeZoom: 19, // To ensure tiles are not unloaded when zooming after 19
-        minZoom: 2 // Don't allow dezooming too far from map so it always stay fully visible
-      });
+      const osm = Providers.planOsm;
+      const plan = Providers.planGeo;
+      const esri = Providers.satEsri;
+      const geo = Providers.satGeo;
       // Prevent panning outside of the world's edge
       this._map.setMaxBounds(Utils.MAP_BOUNDS);
       // Add layer group to interface
       const baseMaps = {};
-      baseMaps[`<p>${this.nls.map('planLayer')}</p>`] = osm;
-      baseMaps[`<p>${this.nls.map('satLayer')}</p>`] = esri;
+      baseMaps[`<p>${this.nls.map('planLayerOSM')}</p>`] = osm;
+      baseMaps[`<p>${this.nls.map('planLayerGeo')}</p>`] = plan;      
+      baseMaps[`<p>${this.nls.map('satLayerEsri')}</p>`] = esri;
+      baseMaps[`<p>${this.nls.map('satLayerGeo')}</p>`] = geo;
       // Append layer depending on user preference
-      if (Utils.getPreference('map-plan-layer') === 'true') {
-        osm.addTo(this._map);
-      } else {
-        esri.addTo(this._map);
+      if (Utils.getPreference('map-plan-layer')) {
+        switch (Utils.getPreference('map-plan-layer')) {
+          case this.nls.map('planLayerOSM'):
+            osm.addTo(this._map);
+            break;
+          case this.nls.map('planLayerGeo'):
+            plan.addTo(this._map);
+            break;
+          case this.nls.map('satLayerEsri'):
+            esri.addTo(this._map);
+            break;
+          case this.nls.map('satLayerGeo'):
+            geo.addTo(this._map);
+            break;            
+          default:
+            osm.addTo(this._map);
+            break;
+        }
       }
       // Add layer switch radio on bottom right of the map
       window.L.control.layers(baseMaps, {}, { position: 'bottomright' }).addTo(this._map);
@@ -399,8 +408,7 @@ class BeerCrackerz extends MapHelper {
         this.updateDebugUI();
       });
       this._map.on('baselayerchange', event => {
-        const planActive = (Utils.stripDom(event.name) === this.nls.map('planLayer'));
-        Utils.setPreference('map-plan-layer', planActive);
+        Utils.setPreference('map-plan-layer', Utils.stripDom(event.name));
       });
       resolve();
     });
@@ -1137,6 +1145,27 @@ class BeerCrackerz extends MapHelper {
   updateDebugUI() {
     const options = (Utils.getPreference('map-high-accuracy') === 'true') ? Utils.HIGH_ACCURACY : Utils.OPTIMIZED_ACCURACY;
     Utils.updateDebugInterface(this._debugElement, this._user, options);
+  }
+
+
+  /**
+   * @method
+   * @name downloadData
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+   * @since August 2022
+   * @description
+   * <blockquote>
+   * The downloadData() method will save to user disk the saved spots as a JSON file
+   * </blockquote>
+   **/  
+  downloadData() {
+    const dataString = `data:text/json;charset=utf-8,${encodeURIComponent(Utils.getPreference('saved-spot'))}`;
+    const link = document.createElement('A');
+    link.setAttribute('href', dataString);
+    link.setAttribute('download', 'BeerCrackerzData.json');
+    link.click();
   }
 
 

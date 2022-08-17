@@ -55,8 +55,7 @@
 ### Interface
 
 - [x] ajouter layers de map satelite
-- [ ] fond de carte plus smooth, moins informatif
-- [ ] légende sur les cercles pour indiquer la distance
+- [x] fond de carte plus smooth, moins informatif
 - [x] ajouter pp user en haut droite pour accéder profil
 - [x] ajouter BeerCrackerz a coté pp coté gauche
 - [ ] logo beercrackerz

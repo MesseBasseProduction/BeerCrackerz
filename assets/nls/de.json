@@ -15,7 +15,7 @@
   },
   "notif": {
     "geolocationError": "Your browser doesn't implement the geolocation API",
-    "newMarkerOutside": "New marker out of range",
+    "newMarkerOutside": "New marker out of your range",
     "spotAdded": "New spot saved to map",
     "storeAdded": "New store saved to map",
     "barAdded": "New bar saved to map",

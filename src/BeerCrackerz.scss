@@ -22,6 +22,7 @@ main.beer-crakerz-map {
 
   .marker-tooltip {
     font-style: italic;
+    text-align: center;
   }
 }
 
@@ -47,6 +48,8 @@ nav {
     .cmd-wrapper {
       align-items: center;
       background: white;
+      background-clip: padding-box;
+      border: 2px solid rgba(0, 0, 0, .2);
       border-radius: .5rem;
       display: flex;
       justify-content: center;
@@ -106,7 +109,9 @@ nav {
 
 .zoom-slider {
   align-items: center;
-  background-color: rgba(255, 255, 255, .8);
+  background: white;
+  background-clip: padding-box;
+  border: 2px solid rgba(0, 0, 0, .2);
   border-radius: .5rem;
   box-shadow: 0 0 10px #424242;
   display: flex;
@@ -365,6 +370,14 @@ nav {
 }
 
 /* Needs to override some leaflet styles to match BeerCrackerz interface */
+.leaflet-control-layers.leaflet-control {
+  transition: all .2s;
+
+  a {
+    margin-bottom: 0;
+  }
+}
+
 .leaflet-control-layers-expanded {
   padding: 2rem !important;
 

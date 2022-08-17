@@ -10,7 +10,8 @@
     "zoom": "Niveau de zoom",
     "enabled": "Activée",
     "disabled": "Désactivée",
-    "marks": "Marqueurs"
+    "marks": "Marqueurs",
+    "export": "Exporter les données"
   },
   "notif": {
     "geolocationError": "Votre navigateur ne peux utiliser votre localisation",
