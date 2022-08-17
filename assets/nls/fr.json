@@ -35,8 +35,10 @@
     "newSpot": "Ajouter un spot",
     "newStore": "Ajouter un magasin",
     "newBar": "Ajouter un bar",
-    "planLayer": "Plan",
-    "satLayer": "Satellite"
+    "planLayerOSM": "Plan OSM",
+    "planLayerGeo": "Plan GeoPortail",
+    "satLayerEsri": "Satellite ESRI",
+    "satLayerGeo": "Satellite GeoPortail"
   },
   "spot": {
     "title": "Nouveau spot",

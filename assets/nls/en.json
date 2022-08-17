@@ -38,7 +38,7 @@
     "planLayerOSM": "Plan OSM",
     "planLayerGeo": "Plan GeoPortail",
     "satLayerEsri": "Satellite ESRI",
-    "satLayerGeo": "Satellite GeoPortail"    
+    "satLayerGeo": "Satellite GeoPortail"
   },
   "spot": {
     "title": "New spot",
