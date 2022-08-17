@@ -1,7 +1,6 @@
 @import 'scss/keyframes';
 @import 'scss/base';
 
-
 main.beer-crakerz-map {
   height: 100%;
   width: 100%;
@@ -32,7 +31,7 @@ nav {
   position: absolute;
   right: 1rem;
   top: 1rem;
-  width: 4.4rem;
+  width: 4.8rem;
   z-index: 20;
 
   img {
@@ -43,8 +42,6 @@ nav {
   }
 
   .cmd-bar {
-    margin-top: 1rem;
-
     .cmd-wrapper {
       align-items: center;
       background: white;
@@ -55,6 +52,10 @@ nav {
       justify-content: center;
       margin: 1rem 0;
       padding: .2rem;
+
+      &:first-child {
+        margin-top: 0;
+      }
 
       img {
         box-shadow: inherit;
@@ -72,6 +73,16 @@ nav {
 
         &[class$="-on"] {
           filter: invert(53%) sepia(30%) saturate(1977%) hue-rotate(155deg) brightness(88%) contrast(102%);
+        }
+      }
+
+      &.logo img {
+        padding: .1rem;
+
+        &:active,
+        &:focus,
+        &:hover {
+          filter: inherit;
         }
       }
     }
@@ -122,7 +133,7 @@ nav {
   position: absolute;
   right: -6rem;
   top: calc(50% - 10rem);
-  width: 4rem;
+  width: 4.8rem;
   z-index: 20;
 
   transition: right .3s, opacity .2s ease-out;

@@ -327,6 +327,8 @@ class BeerCrackerz extends MapHelper {
             osm.addTo(this._map);
             break;
         }
+      } else { // No saved pref, fallback on OSM base map
+        osm.addTo(this._map);
       }
       // Add layer switch radio on bottom right of the map
       window.L.control.layers(baseMaps, {}, { position: 'bottomright' }).addTo(this._map);
@@ -355,7 +357,6 @@ class BeerCrackerz extends MapHelper {
     return new Promise(resolve => {
       // Command events
       document.getElementById('user-profile').addEventListener('click', this.userProfileModal.bind(this));
-      document.getElementById('about').addEventListener('click', this.aboutModal.bind(this));
       document.getElementById('hide-show').addEventListener('click', this.hidShowModal.bind(this));
       document.getElementById('center-on').addEventListener('click', this.toggleFocusLock.bind(this));
       document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));
@@ -752,6 +753,7 @@ class BeerCrackerz extends MapHelper {
       Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('userTitle'));
       Utils.replaceString(dom.querySelector(`#nls-user-modal-accuracy`), `{{ACCURACY_USER_MODAL}}`, this.nls.modal('userAccuracyPref'));
       Utils.replaceString(dom.querySelector(`#nls-user-modal-debug`), `{{DEBUG_USER_MODAL}}`, this.nls.modal('userDebugPref'));
+      Utils.replaceString(dom.querySelector(`#nls-about-desc`), `{{BEERCRACKERZ_DESC}}`, this.nls.modal('aboutDesc'));
 
       document.getElementById('overlay').appendChild(dom);
       document.getElementById('overlay').style.display = 'flex';
@@ -767,32 +769,6 @@ class BeerCrackerz extends MapHelper {
       document.getElementById('high-accuracy-toggle').addEventListener('change', this.toggleHighAccuracy.bind(this));
       document.getElementById('debug-toggle').addEventListener('change', this.toggleDebug.bind(this));
 
-      setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
-    });
-  }
-
-
-  /**
-   * @method
-   * @name aboutModal
-   * @public
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since January 2022
-   * @description
-   * <blockquote>
-   * The aboutModal() method will request the about modal, which contains
-   * information about BeerCrackerz, cookies/tracking policies and links
-   * </blockquote>
-   **/
-  aboutModal() {
-    Utils.fetchTemplate('assets/html/modal/about.html').then(dom => {
-      // Update nls for template
-      Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('aboutTitle'));
-      Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{{MODAL_DESC}}`, this.nls.modal('aboutDesc'));
-
-      document.getElementById('overlay').appendChild(dom);
-      document.getElementById('overlay').style.display = 'flex';
       setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
     });
   }
