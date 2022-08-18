@@ -297,32 +297,32 @@ class BeerCrackerz extends MapHelper {
       this.drawUserMarker();
       // Add OSM credits to the map next to leaflet credits
       const osm = Providers.planOsm;
-      const plan = Providers.planGeo;
+      //const plan = Providers.planGeo;
       const esri = Providers.satEsri;
-      const geo = Providers.satGeo;
+      //const geo = Providers.satGeo;
       // Prevent panning outside of the world's edge
       this._map.setMaxBounds(Utils.MAP_BOUNDS);
       // Add layer group to interface
       const baseMaps = {};
       baseMaps[`<p>${this.nls.map('planLayerOSM')}</p>`] = osm;
-      baseMaps[`<p>${this.nls.map('planLayerGeo')}</p>`] = plan;      
+      //baseMaps[`<p>${this.nls.map('planLayerGeo')}</p>`] = plan;      
       baseMaps[`<p>${this.nls.map('satLayerEsri')}</p>`] = esri;
-      baseMaps[`<p>${this.nls.map('satLayerGeo')}</p>`] = geo;
+      //baseMaps[`<p>${this.nls.map('satLayerGeo')}</p>`] = geo;
       // Append layer depending on user preference
       if (Utils.getPreference('map-plan-layer')) {
         switch (Utils.getPreference('map-plan-layer')) {
           case this.nls.map('planLayerOSM'):
             osm.addTo(this._map);
             break;
-          case this.nls.map('planLayerGeo'):
+          /*case this.nls.map('planLayerGeo'):
             plan.addTo(this._map);
-            break;
+            break;*/
           case this.nls.map('satLayerEsri'):
             esri.addTo(this._map);
             break;
-          case this.nls.map('satLayerGeo'):
+          /*case this.nls.map('satLayerGeo'):
             geo.addTo(this._map);
-            break;            
+            break;*/         
           default:
             osm.addTo(this._map);
             break;
@@ -438,9 +438,39 @@ class BeerCrackerz extends MapHelper {
         disableClusteringAtZoom: 18,
         spiderfyOnMaxZoom: false
       };
-      this._clusters.spot = new window.L.MarkerClusterGroup(clusterOptions);
-      this._clusters.store = new window.L.MarkerClusterGroup(clusterOptions);
-      this._clusters.bar = new window.L.MarkerClusterGroup(clusterOptions);
+      this._clusters.spot = new window.L.MarkerClusterGroup(Object.assign(clusterOptions, {
+        iconCreateFunction: cluster => {
+          return window.L.divIcon({
+            className: 'cluster-icon-wrapper',
+            html: `
+              <img src="assets/img/marker/cluster-icon-green.png" class="cluster-icon">
+              <span class="cluster-label">${cluster.getChildCount()}</span>
+            `
+          });
+        }
+      }));
+      this._clusters.store = new window.L.MarkerClusterGroup(Object.assign(clusterOptions, {
+        iconCreateFunction: cluster => {
+          return window.L.divIcon({
+            className: 'cluster-icon-wrapper',
+            html: `
+              <img src="assets/img/marker/cluster-icon-blue.png" class="cluster-icon">
+              <span class="cluster-label">${cluster.getChildCount()}</span>
+            `
+          });
+        }
+      }));
+      this._clusters.bar = new window.L.MarkerClusterGroup(Object.assign(clusterOptions, {
+        iconCreateFunction: cluster => {
+          return window.L.divIcon({
+            className: 'cluster-icon-wrapper',
+            html: `
+              <img src="assets/img/marker/cluster-icon-red.png" class="cluster-icon">
+              <span class="cluster-label">${cluster.getChildCount()}</span>
+            `
+          });
+        }
+      }));
       // Append clusters to the map depending on user preferences
       if (Utils.getPreference(`poi-show-spot`) === 'true') {
         this._map.addLayer(this._clusters.spot);
@@ -499,9 +529,11 @@ class BeerCrackerz extends MapHelper {
    **/
   toggleFocusLock() {
     if (Utils.getPreference('map-center-on-user') === 'true') {
+      this._notification.raise(this.nls.notif(`unlockFocusOn`));
       document.getElementById('center-on').classList.remove('lock-center-on');
       Utils.setPreference('map-center-on-user', 'false');
     } else {
+      this._notification.raise(this.nls.notif(`lockFocusOn`));
       document.getElementById('center-on').classList.add('lock-center-on');
       this._map.flyTo([this._user.lat, this._user.lng], 18);
       Utils.setPreference('map-center-on-user', 'true');

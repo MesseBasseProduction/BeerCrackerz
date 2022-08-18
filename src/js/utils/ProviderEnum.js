@@ -5,7 +5,7 @@ export default Object.freeze({
     maxNativeZoom: 19, // To ensure tiles are not unloaded when zooming after 19
     minZoom: 2 // Don't allow dezooming too far from map so it always stay fully visible
   }),
-  planGeo: window.L.tileLayer('https://wxs.ign.fr/{apikey}/geoportail/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE={style}&TILEMATRIXSET=PM&FORMAT={format}&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', {
+  /*planGeo: window.L.tileLayer('https://wxs.ign.fr/{apikey}/geoportail/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE={style}&TILEMATRIXSET=PM&FORMAT={format}&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', {
     attribution: '&copy; <a target="_blank" href="https://www.geoportail.gouv.fr/">Geoportail France</a>',
     apikey: 'choisirgeoportail',
     format: 'image/png',
@@ -13,14 +13,14 @@ export default Object.freeze({
     minZoom: 2, // Don't allow dezooming too far from map so it always stay fully visible
     maxNativeZoom: 19, // To ensure tiles are not unloaded when zooming after 19
     maxZoom: 21,
-  }),
+  }),*/
   satEsri: window.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: '&copy; <a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9">Esri Imagery</a>',
     minZoom: 2, // Don't allow dezooming too far from map so it always stay fully visible
     maxNativeZoom: 19, // To ensure tiles are not unloaded when zooming after 19
     maxZoom: 21
   }),
-  satGeo: window.L.tileLayer('https://wxs.ign.fr/{apikey}/geoportail/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE={style}&TILEMATRIXSET=PM&FORMAT={format}&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', {
+  /*satGeo: window.L.tileLayer('https://wxs.ign.fr/{apikey}/geoportail/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE={style}&TILEMATRIXSET=PM&FORMAT={format}&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', {
     attribution: '&copy; <a target="_blank" href="https://www.geoportail.gouv.fr/">Geoportail France</a>',
     apikey: 'choisirgeoportail',
     format: 'image/jpeg',
@@ -28,5 +28,5 @@ export default Object.freeze({
     minZoom: 2, // Don't allow dezooming too far from map so it always stay fully visible
     maxNativeZoom: 19, // To ensure tiles are not unloaded when zooming after 19
     maxZoom: 21    
-  })
+  })*/
 });

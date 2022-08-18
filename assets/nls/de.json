@@ -22,7 +22,9 @@
     "spotDeleted": "Spot has been successfully deleted from map",
     "storeDeleted": "Store has been successfully deleted from map",
     "barDeleted": "Bar has been successfully deleted from map",
-    "markNameEmpty": "You didn't specified a name for the mark"
+    "markNameEmpty": "You didn't specified a name for the mark",
+    "lockFocusOn": "Centering and locking on your position",
+    "unlockFocusOn": "Position locking ended"
   },
   "nav": {
     "add": "Add",

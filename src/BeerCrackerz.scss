@@ -380,6 +380,40 @@ nav {
   }
 }
 
+.cluster-icon-wrapper {
+  position: relative;
+
+  .cluster-icon {
+    width: auto;
+    height: 50px;
+    line-height: 50px;
+    margin-left: -21px;
+    margin-top: -13px;
+    filter: drop-shadow(0 0 .25rem #424242);
+    transition: transform .2s, filter .2s;
+
+    &:active,
+    &:focus,
+    &:hover {
+      filter: drop-shadow(0 0 .33rem #A8A8A8);
+      transform: scale(1.066);
+    }
+  }
+
+  .cluster-label {
+    background-color: white;
+    border: solid black 1px;
+    border-radius: .75rem;
+    box-shadow: 0 0 10px #424242;
+    color: black;
+    font-size: 1.1rem;
+    font-weight: bold;
+    left: 15px;
+    padding: .1rem .4rem;
+    position: absolute;
+    top: -15px;
+  }
+}
 /* Needs to override some leaflet styles to match BeerCrackerz interface */
 .leaflet-control-layers.leaflet-control {
   transition: all .2s;
@@ -413,6 +447,17 @@ nav {
         margin-right: 1rem;
       }
     }
+  }
+}
+
+.leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive {
+  filter: drop-shadow(0 0 .25rem #424242);
+  transition: transform .2s, filter .2s;
+
+  &:active,
+  &:focus,
+  &:hover {
+    filter: drop-shadow(0 0 .33rem #A8A8A8);
   }
 }
 

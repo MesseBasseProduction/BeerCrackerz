@@ -22,7 +22,9 @@
     "spotDeleted": "Le spot a été supprimé de la carte avec succès",
     "storeDeleted": "Le magasin a été supprimé de la carte avec succès",
     "barDeleted": "Le bar a été supprimé de la carte avec succès",
-    "markNameEmpty": "Vous devez specifier un nom pour le marqueur"
+    "markNameEmpty": "Vous devez specifier un nom pour le marqueur",
+    "lockFocusOn": "Suivre et recentrer sur votre position",
+    "unlockFocusOn": "Fin du suivi de position"
   },
   "nav": {
     "add": "Ajouter",
