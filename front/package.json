@@ -9,7 +9,9 @@
     "watch": "webpack --watch --config webpack/webpack.dev.js",
     "server": "http-server -p 1337 -c-1 -o index.html",
     "doc": "jsdoc -c doc/jsDoc.json",
-    "beforecommit": "npm run doc && npm run build"
+    "beforecommit": "npm run doc && npm run build",
+    "docker:build": "docker compose --file ../docker-compose.yml --env-file ../.conf/development/conf.env build",
+    "docker:up": "docker compose --file ../docker-compose.yml --env-file ../.conf/development/conf.env up"
   },
   "homepage": "https://github.com/MesseBasseProduction/BeerCrackerz/README.md",
   "repository": {

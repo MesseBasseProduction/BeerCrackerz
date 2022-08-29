@@ -3,7 +3,6 @@ node_modules
 .DS_Store
 
 # Byte-compiled / optimized / DLL files
- __pycache__/
- *.pyc
- *.py[cod]
+__pycache__/
+*.py[cod]
  *$py.class

@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  backend:
+    container_name: ${BACKEND_NAME}
+    build:
+      context: .
+      dockerfile: ./.conf/development/back/Dockerfile
+    command: >
+      sh -c "python manage.py wait_for_db &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    environment:
+      SECRET_KEY: ${BACKEND_SECRET_KEY}
+      DEBUG: ${BACKEND_DEBUG}
+      ALLOWED_HOSTS: ${BACKEND_ALLOWED_HOSTS}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_CONTAINER_PORT}
+    volumes:
+      - ./back:/back
+    depends_on:
+      - db
+  db:
+    image: postgres:${DB_POSTGRES_VERSION}
+    container_name: ${DB_HOST}
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:${DB_CONTAINER_PORT}
+    volumes:
+      - beer_crakerz_db:/var/lib/postgresql/data
+volumes:
+  beer_crakerz_db:
+    name: beer_crakerz_db
