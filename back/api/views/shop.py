@@ -1,8 +1,7 @@
 from rest_framework import viewsets
 
+from api.serializers.shop import ShopExtendedSerializer, ShopSerializer
 from app.models.shop import Shop
-from app.serializers.shop.shop import ShopSerializer
-from app.serializers.shop.shop_extended import ShopExtendedSerializer
 
 
 class ShopViewSet(viewsets.ModelViewSet):

@@ -1,8 +1,7 @@
 from rest_framework import viewsets
 
+from api.serializers.spot import SpotExtendedSerializer, SpotSerializer
 from app.models.spot import Spot
-from app.serializers.spot.spot import SpotSerializer
-from app.serializers.spot.spot_extended import SpotExtendedSerializer
 
 
 class SpotViewSet(viewsets.ModelViewSet):

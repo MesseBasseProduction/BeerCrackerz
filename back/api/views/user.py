@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
+from api.serializers.user import UserSerializer
 from app.models import User
-from app.serializers.user.user import UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):

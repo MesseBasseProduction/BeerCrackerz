@@ -1,8 +1,7 @@
 from rest_framework import viewsets
 
+from api.serializers.bar import BarExtendedSerializer, BarSerializer
 from app.models.bar import Bar
-from app.serializers.bar.bar import BarSerializer
-from app.serializers.bar.bar_extended import BarExtendedSerializer
 
 
 class BarViewSet(viewsets.ModelViewSet):
