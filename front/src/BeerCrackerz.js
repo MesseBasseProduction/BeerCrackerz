@@ -305,7 +305,7 @@ class BeerCrackerz extends MapHelper {
       // Add layer group to interface
       const baseMaps = {};
       baseMaps[`<p>${this.nls.map('planLayerOSM')}</p>`] = osm;
-      //baseMaps[`<p>${this.nls.map('planLayerGeo')}</p>`] = plan;      
+      //baseMaps[`<p>${this.nls.map('planLayerGeo')}</p>`] = plan;
       baseMaps[`<p>${this.nls.map('satLayerEsri')}</p>`] = esri;
       //baseMaps[`<p>${this.nls.map('satLayerGeo')}</p>`] = geo;
       // Append layer depending on user preference
@@ -322,7 +322,7 @@ class BeerCrackerz extends MapHelper {
             break;
           /*case this.nls.map('satLayerGeo'):
             geo.addTo(this._map);
-            break;*/         
+            break;*/
           default:
             osm.addTo(this._map);
             break;
@@ -490,18 +490,42 @@ class BeerCrackerz extends MapHelper {
           this._clusters[mark.type].addLayer(mark.marker);
         });
       };
-      let marks = JSON.parse(Utils.getPreference('saved-spot')) || [];
-      for (let i = 0; i < marks.length; ++i) {
-        iterateMarkers(marks[i]);
-      }
-      marks = JSON.parse(Utils.getPreference('saved-store')) || [];
-      for (let i = 0; i < marks.length; ++i) {
-        iterateMarkers(marks[i]);
-      }
-      marks = JSON.parse(Utils.getPreference('saved-bar')) || [];
-      for (let i = 0; i < marks.length; ++i) {
-        iterateMarkers(marks[i]);
-      }
+
+      Utils.getSpots().then(spots => {
+        for (let i = 0; i < spots.length; ++i) {
+          // TODO @raph
+          spots[i].type = 'spot';
+          spots[i].user = 'messmaker';
+          spots[i].userId = 42;
+          spots[i].lat = spots[i].latitude;
+          spots[i].lng = spots[i].longitude;
+          iterateMarkers(spots[i]);
+        }
+      });
+
+      Utils.getStores().then(stores => {
+        for (let i = 0; i < stores.length; ++i) {
+          // TODO @raph
+          stores[i].type = 'store';
+          stores[i].user = 'messmaker';
+          stores[i].userId = 42;
+          stores[i].lat = stores[i].latitude;
+          stores[i].lng = stores[i].longitude;
+          iterateMarkers(stores[i]);
+        }
+      }); 
+    
+      Utils.getBars().then(bars => {
+        for (let i = 0; i < bars.length; ++i) {
+          // TODO @raph
+          bars[i].type = 'bar';
+          bars[i].user = 'messmaker';
+          bars[i].userId = 42;
+          bars[i].lat = bars[i].latitude;
+          bars[i].lng = bars[i].longitude;
+          iterateMarkers(bars[i]);
+        }
+      }); 
 
       resolve();
     });
@@ -1167,7 +1191,7 @@ class BeerCrackerz extends MapHelper {
    * <blockquote>
    * The downloadData() method will save to user disk the saved spots as a JSON file
    * </blockquote>
-   **/  
+   **/
   downloadData() {
     const dataString = `data:text/json;charset=utf-8,${encodeURIComponent(Utils.getPreference('saved-spot'))}`;
     const link = document.createElement('A');

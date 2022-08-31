@@ -30,7 +30,8 @@ class Utils {
         method: 'GET',
         headers: new Headers(),
         mode: 'cors',
-        cache: 'default'
+        cache: 'default',
+        url: `http://localhost:8000`
       };
 
       fetch(url, options).then(data => {
@@ -185,6 +186,34 @@ class Utils {
       `;
     }
   }
+
+
+  /* Point getter and setter */
+
+
+  static getPoints(type) {
+    return new Promise(resolve => {
+      Utils.getReq(`http://localhost:8000/${type}`).then(resolve);
+    });
+  }
+
+
+  static getSpots() {
+    return new Promise(resolve => { Utils.getPoints('spot').then(resolve); });
+  }
+
+
+  static getStores() {
+    return new Promise(resolve => { Utils.getPoints('store').then(resolve); });
+  }
+
+
+  static getBars() {
+    return new Promise(resolve => { Utils.getPoints('bar').then(resolve); });
+  }
+
+
+  /* Preference get set (DEPRECATED) */
 
 
   static getPreference(pref) {
