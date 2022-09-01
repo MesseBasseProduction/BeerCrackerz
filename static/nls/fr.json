@@ -1,0 +1,121 @@
+{
+  "debug": {
+    "lat": "Latitude",
+    "lng": "Longitude",
+    "updates": "Mises à jour",
+    "accuracy": "Précision",
+    "highAccuracy": "Haute précision",
+    "posAge": "Fréquence de rafraichissement",
+    "posTimeout": "Validité de la position",
+    "zoom": "Niveau de zoom",
+    "enabled": "Activée",
+    "disabled": "Désactivée",
+    "marks": "Marqueurs",
+    "export": "Exporter les données"
+  },
+  "notif": {
+    "geolocationError": "Votre navigateur ne peux utiliser votre localisation",
+    "newMarkerOutside": "Nouveau marqueur hors de votre portée",
+    "spotAdded": "Nouveau spot ajouté à la carte",
+    "storeAdded": "Nouveau magasin ajouté à la carte",
+    "barAdded": "Nouveau bar ajouté à la carte",
+    "spotDeleted": "Le spot a été supprimé de la carte avec succès",
+    "storeDeleted": "Le magasin a été supprimé de la carte avec succès",
+    "barDeleted": "Le bar a été supprimé de la carte avec succès",
+    "markNameEmpty": "Vous devez specifier un nom pour le marqueur",
+    "lockFocusOn": "Suivre et recentrer sur votre position",
+    "unlockFocusOn": "Fin du suivi de position"
+  },
+  "nav": {
+    "add": "Ajouter",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "delete": "Supprimer"
+  },
+  "map": {
+    "newTitle": "Nouveau marqueur",
+    "newSpot": "Ajouter un spot",
+    "newStore": "Ajouter un magasin",
+    "newBar": "Ajouter un bar",
+    "planLayerOSM": "Plan OSM",
+    "planLayerGeo": "Plan GeoPortail",
+    "satLayerEsri": "Satellite ESRI",
+    "satLayerGeo": "Satellite GeoPortail"
+  },
+  "spot": {
+    "title": "Nouveau spot",
+    "subtitle": "Un spot est un endroit remarquable pour cracker une bière en tout quiétude! Faites en profiter la communauté, que ce soit pour le calme exceptionnel, pour la vue incroyable ou pour tout autre source de ravissement houblonné.",
+    "nameLabel": "Nommer ce spot",
+    "descLabel": "Pourquoi ne pas le décrire",
+    "rateLabel": "Lui attribuer une note"
+  },
+  "store": {
+    "title": "Nouveau magasin",
+    "subtitle": "C'est un indispensable pour se ravitailler des meilleurs breuvages houblonnés. Rensigner la gamme de prix et surtout si fraicheur il y a!",
+    "nameLabel": "Nom du magasin",
+    "descLabel": "Pourquoi ne pas le décrire",
+    "rateLabel": "Lui attribuer une note"
+  },
+  "bar": {
+    "title": "Nouveau bar",
+    "subtitle": "Un bar est un endroit convivial ou le houblons coule des saintes tireuses à pression.",
+    "nameLabel": "Nom du bar",
+    "descLabel": "Pourquoi ne pas le décrire",
+    "rateLabel": "Lui attribuer une note"
+  },
+  "modal": {
+    "userTitle": "Compte utilisateur",
+    "userAccuracyPref": "Haute précision",
+    "userDebugPref": "Interface de debug",
+    "aboutTitle": "À propos de BeerCrackerz",
+    "aboutDesc": "Une idée brillante de David Béché!<br>BeerCrackerz, c'est la communauté incontournable d'amoureux du houblons, de pourfendeurs de pintes, d'aficionados de céréales!",
+    "hideShowTitle": "Options de carte",
+    "hideShowLabels": "Étiquettes",
+    "hideShowCircles": "Cercles",
+    "hideShowSpots": "Spots",
+    "hideShowStores": "Magasins",
+    "hideShowBars": "Bars",
+    "deleteMarkTitle": "Supprimer le marqueur",
+    "deleteMarkDesc": "Êtes-vous sûr de vouloir supprimer ce marqueur?<br>Cette action est permanente et irréversible.",
+    "spotEditTitle": "Éditer le spot",
+    "storeEditTitle": "Éditer le magasin",
+    "barEditTitle": "Éditer le bar"
+  },
+  "popup": {
+    "spotFoundBy": "Un spot découvert par",
+    "storeFoundBy": "Un magasin ajouté par",
+    "barFoundBy": "Un bar ajouté par",
+    "spotNoDesc": "Pas de description disponible pour ce spot",
+    "storeNoDesc": "Pas de description disponible pour ce magasin",
+    "barNoDesc": "Pas de description disponible pour ce bar"
+  },
+  "auth": {
+    "login": {
+      "headTitle": "Connexion | BeerCrackerz",
+      "subtitle": "Se connecter",
+      "hiddenError": "Oh! Un texte caché!",
+      "username": "Nom d'utilisateur ou Email",
+      "password": "Mot de passe",
+      "login": "Se connecter",
+      "notRegistered": "Pas encore inscrit?",
+      "register": "Créer un compte",
+      "bothEmpty": "Veuillez saisir un nom d'utilisateur et un mot de passe",
+      "usernameEmpty": "Veuillez saisir un nom d'utilisateur",
+      "passwordEmpty": "Veuillez saisir votre mot de passe",
+      "serverError": "Une erreur serveur est survenue, contactez le support"
+    },
+    "register": {
+      "headTitle": "S'inscrire | BeerCrackerz",
+      "subtitle": "S'inscrire",
+      "hiddenError": "Oh! Un texte caché!",
+      "username": "Nom d'utilisateur ou Email",
+      "password1": "Mot de passe",
+      "password2": "Confirmer le mot de passe",
+      "register": "S'inscrire",
+      "notRegistered": "Déjà inscrit?",
+      "login": "Se connecter",
+      "fieldEmpty": "Veuillez remplir tous les champs du formulaire",
+      "notMatchingPassword": "Les deux mots de passe ne correspondent pas"
+    }
+  }
+}
