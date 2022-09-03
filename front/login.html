@@ -45,7 +45,16 @@
   <meta name="twitter:image:src" content="assets/img/logo-social.png" />
 </head>
 <body class="login">
-  <aside>
+  <main id="beer-crakerz-map" class="beer-crakerz-map"></main>
+  <div id="zoom-slider" class="zoom-slider">
+    <p id="zoom-more">&plus;</p>
+    <div id="slider-wrapper" class="slider-wrapper">
+      <div id="slider-position" class="slider-position"></div>
+    </div>
+    <p id="zoom-less">&minus;</p>
+  </div>  
+  <aside id="aside">
+    <div id="aside-expander" class="aside-expander"><img src="assets/img/logo/right.svg" id="aside-expander-icon"></div>
     <header>
       <h1>BeerCrackerz</h1>
       <h2><i>{{LOGIN_SUBTITLE}}</i></h2>
@@ -57,13 +66,17 @@
       <label>{{LOGIN_USERNAME_PASSWORD}}</label>
       <input id="password" type="password">
       <button id="login-submit">{{LOGIN_BUTTON}}</button>
-      <p><i>{{LOGIN_NOT_REGISTERED}} <a href="register.html">{{LOGIN_REGISTER}}</a></i></p>
+      <p><i>{{LOGIN_NOT_REGISTERED}} <a href="#" id="register-aside">{{LOGIN_REGISTER}}</a></i></p>
     </main>
     <footer>
       <a href="https://messe-basse-production.com">Messe Basse Production</a>
       <p>2022 - GPL-3.0</p>
     </footer>
   </aside>
+  <!-- Leaflet script -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  <!-- Leaflet.markercluster plugin script -->
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js" crossorigin=""></script>  
   <!-- BeeCrackerzAuth entry point -->
   <script type="text/javascript" src="assets/dist/BeerCrackerzAuth.bundle.js"></script>
   <script type="text/javascript">

@@ -414,51 +414,6 @@ nav {
     top: -15px;
   }
 }
-/* Needs to override some leaflet styles to match BeerCrackerz interface */
-.leaflet-control-layers.leaflet-control {
-  transition: all .2s;
 
-  a {
-    margin-bottom: 0;
-  }
-}
-
-.leaflet-control-layers-expanded {
-  padding: 2rem !important;
-
-  label {
-    margin: 0;
-
-    div {
-      align-items: center;
-      display: flex;
-      flex-direction: row-reverse;
-      justify-content: space-between;
-
-      input {
-        width: auto;
-      }
-
-      input, p {
-        margin: 0;
-      }
-
-      p {
-        margin-right: 1rem;
-      }
-    }
-  }
-}
-
-.leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive {
-  filter: drop-shadow(0 0 .25rem #424242);
-  transition: transform .2s, filter .2s;
-
-  &:active,
-  &:focus,
-  &:hover {
-    filter: drop-shadow(0 0 .33rem #A8A8A8);
-  }
-}
-
+@import 'scss/leaflet';
 @import 'scss/responsive';
