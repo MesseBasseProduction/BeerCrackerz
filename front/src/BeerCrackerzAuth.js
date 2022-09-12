@@ -83,6 +83,7 @@ class BeerCrackerzAuth extends MapHelper {
     Utils.replaceString(document.body, '{{LOGIN_HIDDEN_ERROR}}', this.nls.login('hiddenError'));
     Utils.replaceString(document.body, '{{LOGIN_USERNAME_LABEL}}', this.nls.login('username'));
     Utils.replaceString(document.body, '{{LOGIN_USERNAME_PASSWORD}}', this.nls.login('password'));
+    Utils.replaceString(document.body, '{{LOGIN_FORGOT_PASSWORD}}', this.nls.login('forgot'));
     Utils.replaceString(document.body, '{{LOGIN_BUTTON}}', this.nls.login('login'));
     Utils.replaceString(document.body, '{{LOGIN_NOT_REGISTERED}}', this.nls.login('notRegistered'));
     Utils.replaceString(document.body, '{{LOGIN_REGISTER}}', this.nls.login('register'));
@@ -135,6 +136,7 @@ class BeerCrackerzAuth extends MapHelper {
     }, false);
     // Register event
     document.getElementById('register-aside').addEventListener('click', this._loadRegisterAside.bind(this), false);
+    document.getElementById('forgot-password').addEventListener('click', this._loadForgotPasswordAside.bind(this), false);
     document.getElementById('aside-expander').addEventListener('click', this._toggleAside.bind(this), false);
   }
 
@@ -145,6 +147,7 @@ class BeerCrackerzAuth extends MapHelper {
     Utils.replaceString(document.body, '{{REGISTER_SUBTITLE}}', this.nls.register('subtitle'));
     Utils.replaceString(document.body, '{{REGISTER_HIDDEN_ERROR}}', this.nls.register('hiddenError'));
     Utils.replaceString(document.body, '{{REGISTER_USERNAME_LABEL}}', this.nls.register('username'));
+    Utils.replaceString(document.body, '{{REGISTER_MAIL_LABEL}}', this.nls.register('mail'));
     Utils.replaceString(document.body, '{{REGISTER_USERNAME_PASSWORD_1}}', this.nls.register('password1'));
     Utils.replaceString(document.body, '{{REGISTER_USERNAME_PASSWORD_2}}', this.nls.register('password2'));
     Utils.replaceString(document.body, '{{REGISTER_BUTTON}}', this.nls.register('register'));
@@ -152,16 +155,20 @@ class BeerCrackerzAuth extends MapHelper {
     Utils.replaceString(document.body, '{{REGISTER_LOGIN}}', this.nls.register('login'));
     const error = document.getElementById('register-error');
     const username = document.getElementById('username');
+    const mail = document.getElementById('mail');
     const password1 = document.getElementById('password1');
     const password2 = document.getElementById('password2');
     // useful login method for field check and server response check
     const _frontFieldValidation = () => {
       // Handling empty error cases
-      if (username.value === '' || password1.value === '' || password2.value === '') {
+      if (username.value === '' || mail.value === '' || password1.value === '' || password2.value === '') {
         error.classList.add('visible');
         error.innerHTML = this.nls.register('fieldEmpty');
         if (username.value === '') {
           username.classList.add('error');
+        }
+        if (mail.value === '') {
+          mail.classList.add('error');
         }
         if (password1.value === '') {
           password1.classList.add('error');
@@ -192,6 +199,7 @@ class BeerCrackerzAuth extends MapHelper {
       // Reset error css classes
       error.classList.remove('visible');
       username.classList.remove('error');
+      mail.classList.remove('error');
       password1.classList.remove('error');
       password2.classList.remove('error');
       if (_frontFieldValidation()) {
@@ -204,6 +212,56 @@ class BeerCrackerzAuth extends MapHelper {
     // Register event
     document.getElementById('login-aside').addEventListener('click', this._loadLoginAside.bind(this), false);
     document.getElementById('aside-expander').addEventListener('click', this._toggleAside.bind(this), false);    
+  }
+
+
+  _handleResetPasswordAdise() {
+    // Update page nls according to browser language
+    document.title = this.nls.forgotPassword('headTitle');
+    Utils.replaceString(document.body, '{{FORGOT_PASSWORD_SUBTITLE}}', this.nls.forgotPassword('subtitle'));
+    Utils.replaceString(document.body, '{{FORGOT_PASSWORD_ERROR}}', this.nls.register('hiddenError'));
+    Utils.replaceString(document.body, '{{FORGOT_PASSWORD_MAIL_LABEL}}', this.nls.forgotPassword('mail'));
+    Utils.replaceString(document.body, '{{FORGOT_PASSWORD_BUTTON}}', this.nls.forgotPassword('submit'));
+    Utils.replaceString(document.body, '{{FORGOT_PASSWORD_LOGIN_LABEL}}', this.nls.forgotPassword('loginLabel'));
+    Utils.replaceString(document.body, '{{FORGOT_PASSWORD_LOGIN}}', this.nls.forgotPassword('login'));
+    const error = document.getElementById('forgot-password-error');
+    const mail = document.getElementById('mail');
+    // useful login method for field check and server response check
+    const _frontFieldValidation = () => {
+      // Handling empty error cases
+      if (mail.value === '') {
+        error.classList.add('visible');
+        error.innerHTML = this.nls.forgotPassword('fieldEmpty');
+        if (mail.value === '') {
+          mail.classList.add('error');
+        }
+        return false;
+      }
+      return true;
+    };
+    const _backValidation = (response) => {
+      // Check response and handle status codes
+      console.log(response);
+      // If all front and back tests are ok, redirect to auth
+      // If the user ma nually force redirection to authindex,
+      // the server should reject the request as the user is not authenticated
+      window.location = 'authindex.html';
+    };
+    // Submit click event
+    document.getElementById('forgot-password-submit').addEventListener('click', () => {
+      // Reset error css classes
+      error.classList.remove('visible');
+      mail.classList.remove('error');
+      if (_frontFieldValidation()) {
+        Utils.postReq('/api/password/reset').then(_backValidation).catch(() => {
+          error.classList.add('visible');
+          error.innerHTML = this.nls.forgotPassword('serverError');
+        });
+      }
+    }, false);
+
+    document.getElementById('login-aside').addEventListener('click', this._loadLoginAside.bind(this), false);
+    document.getElementById('aside-expander').addEventListener('click', this._toggleAside.bind(this), false);
   }
 
 
@@ -233,11 +291,19 @@ class BeerCrackerzAuth extends MapHelper {
 
   _loadRegisterAside() {
     this._loadAside('register').then(() => {
-      document.body.classList.remove('register');
       this._handleRegisterAside();
     }).catch(() => {
       console.error('Couldn\'t fetch or build the register aside');
     });
+  }
+
+
+  _loadForgotPasswordAside() {
+    this._loadAside('forgot-password').then(() => {
+      this._handleResetPasswordAdise();
+    }).catch(() => {
+      console.error('Couldn\'t fetch or build the forgot password aside');
+    });    
   }
 
 
@@ -271,46 +337,6 @@ class BeerCrackerzAuth extends MapHelper {
   // ======================================================================== //
   // -------------------------- Public map methods -------------------------- //
   // ======================================================================== //
-
-
-  /**
-   * @method
-   * @name _initGeolocation
-   * @private
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since January 2022
-   * @description
-   * <blockquote>
-   * The _initGeolocation() method will request from browser the location authorization.
-   * Once granted, an event listener is set on any position update, so it can update the
-   * map state and the markers position. This method can be called again, only if the
-   * geolocation watch has been cleared ; for example when updating the accuracy options.
-   * </blockquote>
-   * @returns {Promise} A Promise resolved when preferences are set
-   **/
-   _initGeolocation() {
-    return new Promise(resolve => {
-      if ('geolocation' in navigator) {
-        const options = (Utils.getPreference('map-high-accuracy') === 'true') ? Utils.HIGH_ACCURACY : Utils.OPTIMIZED_ACCURACY;
-        this._watchId = navigator.geolocation.watchPosition(position => {
-          // Update saved user position
-          this._user.lat = position.coords.latitude;
-          this._user.lng = position.coords.longitude;
-          this._user.accuracy = position.coords.accuracy;
-          // Only draw marker if map is already created
-          if (this._map) {
-            this.drawUserMarker();
-            this._map.setView(this._user);
-          }
-          resolve();
-        }, resolve, options);
-      } else {
-        this._notification.raise(this.nls.notif('geolocationError'));
-        resolve();
-      }
-    });
-  }
 
 
   /**
@@ -355,6 +381,46 @@ class BeerCrackerzAuth extends MapHelper {
       // Init zoom slider when map has been created
       this._zoomSlider = new ZoomSlider(this._map);
       resolve();
+    });
+  }
+
+
+  /**
+   * @method
+   * @name _initGeolocation
+   * @private
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+   * @since January 2022
+   * @description
+   * <blockquote>
+   * The _initGeolocation() method will request from browser the location authorization.
+   * Once granted, an event listener is set on any position update, so it can update the
+   * map state and the markers position. This method can be called again, only if the
+   * geolocation watch has been cleared ; for example when updating the accuracy options.
+   * </blockquote>
+   * @returns {Promise} A Promise resolved when preferences are set
+   **/
+   _initGeolocation() {
+    return new Promise(resolve => {
+      if ('geolocation' in navigator) {
+        const options = (Utils.getPreference('map-high-accuracy') === 'true') ? Utils.HIGH_ACCURACY : Utils.OPTIMIZED_ACCURACY;
+        this._watchId = navigator.geolocation.watchPosition(position => {
+          // Update saved user position
+          this._user.lat = position.coords.latitude;
+          this._user.lng = position.coords.longitude;
+          this._user.accuracy = position.coords.accuracy;
+          // Only draw marker if map is already created
+          if (this._map) {
+            this.drawUserMarker();
+            this._map.setView(this._user);
+          }
+        }, null, options);
+        resolve();
+      } else {
+        this._notification.raise(this.nls.notif('geolocationError'));
+        resolve();
+      }
     });
   }
 
@@ -559,6 +625,7 @@ class BeerCrackerzAuth extends MapHelper {
    **/
    mapClicked() {
     // Let this empty
+    console.log('lkjdslm')
   }
 
 

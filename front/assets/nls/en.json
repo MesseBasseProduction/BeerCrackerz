@@ -96,6 +96,7 @@
       "hiddenError": "Oh! Un texte caché!",
       "username": "Nom d'utilisateur ou Email",
       "password": "Mot de passe",
+      "forgot": "Vous l'avez oublié?",
       "login": "Se connecter",
       "notRegistered": "Pas encore inscrit?",
       "register": "Créer un compte",
@@ -108,7 +109,8 @@
       "headTitle": "S'inscrire | BeerCrackerz",
       "subtitle": "S'inscrire",
       "hiddenError": "Oh! Un texte caché!",
-      "username": "Nom d'utilisateur ou Email",
+      "username": "Nom d'utilisateur",
+      "mail": "Adresse email",
       "password1": "Mot de passe",
       "password2": "Confirmer le mot de passe",
       "register": "S'inscrire",
@@ -116,6 +118,17 @@
       "login": "Se connecter",
       "fieldEmpty": "Veuillez remplir tous les champs du formulaire",
       "notMatchingPassword": "Les deux mots de passe ne correspondent pas"
+    },
+    "forgotPassword": {
+      "headTitle": "Mot de passe oublié | BeerCrackerz",
+      "subtitle": "Mot de passe oublié",
+      "hiddenError": "Oh! Un texte caché!",
+      "mail": "Mail",
+      "submit": "Réinitialiser votre mot de passe",
+      "loginLabel": "Vous vous en souvenez?",
+      "login": "Se connecter",
+      "fieldEmpty": "Renseignez votre adresse mail",
+      "serverError": "Une erreur serveur est survenue, contactez le support"
     }
   }
 }

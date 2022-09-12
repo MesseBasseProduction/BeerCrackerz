@@ -76,6 +76,11 @@ class LangManager {
   }
 
 
+  forgotPassword(key) {
+    return this._values.auth.forgotPassword[key] || '';    
+  }
+
+
 }
 
 

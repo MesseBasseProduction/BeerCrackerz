@@ -56,18 +56,18 @@ aside {
 
     p {
       text-align: right;
-    }
 
-    .login-error {
-      color: transparent;
-      font-style: italic;
-      font-weight: bold;
-      text-align: center;
-
-      transition: color .2s;
-
-      &.visible {
-        color: #ff5454;
+      &[class*="error"] {
+        color: transparent;
+        font-style: italic;
+        font-weight: bold;
+        text-align: center;
+  
+        transition: color .2s;
+  
+        &.visible {
+          color: #ff5454;
+        }
       }
     }
   }
