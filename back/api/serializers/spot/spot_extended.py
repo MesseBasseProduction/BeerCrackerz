@@ -7,7 +7,7 @@ class SpotExtendedSerializer(serializers.ModelSerializer):
     type = serializers.CharField(default='spot')
     rate = serializers.FloatField(default=0)
     user = serializers.CharField(source='user.username')
-    userId = serializers.CharField(source='user.id')
+    userId = serializers.IntegerField(source='user.id')
     creationDate = serializers.DateField(source='creation_date')
 
     class Meta:
