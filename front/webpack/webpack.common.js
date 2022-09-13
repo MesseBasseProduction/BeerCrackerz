@@ -13,7 +13,7 @@ module.exports = {
   },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, '../assets/dist'),
+    path: path.resolve(__dirname, '../../static/dist'),
     library: 'BeerCrackerz', // We set a library name to bundle the export default of the class
     libraryTarget: 'window', // Make it globally available
     libraryExport: 'default', // Make BeerCrackerz.default become BeerCrackerz

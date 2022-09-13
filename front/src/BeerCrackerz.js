@@ -443,7 +443,7 @@ class BeerCrackerz extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="assets/img/marker/cluster-icon-green.png" class="cluster-icon">
+              <img src="/assets/img/marker/cluster-icon-green.png" class="cluster-icon">
               <span class="cluster-label">${cluster.getChildCount()}</span>
             `
           });
@@ -454,7 +454,7 @@ class BeerCrackerz extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="assets/img/marker/cluster-icon-blue.png" class="cluster-icon">
+              <img src="/assets/img/marker/cluster-icon-blue.png" class="cluster-icon">
               <span class="cluster-label">${cluster.getChildCount()}</span>
             `
           });
@@ -465,7 +465,7 @@ class BeerCrackerz extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="assets/img/marker/cluster-icon-red.png" class="cluster-icon">
+              <img src="/assets/img/marker/cluster-icon-red.png" class="cluster-icon">
               <span class="cluster-label">${cluster.getChildCount()}</span>
             `
           });
@@ -702,7 +702,7 @@ class BeerCrackerz extends MapHelper {
 
 
   editMarkModal(options) {
-    Utils.fetchTemplate(`assets/html/modal/edit${options.type}.html`).then(dom => {
+    Utils.fetchTemplate(`/assets/html/modal/edit${options.type}.html`).then(dom => {
       const name = dom.querySelector(`#${options.type}-name`);
       const description = dom.querySelector(`#${options.type}-desc`);
       const submit = dom.querySelector(`#${options.type}-submit`);
@@ -768,7 +768,7 @@ class BeerCrackerz extends MapHelper {
    * @param {Function} cb The function to callback with true or false depending on user's choice
    **/
   deleteMarkModal(cb) {
-    Utils.fetchTemplate('assets/html/modal/deletemark.html').then(dom => {
+    Utils.fetchTemplate('/assets/html/modal/deletemark.html').then(dom => {
       // Update nls for template
       Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('deleteMarkTitle'));
       Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{{MODAL_DESC}}`, this.nls.modal('deleteMarkDesc'));
@@ -804,7 +804,7 @@ class BeerCrackerz extends MapHelper {
    * </blockquote>
    **/
   userProfileModal() {
-    Utils.fetchTemplate('assets/html/modal/user.html').then(dom => {
+    Utils.fetchTemplate('/assets/html/modal/user.html').then(dom => {
       // Update nls for template
       Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('userTitle'));
       Utils.replaceString(dom.querySelector(`#nls-user-modal-accuracy`), `{{ACCURACY_USER_MODAL}}`, this.nls.modal('userAccuracyPref'));
@@ -844,7 +844,7 @@ class BeerCrackerz extends MapHelper {
    * </blockquote>
    **/
   hidShowModal() {
-    Utils.fetchTemplate('assets/html/modal/hideshow.html').then(dom => {
+    Utils.fetchTemplate('/assets/html/modal/hideshow.html').then(dom => {
       // Update template nls
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('hideShowTitle'));
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-labels`), `{{LABELS_HIDESHOW_MODAL}}`, this.nls.modal('hideShowLabels'));

@@ -12,6 +12,8 @@ class BeerCrackerzAuth extends MapHelper {
 
   constructor() {
     super();
+
+    console.log('CACACACACACACACA')
     /**
      * The user object holds everything useful to ensure a proper session
      * @type {Object}
@@ -267,7 +269,7 @@ class BeerCrackerzAuth extends MapHelper {
 
   _loadAside(type) {
     return new Promise((resolve, reject) => {
-      Utils.fetchTemplate(`assets/html/aside/${type}.html`).then(dom => {
+      Utils.fetchTemplate(`/assets/html/aside/${type}.html`).then(dom => {
         document.body.className = ''; // Clear previous css class
         document.body.classList.add(type); // Update body class with current aside view
         // We need to get aside at the last moment because of nls that changed HTML content
@@ -316,7 +318,7 @@ class BeerCrackerzAuth extends MapHelper {
       requestAnimationFrame(() => { this._map.invalidateSize(); });
       setTimeout(() => {
         document.getElementById('aside-expander').style.left = '-44.8rem'; 
-        document.getElementById('aside-expander-icon').src = 'assets/img/logo/left.svg';
+        document.getElementById('aside-expander-icon').src = '/assets/img/logo/left.svg';
       }, 100);
     } else {
       this._isAsideExpanded = true;
@@ -324,7 +326,7 @@ class BeerCrackerzAuth extends MapHelper {
       document.getElementById('aside').style.right = '0';
       document.getElementById('aside-expander').style.transition = 'none';
       document.getElementById('aside-expander').style.left = '0';
-      document.getElementById('aside-expander-icon').src = 'assets/img/logo/right.svg';
+      document.getElementById('aside-expander-icon').src = '/assets/img/logo/right.svg';
       setTimeout(() => {
         document.documentElement.style.setProperty('--aside-width', '40rem');
         document.getElementById('aside').style.maxWidth = 'var(--aside-width)';
@@ -522,7 +524,7 @@ class BeerCrackerzAuth extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="assets/img/marker/cluster-icon-green.png" class="cluster-icon">
+              <img src="/assets/img/marker/cluster-icon-green.png" class="cluster-icon">
               <span class="cluster-label">${cluster.getChildCount()}</span>
             `
           });
@@ -533,7 +535,7 @@ class BeerCrackerzAuth extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="assets/img/marker/cluster-icon-blue.png" class="cluster-icon">
+              <img src="/assets/img/marker/cluster-icon-blue.png" class="cluster-icon">
               <span class="cluster-label">${cluster.getChildCount()}</span>
             `
           });
@@ -544,7 +546,7 @@ class BeerCrackerzAuth extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="assets/img/marker/cluster-icon-red.png" class="cluster-icon">
+              <img src="/assets/img/marker/cluster-icon-red.png" class="cluster-icon">
               <span class="cluster-label">${cluster.getChildCount()}</span>
             `
           });
