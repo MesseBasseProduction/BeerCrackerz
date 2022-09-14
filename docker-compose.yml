@@ -13,7 +13,7 @@ services:
       BACKEND_NAME: ${BACKEND_NAME}
       BACKEND_PORT: ${BACKEND_PORT}
     volumes:
-      - beer_crackerz_static:/vol/static
+      - ./static:/vol/static
   backend:
     container_name: ${BACKEND_NAME}
     build:
@@ -31,7 +31,6 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
     volumes:
       - ./back:/back
-      - beer_crackerz_static:/static
     depends_on:
       - db
   db:
@@ -48,5 +47,3 @@ services:
 volumes:
   beer_crakerz_db:
     name: beer_crakerz_db
-  beer_crackerz_static:
-    name: beer_crackerz_static
