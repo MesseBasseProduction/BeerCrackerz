@@ -2,92 +2,92 @@
   "debug": {
     "lat": "Latitude",
     "lng": "Longitude",
-    "updates": "Mises à jour",
-    "accuracy": "Précision",
-    "highAccuracy": "Haute précision",
-    "posAge": "Fréquence de rafraichissement",
-    "posTimeout": "Validité de la position",
-    "zoom": "Niveau de zoom",
-    "enabled": "Activée",
-    "disabled": "Désactivée",
-    "marks": "Marqueurs",
-    "export": "Exporter les données"
+    "updates": "Updates",
+    "accuracy": "Accuracy",
+    "highAccuracy": "High accuracy",
+    "posAge": "Position max age",
+    "posTimeout": "Position timeout",
+    "zoom": "Zoom level",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "marks": "Marks",
+    "export": "Export data"
   },
   "notif": {
-    "geolocationError": "Votre navigateur ne peux utiliser votre localisation",
-    "newMarkerOutside": "Nouveau marqueur hors de votre portée",
-    "spotAdded": "Nouveau spot ajouté à la carte",
-    "storeAdded": "Nouveau magasin ajouté à la carte",
-    "barAdded": "Nouveau bar ajouté à la carte",
-    "spotDeleted": "Le spot a été supprimé de la carte avec succès",
-    "storeDeleted": "Le magasin a été supprimé de la carte avec succès",
-    "barDeleted": "Le bar a été supprimé de la carte avec succès",
-    "markNameEmpty": "Vous devez specifier un nom pour le marqueur",
-    "lockFocusOn": "Suivre et recentrer sur votre position",
-    "unlockFocusOn": "Fin du suivi de position"
+    "geolocationError": "Your browser doesn't implement the geolocation API",
+    "newMarkerOutside": "New marker out of your range",
+    "spotAdded": "New spot saved to map",
+    "storeAdded": "New store saved to map",
+    "barAdded": "New bar saved to map",
+    "spotDeleted": "Spot has been successfully deleted from map",
+    "storeDeleted": "Store has been successfully deleted from map",
+    "barDeleted": "Bar has been successfully deleted from map",
+    "markNameEmpty": "You didn't specified a name for the mark",
+    "lockFocusOn": "Centering and locking view on your position",
+    "unlockFocusOn": "Position locking ended"
   },
   "nav": {
-    "add": "Ajouter",
-    "cancel": "Annuler",
-    "close": "Fermer",
-    "delete": "Supprimer"
+    "add": "Add",
+    "cancel": "Cancel",
+    "close": "Close",
+    "delete": "Delete"
   },
   "map": {
-    "newTitle": "Nouveau marqueur",
-    "newSpot": "Ajouter un spot",
-    "newStore": "Ajouter un magasin",
-    "newBar": "Ajouter un bar",
+    "newTitle": "New marker",
+    "newSpot": "Add a spot",
+    "newStore": "Add a shop",
+    "newBar": "Add a bar",
     "planLayerOSM": "Plan OSM",
     "planLayerGeo": "Plan GeoPortail",
     "satLayerEsri": "Satellite ESRI",
     "satLayerGeo": "Satellite GeoPortail"
   },
   "spot": {
-    "title": "Nouveau spot",
-    "subtitle": "Un spot est un endroit remarquable pour cracker une bière en tout quiétude! Faites en profiter la communauté, que ce soit pour le calme exceptionnel, pour la vue incroyable ou pour tout autre source de ravissement houblonné.",
-    "nameLabel": "Nommer ce spot",
-    "descLabel": "Pourquoi ne pas le décrire",
-    "rateLabel": "Lui attribuer une note"
+    "title": "New spot",
+    "subtitle": "A spot is a remarkable place to crack a beer ! Share it with the community, wether it is for the astonishing view of for whatever it is enjoyable to drink a beer!",
+    "nameLabel": "Name that spot",
+    "descLabel": "Why don't you describe it",
+    "rateLabel": "Give it a note"
   },
   "store": {
-    "title": "Nouveau magasin",
-    "subtitle": "C'est un indispensable pour se ravitailler des meilleurs breuvages houblonnés. Rensigner la gamme de prix et surtout si fraicheur il y a!",
-    "nameLabel": "Nom du magasin",
-    "descLabel": "Pourquoi ne pas le décrire",
-    "rateLabel": "Lui attribuer une note"
+    "title": "New store",
+    "subtitle": "The must have place to refill your beer stock. The more info you provide, the better you help your fellow beer crackerz!",
+    "nameLabel": "Store name",
+    "descLabel": "Why don't you describe it",
+    "rateLabel": "Give it a note"
   },
   "bar": {
-    "title": "Nouveau bar",
-    "subtitle": "Un bar est un endroit convivial ou le houblons coule des saintes tireuses à pression.",
-    "nameLabel": "Nom du bar",
-    "descLabel": "Pourquoi ne pas le décrire",
-    "rateLabel": "Lui attribuer une note"
+    "title": "New bar",
+    "subtitle": "A bar is a holly place where you can get some nicely colded draft beers!",
+    "nameLabel": "Bar name",
+    "descLabel": "Why don't you describe it",
+    "rateLabel": "Give it a note"
   },
   "modal": {
-    "userTitle": "Compte utilisateur",
-    "userAccuracyPref": "Haute précision",
-    "userDebugPref": "Interface de debug",
-    "aboutTitle": "À propos de BeerCrackerz",
-    "aboutDesc": "Une idée brillante de David Béché!<br>BeerCrackerz, c'est la communauté incontournable d'amoureux du houblons, de pourfendeurs de pintes, d'aficionados de céréales!",
-    "hideShowTitle": "Options de carte",
-    "hideShowLabels": "Étiquettes",
-    "hideShowCircles": "Cercles",
+    "userTitle": "User account",
+    "userAccuracyPref": "High precision",
+    "userDebugPref": "Debug interface",
+    "aboutTitle": "About BeerCrackerz",
+    "aboutDesc": "A brilliant idea from David Béché!<br>BeerCrackerz is the beer lovers comunity, filled with pint slayers and cereals lovers",
+    "hideShowTitle": "Map options",
+    "hideShowLabels": "Labels",
+    "hideShowCircles": "Circles",
     "hideShowSpots": "Spots",
-    "hideShowStores": "Magasins",
+    "hideShowStores": "Stores",
     "hideShowBars": "Bars",
-    "deleteMarkTitle": "Supprimer le marqueur",
-    "deleteMarkDesc": "Êtes-vous sûr de vouloir supprimer ce marqueur?<br>Cette action est permanente et irréversible.",
-    "spotEditTitle": "Éditer le spot",
-    "storeEditTitle": "Éditer le magasin",
-    "barEditTitle": "Éditer le bar"
+    "deleteMarkTitle": "Delete mark",
+    "deleteMarkDesc": "Are you sure you want to delete this mark?<br>This action is permanent and can not be reverted.",
+    "spotEditTitle": "Edit spot",
+    "storeEditTitle": "Edit store",
+    "barEditTitle": "Edit bar"
   },
   "popup": {
-    "spotFoundBy": "Un spot découvert par",
-    "storeFoundBy": "Un magasin ajouté par",
-    "barFoundBy": "Un bar ajouté par",
-    "spotNoDesc": "Pas de description disponible pour ce spot",
-    "storeNoDesc": "Pas de description disponible pour ce magasin",
-    "barNoDesc": "Pas de description disponible pour ce bar"
+    "spotFoundBy": "A spot discovered by",
+    "storeFoundBy": "A store added by",
+    "barFoundBy": "A bar added by",
+    "spotNoDesc": "No description available for this spot",
+    "storeNoDesc": "No description available for this store",
+    "barNoDesc": "No description available for this bar"
   },
   "auth": {
     "login": {
@@ -96,6 +96,7 @@
       "hiddenError": "Oh! Un texte caché!",
       "username": "Nom d'utilisateur ou Email",
       "password": "Mot de passe",
+      "forgot": "Vous l'avez oublié?",
       "login": "Se connecter",
       "notRegistered": "Pas encore inscrit?",
       "register": "Créer un compte",
@@ -108,7 +109,8 @@
       "headTitle": "S'inscrire | BeerCrackerz",
       "subtitle": "S'inscrire",
       "hiddenError": "Oh! Un texte caché!",
-      "username": "Nom d'utilisateur ou Email",
+      "username": "Nom d'utilisateur",
+      "mail": "Adresse email",
       "password1": "Mot de passe",
       "password2": "Confirmer le mot de passe",
       "register": "S'inscrire",
@@ -116,6 +118,17 @@
       "login": "Se connecter",
       "fieldEmpty": "Veuillez remplir tous les champs du formulaire",
       "notMatchingPassword": "Les deux mots de passe ne correspondent pas"
+    },
+    "forgotPassword": {
+      "headTitle": "Mot de passe oublié | BeerCrackerz",
+      "subtitle": "Mot de passe oublié",
+      "hiddenError": "Oh! Un texte caché!",
+      "mail": "Mail",
+      "submit": "Réinitialiser votre mot de passe",
+      "loginLabel": "Vous vous en souvenez?",
+      "login": "Se connecter",
+      "fieldEmpty": "Renseignez votre adresse mail",
+      "serverError": "Une erreur serveur est survenue, contactez le support"
     }
   }
 }

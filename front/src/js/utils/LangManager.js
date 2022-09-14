@@ -13,7 +13,7 @@ class LangManager {
 
   _init() {
     return new Promise((resolve, reject) => {
-      Utils.fetchFile(`/assets/nls/${this._lang}.json`).then(lang => {
+      Utils.fetchFile(`/static/nls/${this._lang}.json`).then(lang => {
         this._values = JSON.parse(lang);
         resolve();
       }).catch(reject);

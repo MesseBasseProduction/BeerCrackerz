@@ -2,7 +2,7 @@ server {
     listen          ${SERVER_HTTP_PORT};
     listen     [::]:${SERVER_HTTP_PORT};
 
-    location /assets {
+    location /static {
 		alias /vol/static;
 	}
 

@@ -12,8 +12,6 @@ class BeerCrackerzAuth extends MapHelper {
 
   constructor() {
     super();
-
-    console.log('CACACACACACACACA')
     /**
      * The user object holds everything useful to ensure a proper session
      * @type {Object}
@@ -81,14 +79,14 @@ class BeerCrackerzAuth extends MapHelper {
   _handleLoginAside() {
     // Update page nls according to browser language
     document.title = this.nls.login('headTitle');
-    Utils.replaceString(document.body, '{{LOGIN_SUBTITLE}}', this.nls.login('subtitle'));
-    Utils.replaceString(document.body, '{{LOGIN_HIDDEN_ERROR}}', this.nls.login('hiddenError'));
-    Utils.replaceString(document.body, '{{LOGIN_USERNAME_LABEL}}', this.nls.login('username'));
-    Utils.replaceString(document.body, '{{LOGIN_USERNAME_PASSWORD}}', this.nls.login('password'));
-    Utils.replaceString(document.body, '{{LOGIN_FORGOT_PASSWORD}}', this.nls.login('forgot'));
-    Utils.replaceString(document.body, '{{LOGIN_BUTTON}}', this.nls.login('login'));
-    Utils.replaceString(document.body, '{{LOGIN_NOT_REGISTERED}}', this.nls.login('notRegistered'));
-    Utils.replaceString(document.body, '{{LOGIN_REGISTER}}', this.nls.login('register'));
+    Utils.replaceString(document.body, '{LOGIN_SUBTITLE}', this.nls.login('subtitle'));
+    Utils.replaceString(document.body, '{LOGIN_HIDDEN_ERROR}', this.nls.login('hiddenError'));
+    Utils.replaceString(document.body, '{LOGIN_USERNAME_LABEL}', this.nls.login('username'));
+    Utils.replaceString(document.body, '{LOGIN_USERNAME_PASSWORD}', this.nls.login('password'));
+    Utils.replaceString(document.body, '{LOGIN_FORGOT_PASSWORD}', this.nls.login('forgot'));
+    Utils.replaceString(document.body, '{LOGIN_BUTTON}', this.nls.login('login'));
+    Utils.replaceString(document.body, '{LOGIN_NOT_REGISTERED}', this.nls.login('notRegistered'));
+    Utils.replaceString(document.body, '{LOGIN_REGISTER}', this.nls.login('register'));
 
     const error = document.getElementById('login-error');
     const username = document.getElementById('username');
@@ -146,15 +144,15 @@ class BeerCrackerzAuth extends MapHelper {
   _handleRegisterAside() {
     // Update page nls according to browser language
     document.title = this.nls.register('headTitle');
-    Utils.replaceString(document.body, '{{REGISTER_SUBTITLE}}', this.nls.register('subtitle'));
-    Utils.replaceString(document.body, '{{REGISTER_HIDDEN_ERROR}}', this.nls.register('hiddenError'));
-    Utils.replaceString(document.body, '{{REGISTER_USERNAME_LABEL}}', this.nls.register('username'));
-    Utils.replaceString(document.body, '{{REGISTER_MAIL_LABEL}}', this.nls.register('mail'));
-    Utils.replaceString(document.body, '{{REGISTER_USERNAME_PASSWORD_1}}', this.nls.register('password1'));
-    Utils.replaceString(document.body, '{{REGISTER_USERNAME_PASSWORD_2}}', this.nls.register('password2'));
-    Utils.replaceString(document.body, '{{REGISTER_BUTTON}}', this.nls.register('register'));
-    Utils.replaceString(document.body, '{{REGISTER_ALREADY_DONE}}', this.nls.register('notRegistered'));
-    Utils.replaceString(document.body, '{{REGISTER_LOGIN}}', this.nls.register('login'));
+    Utils.replaceString(document.body, '{REGISTER_SUBTITLE}', this.nls.register('subtitle'));
+    Utils.replaceString(document.body, '{REGISTER_HIDDEN_ERROR}', this.nls.register('hiddenError'));
+    Utils.replaceString(document.body, '{REGISTER_USERNAME_LABEL}', this.nls.register('username'));
+    Utils.replaceString(document.body, '{REGISTER_MAIL_LABEL}', this.nls.register('mail'));
+    Utils.replaceString(document.body, '{REGISTER_USERNAME_PASSWORD_1}', this.nls.register('password1'));
+    Utils.replaceString(document.body, '{REGISTER_USERNAME_PASSWORD_2}', this.nls.register('password2'));
+    Utils.replaceString(document.body, '{REGISTER_BUTTON}', this.nls.register('register'));
+    Utils.replaceString(document.body, '{REGISTER_ALREADY_DONE}', this.nls.register('notRegistered'));
+    Utils.replaceString(document.body, '{REGISTER_LOGIN}', this.nls.register('login'));
     const error = document.getElementById('register-error');
     const username = document.getElementById('username');
     const mail = document.getElementById('mail');
@@ -220,12 +218,12 @@ class BeerCrackerzAuth extends MapHelper {
   _handleResetPasswordAdise() {
     // Update page nls according to browser language
     document.title = this.nls.forgotPassword('headTitle');
-    Utils.replaceString(document.body, '{{FORGOT_PASSWORD_SUBTITLE}}', this.nls.forgotPassword('subtitle'));
-    Utils.replaceString(document.body, '{{FORGOT_PASSWORD_ERROR}}', this.nls.register('hiddenError'));
-    Utils.replaceString(document.body, '{{FORGOT_PASSWORD_MAIL_LABEL}}', this.nls.forgotPassword('mail'));
-    Utils.replaceString(document.body, '{{FORGOT_PASSWORD_BUTTON}}', this.nls.forgotPassword('submit'));
-    Utils.replaceString(document.body, '{{FORGOT_PASSWORD_LOGIN_LABEL}}', this.nls.forgotPassword('loginLabel'));
-    Utils.replaceString(document.body, '{{FORGOT_PASSWORD_LOGIN}}', this.nls.forgotPassword('login'));
+    Utils.replaceString(document.body, '{FORGOT_PASSWORD_SUBTITLE}', this.nls.forgotPassword('subtitle'));
+    Utils.replaceString(document.body, '{FORGOT_PASSWORD_ERROR}', this.nls.register('hiddenError'));
+    Utils.replaceString(document.body, '{FORGOT_PASSWORD_MAIL_LABEL}', this.nls.forgotPassword('mail'));
+    Utils.replaceString(document.body, '{FORGOT_PASSWORD_BUTTON}', this.nls.forgotPassword('submit'));
+    Utils.replaceString(document.body, '{FORGOT_PASSWORD_LOGIN_LABEL}', this.nls.forgotPassword('loginLabel'));
+    Utils.replaceString(document.body, '{FORGOT_PASSWORD_LOGIN}', this.nls.forgotPassword('login'));
     const error = document.getElementById('forgot-password-error');
     const mail = document.getElementById('mail');
     // useful login method for field check and server response check
@@ -269,7 +267,7 @@ class BeerCrackerzAuth extends MapHelper {
 
   _loadAside(type) {
     return new Promise((resolve, reject) => {
-      Utils.fetchTemplate(`/assets/html/aside/${type}.html`).then(dom => {
+      Utils.fetchTemplate(`/static/html/aside/${type}.html`).then(dom => {
         document.body.className = ''; // Clear previous css class
         document.body.classList.add(type); // Update body class with current aside view
         // We need to get aside at the last moment because of nls that changed HTML content
@@ -283,27 +281,21 @@ class BeerCrackerzAuth extends MapHelper {
 
 
   _loadLoginAside() {
-    this._loadAside('login').then(() => {
-      this._handleLoginAside();
-    }).catch(() => {
+    this._loadAside('login').then(this._handleLoginAside.bind(this)).catch(() => {
       console.error('Couldn\'t fetch or build the login aside');
     });
   }
 
 
   _loadRegisterAside() {
-    this._loadAside('register').then(() => {
-      this._handleRegisterAside();
-    }).catch(() => {
+    this._loadAside('register').then(this._handleRegisterAside.bind(this)).catch(() => {
       console.error('Couldn\'t fetch or build the register aside');
     });
   }
 
 
   _loadForgotPasswordAside() {
-    this._loadAside('forgot-password').then(() => {
-      this._handleResetPasswordAdise();
-    }).catch(() => {
+    this._loadAside('forgot-password').then(this._handleResetPasswordAdise.bind(this)).catch(() => {
       console.error('Couldn\'t fetch or build the forgot password aside');
     });    
   }
@@ -318,7 +310,7 @@ class BeerCrackerzAuth extends MapHelper {
       requestAnimationFrame(() => { this._map.invalidateSize(); });
       setTimeout(() => {
         document.getElementById('aside-expander').style.left = '-44.8rem'; 
-        document.getElementById('aside-expander-icon').src = '/assets/img/logo/left.svg';
+        document.getElementById('aside-expander-icon').src = '/static/img/logo/left.svg';
       }, 100);
     } else {
       this._isAsideExpanded = true;
@@ -326,7 +318,7 @@ class BeerCrackerzAuth extends MapHelper {
       document.getElementById('aside').style.right = '0';
       document.getElementById('aside-expander').style.transition = 'none';
       document.getElementById('aside-expander').style.left = '0';
-      document.getElementById('aside-expander-icon').src = '/assets/img/logo/right.svg';
+      document.getElementById('aside-expander-icon').src = '/static/img/logo/right.svg';
       setTimeout(() => {
         document.documentElement.style.setProperty('--aside-width', '40rem');
         document.getElementById('aside').style.maxWidth = 'var(--aside-width)';
@@ -524,7 +516,7 @@ class BeerCrackerzAuth extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="/assets/img/marker/cluster-icon-green.png" class="cluster-icon">
+              <img src="/static/img/marker/cluster-icon-green.png" class="cluster-icon">
               <span class="cluster-label">${cluster.getChildCount()}</span>
             `
           });
@@ -535,7 +527,7 @@ class BeerCrackerzAuth extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="/assets/img/marker/cluster-icon-blue.png" class="cluster-icon">
+              <img src="/static/img/marker/cluster-icon-blue.png" class="cluster-icon">
               <span class="cluster-label">${cluster.getChildCount()}</span>
             `
           });
@@ -546,7 +538,7 @@ class BeerCrackerzAuth extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="/assets/img/marker/cluster-icon-red.png" class="cluster-icon">
+              <img src="/static/img/marker/cluster-icon-red.png" class="cluster-icon">
               <span class="cluster-label">${cluster.getChildCount()}</span>
             `
           });
@@ -627,7 +619,6 @@ class BeerCrackerzAuth extends MapHelper {
    **/
    mapClicked() {
     // Let this empty
-    console.log('lkjdslm')
   }
 
 

@@ -443,7 +443,7 @@ class BeerCrackerz extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="/assets/img/marker/cluster-icon-green.png" class="cluster-icon">
+              <img src="/static/img/marker/cluster-icon-green.png" class="cluster-icon">
               <span class="cluster-label">${cluster.getChildCount()}</span>
             `
           });
@@ -454,7 +454,7 @@ class BeerCrackerz extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="/assets/img/marker/cluster-icon-blue.png" class="cluster-icon">
+              <img src="/static/img/marker/cluster-icon-blue.png" class="cluster-icon">
               <span class="cluster-label">${cluster.getChildCount()}</span>
             `
           });
@@ -465,7 +465,7 @@ class BeerCrackerz extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="/assets/img/marker/cluster-icon-red.png" class="cluster-icon">
+              <img src="/static/img/marker/cluster-icon-red.png" class="cluster-icon">
               <span class="cluster-label">${cluster.getChildCount()}</span>
             `
           });
@@ -702,7 +702,7 @@ class BeerCrackerz extends MapHelper {
 
 
   editMarkModal(options) {
-    Utils.fetchTemplate(`/assets/html/modal/edit${options.type}.html`).then(dom => {
+    Utils.fetchTemplate(`/static/html/modal/edit${options.type}.html`).then(dom => {
       const name = dom.querySelector(`#${options.type}-name`);
       const description = dom.querySelector(`#${options.type}-desc`);
       const submit = dom.querySelector(`#${options.type}-submit`);
@@ -710,12 +710,12 @@ class BeerCrackerz extends MapHelper {
       const rate = dom.querySelector(`#${options.type}-rating`);
       const rating = new Rating(rate, options.rate);
       // Update nls for template
-      Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal(`${options.type}EditTitle`));
-      Utils.replaceString(dom.querySelector(`#nls-${options.type}-name`), `{{${options.type.toUpperCase()}_NAME}}`, this.nls[options.type]('nameLabel'));
-      Utils.replaceString(dom.querySelector(`#nls-${options.type}-desc`), `{{${options.type.toUpperCase()}_DESC}}`, this.nls[options.type]('descLabel'));
-      Utils.replaceString(dom.querySelector(`#nls-${options.type}-rate`), `{{${options.type.toUpperCase()}_RATE}}`, this.nls[options.type]('rateLabel'));
-      Utils.replaceString(submit, `{{${options.type.toUpperCase()}_SUBMIT}}`, this.nls.nav('add'));
-      Utils.replaceString(cancel, `{{${options.type.toUpperCase()}_CANCEL}}`, this.nls.nav('cancel'));
+      Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal(`${options.type}EditTitle`));
+      Utils.replaceString(dom.querySelector(`#nls-${options.type}-name`), `{${options.type.toUpperCase()}_NAME}`, this.nls[options.type]('nameLabel'));
+      Utils.replaceString(dom.querySelector(`#nls-${options.type}-desc`), `{${options.type.toUpperCase()}_DESC}`, this.nls[options.type]('descLabel'));
+      Utils.replaceString(dom.querySelector(`#nls-${options.type}-rate`), `{${options.type.toUpperCase()}_RATE}`, this.nls[options.type]('rateLabel'));
+      Utils.replaceString(submit, `{${options.type.toUpperCase()}_SUBMIT}`, this.nls.nav('add'));
+      Utils.replaceString(cancel, `{${options.type.toUpperCase()}_CANCEL}`, this.nls.nav('cancel'));
       name.value = options.name;
       description.value = options.description;
       submit.addEventListener('click', () => {
@@ -768,12 +768,12 @@ class BeerCrackerz extends MapHelper {
    * @param {Function} cb The function to callback with true or false depending on user's choice
    **/
   deleteMarkModal(cb) {
-    Utils.fetchTemplate('/assets/html/modal/deletemark.html').then(dom => {
+    Utils.fetchTemplate('/static/html/modal/deletemark.html').then(dom => {
       // Update nls for template
-      Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('deleteMarkTitle'));
-      Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{{MODAL_DESC}}`, this.nls.modal('deleteMarkDesc'));
-      Utils.replaceString(dom.querySelector(`#cancel-close`), `{{MODAL_CANCEL}}`, this.nls.nav('cancel'));
-      Utils.replaceString(dom.querySelector(`#delete-close`), `{{MODAL_DELETE}}`, this.nls.nav('delete'));
+      Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('deleteMarkTitle'));
+      Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{MODAL_DESC}`, this.nls.modal('deleteMarkDesc'));
+      Utils.replaceString(dom.querySelector(`#cancel-close`), `{MODAL_CANCEL}`, this.nls.nav('cancel'));
+      Utils.replaceString(dom.querySelector(`#delete-close`), `{MODAL_DELETE}`, this.nls.nav('delete'));
       document.getElementById('overlay').appendChild(dom);
       document.getElementById('overlay').style.display = 'flex';
       // Setup callback for confirm/cancel buttons
@@ -804,12 +804,12 @@ class BeerCrackerz extends MapHelper {
    * </blockquote>
    **/
   userProfileModal() {
-    Utils.fetchTemplate('/assets/html/modal/user.html').then(dom => {
+    Utils.fetchTemplate('/static/html/modal/user.html').then(dom => {
       // Update nls for template
-      Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('userTitle'));
-      Utils.replaceString(dom.querySelector(`#nls-user-modal-accuracy`), `{{ACCURACY_USER_MODAL}}`, this.nls.modal('userAccuracyPref'));
-      Utils.replaceString(dom.querySelector(`#nls-user-modal-debug`), `{{DEBUG_USER_MODAL}}`, this.nls.modal('userDebugPref'));
-      Utils.replaceString(dom.querySelector(`#nls-about-desc`), `{{BEERCRACKERZ_DESC}}`, this.nls.modal('aboutDesc'));
+      Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('userTitle'));
+      Utils.replaceString(dom.querySelector(`#nls-user-modal-accuracy`), `{ACCURACY_USER_MODAL}`, this.nls.modal('userAccuracyPref'));
+      Utils.replaceString(dom.querySelector(`#nls-user-modal-debug`), `{DEBUG_USER_MODAL}`, this.nls.modal('userDebugPref'));
+      Utils.replaceString(dom.querySelector(`#nls-about-desc`), `{BEERCRACKERZ_DESC}`, this.nls.modal('aboutDesc'));
 
       document.getElementById('overlay').appendChild(dom);
       document.getElementById('overlay').style.display = 'flex';
@@ -844,15 +844,15 @@ class BeerCrackerz extends MapHelper {
    * </blockquote>
    **/
   hidShowModal() {
-    Utils.fetchTemplate('/assets/html/modal/hideshow.html').then(dom => {
+    Utils.fetchTemplate('/static/html/modal/hideshow.html').then(dom => {
       // Update template nls
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-title`), `{{MODAL_TITLE}}`, this.nls.modal('hideShowTitle'));
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-labels`), `{{LABELS_HIDESHOW_MODAL}}`, this.nls.modal('hideShowLabels'));
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-circles`), `{{CIRCLES_HIDESHOW_MODAL}}`, this.nls.modal('hideShowCircles'));
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-spots`), `{{SPOTS_HIDESHOW_MODAL}}`, this.nls.modal('hideShowSpots'));
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-stores`), `{{STORES_HIDESHOW_MODAL}}`, this.nls.modal('hideShowStores'));
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-bars`), `{{BARS_HIDESHOW_MODAL}}`, this.nls.modal('hideShowBars'));
-      Utils.replaceString(dom.querySelector(`#modal-close-button`), `{{MODAL_CLOSE}}`, this.nls.nav('close'));
+      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-title`), `{MODAL_TITLE}`, this.nls.modal('hideShowTitle'));
+      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-labels`), `{LABELS_HIDESHOW_MODAL}`, this.nls.modal('hideShowLabels'));
+      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-circles`), `{CIRCLES_HIDESHOW_MODAL}`, this.nls.modal('hideShowCircles'));
+      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-spots`), `{SPOTS_HIDESHOW_MODAL}`, this.nls.modal('hideShowSpots'));
+      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-stores`), `{STORES_HIDESHOW_MODAL}`, this.nls.modal('hideShowStores'));
+      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-bars`), `{BARS_HIDESHOW_MODAL}`, this.nls.modal('hideShowBars'));
+      Utils.replaceString(dom.querySelector(`#modal-close-button`), `{MODAL_CLOSE}`, this.nls.nav('close'));
       document.getElementById('overlay').appendChild(dom);
       document.getElementById('overlay').style.display = 'flex';
       // Init modal checkbox state according to local storage preferences
