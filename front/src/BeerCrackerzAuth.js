@@ -120,7 +120,7 @@ class BeerCrackerzAuth extends MapHelper {
       // Check response and handle status codes
       console.log(response);
       // If all front and back tests are ok, redirect to auth
-      // If the user ma nually force redirection to authindex,
+      // If the user manually force redirection to authindex,
       // the server should reject the request as the user is not authenticated
       window.location = 'authindex.html';
     };
@@ -131,7 +131,10 @@ class BeerCrackerzAuth extends MapHelper {
       username.classList.remove('error');
       password.classList.remove('error');
       if (_frontFieldValidation()) {
-        Utils.postReq('/api/login/submit').then(_backValidation).catch(() => {
+        this._kom.post('/api/login/', {
+          username: username.value,
+          password: password.value
+        }).then(_backValidation).catch(() => {
           error.classList.add('visible');
           error.innerHTML = this.nls.login('serverError');
         });
