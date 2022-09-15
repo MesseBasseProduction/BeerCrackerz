@@ -211,11 +211,11 @@ class MapHelper {
         element.appendChild(dom);
         const user = options.user || this.user.username;
         const desc = Utils.stripDom(options.description) || this.nls.popup(`${options.type}NoDesc`);
-        Utils.replaceString(element, `{{${options.type.toUpperCase()}_NAME}}`, Utils.stripDom(options.name));
-        Utils.replaceString(element, `{{${options.type.toUpperCase()}_FINDER}}`, user);
-        Utils.replaceString(element, `{{${options.type.toUpperCase()}_RATE}}`, options.rate + 1);
-        Utils.replaceString(element, `{{${options.type.toUpperCase()}_DESC}}`, desc);
-        Utils.replaceString(element, `{{${options.type.toUpperCase()}_FOUND_BY}}`, this.nls.popup(`${options.type}FoundBy`));
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_NAME}`, Utils.stripDom(options.name));
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_FINDER}`, user);
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_RATE}`, options.rate + 1);
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_DESC}`, desc);
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_BY}`, this.nls.popup(`${options.type}FoundBy`));
         // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
         const rate = element.querySelector(`#${options.type}-rating`);
         for (let i = 0; i < options.rate + 1; ++i) {
@@ -228,13 +228,14 @@ class MapHelper {
           //element.removeChild(element.querySelector(''));
         }
         // Remove edition buttons if marker is not user's one, this does not replace a server test for edition...
+/*      TODO handle unlogged display  
         if (user !== this.user.username) {
           element.removeChild(element.querySelector('#popup-edit'));
         } else {
           element.querySelector('#edit-mark').addEventListener('click', this.editMarker.bind(this, options), false);
           element.querySelector('#delete-mark').addEventListener('click', this.deleteMarker.bind(this, options), false);
         }
-
+*/
         // Append circle around marker
         options.color = Utils[`${options.type.toUpperCase()}_COLOR`];
         options.circle = this.drawCircle(options);

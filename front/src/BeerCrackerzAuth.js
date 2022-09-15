@@ -547,16 +547,11 @@ class BeerCrackerzAuth extends MapHelper {
           });
         }
       }));
-      // Append clusters to the map depending on user preferences
-      if (Utils.getPreference(`poi-show-spot`) === 'true') {
-        this._map.addLayer(this._clusters.spot);
-      }
-      if (Utils.getPreference(`poi-show-store`) === 'true') {
-        this._map.addLayer(this._clusters.store);
-      }
-      if (Utils.getPreference(`poi-show-bar`) === 'true') {
-        this._map.addLayer(this._clusters.bar);
-      }
+
+      this._map.addLayer(this._clusters.spot);
+      this._map.addLayer(this._clusters.store);
+      this._map.addLayer(this._clusters.bar);
+
       // Load data from local storage, later to be fetched from server
       const iterateMarkers = mark => {
         this.markPopupFactory(mark).then(dom => {
@@ -572,9 +567,7 @@ class BeerCrackerzAuth extends MapHelper {
           // TODO @raph
           spots[i].type = 'spot';
           spots[i].user = 'messmaker';
-          spots[i].userId = 42;
-          spots[i].lat = spots[i].latitude;
-          spots[i].lng = spots[i].longitude;
+          spots[i].userId = 1;
           iterateMarkers(spots[i]);
         }
       });
@@ -584,9 +577,7 @@ class BeerCrackerzAuth extends MapHelper {
           // TODO @raph
           stores[i].type = 'store';
           stores[i].user = 'messmaker';
-          stores[i].userId = 42;
-          stores[i].lat = stores[i].latitude;
-          stores[i].lng = stores[i].longitude;
+          stores[i].userId = 1;
           iterateMarkers(stores[i]);
         }
       });
@@ -596,9 +587,7 @@ class BeerCrackerzAuth extends MapHelper {
           // TODO @raph
           bars[i].type = 'bar';
           bars[i].user = 'messmaker';
-          bars[i].userId = 42;
-          bars[i].lat = bars[i].latitude;
-          bars[i].lng = bars[i].longitude;
+          bars[i].userId = 1;
           iterateMarkers(bars[i]);
         }
       });
