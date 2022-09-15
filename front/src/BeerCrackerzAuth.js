@@ -5,6 +5,7 @@ import ZoomSlider from './js/ui/ZoomSlider.js';
 import LangManager from './js/utils/LangManager.js';
 import Notification from './js/ui/Notification.js';
 import Utils from './js/utils/Utils.js';
+import Kom from './js/utils/Kom.js';
 
 
 class BeerCrackerzAuth extends MapHelper {
@@ -51,6 +52,8 @@ class BeerCrackerzAuth extends MapHelper {
 
     this._aside = null;
     this._isAsideExpanded = true;
+
+    this._kom = new Kom();
     // The BeerCrackerz app is only initialized once nls are set up
     // By default, the template contains the login aside, no need to fetch it
     this._lang = new LangManager(
