@@ -139,8 +139,8 @@ class Kom {
           response.text().then(html => {
             resolve(document.createRange().createContextualFragment(html));
           }).catch(reject);
-        } else { // Resolution type doesn't exists
-          reject('F_KOM_UNSUPPORTED_TYPE');
+        } else { // Resolution type doesn't exists, resolving empty
+          resolve();
         }
       } else {
         reject('F_KOM_MISSING_ARGUMENT');
@@ -356,6 +356,32 @@ class Kom {
         .catch(reject);
     });
   }
+
+
+  /* */
+
+
+  savePoint(type, data) {
+    return new Promise(resolve => {
+      this.post(`http://localhost:8080/api/${type}/`, data, null).then(resolve);
+    });
+  }
+
+
+  spotCreated(data) {
+    return new Promise(resolve => { this.savePoint('spot', data).then(resolve); });    
+  }
+
+
+  shopCreated(data) {
+    return new Promise(resolve => { this.savePoint('shop', data).then(resolve); });    
+  }
+
+
+  barCreated(data) {
+    return new Promise(resolve => { this.savePoint('bar', data).then(resolve); });    
+  }
+
 
 
 }

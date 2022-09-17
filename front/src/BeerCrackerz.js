@@ -5,6 +5,7 @@ import ZoomSlider from './js/ui/ZoomSlider.js';
 import LangManager from './js/utils/LangManager.js';
 import Notification from './js/ui/Notification.js';
 import Rating from './js/ui/Rating.js';
+import Kom from './js/utils/Kom.js';
 import Utils from './js/utils/Utils.js';
 
 
@@ -110,8 +111,14 @@ class BeerCrackerz extends MapHelper {
      **/
     this._isZooming = false;
     /**
+     * The communication manager to process all server call
+     * @type {Object}
+     * @private
+     **/
+    this._kom = new Kom();
+    /**
      * The LangManager must be instantiated to handle nls accross the app
-     * @type {Boolean}
+     * @type {Object}
      * @private
      **/
     // The BeerCrackerz app is only initialized once nls are set up
@@ -169,8 +176,8 @@ class BeerCrackerz extends MapHelper {
    **/
   _initUser() {
     return new Promise(resolve => {
-      // TODO fill user information from server
-      this._user.id = 42;
+      // TODO fill user information from server @Raph
+      this._user.id = 1;
       this._user.username = 'messmaker';
       resolve();
     });
@@ -965,9 +972,7 @@ class BeerCrackerz extends MapHelper {
     // Clear new marker to let user add other stuff
     this._newMarker = null;
     // Save new marker in local storage, later to be sent to the server
-    const marks = JSON.parse(Utils.getPreference(`saved-${options.type}`)) || [];
-    marks.push(this.formatSavedMarker(options));
-    Utils.setPreference(`saved-${options.type}`, JSON.stringify(marks));
+    this._kom[`${options.type}Created`](this.formatSavedMarker(options));
   }
 
 
@@ -1040,17 +1045,12 @@ class BeerCrackerz extends MapHelper {
    **/
   formatSavedMarker(mark) {
     return {
-      type: mark.type,
-      lat: mark.lat,
-      lng: mark.lng,
+      userId: mark.userId || this.user.id,      
       name: mark.name,
       description: mark.description,
-      user: mark.username || this.user.username,
-      userId: mark.userId || this.user.id,
-      dom: null,
-      rate: mark.rate,
-      marker: null,
-      circle: null,
+      lat: mark.lat,
+      lng: mark.lng,
+      rate: mark.rate
     };
   }
 
@@ -1227,6 +1227,11 @@ class BeerCrackerz extends MapHelper {
    **/
   get user() {
     return this._user;
+  }
+
+
+  get kom() {
+    return this._kom;
   }
 
 
