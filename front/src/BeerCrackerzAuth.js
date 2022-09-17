@@ -145,19 +145,14 @@ class BeerCrackerzAuth {
       window.L.control.scale().addTo(this._map);
       // Place user marker on the map
       this._drawUserMarker();
-      // Add OSM credits to the map next to leaflet credits
-      const osm = Providers.planOsm;
-      //const plan = Providers.planGeo;
-      const esri = Providers.satEsri;
-      //const geo = Providers.satGeo;
       // Prevent panning outside of the world's edge
       this._map.setMaxBounds(Utils.MAP_BOUNDS);
       // Add layer group to interface
       const baseMaps = {};
-      baseMaps[`<p>${this.nls.map('planLayerOSM')}</p>`] = osm;
-      baseMaps[`<p>${this.nls.map('satLayerEsri')}</p>`] = esri;
+      baseMaps[`<p>${this.nls.map('planLayerOSM')}</p>`] = Providers.planOsm;
+      baseMaps[`<p>${this.nls.map('satLayerEsri')}</p>`] = Providers.satEsri;
       // Append layer depending on user preference
-      osm.addTo(this._map);
+      Providers.planOsm.addTo(this._map);
       // Add layer switch radio on bottom right of the map
       window.L.control.layers(baseMaps, {}, { position: 'bottomright' }).addTo(this._map);
       // Init zoom slider when map has been created

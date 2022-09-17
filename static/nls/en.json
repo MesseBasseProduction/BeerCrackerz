@@ -38,9 +38,8 @@
     "newShop": "Add a shop",
     "newBar": "Add a bar",
     "planLayerOSM": "Plan OSM",
-    "planLayerGeo": "Plan GeoPortail",
-    "satLayerEsri": "Satellite ESRI",
-    "satLayerGeo": "Satellite GeoPortail"
+    "planStadiaOut": "Plan Stadia Outdoor",
+    "satLayerEsri": "Satellite ESRI"
   },
   "spot": {
     "title": "New spot",
