@@ -500,32 +500,20 @@ class BeerCrackerz extends MapHelper {
         });
       };
 
-      Utils.getSpots().then(spots => {
+      this._kom.getSpots().then(spots => {
         for (let i = 0; i < spots.length; ++i) {
-          // TODO @raph
-          spots[i].type = 'spot';
-          spots[i].user = 'messmaker';
-          spots[i].userId = 42;
           iterateMarkers(spots[i]);
         }
       });
 
-      Utils.getShops().then(shops => {
+      this._kom.getShops().then(shops => {
         for (let i = 0; i < shops.length; ++i) {
-          // TODO @raph
-          shops[i].type = 'shop';
-          shops[i].user = 'messmaker';
-          shops[i].userId = 42;
           iterateMarkers(shops[i]);
         }
       }); 
     
-      Utils.getBars().then(bars => {
+      this._kom.getBars().then(bars => {
         for (let i = 0; i < bars.length; ++i) {
-          // TODO @raph
-          bars[i].type = 'bar';
-          bars[i].user = 'messmaker';
-          bars[i].userId = 42;
           iterateMarkers(bars[i]);
         }
       }); 
@@ -705,7 +693,7 @@ class BeerCrackerz extends MapHelper {
 
 
   editMarkModal(options) {
-    Utils.fetchTemplate(`/static/html/modal/edit${options.type}.html`).then(dom => {
+    this._kom.getTemplate(`/static/html/modal/edit${options.type}.html`).then(dom => {
       const name = dom.querySelector(`#${options.type}-name`);
       const description = dom.querySelector(`#${options.type}-desc`);
       const submit = dom.querySelector(`#${options.type}-submit`);
@@ -771,7 +759,7 @@ class BeerCrackerz extends MapHelper {
    * @param {Function} cb The function to callback with true or false depending on user's choice
    **/
   deleteMarkModal(cb) {
-    Utils.fetchTemplate('/static/html/modal/deletemark.html').then(dom => {
+    this._kom.getTemplate('/static/html/modal/deletemark.html').then(dom => {
       // Update nls for template
       Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('deleteMarkTitle'));
       Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{MODAL_DESC}`, this.nls.modal('deleteMarkDesc'));
@@ -807,7 +795,7 @@ class BeerCrackerz extends MapHelper {
    * </blockquote>
    **/
   userProfileModal() {
-    Utils.fetchTemplate('/static/html/modal/user.html').then(dom => {
+    this._kom.getTemplate('/static/html/modal/user.html').then(dom => {
       // Update nls for template
       Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('userTitle'));
       Utils.replaceString(dom.querySelector(`#nls-user-modal-accuracy`), `{ACCURACY_USER_MODAL}`, this.nls.modal('userAccuracyPref'));
@@ -847,7 +835,7 @@ class BeerCrackerz extends MapHelper {
    * </blockquote>
    **/
   hidShowModal() {
-    Utils.fetchTemplate('/static/html/modal/hideshow.html').then(dom => {
+    this._kom.getTemplate('/static/html/modal/hideshow.html').then(dom => {
       // Update template nls
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-title`), `{MODAL_TITLE}`, this.nls.modal('hideShowTitle'));
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-labels`), `{LABELS_HIDESHOW_MODAL}`, this.nls.modal('hideShowLabels'));

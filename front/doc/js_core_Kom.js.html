@@ -29,38 +29,56 @@
             <pre class="prettyprint source linenums"><code>class Kom {
 
 
-  /** @summary &lt;h1>Server communication abstraction&lt;/h1>
+  /** 
+   * @summary Server communication abstraction
    * @author Arthur Beaulieu
-   * @since June 2020
-   * @description &lt;blockquote>This class is the main object to deal with when requesting something from the server.&lt;br>
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * This class is the main object to deal with when requesting something from the server.
    * It handle all urls calls (&lt;code>GET&lt;/code>, &lt;code>POST&lt;/code>), treat responses or handle errors using
    * &lt;code>Promise&lt;/code>.&lt;br>Because it uses &lt;code>Promise&lt;/code>, success and errors are to be handled in the caller
    * function, using &lt;code>.then()&lt;/code> and &lt;code>.catch()&lt;/code>. To properly deal with &lt;code>POST&lt;/code> request,
-   * the session must contain a csrf token in cookies. Otherwise, those &lt;code>POST&lt;/code> call may fail.&lt;/blockquote> */
+   * the session must contain a csrf token in cookies. Otherwise, those &lt;code>POST&lt;/code> call may fail.
+   * &lt;/blockquote> 
+   **/
   constructor() {
-    /** @private
-     * @member {string} - User session CSRF token to use in POST request */
+    /** 
+     * User session CSRF token to use in POST request
+     * @type {string}
+     * @private
+     **/
     this._csrfToken = this._getCsrfCookie();
-    /** @private
-     * @member {array[]} - Array of HTTP headers to be used in HTTP calls */
+    /** 
+     * Array of HTTP headers to be used in HTTP calls
+     * @type {Array[]}
+     * @private
+     **/
     this._headers = this._createRequestHeaders();
     // Check that CSRF token exists and that headers are properly created
     this._checkValidity();
   }
 
 
-  /*  --------------------------------------------------------------------------------------------------------------- */
-  /*  -------------------------------------------  CLASS INIT UTILS  -----------------------------------------------  */
-  /*  --------------------------------------------------------------------------------------------------------------- */
+  // ======================================================================== //
+  // ------------------------- Class initialization ------------------------- //
+  // ======================================================================== //
 
 
-  /** @method
+  /**
+   * @method
    * @name _getCsrfCookie
    * @private
    * @memberof Kom
-   * @description &lt;blockquote>Extract CSRF token value from client cookies and returns it as a string. Returns an empty
-   * string by default. This method is required to be called on construction.&lt;/blockquote>
-   * @return {string} - The CSRF token string */
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * Extract CSRF token value from client cookies and returns it as a string. Returns an empty
+   * string by default. This method is required to be called on construction.
+   * &lt;/blockquote>
+   * @return {String} - The CSRF token string 
+   **/
   _getCsrfCookie() {
     if (document.cookie &amp;&amp; document.cookie !== '') {
       const cookies = document.cookie.split(';');
@@ -78,13 +96,20 @@
   }
 
 
-  /** @method
+  /** 
+   * @method
    * @name _createRequestHeaders
    * @private
    * @memberof Kom
-   * @description &lt;blockquote>Fills Kom &lt;code>_headers&lt;/code> private member array, to use in HTTP requests later on.
-   * This method is required to be called on construction.&lt;/blockquote>
-   * @return {array[]} - The headers array, length 3, to be used in HTTP requests */
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * Fills Kom &lt;code>_headers&lt;/code> private member array, to use in HTTP requests later on.
+   * This method is required to be called on construction.
+   * &lt;/blockquote>
+   * @return {Array[]} - The headers array, length 3, to be used in HTTP requests 
+   **/
   _createRequestHeaders() {
     return [
       ['Content-Type', 'application/json; charset=UTF-8'],
@@ -94,12 +119,18 @@
   }
 
 
-  /** @method
-   * @async
+  /** 
+   * @method
    * @name _checkValidity
    * @private
    * @memberof Kom
-   * @description &lt;blockquote>Check the Kom instance validity to ensure its properties validity.&lt;/blockquote> */
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * Check the Kom instance validity (eough headers) to ensure its properties validity.
+   * &lt;/blockquote> 
+   **/
   _checkValidity() {
     if (this._csrfToken !== '') {
       if (this._headers.length !== 3) {
@@ -111,43 +142,28 @@
   }
 
 
-  /*  --------------------------------------------------------------------------------------------------------------- */
-  /*  -------------------------------------------  PRIVATE METHODS  ------------------------------------------------  */
-  /*  --------------------------------------------------------------------------------------------------------------- */
+  // ======================================================================== //
+  // ------------------------- Response formatting -------------------------- //
+  // ======================================================================== //
 
 
-  /** @method
-   * @name _getErrorCodeFromHTTPStatus
-   * @private
-   * @memberof Kom
-   * @description &lt;blockquote>This method is called whenever a server request didn't went well. In case a request (from
-   * any type) fails, its HTTP status code have to be handle in the method, so it returns an error code can be handled
-   * in the user interface (with notification, console or else).&lt;/blockquote>
-   * @param {number} code - The HTTP status code to handle, in supported ones from HttpStatusCode enumeration
-   * @return {string} The HTTP status as an error code */
-  _getErrorCodeFromHTTPStatus(code) {
-    if (code === 404) {
-      return 'B_KOM_NOT_FOUND';
-    } else if (code === 403) {
-      return 'B_KOM_ACCESS_FORBIDDEN';
-    } else if (code === 500) {
-      return 'B_KOM_INTERNAL_ERROR';
-    } else {
-      return `B_KOM_UNKNOWN_ERROR`;
-    }
-  }
-
-
-  /** @method
+  /** 
+   * @method
    * @async
    * @name _resolveAs
    * @private
    * @memberof Kom
-   * @description &lt;blockquote>Generic tool method used by private methods on fetch responses to format output in the provided
-   * format. It must be either `json`, `text` or `raw`.&lt;/blockquote>
-   * @param {String} type - The type of resolution, can be `json`, `text` or `raw`
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * Generic tool method used by private methods on fetch responses to format output in the provided
+   * format. It must be either `json`, `text`, `raw` or `dom`.
+   * &lt;/blockquote>
+   * @param {String} type - The type of resolution, can be `json`, `text`, `raw` or `dom`
    * @param {Object} response - The &lt;code>fetch&lt;/code> response object
-   * @returns {Promise} The request &lt;code>Promise&lt;/code>, format response as an object on resolve, as error code string on reject */
+   * @returns {Promise} The request &lt;code>Promise&lt;/code>, format response as an object on resolve, as error code string on reject 
+   **/
   _resolveAs(type, response) {
     return new Promise((resolve, reject) => {
       if (response) {
@@ -155,13 +171,13 @@
           if (response.status === 200) {
             resolve(response.responseText);
           } else {
-            reject(this._getErrorCodeFromHTTPStatus(response.status));
+            reject(response.status);
           }
         } else if (type === 'json' || type === 'text') { // Call are made using fetch API
           if (response[type]) {
             resolve(response[type]());
           } else { // Fallback on standard error handling
-            reject(this._getErrorCodeFromHTTPStatus(response.status));
+            reject(response.status);
           }
         } else if (type === 'dom') {
           response.text().then(html => {
@@ -177,87 +193,92 @@
   }
 
 
-  /** @method
+  /** 
+   * @method
    * @async
    * @name _resolveAsJSON
    * @private
    * @memberof Kom
-   * @description &lt;blockquote>Tool method used by public methods on fetch responses to format output data as JSON to be
-   * read in JavaScript code as objects.&lt;/blockquote>
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * Tool method used by public methods on fetch responses to format output data as JSON to be
+   * read in JavaScript code as objects.
+   * &lt;/blockquote>
    * @param {Object} response - The &lt;code>fetch&lt;/code> response object
-   * @returns {Promise} The request &lt;code>Promise&lt;/code>, format response as an object on resolve, as error code string on reject */
+   * @returns {Promise} The request &lt;code>Promise&lt;/code>, format response as an object on resolve, as error code string on reject 
+   **/
   _resolveAsJSON(response) {
     return this._resolveAs('json', response);
   }
 
 
-  /** @method
+  /** 
+   * @method
    * @async
    * @name _resolveAsText
    * @private
    * @memberof Kom
-   * @description &lt;blockquote>Tool method used by public methods on fetch responses to format output data as text to be
-   * read in JavaScript code as string (mostly to parse HTML templates).&lt;/blockquote>
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * Tool method used by public methods on fetch responses to format output data as text to be
+   * read in JavaScript code as string (mostly to parse HTML templates).
+   * &lt;/blockquote>
    * @param {Object} response - The &lt;code>fetch&lt;/code> response object
-   * @returns {Promise} The request &lt;code>Promise&lt;/code>, format response as a string on resolve, as error code string on reject */
+   * @returns {Promise} The request &lt;code>Promise&lt;/code>, format response as a string on resolve, as error code string on reject
+   **/
   _resolveAsText(response) {
     return this._resolveAs('text', response);
   }
 
 
+  /** 
+   * @method
+   * @async
+   * @name _resolveAsDom
+   * @private
+   * @memberof Kom
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * Tool method used by public methods on fetch responses to format output data as DOM fragment to be
+   * read in JavaScript code as HTML template.
+   * &lt;/blockquote>
+   * @param {Object} response - The &lt;code>fetch&lt;/code> response object
+   * @returns {Promise} The request &lt;code>Promise&lt;/code>, format response as a string on resolve, as error code string on reject
+   **/
   _resolveAsDom(response) {
     return this._resolveAs('dom', response);
   }
 
 
-  /** @method
-   * @async
-   * @name _resolveAsRaw
-   * @private
-   * @memberof Kom
-   * @description &lt;blockquote>Tool method used by XmlHTTPRequests to format server response as raw binary data.&lt;/blockquote>
-   * @param {Object} response - The &lt;code>XmlHTTPRequest&lt;/code> response status object
-   * @returns {Promise} The request &lt;code>Promise&lt;/code>, doesn't format response on resolve, send error code string on reject */
-  _resolveAsRaw(response) {
-    return this._resolveAs('raw', response);
-  }
+
+  // ======================================================================== //
+  // --------------------------- GET server calls --------------------------- //
+  // ======================================================================== //
 
 
-  _xhrCall(url, verb, data) {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open(verb, url, true);
-      xhr.overrideMimeType('text/plain; charset=x-user-defined');
-      xhr.onreadystatechange = response => {
-        if (response.target.readyState === 4) { // Ready state changed has reach the response state
-          this._resolveAsRaw(response.target)
-            .then(resolve)
-            .catch(reject);
-        }
-      };
-      xhr.onerror = () => {
-        reject('F_KOM_XHR_ERROR');
-      };
-      xhr.send(data);
-    });
-  }
-
-
-  /*  --------------------------------------------------------------------------------------------------------------- */
-  /*  ---------------------------------------  HTTP SERVER CALLS METHODS  ------------------------------------------  */
-  /*  --------------------------------------------------------------------------------------------------------------- */
-
-
-  /** @method
+  /** 
+   * @method
    * @async
    * @name get
    * @public
    * @memberof Kom
-   * @description &lt;blockquote>&lt;code>GET&lt;/code> HTTP request using the fetch API.&lt;br>&lt;code>resolve&lt;/code> returns the
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * &lt;code>GET&lt;/code> HTTP request using the fetch API.&lt;br>&lt;code>resolve&lt;/code> returns the
    * response as an &lt;code>Object&lt;/code>.&lt;br>&lt;code>reject&lt;/code> returns an error key as a &lt;code>String&lt;/code>.
-   * It is meant to perform API call to access database through the user interface.&lt;/blockquote>
+   * It is meant to perform API call to access database through the user interface.
+   * &lt;/blockquote>
    * @param {String} url - The &lt;code>GET&lt;/code> url to fetch data from, in supported back URLs
-   * @returns {Promise} The request &lt;code>Promise&lt;/code> */
+   * @returns {Promise} The request &lt;code>Promise&lt;/code> 
+   **/
   get(url, resolution = this._resolveAsJSON.bind(this)) {
     return new Promise((resolve, reject) => {
       const options = {
@@ -273,66 +294,73 @@
   }
 
 
-  /** @method
+  /** 
+   * @method
    * @async
    * @name getText
    * @public
    * @memberof Kom
-   * @description &lt;blockquote>&lt;code>GET&lt;/code> HTTP request using the fetch API.&lt;br>&lt;code>resolve&lt;/code> returns the
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * &lt;code>GET&lt;/code> HTTP request using the fetch API.&lt;br>&lt;code>resolve&lt;/code> returns the
    * response as a &lt;code>String&lt;/code>.&lt;br>&lt;code>reject&lt;/code> returns an error key as a &lt;code>String&lt;/code>. It is
-   * meant to perform API call to get HTML templates as string to be parsed as documents/documents fragments.&lt;/blockquote>
+   * meant to perform API call to get HTML templates as string to be parsed as documents/documents fragments.
+   * &lt;/blockquote>
    * @param {String} url - The &lt;code>GET&lt;/code> url to fetch data from, in supported back URLs
-   * @returns {Promise} The request &lt;code>Promise&lt;/code> */
+   * @returns {Promise} The request &lt;code>Promise&lt;/code>
+   **/
   getText(url) {
     return this.get(url, this._resolveAsText.bind(this));
   }
 
 
-  /** @method
+  /** 
+   * @method
    * @async
    * @name getText
    * @public
    * @memberof Kom
-   * @description &lt;blockquote>&lt;code>GET&lt;/code> HTTP request using the fetch API.&lt;br>&lt;code>resolve&lt;/code> returns the
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * &lt;code>GET&lt;/code> HTTP request using the fetch API.&lt;br>&lt;code>resolve&lt;/code> returns the
    * response as a &lt;code>String&lt;/code>.&lt;br>&lt;code>reject&lt;/code> returns an error key as a &lt;code>String&lt;/code>. It is
-   * meant to perform API call to get HTML templates as string to be parsed as documents/documents fragments.&lt;/blockquote>
+   * meant to perform API call to get HTML templates as string to be parsed as documents/documents fragments.
+   * &lt;/blockquote>
    * @param {String} url - The &lt;code>GET&lt;/code> url to fetch data from, in supported back URLs
-   * @returns {Promise} The request &lt;code>Promise&lt;/code> */
+   * @returns {Promise} The request &lt;code>Promise&lt;/code> 
+   **/
   getTemplate(url) {
     return this.get(url, this._resolveAsDom.bind(this));
   }
 
 
-  /** @method
-   * @async
-   * @name getRaw
-   * @public
-   * @memberof Kom
-   * @description &lt;blockquote>&lt;code>GET&lt;/code> HTTP request using an &lt;code>XMLHttpRequest&lt;/code>, with an override
-   * mime type hack to pass bytes through unprocessed.&lt;br>&lt;code>resolve&lt;/code> returns the response as raw binary data.&lt;br>&lt;code>reject&lt;/code>
-   * returns an error code as a &lt;code>String&lt;/code>.&lt;/blockquote>
-   * @param {String} url - The url to fetch raw data from
-   * @returns {Promise} The request &lt;code>Promise&lt;/code> */
-  getRaw(url) {
-    return new Promise((resolve, reject) => {
-      this._xhrCall(url, 'GET', null)
-        .then(resolve)
-        .catch(reject);
-    });
-  }
+  // ======================================================================== //
+  // -------------------------- POST server calls --------------------------- //
+  // ======================================================================== //
 
 
-  /** @method
+  /** 
+   * @method
    * @async
    * @name post
    * @public
    * @memberof Kom
-   * @description &lt;blockquote>&lt;code>POST&lt;/code> HTTP request using the fetch API.&lt;br>Beware that the given options
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * &lt;code>POST&lt;/code> HTTP request using the fetch API.&lt;br>Beware that the given options
    * object match the url expectations.&lt;br>&lt;code>resolve&lt;/code>
-   * returns the response as an &lt;code>Object&lt;/code>.&lt;br>&lt;code>reject&lt;/code> returns an error key as a &lt;code>String&lt;/code>.&lt;/blockquote>
+   * returns the response as an &lt;code>Object&lt;/code>.&lt;br>&lt;code>reject&lt;/code> returns an error key as a &lt;code>String&lt;/code>.
+   * &lt;/blockquote>
    * @param {String} url - The &lt;code>POST&lt;/code> url to fetch data from
    * @param {Object} data - The &lt;code>JSON&lt;/code> object that contains &lt;code>POST&lt;/code> parameters
-   * @returns {Promise} The request &lt;code>Promise&lt;/code> */
+   * @returns {Promise} The request &lt;code>Promise&lt;/code> 
+   **/
   post(url, data, resolution = this._resolveAsJSON.bind(this)) {
     return new Promise((resolve, reject) => {
       const options = {
@@ -349,65 +377,76 @@
   }
 
 
-  /** @method
+  /** 
+   * @method
    * @async
    * @name postText
    * @public
    * @memberof Kom
-   * @description &lt;blockquote>&lt;code>POST&lt;/code> HTTP request using the fetch API.&lt;br>Beware that the given options
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * &lt;code>POST&lt;/code> HTTP request using the fetch API.&lt;br>Beware that the given options
    * object match the url expectations.&lt;br>&lt;code>resolve&lt;/code>
-   * returns the response as a &lt;code>String&lt;/code>.&lt;br>&lt;code>reject&lt;/code> returns an error key as a &lt;code>String&lt;/code>.&lt;/blockquote>
+   * returns the response as a &lt;code>String&lt;/code>.&lt;br>&lt;code>reject&lt;/code> returns an error key as a &lt;code>String&lt;/code>.
+   * &lt;/blockquote>
    * @param {String} url - The &lt;code>POST&lt;/code> url to fetch data from
    * @param {Object} data - The &lt;code>JSON&lt;/code> object that contains &lt;code>POST&lt;/code> parameters
-   * @returns {Promise} The request &lt;code>Promise&lt;/code> */
+   * @returns {Promise} The request &lt;code>Promise&lt;/code>
+   **/
   postText(url, data) {
     return this.post(url, data, this._resolveAsText.bind(this));
   }
 
 
-  /** @method
-   * @async
-   * @name postRaw
-   * @public
-   * @memberof Kom
-   * @description &lt;blockquote>&lt;code>POST&lt;/code> HTTP request using the fetch API.&lt;br>Beware that the given options
-   * object match the url expectations.&lt;br>&lt;code>resolve&lt;/code>, with an override
-   * mime type hack to pass bytes through unprocessed.&lt;br>&lt;code>resolve&lt;/code> returns the response as raw binary data.&lt;br>&lt;code>reject&lt;/code>
-   * returns an error code as a &lt;code>String&lt;/code>.&lt;/blockquote>
-   * @param {String} url - The url to fetch raw data from
-   * @param {Object} data - The &lt;code>JSON&lt;/code> object that contains &lt;code>POST&lt;/code> parameters
-   * @returns {Promise} The request &lt;code>Promise&lt;/code> */
-  postRaw(url, data) {
+  // ======================================================================== //
+  // ------------------ BeerCrackerz server call shortcuts ------------------ //
+  // ======================================================================== //
+
+
+  _getPoints(type) {
     return new Promise((resolve, reject) => {
-      this._xhrCall(url, 'POST', JSON.stringify(data))
-        .then(resolve)
-        .catch(reject);
+      this.get(`http://localhost:8080/api/${type}`).then(resolve).catch(reject);
     });
   }
 
 
-  /* */
+  getSpots() {
+    return this._getPoints('spot');
+  }
 
 
-  savePoint(type, data) {
-    return new Promise(resolve => {
-      this.post(`http://localhost:8080/api/${type}/`, data, null).then(resolve);
+  getShops() {
+    return this._getPoints('shop');
+  }
+
+
+  getBars() {
+    return this._getPoints('bar');
+  }
+
+
+  _savePoint(type, data) {
+    return new Promise((resolve, reject) => {
+      // Send null to resolveAs to ensure nothing is done after post call
+      this.post(`http://localhost:8080/api/${type}/`, data, null).then(resolve).catch(reject);
     });
   }
 
 
   spotCreated(data) {
-    return new Promise(resolve => { this.savePoint('spot', data).then(resolve); });    
+    return this._savePoint('spot', data);    
   }
 
 
   shopCreated(data) {
-    return new Promise(resolve => { this.savePoint('shop', data).then(resolve); });    
+    return this._savePoint('shop', data);    
   }
 
 
   barCreated(data) {
-    return new Promise(resolve => { this.savePoint('bar', data).then(resolve); });    
+    return this._savePoint('bar', data);    
   }
 
 
@@ -426,13 +465,13 @@ export default Kom;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BeerCrackerz.html">BeerCrackerz</a></li><li><a href="BeerCrackerzAuth.html">BeerCrackerzAuth</a></li><li><a href="Kom.html">Kom</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BeerCrackerz.html">BeerCrackerz</a></li><li><a href="BeerCrackerzAuth.html">BeerCrackerzAuth</a></li><li><a href="Kom.html">Kom</a></li><li><a href="LangManager.html">LangManager</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sat Sep 17 2022 18:34:38 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sat Sep 17 2022 19:45:58 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

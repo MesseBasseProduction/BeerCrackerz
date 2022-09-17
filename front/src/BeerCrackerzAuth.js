@@ -11,11 +11,6 @@ import Clusters from './js/utils/ClusterEnum.js';
 import Utils from './js/utils/Utils.js';
 
 
-/**
- * @class
- * @constructor
- * @public
-**/
 class BeerCrackerzAuth {
 
 
@@ -127,6 +122,7 @@ class BeerCrackerzAuth {
 
   /**
    * @method
+   * @async
    * @name _initMap
    * @private
    * @memberof BeerCrackerzAuth
@@ -139,7 +135,7 @@ class BeerCrackerzAuth {
    * </blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
-   _initMap() {
+  _initMap() {
     return new Promise(resolve => {
       // Use main div to inject OSM into
       this._map = window.L.map('beer-crakerz-map', {
@@ -173,6 +169,7 @@ class BeerCrackerzAuth {
 
   /**
    * @method
+   * @async
    * @name _initGeolocation
    * @private
    * @memberof BeerCrackerzAuth
@@ -187,7 +184,7 @@ class BeerCrackerzAuth {
    * </blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
-   _initGeolocation() {
+  _initGeolocation() {
     return new Promise(resolve => {
       if ('geolocation' in navigator) {
         this._watchId = navigator.geolocation.watchPosition(position => {
@@ -211,6 +208,7 @@ class BeerCrackerzAuth {
 
   /**
    * @method
+   * @async
    * @name _initEvents
    * @private
    * @memberof BeerCrackerzAuth
@@ -254,6 +252,7 @@ class BeerCrackerzAuth {
 
   /**
    * @method
+   * @async
    * @name _initMarkers
    * @private
    * @memberof BeerCrackerzAuth
@@ -286,32 +285,20 @@ class BeerCrackerzAuth {
         });
       };
 
-      Utils.getSpots().then(spots => {
+      this._kom.getSpots().then(spots => {
         for (let i = 0; i < spots.length; ++i) {
-          // TODO @raph
-          spots[i].type = 'spot';
-          spots[i].user = 'messmaker';
-          spots[i].userId = 1;
           iterateMarkers(spots[i]);
         }
       });
 
-      Utils.getShops().then(shops => {
+      this._kom.getShops().then(shops => {
         for (let i = 0; i < shops.length; ++i) {
-          // TODO @raph
-          shops[i].type = 'shop';
-          shops[i].user = 'messmaker';
-          shops[i].userId = 1;
           iterateMarkers(shops[i]);
         }
       });
 
-      Utils.getBars().then(bars => {
+      this._kom.getBars().then(bars => {
         for (let i = 0; i < bars.length; ++i) {
-          // TODO @raph
-          bars[i].type = 'bar';
-          bars[i].user = 'messmaker';
-          bars[i].userId = 1;
           iterateMarkers(bars[i]);
         }
       });
@@ -356,6 +343,7 @@ class BeerCrackerzAuth {
 
   /**
    * @method
+   * @async
    * @name _loadAside
    * @private
    * @memberof BeerCrackerzAuth
@@ -364,7 +352,7 @@ class BeerCrackerzAuth {
    * @description
    * <blockquote>
    * The _loadAside() method is a generic method to load an HTML template and replace
-   * the aside DOM content with that template, aswell as updating the document's class. 
+   * the aside DOM content with that template, aswell as updating the document's class.
    * </blockquote>
    * @param {String} type - The aside to load in login/register/forgot-password
    * @returns {Promise} A Promise resolved when template is loaded and in DOM
@@ -437,7 +425,7 @@ class BeerCrackerzAuth {
   _loadForgotPasswordAside() {
     this._loadAside('forgot-password').then(this._handleResetPasswordAside.bind(this)).catch(() => {
       console.error('Couldn\'t fetch or build the forgot password aside');
-    });    
+    });
   }
 
 
@@ -604,10 +592,10 @@ class BeerCrackerzAuth {
     }, false);
     // Register event
     document.getElementById('login-aside').addEventListener('click', this._loadLoginAside.bind(this), false);
-    document.getElementById('aside-expander').addEventListener('click', this._toggleAside.bind(this), false);    
+    document.getElementById('aside-expander').addEventListener('click', this._toggleAside.bind(this), false);
   }
 
-  
+
   /**
    * @method
    * @name _handleResetPasswordAside
@@ -721,7 +709,7 @@ class BeerCrackerzAuth {
    * @param {Float} options.lat - The marker latitude
    * @param {Float} options.lng - The marker longitude
    * @param {HTMLElement} [options.dom] - The marker popup content
-   * @return {HTMLElement} The Leaflet marker extended with option properties
+   * @returns {HTMLElement} The Leaflet marker extended with option properties
   **/
    _createMarker(options) {
     let icon = Markers.black;
@@ -754,6 +742,7 @@ class BeerCrackerzAuth {
 
   /**
    * @method
+   * @async
    * @name _markPopupFactory
    * @private
    * @memberof BeerCrackerzAuth
@@ -771,7 +760,7 @@ class BeerCrackerzAuth {
    * @param {String} options.user - The user that discovered the marker
    * @param {String} options.description - The marker description
    * @param {Float} options.rate - The marker rate
-   * @return {Promise} A promise resolved with the popup DOM element
+   * @returns {Promise} A promise resolved with the popup DOM element
   **/
   _markPopupFactory(options) {
     return new Promise(resolve => {

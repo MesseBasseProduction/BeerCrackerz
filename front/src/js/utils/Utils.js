@@ -4,60 +4,6 @@ class Utils {
   constructor() { /* Not meant to be instantiated, all methods should be static */ }
 
 
-  static fetchTemplate(url) {
-    return new Promise((resolve, reject) => {
-      fetch(url).then(data => {
-        data.text().then(html => {
-          resolve(document.createRange().createContextualFragment(html));
-        }).catch(reject);
-      }).catch(reject);
-    });
-  }
-
-
-  static fetchFile(url) {
-    return new Promise((resolve, reject) => {
-      fetch(url).then(data => {
-        data.text().then(resolve).catch(reject);
-      }).catch(reject);
-    });
-  }
-
-
-  static getReq(url) {
-    return new Promise((resolve, reject) => {
-      const options = {
-        method: 'GET',
-        headers: new Headers(),
-        mode: 'cors',
-        cache: 'default',
-        url: `http://localhost:8080`
-      };
-
-      fetch(url, options).then(data => {
-        data.json().then(resolve).catch(reject);
-      }).catch(reject);
-    });
-  }
-
-
-  static postReq(url, data) {
-    return new Promise((resolve, reject) => {
-      const options = {
-        method: 'POST',
-        headers: new Headers(),
-        mode: 'cors',
-        cache: 'default',
-        body: data
-      };
-
-      fetch(url, options).then(data => {
-        data.json().then(resolve).catch(reject);
-      }).catch(reject);
-    });
-  }
-
-
   static stripDom(html){
     let doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent || '';
@@ -188,31 +134,6 @@ class Utils {
   }
 
 
-  /* Point getter and setter */
-
-
-  static getPoints(type) {
-    return new Promise(resolve => {
-      Utils.getReq(`http://localhost:8080/api/${type}`).then(resolve);
-    });
-  }
-
-
-  static getSpots() {
-    return new Promise(resolve => { Utils.getPoints('spot').then(resolve); });
-  }
-
-
-  static getShops() {
-    return new Promise(resolve => { Utils.getPoints('shop').then(resolve); });
-  }
-
-
-  static getBars() {
-    return new Promise(resolve => { Utils.getPoints('bar').then(resolve); });
-  }
-
-
   /* Preference get set (DEPRECATED) */
 
 
@@ -288,7 +209,7 @@ class Utils {
 
 
   static get SUPPORTED_LANGUAGE() {
-    return ['en', 'fr', 'es', 'de'];
+    return ['en', 'fr', 'es', 'de', 'pt'];
   }
 
 

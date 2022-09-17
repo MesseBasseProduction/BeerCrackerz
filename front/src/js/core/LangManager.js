@@ -4,6 +4,17 @@ import Utils from '../utils/Utils.js';
 class LangManager {
 
 
+  /** 
+   * @summary Handle i18n for BeerCrackerz
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * <blockquote>
+   * This class will fetch and store all i18n keys for a given language to be used in BeerCrackerz.
+   * </blockquote> 
+   * @param {String} lang - The selected language to fetch
+   * @param {Function} cb - The callback to call once i18n keys are loaded
+   **/
   constructor(lang, cb) {
     this._lang = (Utils.SUPPORTED_LANGUAGE.indexOf(lang) !== -1) ? lang : 'en';
     this._values = {};
@@ -13,9 +24,11 @@ class LangManager {
 
   _init() {
     return new Promise((resolve, reject) => {
-      Utils.fetchFile(`/static/nls/${this._lang}.json`).then(lang => {
-        this._values = JSON.parse(lang);
-        resolve();
+      fetch(`/static/nls/${this._lang}.json`).then(data => {
+        data.text().then(nls => {
+          this._values = JSON.parse(nls);
+          resolve();
+        }).catch(reject);
       }).catch(reject);
     });
   }
