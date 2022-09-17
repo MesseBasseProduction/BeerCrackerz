@@ -1,4 +1,32 @@
-import './BeerCrackerz.scss';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: BeerCrackerz.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: BeerCrackerz.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import './BeerCrackerz.scss';
 import Kom from './js/core/Kom.js';
 import LangManager from './js/core/LangManager.js';
 
@@ -25,12 +53,12 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * This component handles the whole BeerCrackerz app. It includes the map manipulation,
    * the geolocation API to update the user position and process any map events that are
    * relevant to an UX stand point. For more information, please consult the application
-   * description page at <a href="https://about.beercrackerz.org">https://about.beercrackerz.org/</a>
-   * </blockquote>
+   * description page at &lt;a href="https://about.beercrackerz.org">https://about.beercrackerz.org/&lt;/a>
+   * &lt;/blockquote>
    **/
   constructor() {
     super();
@@ -144,11 +172,11 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _init() method is designed to properly configure the user session, according
    * to its saved preferences and its position. It first build the debug interface,
    * then loads the user preferences, then create the map and finally, events are listened.
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   _init() {
     this._debugElement = Utils.initDebugInterface();
@@ -170,10 +198,10 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _init() method initialize the user object according to its information
    * and statistic so the UI can be properly built.
-   * </blockquote>
+   * &lt;/blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
   _initUser() {
@@ -194,11 +222,11 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _initPreferences() will initialize user preference if they are not set yet,
    * it will also update the UI according to user preferences ; debug DOM visible,
    * update the command classList for selected ones.
-   * </blockquote>
+   * &lt;/blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
   _initPreferences() {
@@ -242,12 +270,12 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _initGeolocation() method will request from browser the location authorization.
    * Once granted, an event listener is set on any position update, so it can update the
    * map state and the markers position. This method can be called again, only if the
    * geolocation watch has been cleared ; for example when updating the accuracy options.
-   * </blockquote>
+   * &lt;/blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
   _initGeolocation() {
@@ -264,7 +292,7 @@ class BeerCrackerz extends MapHelper {
             this.drawUserMarker();
             this.updateMarkerCirclesVisibility();
             // Update map position if focus lock is active
-            if (Utils.getPreference('map-center-on-user') === 'true' && !this._isZooming) {
+            if (Utils.getPreference('map-center-on-user') === 'true' &amp;&amp; !this._isZooming) {
               this._map.setView(this._user);
             }
             // Updating debug info
@@ -288,10 +316,10 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _initMap() method will create the Leaflet.js map with two base layers (plan/satellite),
    * add scale control, remove zoom control and set map bounds.
-   * </blockquote>
+   * &lt;/blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
   _initMap() {
@@ -313,10 +341,10 @@ class BeerCrackerz extends MapHelper {
       this._map.setMaxBounds(Utils.MAP_BOUNDS);
       // Add layer group to interface
       const baseMaps = {};
-      baseMaps[`<p>${this.nls.map('planLayerOSM')}</p>`] = osm;
-      //baseMaps[`<p>${this.nls.map('planLayerGeo')}</p>`] = plan;
-      baseMaps[`<p>${this.nls.map('satLayerEsri')}</p>`] = esri;
-      //baseMaps[`<p>${this.nls.map('satLayerGeo')}</p>`] = geo;
+      baseMaps[`&lt;p>${this.nls.map('planLayerOSM')}&lt;/p>`] = osm;
+      //baseMaps[`&lt;p>${this.nls.map('planLayerGeo')}&lt;/p>`] = plan;
+      baseMaps[`&lt;p>${this.nls.map('satLayerEsri')}&lt;/p>`] = esri;
+      //baseMaps[`&lt;p>${this.nls.map('satLayerGeo')}&lt;/p>`] = geo;
       // Append layer depending on user preference
       if (Utils.getPreference('map-plan-layer')) {
         switch (Utils.getPreference('map-plan-layer')) {
@@ -356,10 +384,10 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _initEvents() method will listen to all required events to manipulate the map. Those events
    * are both for commands and for map events (click, drag, zoom and layer change).
-   * </blockquote>
+   * &lt;/blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
   _initEvents() {
@@ -404,7 +432,7 @@ class BeerCrackerz extends MapHelper {
         }
         // Auto hide labels if zoom level is too high (and restore it when needed)
         if (Utils.getPreference('poi-marker-label') === 'true') {
-          if (this._map.getZoom() < 15) {
+          if (this._map.getZoom() &lt; 15) {
             this.setMarkerLabels(this._marks.spot, false);
             this.setMarkerLabels(this._marks.shop, false);
             this.setMarkerLabels(this._marks.bar, false);
@@ -433,10 +461,10 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _initEvents() method will initialize all saved marker into the map.
    * Markers must be retrieved from server with a specific format to ensure it works
-   * </blockquote>
+   * &lt;/blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
   _initMarkers() {
@@ -452,8 +480,8 @@ class BeerCrackerz extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="/static/img/marker/cluster-icon-green.png" class="cluster-icon">
-              <span class="cluster-label">${cluster.getChildCount()}</span>
+              &lt;img src="/static/img/marker/cluster-icon-green.png" class="cluster-icon">
+              &lt;span class="cluster-label">${cluster.getChildCount()}&lt;/span>
             `
           });
         }
@@ -463,8 +491,8 @@ class BeerCrackerz extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="/static/img/marker/cluster-icon-blue.png" class="cluster-icon">
-              <span class="cluster-label">${cluster.getChildCount()}</span>
+              &lt;img src="/static/img/marker/cluster-icon-blue.png" class="cluster-icon">
+              &lt;span class="cluster-label">${cluster.getChildCount()}&lt;/span>
             `
           });
         }
@@ -474,8 +502,8 @@ class BeerCrackerz extends MapHelper {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
             html: `
-              <img src="/static/img/marker/cluster-icon-red.png" class="cluster-icon">
-              <span class="cluster-label">${cluster.getChildCount()}</span>
+              &lt;img src="/static/img/marker/cluster-icon-red.png" class="cluster-icon">
+              &lt;span class="cluster-label">${cluster.getChildCount()}&lt;/span>
             `
           });
         }
@@ -501,7 +529,7 @@ class BeerCrackerz extends MapHelper {
       };
 
       Utils.getSpots().then(spots => {
-        for (let i = 0; i < spots.length; ++i) {
+        for (let i = 0; i &lt; spots.length; ++i) {
           // TODO @raph
           spots[i].type = 'spot';
           spots[i].user = 'messmaker';
@@ -511,7 +539,7 @@ class BeerCrackerz extends MapHelper {
       });
 
       Utils.getShops().then(shops => {
-        for (let i = 0; i < shops.length; ++i) {
+        for (let i = 0; i &lt; shops.length; ++i) {
           // TODO @raph
           shops[i].type = 'shop';
           shops[i].user = 'messmaker';
@@ -521,7 +549,7 @@ class BeerCrackerz extends MapHelper {
       }); 
     
       Utils.getBars().then(bars => {
-        for (let i = 0; i < bars.length; ++i) {
+        for (let i = 0; i &lt; bars.length; ++i) {
           // TODO @raph
           bars[i].type = 'bar';
           bars[i].user = 'messmaker';
@@ -548,11 +576,11 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The toggleFocusLock() method will, depending on user preference, lock or unlock
    * the map centering around the user marker at each position refresh. This way the user
    * can roam while the map is following its position.
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   toggleFocusLock() {
     if (Utils.getPreference('map-center-on-user') === 'true') {
@@ -576,11 +604,11 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The toggleLabel() method will, depending on user preference, display or not
    * the labels attached to spots/shops/bars marks. This label is basically the
    * mark name given by its creator.
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   toggleLabel() {
     const visible = !(Utils.getPreference('poi-marker-label') === 'true');
@@ -599,11 +627,11 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The toggleCircle() method will, depending on user preference, display or not
    * the circles around the spots/shops/bars marks. This circle indicates the minimal
    * distance which allow the user to make updates on the mark information
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   toggleCircle() {
     const visible = !(Utils.getPreference('poi-show-circle') === 'true');
@@ -624,11 +652,11 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The toggleMarkers() method will, depending on user preference, display or not
    * a given mark type. This way, the user can fine tune what is displayed on the map.
    * A mark type in spots/shops/bars must be given as an argument
-   * </blockquote>
+   * &lt;/blockquote>
    * @param {String} type - The mark type in spots/tores/bars
    **/
   toggleMarkers(type) {
@@ -650,13 +678,13 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The toggleHighAccuracy() method will, depending on user preference, update the
    * geolocation accuracy between optimized and high. The high settings might cause
    * more memory and processing consumption, but gives better results. It will clear
    * any previous position watch on the geolocation API so it can subscribe a new one
    * with the new accuracy parameters (see Utils for values)
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   toggleHighAccuracy() {
     const high = !(Utils.getPreference('map-high-accuracy') === 'true');
@@ -674,11 +702,11 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The toggleDebug() method will, depending on user preference, add or remove
    * the debug DOM element to the user interface. The debug DOM display several
    * useful information to identify an issue with the geolocation API
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   toggleDebug() {
     const visible = !window.DEBUG;
@@ -723,9 +751,9 @@ class BeerCrackerz extends MapHelper {
       description.value = options.description;
       submit.addEventListener('click', () => {
         // Iterate through marks to find matching one (by coord as marks coordinates are unique)
-        for (let i = 0; i < this._marks[options.type].length; ++i) {
+        for (let i = 0; i &lt; this._marks[options.type].length; ++i) {
           // We found, remove circle, label and marker from map/clusters
-          if (options.lat === this._marks[options.type][i].lat && options.lng === this._marks[options.type][i].lng) {
+          if (options.lat === this._marks[options.type][i].lat &amp;&amp; options.lng === this._marks[options.type][i].lng) {
             this._marks[options.type][i].name = name.value;
             this._marks[options.type][i].description = description.value;
             this._marks[options.type][i].rate = rating.currentRate;
@@ -739,7 +767,7 @@ class BeerCrackerz extends MapHelper {
         }
         // Format marks to be saved and then update user preference with
         const formattedMarks = [];
-        for (let i = 0; i < this._marks[options.type].length; ++i) {
+        for (let i = 0; i &lt; this._marks[options.type].length; ++i) {
           formattedMarks.push(this.formatSavedMarker(this._marks[options.type][i]));
         }
         Utils.setPreference(`saved-${options.type}`, JSON.stringify(formattedMarks));
@@ -764,10 +792,10 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since February 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The deleteMarkModal() method will request the mark delete modal, which prompts
    * the user a confirmation to actually delete the mark
-   * </blockquote>
+   * &lt;/blockquote>
    * @param {Function} cb The function to callback with true or false depending on user's choice
    **/
   deleteMarkModal(cb) {
@@ -801,10 +829,10 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The userProfileModal() method will request the user modal, which contains
    * the user preferences, and the user profile information
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   userProfileModal() {
     Utils.fetchTemplate('/static/html/modal/user.html').then(dom => {
@@ -841,10 +869,10 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The hidShowModal() method will request the hide show modal, which all
    * toggles for map elements ; labels/circles/spots/shops/bars
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   hidShowModal() {
     Utils.fetchTemplate('/static/html/modal/hideshow.html').then(dom => {
@@ -898,10 +926,10 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The closeModal() method will close any opened modal if the click event is
    * targeted on the modal overlay or on close buttons
-   * </blockquote>
+   * &lt;/blockquote>
    * @param {Event} event The click event
    **/
   closeModal(event, force) {
@@ -928,19 +956,19 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The mapClicked() method is the callback used when the user clicked on the Leaflet.js map
-   * </blockquote>
+   * &lt;/blockquote>
    * @param {Event} event The click event
    **/
   mapClicked(event) {
-    if (this._newMarker && this._newMarker.popupClosed) {
+    if (this._newMarker &amp;&amp; this._newMarker.popupClosed) {
       // Avoid to open new marker right after popup closing
       this._newMarker = null;
     } else if (this._newMarker === null || !this._newMarker.isBeingDefined) {
       // Only create new marker if none is in progress, and that click is max range to add a marker
       const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [event.latlng.lat, event.latlng.lng]);
-      if (distance < Utils.NEW_MARKER_RANGE) {
+      if (distance &lt; Utils.NEW_MARKER_RANGE) {
         this._newMarker = this.definePOI(event.latlng, this._markerSaved.bind(this));
       } else {
         this._notification.raise(this.nls.notif('newMarkerOutside'));
@@ -957,10 +985,10 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _markerSaved() method is the callback used when a marker is created and added
    * to the map. It is the last method of a new marker proccess.
-   * </blockquote>
+   * &lt;/blockquote>
    * @param {Object} options The new marker options
    **/
   _markerSaved(options) {
@@ -986,27 +1014,27 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The updateMarkerCirclesVisibility() method will update the circle visibility for
    * all mark types (spots/shops/bars) and for the user marker
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   updateMarkerCirclesVisibility() {
     const _updateByType = data => {
       // Check spots in user's proximity
-      for (let i = 0; i < data.length; ++i) {
+      for (let i = 0; i &lt; data.length; ++i) {
         // Only update circles that are in user view
         if (this._map.getBounds().contains(data[i].marker.getLatLng())) {
           const marker = data[i].marker;
           const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [marker.getLatLng().lat, marker.getLatLng().lng]);
           // Only show if user distance to marker is under circle radius
-          if (distance < Utils.CIRCLE_RADIUS && !data[i].circle.visible) {
+          if (distance &lt; Utils.CIRCLE_RADIUS &amp;&amp; !data[i].circle.visible) {
             data[i].circle.visible = true;
             data[i].circle.setStyle({
               opacity: 1,
               fillOpacity: 0.1
             });
-          } else if (distance >= Utils.CIRCLE_RADIUS && data[i].circle.visible) {
+          } else if (distance >= Utils.CIRCLE_RADIUS &amp;&amp; data[i].circle.visible) {
             data[i].circle.visible = false;
             data[i].circle.setStyle({
               opacity: 0,
@@ -1039,10 +1067,10 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since February 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * This method formats a mark returned from MapHelper so it can be parsed
    * using JSON.parse (in order to store it in local storage/database)
-   * </blockquote>
+   * &lt;/blockquote>
    * @param {Object} mark The mark options from internal this._marks[type]
    **/
   formatSavedMarker(mark) {
@@ -1065,9 +1093,9 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since February 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * This method will open a mark edition modal
-   * </blockquote>
+   * &lt;/blockquote>
    * @param {Object} options The mark options to edit
    **/
   editMarker(options) {
@@ -1084,9 +1112,9 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since February 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * This method will delete a mark after prompting the user if he trully wants to
-   * </blockquote>
+   * &lt;/blockquote>
    * @param {Object} options The mark options to delete
    **/
   deleteMarker(options) {
@@ -1094,9 +1122,9 @@ class BeerCrackerz extends MapHelper {
       if (confirm === true) {
         // Iterate through marks to find matching one (by coord as marks coordinates are unique)
         const marks = this._marks[options.type];
-        for (let i = 0; i < marks.length; ++i) {
+        for (let i = 0; i &lt; marks.length; ++i) {
           // We found, remove circle, label and marker from map/clusters
-          if (options.lat === marks[i].lat && options.lng === marks[i].lng) {
+          if (options.lat === marks[i].lat &amp;&amp; options.lng === marks[i].lng) {
             this.setMarkerCircles([ marks[i] ], false);
             this.setMarkerLabels([marks[i]], false);
             this._clusters[options.type].removeLayer(marks[i].marker);
@@ -1108,7 +1136,7 @@ class BeerCrackerz extends MapHelper {
         this._marks[options.type] = marks;
         // Format marks to be saved and then update user preference with
         const formattedMarks = [];
-        for (let i = 0; i < this._marks[options.type].length; ++i) {
+        for (let i = 0; i &lt; this._marks[options.type].length; ++i) {
           formattedMarks.push(this.formatSavedMarker(this._marks[options.type][i]));
         }
         Utils.setPreference(`saved-${options.type}`, JSON.stringify(formattedMarks));
@@ -1132,9 +1160,9 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The addDebugUI() method appends the debug DOM element to the document body
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   addDebugUI() {
     document.body.appendChild(this._debugElement);
@@ -1149,9 +1177,9 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The removeDebugUI() method remove the debug DOM element from the document body
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   removeDebugUI() {
     document.body.removeChild(this._debugElement);
@@ -1166,9 +1194,9 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The updateDebugUI() method will update informations held in the debug DOM
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   updateDebugUI() {
     const options = (Utils.getPreference('map-high-accuracy') === 'true') ? Utils.HIGH_ACCURACY : Utils.OPTIMIZED_ACCURACY;
@@ -1184,9 +1212,9 @@ class BeerCrackerz extends MapHelper {
    * @author Arthur Beaulieu
    * @since August 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The downloadData() method will save to user disk the saved spots as a JSON file
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   downloadData() {
     const dataString = `data:text/json;charset=utf-8,${encodeURIComponent(Utils.getPreference('saved-spot'))}`;
@@ -1251,3 +1279,26 @@ class BeerCrackerz extends MapHelper {
 
 
 export default BeerCrackerz;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BeerCrackerz.html">BeerCrackerz</a></li><li><a href="BeerCrackerzAuth.html">BeerCrackerzAuth</a></li><li><a href="Kom.html">Kom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sat Sep 17 2022 18:34:38 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

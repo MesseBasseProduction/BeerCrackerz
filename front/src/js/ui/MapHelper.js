@@ -1,6 +1,6 @@
-import Markers from './utils/MarkerEnum.js';
-import Rating from './ui/Rating.js';
-import Utils from './utils/Utils.js';
+import Markers from '../utils/MarkerEnum.js';
+import Rating from './Rating.js';
+import Utils from '../utils/Utils.js';
 
 
 class MapHelper {

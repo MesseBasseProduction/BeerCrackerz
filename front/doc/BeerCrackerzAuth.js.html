@@ -1,4 +1,32 @@
-import './BeerCrackerzAuth.scss';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: BeerCrackerzAuth.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: BeerCrackerzAuth.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import './BeerCrackerzAuth.scss';
 import Kom from './js/core/Kom.js';
 import LangManager from './js/core/LangManager.js';
 
@@ -24,12 +52,12 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * This component handles all the authentication pages for BeerCrackerz. It provides the login, the
    * register and the forgot password process. It also provides a public map so unauthenticated user
    * can still browse the best BeerCrackerz spots. For more information, please consult the application
-   * description page at <a href="https://about.beercrackerz.org">https://about.beercrackerz.org/</a>
-   * </blockquote>
+   * description page at &lt;a href="https://about.beercrackerz.org">https://about.beercrackerz.org/&lt;/a>
+   * &lt;/blockquote>
    **/
   constructor() {
     /**
@@ -105,12 +133,12 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _init() method handle the whole app initialization sequence. It first
    * set the aside content to login (as it comes with the base welcome.html template),
    * then initialize the communication and notification handler, and will finally
    * initialize the whole map, markers and interactivity.
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   _init() {
     // By default, the template contains the login aside, no need to fetch it
@@ -133,10 +161,10 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _initMap() method will create the Leaflet.js map with two base layers (plan/satellite),
    * add scale control, remove zoom control and set map bounds.
-   * </blockquote>
+   * &lt;/blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
    _initMap() {
@@ -158,8 +186,8 @@ class BeerCrackerzAuth {
       this._map.setMaxBounds(Utils.MAP_BOUNDS);
       // Add layer group to interface
       const baseMaps = {};
-      baseMaps[`<p>${this.nls.map('planLayerOSM')}</p>`] = osm;
-      baseMaps[`<p>${this.nls.map('satLayerEsri')}</p>`] = esri;
+      baseMaps[`&lt;p>${this.nls.map('planLayerOSM')}&lt;/p>`] = osm;
+      baseMaps[`&lt;p>${this.nls.map('satLayerEsri')}&lt;/p>`] = esri;
       // Append layer depending on user preference
       osm.addTo(this._map);
       // Add layer switch radio on bottom right of the map
@@ -179,12 +207,12 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _initGeolocation() method will request from browser the location authorization.
    * Once granted, an event listener is set on any position update, so it can update the
    * map state and the markers position. This method can be called again, only if the
    * geolocation watch has been cleared ; for example when updating the accuracy options.
-   * </blockquote>
+   * &lt;/blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
    _initGeolocation() {
@@ -217,10 +245,10 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _initEvents() method will listen to all required events to manipulate the map. Those events
    * are both for commands and for map events (click, drag, zoom and layer change).
-   * </blockquote>
+   * &lt;/blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
   _initEvents() {
@@ -237,7 +265,7 @@ class BeerCrackerzAuth {
       this._map.on('zoomend', () => {
         this._isZooming = false;
         // Auto hide labels if zoom level is too high (and restore it when needed)
-        if (this._map.getZoom() < 15) {
+        if (this._map.getZoom() &lt; 15) {
           this._setMarkerLabels(this._marks.spot, false);
           this._setMarkerLabels(this._marks.shop, false);
           this._setMarkerLabels(this._marks.bar, false);
@@ -260,10 +288,10 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _initEvents() method will initialize all saved marker into the map.
    * Markers must be retrieved from server with a specific format to ensure it works
-   * </blockquote>
+   * &lt;/blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
   _initMarkers() {
@@ -287,7 +315,7 @@ class BeerCrackerzAuth {
       };
 
       Utils.getSpots().then(spots => {
-        for (let i = 0; i < spots.length; ++i) {
+        for (let i = 0; i &lt; spots.length; ++i) {
           // TODO @raph
           spots[i].type = 'spot';
           spots[i].user = 'messmaker';
@@ -297,7 +325,7 @@ class BeerCrackerzAuth {
       });
 
       Utils.getShops().then(shops => {
-        for (let i = 0; i < shops.length; ++i) {
+        for (let i = 0; i &lt; shops.length; ++i) {
           // TODO @raph
           shops[i].type = 'shop';
           shops[i].user = 'messmaker';
@@ -307,7 +335,7 @@ class BeerCrackerzAuth {
       });
 
       Utils.getBars().then(bars => {
-        for (let i = 0; i < bars.length; ++i) {
+        for (let i = 0; i &lt; bars.length; ++i) {
           // TODO @raph
           bars[i].type = 'bar';
           bars[i].user = 'messmaker';
@@ -334,10 +362,10 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _toggleAside() method will expand or collapse the aside, depending on the
    * `this._isAsideExpanded` flag state. To be used as a callback on aside expander.
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   _toggleAside() {
     if (this._isAsideExpanded === true) {
@@ -362,10 +390,10 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _loadAside() method is a generic method to load an HTML template and replace
    * the aside DOM content with that template, aswell as updating the document's class. 
-   * </blockquote>
+   * &lt;/blockquote>
    * @param {String} type - The aside to load in login/register/forgot-password
    * @returns {Promise} A Promise resolved when template is loaded and in DOM
    **/
@@ -392,9 +420,9 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _loadLoginAside() method will load the login content into the aside
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   _loadLoginAside() {
     this._loadAside('login').then(this._handleLoginAside.bind(this)).catch(() => {
@@ -411,9 +439,9 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _loadRegisterAside() method will load the register content into the aside
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   _loadRegisterAside() {
     this._loadAside('register').then(this._handleRegisterAside.bind(this)).catch(() => {
@@ -430,9 +458,9 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _loadForgotPasswordAside() method will load the forgot password content into the aside
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   _loadForgotPasswordAside() {
     this._loadAside('forgot-password').then(this._handleResetPasswordAside.bind(this)).catch(() => {
@@ -449,10 +477,10 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _handleLoginAside() method will replace the aside content with the login template,
    * then it will handle its i18n, and all of its interactivity to submit login form to the server.
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   _handleLoginAside() {
     // Update page nls according to browser language
@@ -473,7 +501,7 @@ class BeerCrackerzAuth {
     // useful login method for field check and server response check
     const _frontFieldValidation = () => {
       // Handling empty error cases
-      if (username.value === '' && password.value === '') {
+      if (username.value === '' &amp;&amp; password.value === '') {
         error.classList.add('visible');
         error.innerHTML = this.nls.login('bothEmpty');
         username.classList.add('error');
@@ -531,10 +559,10 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _handleRegisterAside() method will replace the aside content with the register template,
    * then it will handle its i18n, and all of its interactivity to submit register form to the server.
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   _handleRegisterAside() {
     // Update page nls according to browser language
@@ -616,11 +644,11 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _handleResetPasswordAside() method will replace the aside content with the fogot password
    * template, then it will handle its i18n, and all of its interactivity to submit forgot password
    * form to the server.
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   _handleResetPasswordAside() {
     // Update page nls according to browser language
@@ -688,11 +716,11 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _drawUserMarker() method will draw the user marker to the position received
    * from the geolocation API. If the marker doesn't exist yet, it will create it and
    * place it to its default position (see constructor/this._user).
-   * </blockquote>
+   * &lt;/blockquote>
    **/
   _drawUserMarker() {
     if (!this.user.marker) { // Create user marker if not existing
@@ -712,10 +740,10 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _createMarker() method will create all BeerCrackerz kind of markers (spot/shop/bar/user),
    * will create if needed its popup (if provided in options) and will make it interactive to click.
-   * </blockquote>
+   * &lt;/blockquote>
    * @param {Object} options - The marker options
    * @param {String} options.type - The marker type in spot/shop/bar/user
    * @param {Float} options.lat - The marker latitude
@@ -760,10 +788,10 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _markPopupFactory() method will create the associated popup DOM for a given mark. It will
    * fetch the popup template, replace its content with its i18n and provide its tooltip.
-   * </blockquote>
+   * &lt;/blockquote>
    * @param {Object} options - The marker options
    * @param {String} options.type - The marker type in spot/shop/bar/user
    * @param {Float} options.lat - The marker latitude
@@ -787,7 +815,7 @@ class BeerCrackerzAuth {
         Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_BY}`, this.nls.popup(`${options.type}FoundBy`));
         // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
         const rate = element.querySelector(`#${options.type}-rating`);
-        for (let i = 0; i < options.rate + 1; ++i) {
+        for (let i = 0; i &lt; options.rate + 1; ++i) {
           rate.children[i].classList.add('active');
         }
         // Remove edition buttons if marker is not user's one, this does not replace a server test for edition...
@@ -818,15 +846,15 @@ class BeerCrackerzAuth {
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
-   * <blockquote>
+   * &lt;blockquote>
    * The _setMarkerLabels() method will set the label visibility for an array of marks
    * depending on the `visible` argument value.
-   * </blockquote>
+   * &lt;/blockquote>
    * @param {Object[]} marks - The array of marks to edit visibility from
    * @param {Boolean} visible - The labels visibility state to apply
   **/
   _setMarkerLabels(marks, visible) {
-    for (let i = 0; i < marks.length; ++i) {
+    for (let i = 0; i &lt; marks.length; ++i) {
       if (visible) {
         marks[i].tooltip.addTo(this.map);
       } else {
@@ -885,3 +913,26 @@ class BeerCrackerzAuth {
 
 
 export default BeerCrackerzAuth;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BeerCrackerz.html">BeerCrackerz</a></li><li><a href="BeerCrackerzAuth.html">BeerCrackerzAuth</a></li><li><a href="Kom.html">Kom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sat Sep 17 2022 18:34:38 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
