@@ -228,14 +228,12 @@ class MapHelper {
           //element.removeChild(element.querySelector(''));
         }
         // Remove edition buttons if marker is not user's one, this does not replace a server test for edition...
-/*      TODO handle unlogged display  
         if (user !== this.user.username) {
-          element.removeChild(element.querySelector('#popup-edit'));
+          element.querySelector('#popup-edit').parentNode.removeChild(element.querySelector('#popup-edit'));
         } else {
           element.querySelector('#edit-mark').addEventListener('click', this.editMarker.bind(this, options), false);
           element.querySelector('#delete-mark').addEventListener('click', this.deleteMarker.bind(this, options), false);
         }
-*/
         // Append circle around marker
         options.color = Utils[`${options.type.toUpperCase()}_COLOR`];
         options.circle = this.drawCircle(options);

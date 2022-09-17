@@ -1,0 +1,240 @@
+.overlay {
+  align-items: center;
+  background: rgba(255, 255, 255, .8);
+  display: none;
+  height: 100%;
+  justify-content: center;
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  width: 100%;
+  z-index: 30;
+
+  transition: opacity .3s;
+
+  [class$="-modal"] {
+    background: rgba(255, 255, 255, .8);
+    border-radius: .5rem;
+    box-shadow: 0px 0px 10px #424242;
+    padding: 3rem 4rem;
+    position: relative;
+    text-align: center;
+
+    h1 {
+      margin-bottom: 3rem;
+    }
+
+    button {
+      margin-top: 3rem;
+    }
+
+    .modal-close {
+      color: #999;
+      cursor: pointer;
+      font-size: 2.2rem;
+      font-weight: bold;
+      line-height: 1.4rem; /* Because the cross symbol doesn't fit font height */
+      right: 1rem;
+      position: absolute;
+      top: 1rem;
+    }
+
+    .button-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      button {
+        margin-left: 1rem;
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  .new-mark-modal,
+  .edit-mark-modal {
+    width: calc(100% - 2rem);
+
+    h1, p {
+      text-align: center;
+    }
+
+    .rating {
+      margin-bottom: 1.2rem;
+
+      img {
+        cursor: pointer;
+        height: 2.5rem;
+        margin: 0 .25rem;
+        width: 2.5rem;
+
+        &.active {
+          filter: invert(95%) sepia(39%) saturate(3136%) hue-rotate(323deg) brightness(96%) contrast(115%);
+
+          &.selected {
+            filter: invert(75%) sepia(9%) saturate(4002%) hue-rotate(67deg) brightness(81%) contrast(83%);
+          }
+        }
+      }
+    }
+  }
+
+  .hide-show-modal {
+    .item {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      margin: 1rem auto;
+      max-width: 15rem;
+
+      img {
+        margin-right: 2rem;
+        height: 2rem;
+      }
+
+      label {
+        margin-bottom: 0;
+        margin-right: 2rem;
+      }
+
+      input {
+        margin: 0;
+        width: auto;
+      }
+    }
+  }
+
+  .user-profile-modal {
+    height: calc(100% - 2rem);
+    width: calc(100% - 2rem);
+
+    .item {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      margin: 1rem auto;
+      max-width: 25rem;
+
+      img {
+        margin-right: 2rem;
+        height: 2rem;
+      }
+
+      label {
+        margin-bottom: 0;
+        margin-right: 2rem;
+      }
+
+      input {
+        margin: 0;
+        width: auto;
+      }
+    }
+  }
+}
+
+.debug-container {
+  background-color: rgba(255, 255, 255, .8);
+  border-radius: .5rem;
+  color: black;
+  left: 1rem;
+  padding: 1rem;
+  position: absolute;
+  top: 1rem;
+  z-index: 20;
+
+  p {
+    margin-bottom: .2rem;
+  }
+}
+
+.popup {
+  h1, h2, p {
+    margin: 0;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .rating {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    img {
+      height: 1.2rem;
+
+      &.active {
+        filter: invert(95%) sepia(39%) saturate(3136%) hue-rotate(323deg) brightness(96%) contrast(115%);
+      }
+    }
+
+    p {
+      font-style: inherit;
+      margin-left: .5rem;
+    }
+  }
+
+  p {
+    font-style: italic;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+    font-weight: inherit;
+    margin-top: 1.2rem;
+  }
+
+  footer {
+    align-items: center;
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    margin-top: 1.2rem;
+
+    img {
+      cursor: pointer;
+      height: 2rem;
+      margin-left: .5rem;
+    }
+  }
+}
+
+.cluster-icon-wrapper {
+  position: relative;
+
+  .cluster-icon {
+    width: auto;
+    height: 50px;
+    line-height: 50px;
+    margin-left: -21px;
+    margin-top: -13px;
+    filter: drop-shadow(0 0 .25rem #424242);
+    transition: transform .2s, filter .2s;
+
+    &:active,
+    &:focus,
+    &:hover {
+      filter: drop-shadow(0 0 .33rem #A8A8A8);
+      transform: scale(1.066);
+    }
+  }
+
+  .cluster-label {
+    background-color: white;
+    border: solid black 1px;
+    border-radius: .75rem;
+    box-shadow: 0 0 10px #424242;
+    color: black;
+    font-size: 1.1rem;
+    font-weight: bold;
+    left: 15px;
+    padding: .1rem .4rem;
+    position: absolute;
+    top: -15px;
+  }
+}

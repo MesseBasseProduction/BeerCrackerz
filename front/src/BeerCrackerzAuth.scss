@@ -3,6 +3,7 @@
 
 :root {
   --aside-width: 40rem;
+  --aside-offset: 0rem;
 }
 
 body {
@@ -20,7 +21,7 @@ aside {
   justify-content: space-between;
   max-width: var(--aside-width);
   position: absolute;
-  right: 0;
+  right: var(--aside-offset);
   text-align: center;
   top: 0;
   width: 100%;
@@ -35,7 +36,7 @@ aside {
     position: absolute;
     top: 0;
 
-    transition: all .5s;
+    transition: left .2s;
   }
 
   h1 {
@@ -79,113 +80,24 @@ aside {
 
 main.beer-crakerz-map {
   height: 100%;
-  width: calc(100% - var(--aside-width));
+  width: 100%;
   z-index: 10;
 
   transition: width .5s;
-
-  .new-poi {
-    text-align: center;
-
-    p {
-      font-size: 1.6rem;
-      font-weight: bold;
-    }
-
-    button {
-      margin: 1.2rem 0;
-    }
-  }
 
   .marker-tooltip {
     font-style: italic;
     text-align: center;
   }
-}
-
-.notification-wrapper {
-  align-items: center;
-  background-color: rgba(255, 255, 255, .8);
-  border-radius: .5rem;
-  box-shadow: 0 0 10px #424242;
-  display: flex;
-  flex-direction: column;
-  height: 3rem;
-  justify-content: center;
-  left: calc(50% - 15rem);
-  opacity: 0;
-  position: absolute;
-  top: -4rem;
-  width: 30rem;
-  z-index: 40;
-
-  transition: top .3s, opacity .2s ease-out;
-
-  &.opened {
-    opacity: 1;
-    top: 1rem;
-  }
-
-  .notification-message {
-    font-style: italic;
-    margin: 0;
+  /* Endure attribution and layers controls are stiking to aside when collapsing/expanding*/
+  .leaflet-control-layers.leaflet-control,
+  .leaflet-control-attribution.leaflet-control {
+    right: calc(var(--aside-width) + var(--aside-offset));
+    transition: right .5s;
   }
 }
 
-.zoom-slider {
-  align-items: center;
-  background: white;
-  background-clip: padding-box;
-  border: 2px solid rgba(0, 0, 0, .2);
-  border-radius: .5rem;
-  box-shadow: 0 0 10px #424242;
-  display: flex;
-  flex-direction: column;
-  height: 20rem;
-  justify-content: center;
-  opacity: 0;
-  position: absolute;
-  right: -6rem;
-  top: calc(50% - 10rem);
-  width: 4.8rem;
-  z-index: 20;
-
-  transition: right .3s, opacity .2s ease-out;
-
-  &.opened {
-    opacity: 1;
-    right: calc(var(--aside-width) + 1rem);
-  }
-
-  p {
-    cursor: pointer;
-    font-size: 1.6rem;
-    font-weight: bold;
-    margin: .5rem 0;
-    user-select: none;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  .slider-wrapper {
-    border-radius: .5rem;
-    box-shadow: 0 0 10px #424242;
-    height: 80%;
-    overflow: hidden;
-    position: relative;
-    width: 20%;
-
-    .slider-position {
-      background-color: lime;
-      bottom: 0;
-      position: absolute;
-      width: 100%;
-
-      transition: height .2s;
-    }
-  }
-}
-
+@import 'scss/overlay';
+@import 'scss/component/notification';
+@import 'scss/component/zoomslider';
 @import 'scss/leaflet';

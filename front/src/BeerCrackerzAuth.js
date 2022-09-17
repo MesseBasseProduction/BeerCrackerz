@@ -13,20 +13,14 @@ class BeerCrackerzAuth {
 
   constructor() {
     /**
-     * The user object holds everything useful to ensure a proper session
+     * The minimal user object holds position and accuracy
      * @type {Object}
      * @private
      **/
     this._user = {
       lat: 48.853121540141096, // Default lat to Paris Notre-Dame latitude
       lng: 2.3498955769881156, // Default lng to Paris Notre-Dame longitude
-      accuracy: 0, // Accuracy in meter given by geolocation API
-      marker: null, // The user marker on map
-      circle: null, // The accuracy circle around the user marker
-      range: null, // The range in which user can add a new marker
-      color: Utils.USER_COLOR, // The color to use for circle (match the user marker color)
-      id: -1,
-      username: ''
+      accuracy: 0 // Accuracy in meter given by geolocation API
     };
     /**
      * The stored marks for spots, shops and bars
@@ -319,26 +313,14 @@ class BeerCrackerzAuth {
   _toggleAside() {
     if (this._isAsideExpanded === true) {
       this._isAsideExpanded = false;
-      document.getElementById('aside').style.right = '-40rem';
-      document.documentElement.style.setProperty('--aside-width', '0');
-      // Refreshing map to load new tiles
-      requestAnimationFrame(() => { this._map.invalidateSize(); });
-      setTimeout(() => {
-        document.getElementById('aside-expander').style.left = '-44.8rem'; 
-        document.getElementById('aside-expander-icon').src = '/static/img/logo/left.svg';
-      }, 100);
+      document.documentElement.style.setProperty('--aside-offset', '-40rem');
+      document.getElementById('aside-expander-icon').src = '/static/img/logo/left.svg';
+      setTimeout(() => document.getElementById('aside-expander').style.left = '-5rem', 300);
     } else {
       this._isAsideExpanded = true;
-      document.getElementById('aside').style.maxWidth = '40rem';
-      document.getElementById('aside').style.right = '0';
-      document.getElementById('aside-expander').style.transition = 'none';
-      document.getElementById('aside-expander').style.left = '0';
+      document.documentElement.style.setProperty('--aside-offset', '0rem');
       document.getElementById('aside-expander-icon').src = '/static/img/logo/right.svg';
-      setTimeout(() => {
-        document.documentElement.style.setProperty('--aside-width', '40rem');
-        document.getElementById('aside').style.maxWidth = 'var(--aside-width)';
-        document.getElementById('aside-expander').style.transition = 'all .5s';
-      }, 500);
+      document.getElementById('aside-expander').style.left = '0';
     }
   }
 
@@ -367,7 +349,7 @@ class BeerCrackerzAuth {
       // Use main div to inject OSM into
       this._map = window.L.map('beer-crakerz-map', {
         zoomControl: false,
-      }).setView([this._user.lat, this._user.lng], 18);
+      }).setView([48.853121540141096, 2.3498955769881156], 12);
       // Add meter and feet scale on map
       window.L.control.scale().addTo(this._map);
       // Place user marker on the map
@@ -421,7 +403,6 @@ class BeerCrackerzAuth {
           // Only draw marker if map is already created
           if (this._map) {
             this.drawUserMarker();
-            this._map.setView(this._user);
           }
         }, null, Utils.HIGH_ACCURACY);
         resolve();
@@ -587,10 +568,6 @@ class BeerCrackerzAuth {
     if (!this.user.marker) { // Create user marker if not existing
       this.user.type = 'user';
       this.user.marker = this.placeMarker(this.user);
-      // Append circle around marker for accuracy and range for new marker
-      this.user.radius = this.user.accuracy;
-      // Callback on marker clicked to add marker on user position
-      this.user.marker.on('click', this.mapClicked.bind(this));
     } else { // Update user marker position, range, and accuracy circle
       this.user.marker.setLatLng(this.user);
     }
@@ -644,7 +621,8 @@ class BeerCrackerzAuth {
           rate.children[i].classList.add('active');
         }
         // Remove edition buttons if marker is not user's one, this does not replace a server test for edition...
-        //element.removeChild(element.querySelector('#popup-edit'));
+        element.querySelector('#popup-social').parentNode.removeChild(element.querySelector('#popup-social'));
+        element.querySelector('#popup-edit').parentNode.removeChild(element.querySelector('#popup-edit'));
         // Append circle around marker
         options.color = Utils[`${options.type.toUpperCase()}_COLOR`];
         // Create label for new marker

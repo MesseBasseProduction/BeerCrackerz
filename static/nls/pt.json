@@ -1,0 +1,134 @@
+{
+  "debug": {
+    "lat": "Latitude",
+    "lng": "Longitude",
+    "updates": "Updates",
+    "accuracy": "Accuracy",
+    "highAccuracy": "High accuracy",
+    "posAge": "Position max age",
+    "posTimeout": "Position timeout",
+    "zoom": "Zoom level",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "marks": "Marks",
+    "export": "Export data"
+  },
+  "notif": {
+    "geolocationError": "Your browser doesn't implement the geolocation API",
+    "newMarkerOutside": "New marker out of your range",
+    "spotAdded": "New spot saved to map",
+    "shopAdded": "New shop saved to map",
+    "barAdded": "New bar saved to map",
+    "spotDeleted": "Spot has been successfully deleted from map",
+    "shopDeleted": "Shop has been successfully deleted from map",
+    "barDeleted": "Bar has been successfully deleted from map",
+    "markNameEmpty": "You didn't specified a name for the mark",
+    "lockFocusOn": "Centering and locking view on your position",
+    "unlockFocusOn": "Position locking ended"
+  },
+  "nav": {
+    "add": "Add",
+    "cancel": "Cancel",
+    "close": "Close",
+    "delete": "Delete"
+  },
+  "map": {
+    "newTitle": "New marker",
+    "newSpot": "Add a spot",
+    "newShop": "Add a shop",
+    "newBar": "Add a bar",
+    "planLayerOSM": "Plan OSM",
+    "planLayerGeo": "Plan GeoPortail",
+    "satLayerEsri": "Satellite ESRI",
+    "satLayerGeo": "Satellite GeoPortail"
+  },
+  "spot": {
+    "title": "New spot",
+    "subtitle": "A spot is a remarkable place to crack a beer ! Share it with the community, wether it is for the astonishing view of for whatever it is enjoyable to drink a beer!",
+    "nameLabel": "Name that spot",
+    "descLabel": "Why don't you describe it",
+    "rateLabel": "Give it a note"
+  },
+  "shop": {
+    "title": "New shop",
+    "subtitle": "The must have place to refill your beer stock. The more info you provide, the better you help your fellow beer crackerz!",
+    "nameLabel": "Shop name",
+    "descLabel": "Why don't you describe it",
+    "rateLabel": "Give it a note"
+  },
+  "bar": {
+    "title": "New bar",
+    "subtitle": "A bar is a holly place where you can get some nicely colded draft beers!",
+    "nameLabel": "Bar name",
+    "descLabel": "Why don't you describe it",
+    "rateLabel": "Give it a note"
+  },
+  "modal": {
+    "userTitle": "User account",
+    "userAccuracyPref": "High precision",
+    "userDebugPref": "Debug interface",
+    "aboutTitle": "About BeerCrackerz",
+    "aboutDesc": "A brilliant idea from David Béché!<br>BeerCrackerz is the beer lovers comunity, filled with pint slayers and cereals lovers",
+    "hideShowTitle": "Map options",
+    "hideShowLabels": "Labels",
+    "hideShowCircles": "Circles",
+    "hideShowSpots": "Spots",
+    "hideShowShops": "Shops",
+    "hideShowBars": "Bars",
+    "deleteMarkTitle": "Delete mark",
+    "deleteMarkDesc": "Are you sure you want to delete this mark?<br>This action is permanent and can not be reverted.",
+    "spotEditTitle": "Edit spot",
+    "shopEditTitle": "Edit shop",
+    "barEditTitle": "Edit bar"
+  },
+  "popup": {
+    "spotFoundBy": "A spot discovered by",
+    "shopFoundBy": "A shop added by",
+    "barFoundBy": "A bar added by",
+    "spotNoDesc": "No description available for this spot",
+    "shopNoDesc": "No description available for this shop",
+    "barNoDesc": "No description available for this bar"
+  },
+  "auth": {
+    "login": {
+      "headTitle": "Connexion | BeerCrackerz",
+      "subtitle": "Se connecter",
+      "hiddenError": "Oh! Un texte caché!",
+      "username": "Nom d'utilisateur ou Email",
+      "password": "Mot de passe",
+      "forgot": "Vous l'avez oublié?",
+      "login": "Se connecter",
+      "notRegistered": "Pas encore inscrit?",
+      "register": "Créer un compte",
+      "bothEmpty": "Veuillez saisir un nom d'utilisateur et un mot de passe",
+      "usernameEmpty": "Veuillez saisir un nom d'utilisateur",
+      "passwordEmpty": "Veuillez saisir votre mot de passe",
+      "serverError": "Une erreur serveur est survenue, contactez le support"
+    },
+    "register": {
+      "headTitle": "S'inscrire | BeerCrackerz",
+      "subtitle": "S'inscrire",
+      "hiddenError": "Oh! Un texte caché!",
+      "username": "Nom d'utilisateur",
+      "mail": "Adresse email",
+      "password1": "Mot de passe",
+      "password2": "Confirmer le mot de passe",
+      "register": "S'inscrire",
+      "notRegistered": "Déjà inscrit?",
+      "login": "Se connecter",
+      "fieldEmpty": "Veuillez remplir tous les champs du formulaire",
+      "notMatchingPassword": "Les deux mots de passe ne correspondent pas"
+    },
+    "forgotPassword": {
+      "headTitle": "Mot de passe oublié | BeerCrackerz",
+      "subtitle": "Mot de passe oublié",
+      "hiddenError": "Oh! Un texte caché!",
+      "mail": "Mail",
+      "submit": "Réinitialiser votre mot de passe",
+      "loginLabel": "Vous vous en souvenez?",
+      "login": "Se connecter",
+      "fieldEmpty": "Renseignez votre adresse mail",
+      "serverError": "Une erreur serveur est survenue, contactez le support"
+    }
+  }
+}
