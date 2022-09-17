@@ -16,7 +16,7 @@ class MapHelper {
 
   placeMarker(options) {
     let icon = Markers.black;
-    if (options.type === 'store') {
+    if (options.type === 'shop') {
       icon = Markers.blue;
     } else if (options.type === 'spot') {
       icon = Markers.green;
@@ -38,8 +38,8 @@ class MapHelper {
     if (options.dom) {
       marker.bindPopup(options.dom);
     }
-    // All markers that are not spot/store/bar should be appended to the map
-    if (['spot', 'store', 'bar'].indexOf(options.type) === -1) {
+    // All markers that are not spot/shop/bar should be appended to the map
+    if (['spot', 'shop', 'bar'].indexOf(options.type) === -1) {
       marker.addTo(this.map);
     }
 
@@ -87,23 +87,23 @@ class MapHelper {
       wrapper: document.createElement('DIV'),
       title: document.createElement('P'),
       spot: document.createElement('BUTTON'),
-      store: document.createElement('BUTTON'),
+      shop: document.createElement('BUTTON'),
       bar: document.createElement('BUTTON'),
     };
     // Update class and inner HTMl content according to user's nls
     dom.wrapper.className = 'new-poi';
     dom.title.innerHTML = this.nls.map('newTitle');
     dom.spot.innerHTML = this.nls.map('newSpot');
-    dom.store.innerHTML = this.nls.map('newStore');
+    dom.shop.innerHTML = this.nls.map('newShop');
     dom.bar.innerHTML = this.nls.map('newBar');
     // Atach data type to each button (to be used in clicked callback)
     dom.spot.dataset.type = 'spot';
-    dom.store.dataset.type = 'store';
+    dom.shop.dataset.type = 'shop';
     dom.bar.dataset.type = 'bar';
     // DOM chaining
     dom.wrapper.appendChild(dom.title);
     dom.wrapper.appendChild(dom.spot);
-    dom.wrapper.appendChild(dom.store);
+    dom.wrapper.appendChild(dom.shop);
     dom.wrapper.appendChild(dom.bar);
     // Update popup content with DOM elements
     options.dom = dom.wrapper;
@@ -119,7 +119,7 @@ class MapHelper {
     };
     // Buttons click events
     dom.spot.addEventListener('click', _prepareNewMark);
-    dom.store.addEventListener('click', _prepareNewMark);
+    dom.shop.addEventListener('click', _prepareNewMark);
     dom.bar.addEventListener('click', _prepareNewMark);
     // Listen to clicks outside of popup to close new mark
     marker.on('popupclose', () => {
@@ -147,13 +147,13 @@ class MapHelper {
       const cancel = dom.querySelector(`#${type}-cancel`);
       const close = dom.querySelector('#modal-close');
       // Update nls for template
-      Utils.replaceString(dom.querySelector(`#nls-${type}-title`), `{{${type.toUpperCase()}_TITLE}}`, this.nls[type]('title'));
-      Utils.replaceString(dom.querySelector(`#nls-${type}-subtitle`), `{{${type.toUpperCase()}_SUBTITLE}}`, this.nls[type]('subtitle'));
-      Utils.replaceString(dom.querySelector(`#nls-${type}-name`), `{{${type.toUpperCase()}_NAME}}`, this.nls[type]('nameLabel'));
-      Utils.replaceString(dom.querySelector(`#nls-${type}-desc`), `{{${type.toUpperCase()}_DESC}}`, this.nls[type]('descLabel'));
-      Utils.replaceString(dom.querySelector(`#nls-${type}-rate`), `{{${type.toUpperCase()}_RATE}}`, this.nls[type]('rateLabel'));
-      Utils.replaceString(submit, `{{${type.toUpperCase()}_SUBMIT}}`, this.nls.nav('add'));
-      Utils.replaceString(cancel, `{{${type.toUpperCase()}_CANCEL}}`, this.nls.nav('cancel'));
+      Utils.replaceString(dom.querySelector(`#nls-${type}-title`), `{${type.toUpperCase()}_TITLE}`, this.nls[type]('title'));
+      Utils.replaceString(dom.querySelector(`#nls-${type}-subtitle`), `{${type.toUpperCase()}_SUBTITLE}`, this.nls[type]('subtitle'));
+      Utils.replaceString(dom.querySelector(`#nls-${type}-name`), `{${type.toUpperCase()}_NAME}`, this.nls[type]('nameLabel'));
+      Utils.replaceString(dom.querySelector(`#nls-${type}-desc`), `{${type.toUpperCase()}_DESC}`, this.nls[type]('descLabel'));
+      Utils.replaceString(dom.querySelector(`#nls-${type}-rate`), `{${type.toUpperCase()}_RATE}`, this.nls[type]('rateLabel'));
+      Utils.replaceString(submit, `{${type.toUpperCase()}_SUBMIT}`, this.nls.nav('add'));
+      Utils.replaceString(cancel, `{${type.toUpperCase()}_CANCEL}`, this.nls.nav('cancel'));
       // Method to clear modal and hide it, and remove temporary marker on the map
       const _cleanDefineUI = () => {
         options.marker.isBeingDefined = false;
@@ -189,8 +189,8 @@ class MapHelper {
   }
 
 
-  defineNewStore(options) {
-    this.defineMarkFactory('store', options);
+  defineNewShop(options) {
+    this.defineMarkFactory('shop', options);
   }
 
 

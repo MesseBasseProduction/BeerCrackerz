@@ -66,14 +66,14 @@ class BeerCrackerz extends MapHelper {
       username: ''
     };
     /**
-     * The stored marks for spots, stores and bars
+     * The stored marks for spots, shops and bars
      * @type {Object}
      * @private
      **/
     this._marks = {
       spot: [],
-      store: [],
-      bar: [],
+      shop: [],
+      bar: []
     };
     /**
      * The stored clusters for markers, see Leaflet.markercluster plugin
@@ -82,8 +82,8 @@ class BeerCrackerz extends MapHelper {
      **/
     this._clusters = {
       spot: {},
-      store: {},
-      bar: {},
+      shop: {},
+      bar: {}
     };
     /**
      * The temporary marker for new marks only
@@ -198,8 +198,8 @@ class BeerCrackerz extends MapHelper {
         Utils.setPreference('poi-show-spot', true);
       }
 
-      if (Utils.getPreference('poi-show-store') === null) {
-        Utils.setPreference('poi-show-store', true);
+      if (Utils.getPreference('poi-show-shop') === null) {
+        Utils.setPreference('poi-show-shop', true);
       }
 
       if (Utils.getPreference('poi-show-bar') === null) {
@@ -376,7 +376,7 @@ class BeerCrackerz extends MapHelper {
         this._isZooming = true;
         if (Utils.getPreference('poi-show-circle') === 'true') {
           this.setMarkerCircles(this._marks.spot, false);
-          this.setMarkerCircles(this._marks.store, false);
+          this.setMarkerCircles(this._marks.shop, false);
           this.setMarkerCircles(this._marks.bar, false);
           this.setMarkerCircles([this._user], false);
           this.setMarkerCircles([{ circle: this._user.range }], false);
@@ -387,7 +387,7 @@ class BeerCrackerz extends MapHelper {
         if (Utils.getPreference('poi-show-circle') === 'true') {
           if (this._map.getZoom() >= 15) {
             this.setMarkerCircles(this._marks.spot, true);
-            this.setMarkerCircles(this._marks.store, true);
+            this.setMarkerCircles(this._marks.shop, true);
             this.setMarkerCircles(this._marks.bar, true);
             this.setMarkerCircles([this._user], true);
             this.setMarkerCircles([{ circle: this._user.range }], true);
@@ -397,11 +397,11 @@ class BeerCrackerz extends MapHelper {
         if (Utils.getPreference('poi-marker-label') === 'true') {
           if (this._map.getZoom() < 15) {
             this.setMarkerLabels(this._marks.spot, false);
-            this.setMarkerLabels(this._marks.store, false);
+            this.setMarkerLabels(this._marks.shop, false);
             this.setMarkerLabels(this._marks.bar, false);
           } else {
             this.setMarkerLabels(this._marks.spot, true);
-            this.setMarkerLabels(this._marks.store, true);
+            this.setMarkerLabels(this._marks.shop, true);
             this.setMarkerLabels(this._marks.bar, true);
           }
         }
@@ -449,7 +449,7 @@ class BeerCrackerz extends MapHelper {
           });
         }
       }));
-      this._clusters.store = new window.L.MarkerClusterGroup(Object.assign(clusterOptions, {
+      this._clusters.shop = new window.L.MarkerClusterGroup(Object.assign(clusterOptions, {
         iconCreateFunction: cluster => {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
@@ -475,8 +475,8 @@ class BeerCrackerz extends MapHelper {
       if (Utils.getPreference(`poi-show-spot`) === 'true') {
         this._map.addLayer(this._clusters.spot);
       }
-      if (Utils.getPreference(`poi-show-store`) === 'true') {
-        this._map.addLayer(this._clusters.store);
+      if (Utils.getPreference(`poi-show-shop`) === 'true') {
+        this._map.addLayer(this._clusters.shop);
       }
       if (Utils.getPreference(`poi-show-bar`) === 'true') {
         this._map.addLayer(this._clusters.bar);
@@ -497,21 +497,17 @@ class BeerCrackerz extends MapHelper {
           spots[i].type = 'spot';
           spots[i].user = 'messmaker';
           spots[i].userId = 42;
-          spots[i].lat = spots[i].latitude;
-          spots[i].lng = spots[i].longitude;
           iterateMarkers(spots[i]);
         }
       });
 
-      Utils.getStores().then(stores => {
-        for (let i = 0; i < stores.length; ++i) {
+      Utils.getShops().then(shops => {
+        for (let i = 0; i < shops.length; ++i) {
           // TODO @raph
-          stores[i].type = 'store';
-          stores[i].user = 'messmaker';
-          stores[i].userId = 42;
-          stores[i].lat = stores[i].latitude;
-          stores[i].lng = stores[i].longitude;
-          iterateMarkers(stores[i]);
+          shops[i].type = 'shop';
+          shops[i].user = 'messmaker';
+          shops[i].userId = 42;
+          iterateMarkers(shops[i]);
         }
       }); 
     
@@ -521,8 +517,6 @@ class BeerCrackerz extends MapHelper {
           bars[i].type = 'bar';
           bars[i].user = 'messmaker';
           bars[i].userId = 42;
-          bars[i].lat = bars[i].latitude;
-          bars[i].lng = bars[i].longitude;
           iterateMarkers(bars[i]);
         }
       }); 
@@ -575,14 +569,14 @@ class BeerCrackerz extends MapHelper {
    * @description
    * <blockquote>
    * The toggleLabel() method will, depending on user preference, display or not
-   * the labels attached to spots/stores/bars marks. This label is basically the
+   * the labels attached to spots/shops/bars marks. This label is basically the
    * mark name given by its creator.
    * </blockquote>
    **/
   toggleLabel() {
     const visible = !(Utils.getPreference('poi-marker-label') === 'true');
     this.setMarkerLabels(this._marks.spot, visible);
-    this.setMarkerLabels(this._marks.store, visible);
+    this.setMarkerLabels(this._marks.shop, visible);
     this.setMarkerLabels(this._marks.bar, visible);
     Utils.setPreference('poi-marker-label', visible);
   }
@@ -598,14 +592,14 @@ class BeerCrackerz extends MapHelper {
    * @description
    * <blockquote>
    * The toggleCircle() method will, depending on user preference, display or not
-   * the circles around the spots/stores/bars marks. This circle indicates the minimal
+   * the circles around the spots/shops/bars marks. This circle indicates the minimal
    * distance which allow the user to make updates on the mark information
    * </blockquote>
    **/
   toggleCircle() {
     const visible = !(Utils.getPreference('poi-show-circle') === 'true');
     this.setMarkerCircles(this._marks.spot, visible);
-    this.setMarkerCircles(this._marks.store, visible);
+    this.setMarkerCircles(this._marks.shop, visible);
     this.setMarkerCircles(this._marks.bar, visible);
     this.setMarkerCircles([this._user], visible);
     this.setMarkerCircles([{ circle: this._user.range }], visible);
@@ -624,7 +618,7 @@ class BeerCrackerz extends MapHelper {
    * <blockquote>
    * The toggleMarkers() method will, depending on user preference, display or not
    * a given mark type. This way, the user can fine tune what is displayed on the map.
-   * A mark type in spots/stores/bars must be given as an argument
+   * A mark type in spots/shops/bars must be given as an argument
    * </blockquote>
    * @param {String} type The mark type in spots/tores/bars
    **/
@@ -840,7 +834,7 @@ class BeerCrackerz extends MapHelper {
    * @description
    * <blockquote>
    * The hidShowModal() method will request the hide show modal, which all
-   * toggles for map elements ; labels/circles/spots/stores/bars
+   * toggles for map elements ; labels/circles/spots/shops/bars
    * </blockquote>
    **/
   hidShowModal() {
@@ -850,7 +844,7 @@ class BeerCrackerz extends MapHelper {
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-labels`), `{LABELS_HIDESHOW_MODAL}`, this.nls.modal('hideShowLabels'));
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-circles`), `{CIRCLES_HIDESHOW_MODAL}`, this.nls.modal('hideShowCircles'));
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-spots`), `{SPOTS_HIDESHOW_MODAL}`, this.nls.modal('hideShowSpots'));
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-stores`), `{STORES_HIDESHOW_MODAL}`, this.nls.modal('hideShowStores'));
+      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-shops`), `{SHOPS_HIDESHOW_MODAL}`, this.nls.modal('hideShowShops'));
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-bars`), `{BARS_HIDESHOW_MODAL}`, this.nls.modal('hideShowBars'));
       Utils.replaceString(dom.querySelector(`#modal-close-button`), `{MODAL_CLOSE}`, this.nls.nav('close'));
       document.getElementById('overlay').appendChild(dom);
@@ -868,8 +862,8 @@ class BeerCrackerz extends MapHelper {
         document.getElementById('show-spots').checked = true;
       }
 
-      if (Utils.getPreference('poi-show-store') === 'true') {
-        document.getElementById('show-stores').checked = true;
+      if (Utils.getPreference('poi-show-shop') === 'true') {
+        document.getElementById('show-shops').checked = true;
       }
 
       if (Utils.getPreference('poi-show-bar') === 'true') {
@@ -879,7 +873,7 @@ class BeerCrackerz extends MapHelper {
       document.getElementById('label-toggle').addEventListener('change', this.toggleLabel.bind(this));
       document.getElementById('circle-toggle').addEventListener('change', this.toggleCircle.bind(this));
       document.getElementById('show-spots').addEventListener('change', this.toggleMarkers.bind(this, 'spot'));
-      document.getElementById('show-stores').addEventListener('change', this.toggleMarkers.bind(this, 'store'));
+      document.getElementById('show-shops').addEventListener('change', this.toggleMarkers.bind(this, 'shop'));
       document.getElementById('show-bars').addEventListener('change', this.toggleMarkers.bind(this, 'bar'));
 
       setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
@@ -987,7 +981,7 @@ class BeerCrackerz extends MapHelper {
    * @description
    * <blockquote>
    * The updateMarkerCirclesVisibility() method will update the circle visibility for
-   * all mark types (spots/stores/bars) and for the user marker
+   * all mark types (spots/shops/bars) and for the user marker
    * </blockquote>
    **/
   updateMarkerCirclesVisibility() {
@@ -1018,7 +1012,7 @@ class BeerCrackerz extends MapHelper {
 
     if (Utils.getPreference('poi-show-circle') === 'true') {
       _updateByType(this._marks.spot);
-      _updateByType(this._marks.store);
+      _updateByType(this._marks.shop);
       _updateByType(this._marks.bar);
       _updateByType([this._user]);
     }
@@ -1219,7 +1213,7 @@ class BeerCrackerz extends MapHelper {
   /**
    * @public
    * @property {Object} marks
-   * Leaflet.js marks that holds spot/store/bar marks as subkeys
+   * Leaflet.js marks that holds spot/shop/bar marks as subkeys
    **/
   get marks() {
     return this._marks;

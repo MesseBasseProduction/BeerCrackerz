@@ -1,18 +1,17 @@
 import './BeerCrackerzAuth.scss';
-import MapHelper from './js/MapHelper.js';
 import Providers from './js/utils/ProviderEnum.js';
 import ZoomSlider from './js/ui/ZoomSlider.js';
 import LangManager from './js/utils/LangManager.js';
 import Notification from './js/ui/Notification.js';
+import Markers from './js/utils/MarkerEnum.js';
 import Utils from './js/utils/Utils.js';
 import Kom from './js/utils/Kom.js';
 
 
-class BeerCrackerzAuth extends MapHelper {
+class BeerCrackerzAuth {
 
 
   constructor() {
-    super();
     /**
      * The user object holds everything useful to ensure a proper session
      * @type {Object}
@@ -30,14 +29,14 @@ class BeerCrackerzAuth extends MapHelper {
       username: ''
     };
     /**
-     * The stored marks for spots, stores and bars
+     * The stored marks for spots, shops and bars
      * @type {Object}
      * @private
      **/
      this._marks = {
       spot: [],
-      store: [],
-      bar: [],
+      shop: [],
+      bar: []
     };
     /**
      * The stored clusters for markers, see Leaflet.markercluster plugin
@@ -46,8 +45,8 @@ class BeerCrackerzAuth extends MapHelper {
      **/
      this._clusters = {
       spot: {},
-      store: {},
-      bar: {},
+      shop: {},
+      bar: {}
     };
 
     this._aside = null;
@@ -209,7 +208,12 @@ class BeerCrackerzAuth extends MapHelper {
       password1.classList.remove('error');
       password2.classList.remove('error');
       if (_frontFieldValidation()) {
-        Utils.postReq('/api/register/submit').then(_backValidation).catch(() => {
+        this._kom.post('/api/register/submit', {
+          username: username.value,
+          email: mail.value,
+          password1: password1.value,
+          password2: password2.value
+        }).then(_backValidation).catch(() => {
           error.classList.add('visible');
           error.innerHTML = this.nls.register('serverError');
         });
@@ -259,7 +263,9 @@ class BeerCrackerzAuth extends MapHelper {
       error.classList.remove('visible');
       mail.classList.remove('error');
       if (_frontFieldValidation()) {
-        Utils.postReq('/api/password/reset').then(_backValidation).catch(() => {
+        this._kom.post('/api/password/reset', {
+          email: mail.value
+        }).then(_backValidation).catch(() => {
           error.classList.add('visible');
           error.innerHTML = this.nls.forgotPassword('serverError');
         });
@@ -273,7 +279,7 @@ class BeerCrackerzAuth extends MapHelper {
 
   _loadAside(type) {
     return new Promise((resolve, reject) => {
-      Utils.fetchTemplate(`/static/html/aside/${type}.html`).then(dom => {
+      this._kom.getTemplate(`/static/html/aside/${type}.html`).then(dom => {
         document.body.className = ''; // Clear previous css class
         document.body.classList.add(type); // Update body class with current aside view
         // We need to get aside at the last moment because of nls that changed HTML content
@@ -404,7 +410,6 @@ class BeerCrackerzAuth extends MapHelper {
    _initGeolocation() {
     return new Promise(resolve => {
       if ('geolocation' in navigator) {
-        const options = (Utils.getPreference('map-high-accuracy') === 'true') ? Utils.HIGH_ACCURACY : Utils.OPTIMIZED_ACCURACY;
         this._watchId = navigator.geolocation.watchPosition(position => {
           // Update saved user position
           this._user.lat = position.coords.latitude;
@@ -415,7 +420,7 @@ class BeerCrackerzAuth extends MapHelper {
             this.drawUserMarker();
             this._map.setView(this._user);
           }
-        }, null, options);
+        }, null, Utils.HIGH_ACCURACY);
         resolve();
       } else {
         this._notification.raise(this.nls.notif('geolocationError'));
@@ -447,48 +452,23 @@ class BeerCrackerzAuth extends MapHelper {
       this._map.on('drag', () => {
         // Constrain pan to the map bounds
         this._map.panInsideBounds(Utils.MAP_BOUNDS, { animate: true });
-        // Disable lock focus if user drags the map
-        if (Utils.getPreference('map-center-on-user') === 'true') {
-          this.toggleFocusLock();
-        }
       });
       // Map events
       this._map.on('zoomstart', () => {
         this._isZooming = true;
-        if (Utils.getPreference('poi-show-circle') === 'true') {
-          this.setMarkerCircles(this._marks.spot, false);
-          this.setMarkerCircles(this._marks.store, false);
-          this.setMarkerCircles(this._marks.bar, false);
-          this.setMarkerCircles([this._user], false);
-          this.setMarkerCircles([{ circle: this._user.range }], false);
-        }
       });
       this._map.on('zoomend', () => {
         this._isZooming = false;
-        if (Utils.getPreference('poi-show-circle') === 'true') {
-          if (this._map.getZoom() >= 15) {
-            this.setMarkerCircles(this._marks.spot, true);
-            this.setMarkerCircles(this._marks.store, true);
-            this.setMarkerCircles(this._marks.bar, true);
-            this.setMarkerCircles([this._user], true);
-            this.setMarkerCircles([{ circle: this._user.range }], true);
-          }
-        }
         // Auto hide labels if zoom level is too high (and restore it when needed)
-        if (Utils.getPreference('poi-marker-label') === 'true') {
-          if (this._map.getZoom() < 15) {
-            this.setMarkerLabels(this._marks.spot, false);
-            this.setMarkerLabels(this._marks.store, false);
-            this.setMarkerLabels(this._marks.bar, false);
-          } else {
-            this.setMarkerLabels(this._marks.spot, true);
-            this.setMarkerLabels(this._marks.store, true);
-            this.setMarkerLabels(this._marks.bar, true);
-          }
+        if (this._map.getZoom() < 15) {
+          this.setMarkerLabels(this._marks.spot, false);
+          this.setMarkerLabels(this._marks.shop, false);
+          this.setMarkerLabels(this._marks.bar, false);
+        } else {
+          this.setMarkerLabels(this._marks.spot, true);
+          this.setMarkerLabels(this._marks.shop, true);
+          this.setMarkerLabels(this._marks.bar, true);
         }
-      });
-      this._map.on('baselayerchange', event => {
-        Utils.setPreference('map-plan-layer', Utils.stripDom(event.name));
       });
       resolve();
     });
@@ -528,7 +508,7 @@ class BeerCrackerzAuth extends MapHelper {
           });
         }
       }));
-      this._clusters.store = new window.L.MarkerClusterGroup(Object.assign(clusterOptions, {
+      this._clusters.shop = new window.L.MarkerClusterGroup(Object.assign(clusterOptions, {
         iconCreateFunction: cluster => {
           return window.L.divIcon({
             className: 'cluster-icon-wrapper',
@@ -552,7 +532,7 @@ class BeerCrackerzAuth extends MapHelper {
       }));
 
       this._map.addLayer(this._clusters.spot);
-      this._map.addLayer(this._clusters.store);
+      this._map.addLayer(this._clusters.shop);
       this._map.addLayer(this._clusters.bar);
 
       // Load data from local storage, later to be fetched from server
@@ -575,13 +555,13 @@ class BeerCrackerzAuth extends MapHelper {
         }
       });
 
-      Utils.getStores().then(stores => {
-        for (let i = 0; i < stores.length; ++i) {
+      Utils.getShops().then(shops => {
+        for (let i = 0; i < shops.length; ++i) {
           // TODO @raph
-          stores[i].type = 'store';
-          stores[i].user = 'messmaker';
-          stores[i].userId = 1;
-          iterateMarkers(stores[i]);
+          shops[i].type = 'shop';
+          shops[i].user = 'messmaker';
+          shops[i].userId = 1;
+          iterateMarkers(shops[i]);
         }
       });
 
@@ -597,6 +577,98 @@ class BeerCrackerzAuth extends MapHelper {
 
       resolve();
     });
+  }
+
+
+  drawUserMarker() {
+    if (!this.user.marker) { // Create user marker if not existing
+      this.user.type = 'user';
+      this.user.marker = this.placeMarker(this.user);
+      // Append circle around marker for accuracy and range for new marker
+      this.user.radius = this.user.accuracy;
+      // Callback on marker clicked to add marker on user position
+      this.user.marker.on('click', this.mapClicked.bind(this));
+    } else { // Update user marker position, range, and accuracy circle
+      this.user.marker.setLatLng(this.user);
+    }
+  }
+
+
+  placeMarker(options) {
+    let icon = Markers.black;
+    if (options.type === 'shop') {
+      icon = Markers.blue;
+    } else if (options.type === 'spot') {
+      icon = Markers.green;
+    } else if (options.type === 'bar') {
+      icon = Markers.red;
+    } else if (options.type === 'user') {
+      icon = Markers.user;
+    }
+
+    const marker = window.L.marker([options.lat, options.lng], { icon: icon }).on('click', () => {
+      // Actual fly to the marker
+      this.map.flyTo([options.lat, options.lng], 18);
+    });
+
+    if (options.dom) {
+      marker.bindPopup(options.dom);
+    }
+    // All markers that are not spot/shop/bar should be appended to the map
+    if (['spot', 'shop', 'bar'].indexOf(options.type) === -1) {
+      marker.addTo(this.map);
+    }
+
+    return marker;
+  }
+
+
+  markPopupFactory(options) {
+    return new Promise(resolve => {
+      this._kom.getTemplate(`/static/html/popup/${options.type}.html`).then(dom => {
+        const element = document.createElement('DIV');
+        element.appendChild(dom);
+        const user = options.user || this.user.username;
+        const desc = Utils.stripDom(options.description) || this.nls.popup(`${options.type}NoDesc`);
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_NAME}`, Utils.stripDom(options.name));
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_FINDER}`, user);
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_RATE}`, options.rate + 1);
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_DESC}`, desc);
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_BY}`, this.nls.popup(`${options.type}FoundBy`));
+        // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
+        const rate = element.querySelector(`#${options.type}-rating`);
+        for (let i = 0; i < options.rate + 1; ++i) {
+          rate.children[i].classList.add('active');
+        }
+        // Remove edition buttons if marker is not user's one, this does not replace a server test for edition...
+        //element.removeChild(element.querySelector('#popup-edit'));
+        // Append circle around marker
+        options.color = Utils[`${options.type.toUpperCase()}_COLOR`];
+        // Create label for new marker
+        options.tooltip = window.L.tooltip({
+          permanent: true,
+          direction: 'center',
+          className: 'marker-tooltip',
+          interactive: true
+        }).setContent(options.name)
+          .setLatLng(options);
+        // Make tooltip visible if preference is to true
+        options.tooltip.addTo(this.map);
+        // Send back the popup
+        resolve(element);
+      });
+    });
+  }
+
+
+  setMarkerLabels(marks, visible) {
+    for (let i = 0; i < marks.length; ++i) {
+      if (visible) {
+        marks[i].tooltip.addTo(this.map);
+      } else {
+        marks[i].tooltip.removeFrom(this.map);
+      }
+    }
   }
 
 
@@ -635,7 +707,7 @@ class BeerCrackerzAuth extends MapHelper {
   /**
    * @public
    * @property {Object} marks
-   * Leaflet.js marks that holds spot/store/bar marks as subkeys
+   * Leaflet.js marks that holds spot/shop/bar marks as subkeys
    **/
   get marks() {
     return this._marks;

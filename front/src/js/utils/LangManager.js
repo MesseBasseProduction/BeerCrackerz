@@ -46,8 +46,8 @@ class LangManager {
   }
 
 
-  store(key) {
-    return this._values.store[key] || '';
+  shop(key) {
+    return this._values.shop[key] || '';
   }
 
 

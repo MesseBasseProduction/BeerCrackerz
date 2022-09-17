@@ -156,7 +156,7 @@ class Utils {
       const bc = window.BeerCrackerz;
       const lang = bc.nls.debug.bind(bc.nls);
       const updates = parseInt(element.querySelector('.debug-updates-amount').innerHTML.split(' : ')[1]) + 1;
-      const marks = bc.marks.spot.length + bc.marks.store.length + bc.marks.bar.length;
+      const marks = bc.marks.spot.length + bc.marks.shop.length + bc.marks.bar.length;
       element.querySelector('.debug-user-lat').innerHTML = `
         <b>${lang('lat')}</b> : ${user.lat}
       `;
@@ -203,7 +203,7 @@ class Utils {
   }
 
 
-  static getStores() {
+  static getShops() {
     return new Promise(resolve => { Utils.getPoints('shop').then(resolve); });
   }
 
@@ -241,7 +241,7 @@ class Utils {
   }
 
 
-  static get STORE_COLOR() {
+  static get SHOP_COLOR() {
     return '#247dc9';
   }
 

@@ -135,6 +135,10 @@ class Kom {
           } else { // Fallback on standard error handling
             reject(this._getErrorCodeFromHTTPStatus(response.status));
           }
+        } else if (type === 'dom') {
+          response.text().then(html => {
+            resolve(document.createRange().createContextualFragment(html));
+          }).catch(reject);
         } else { // Resolution type doesn't exists
           reject('F_KOM_UNSUPPORTED_TYPE');
         }
@@ -170,6 +174,11 @@ class Kom {
    * @returns {Promise} The request <code>Promise</code>, format response as a string on resolve, as error code string on reject */
   _resolveAsText(response) {
     return this._resolveAs('text', response);
+  }
+
+
+  _resolveAsDom(response) {
+    return this._resolveAs('dom', response);
   }
 
 
@@ -248,6 +257,21 @@ class Kom {
    * @returns {Promise} The request <code>Promise</code> */
   getText(url) {
     return this.get(url, this._resolveAsText.bind(this));
+  }
+
+
+  /** @method
+   * @async
+   * @name getText
+   * @public
+   * @memberof Kom
+   * @description <blockquote><code>GET</code> HTTP request using the fetch API.<br><code>resolve</code> returns the
+   * response as a <code>String</code>.<br><code>reject</code> returns an error key as a <code>String</code>. It is
+   * meant to perform API call to get HTML templates as string to be parsed as documents/documents fragments.</blockquote>
+   * @param {String} url - The <code>GET</code> url to fetch data from, in supported back URLs
+   * @returns {Promise} The request <code>Promise</code> */
+  getTemplate(url) {
+    return this.get(url, this._resolveAsDom.bind(this));
   }
 
 
