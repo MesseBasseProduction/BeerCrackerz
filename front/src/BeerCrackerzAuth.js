@@ -80,15 +80,16 @@ class BeerCrackerzAuth {
 
   _handleLoginAside() {
     // Update page nls according to browser language
+    const aside = document.getElementById('aside');
     document.title = this.nls.login('headTitle');
-    Utils.replaceString(document.body, '{LOGIN_SUBTITLE}', this.nls.login('subtitle'));
-    Utils.replaceString(document.body, '{LOGIN_HIDDEN_ERROR}', this.nls.login('hiddenError'));
-    Utils.replaceString(document.body, '{LOGIN_USERNAME_LABEL}', this.nls.login('username'));
-    Utils.replaceString(document.body, '{LOGIN_USERNAME_PASSWORD}', this.nls.login('password'));
-    Utils.replaceString(document.body, '{LOGIN_FORGOT_PASSWORD}', this.nls.login('forgot'));
-    Utils.replaceString(document.body, '{LOGIN_BUTTON}', this.nls.login('login'));
-    Utils.replaceString(document.body, '{LOGIN_NOT_REGISTERED}', this.nls.login('notRegistered'));
-    Utils.replaceString(document.body, '{LOGIN_REGISTER}', this.nls.login('register'));
+    Utils.replaceString(aside, '{LOGIN_SUBTITLE}', this.nls.login('subtitle'));
+    Utils.replaceString(aside, '{LOGIN_HIDDEN_ERROR}', this.nls.login('hiddenError'));
+    Utils.replaceString(aside, '{LOGIN_USERNAME_LABEL}', this.nls.login('username'));
+    Utils.replaceString(aside, '{LOGIN_USERNAME_PASSWORD}', this.nls.login('password'));
+    Utils.replaceString(aside, '{LOGIN_FORGOT_PASSWORD}', this.nls.login('forgot'));
+    Utils.replaceString(aside, '{LOGIN_BUTTON}', this.nls.login('login'));
+    Utils.replaceString(aside, '{LOGIN_NOT_REGISTERED}', this.nls.login('notRegistered'));
+    Utils.replaceString(aside, '{LOGIN_REGISTER}', this.nls.login('register'));
 
     const error = document.getElementById('login-error');
     const username = document.getElementById('username');
@@ -148,16 +149,17 @@ class BeerCrackerzAuth {
 
   _handleRegisterAside() {
     // Update page nls according to browser language
+    const aside = document.getElementById('aside');
     document.title = this.nls.register('headTitle');
-    Utils.replaceString(document.body, '{REGISTER_SUBTITLE}', this.nls.register('subtitle'));
-    Utils.replaceString(document.body, '{REGISTER_HIDDEN_ERROR}', this.nls.register('hiddenError'));
-    Utils.replaceString(document.body, '{REGISTER_USERNAME_LABEL}', this.nls.register('username'));
-    Utils.replaceString(document.body, '{REGISTER_MAIL_LABEL}', this.nls.register('mail'));
-    Utils.replaceString(document.body, '{REGISTER_USERNAME_PASSWORD_1}', this.nls.register('password1'));
-    Utils.replaceString(document.body, '{REGISTER_USERNAME_PASSWORD_2}', this.nls.register('password2'));
-    Utils.replaceString(document.body, '{REGISTER_BUTTON}', this.nls.register('register'));
-    Utils.replaceString(document.body, '{REGISTER_ALREADY_DONE}', this.nls.register('notRegistered'));
-    Utils.replaceString(document.body, '{REGISTER_LOGIN}', this.nls.register('login'));
+    Utils.replaceString(aside, '{REGISTER_SUBTITLE}', this.nls.register('subtitle'));
+    Utils.replaceString(aside, '{REGISTER_HIDDEN_ERROR}', this.nls.register('hiddenError'));
+    Utils.replaceString(aside, '{REGISTER_USERNAME_LABEL}', this.nls.register('username'));
+    Utils.replaceString(aside, '{REGISTER_MAIL_LABEL}', this.nls.register('mail'));
+    Utils.replaceString(aside, '{REGISTER_USERNAME_PASSWORD_1}', this.nls.register('password1'));
+    Utils.replaceString(aside, '{REGISTER_USERNAME_PASSWORD_2}', this.nls.register('password2'));
+    Utils.replaceString(aside, '{REGISTER_BUTTON}', this.nls.register('register'));
+    Utils.replaceString(aside, '{REGISTER_ALREADY_DONE}', this.nls.register('notRegistered'));
+    Utils.replaceString(aside, '{REGISTER_LOGIN}', this.nls.register('login'));
     const error = document.getElementById('register-error');
     const username = document.getElementById('username');
     const mail = document.getElementById('mail');
@@ -227,13 +229,14 @@ class BeerCrackerzAuth {
 
   _handleResetPasswordAdise() {
     // Update page nls according to browser language
+    const aside = document.getElementById('aside');
     document.title = this.nls.forgotPassword('headTitle');
-    Utils.replaceString(document.body, '{FORGOT_PASSWORD_SUBTITLE}', this.nls.forgotPassword('subtitle'));
-    Utils.replaceString(document.body, '{FORGOT_PASSWORD_ERROR}', this.nls.register('hiddenError'));
-    Utils.replaceString(document.body, '{FORGOT_PASSWORD_MAIL_LABEL}', this.nls.forgotPassword('mail'));
-    Utils.replaceString(document.body, '{FORGOT_PASSWORD_BUTTON}', this.nls.forgotPassword('submit'));
-    Utils.replaceString(document.body, '{FORGOT_PASSWORD_LOGIN_LABEL}', this.nls.forgotPassword('loginLabel'));
-    Utils.replaceString(document.body, '{FORGOT_PASSWORD_LOGIN}', this.nls.forgotPassword('login'));
+    Utils.replaceString(aside, '{FORGOT_PASSWORD_SUBTITLE}', this.nls.forgotPassword('subtitle'));
+    Utils.replaceString(aside, '{FORGOT_PASSWORD_ERROR}', this.nls.register('hiddenError'));
+    Utils.replaceString(aside, '{FORGOT_PASSWORD_MAIL_LABEL}', this.nls.forgotPassword('mail'));
+    Utils.replaceString(aside, '{FORGOT_PASSWORD_BUTTON}', this.nls.forgotPassword('submit'));
+    Utils.replaceString(aside, '{FORGOT_PASSWORD_LOGIN_LABEL}', this.nls.forgotPassword('loginLabel'));
+    Utils.replaceString(aside, '{FORGOT_PASSWORD_LOGIN}', this.nls.forgotPassword('login'));
     const error = document.getElementById('forgot-password-error');
     const mail = document.getElementById('mail');
     // useful login method for field check and server response check

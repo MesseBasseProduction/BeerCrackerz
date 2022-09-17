@@ -17,10 +17,10 @@
     "geolocationError": "Your browser doesn't implement the geolocation API",
     "newMarkerOutside": "New marker out of your range",
     "spotAdded": "New spot saved to map",
-    "storeAdded": "New store saved to map",
+    "shopAdded": "New shop saved to map",
     "barAdded": "New bar saved to map",
     "spotDeleted": "Spot has been successfully deleted from map",
-    "storeDeleted": "Store has been successfully deleted from map",
+    "shopDeleted": "Shop has been successfully deleted from map",
     "barDeleted": "Bar has been successfully deleted from map",
     "markNameEmpty": "You didn't specified a name for the mark",
     "lockFocusOn": "Centering and locking view on your position",
@@ -35,7 +35,7 @@
   "map": {
     "newTitle": "New marker",
     "newSpot": "Add a spot",
-    "newStore": "Add a shop",
+    "newShop": "Add a shop",
     "newBar": "Add a bar",
     "planLayerOSM": "Plan OSM",
     "planLayerGeo": "Plan GeoPortail",
@@ -49,10 +49,10 @@
     "descLabel": "Why don't you describe it",
     "rateLabel": "Give it a note"
   },
-  "store": {
-    "title": "New store",
+  "shop": {
+    "title": "New shop",
     "subtitle": "The must have place to refill your beer stock. The more info you provide, the better you help your fellow beer crackerz!",
-    "nameLabel": "Store name",
+    "nameLabel": "Shop name",
     "descLabel": "Why don't you describe it",
     "rateLabel": "Give it a note"
   },
@@ -73,20 +73,20 @@
     "hideShowLabels": "Labels",
     "hideShowCircles": "Circles",
     "hideShowSpots": "Spots",
-    "hideShowStores": "Stores",
+    "hideShowShops": "Shops",
     "hideShowBars": "Bars",
     "deleteMarkTitle": "Delete mark",
     "deleteMarkDesc": "Are you sure you want to delete this mark?<br>This action is permanent and can not be reverted.",
     "spotEditTitle": "Edit spot",
-    "storeEditTitle": "Edit store",
+    "shopEditTitle": "Edit shop",
     "barEditTitle": "Edit bar"
   },
   "popup": {
     "spotFoundBy": "A spot discovered by",
-    "storeFoundBy": "A store added by",
+    "shopFoundBy": "A shop added by",
     "barFoundBy": "A bar added by",
     "spotNoDesc": "No description available for this spot",
-    "storeNoDesc": "No description available for this store",
+    "shopNoDesc": "No description available for this shop",
     "barNoDesc": "No description available for this bar"
   },
   "auth": {
