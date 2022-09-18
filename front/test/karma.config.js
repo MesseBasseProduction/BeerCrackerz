@@ -21,11 +21,14 @@ module.exports = config => {
       'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js',
       'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js',
       'test/testContext.js',
-      'test/testStyle.css'
+      'test/testStyle.css',
+      'test/templates/welcome.html',
+      '../static/dist/*.css'
     ],
     reporters: ['kjhtml', 'progress'],
     preprocessors: {
-      'test/testContext.js': ['webpack']
+      'test/testContext.js': ['webpack'],
+      '**/*.html': ['html2js']
     },
     babelPreprocessor: {
       options: {

@@ -10,7 +10,7 @@
     "server": "http-server -p 1337 -c-1 -o index.html",
     "doc": "jsdoc -c webpack/jsDoc.json",
     "test": "karma start test/karma.config.js",
-    "test-dev": "karma start test/karma.config.js --dev=true",
+    "test:dev": "karma start test/karma.config.js --dev=true",
     "beforecommit": "npm run doc && npm run test && npm run build",
     "docker:build": "docker compose --file ../docker-compose.yml --env-file ../.conf/development/conf.env build",
     "docker:up": "docker compose --file ../docker-compose.yml --env-file ../.conf/development/conf.env up"
@@ -41,6 +41,7 @@
     "jsdoc": "^3.6.11",
     "karma": "^6.4.0",
     "karma-firefox-launcher": "^2.1.2",
+    "karma-html2js-preprocessor": "~0.1",
     "karma-jasmine": "^5.1.0",
     "karma-jasmine-html-reporter": "^2.0.0",
     "karma-webpack": "^5.0.0",
