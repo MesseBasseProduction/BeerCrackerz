@@ -139,7 +139,7 @@ class MapHelper {
 
 
   defineMarkFactory(type, options) {
-    this._kom.getTemplate(`/static/html/modal/new${type}.html`).then(dom => {
+    this._kom.getTemplate(`/modal/new${type}`).then(dom => {
       const name = dom.querySelector(`#${type}-name`);
       const description = dom.querySelector(`#${type}-desc`);
       const rating = new Rating(dom.querySelector(`#${type}-rating`));
@@ -206,7 +206,7 @@ class MapHelper {
 
   markPopupFactory(options) {
     return new Promise(resolve => {
-      this._kom.getTemplate(`/static/html/popup/${options.type}.html`).then(dom => {
+      this._kom.getTemplate(`/popup/${options.type}`).then(dom => {
         const element = document.createElement('DIV');
         element.appendChild(dom);
         const user = options.user || this.user.username;

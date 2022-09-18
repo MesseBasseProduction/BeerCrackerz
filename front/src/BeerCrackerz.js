@@ -693,7 +693,7 @@ class BeerCrackerz extends MapHelper {
 
 
   editMarkModal(options) {
-    this._kom.getTemplate(`/static/html/modal/edit${options.type}.html`).then(dom => {
+    this._kom.getTemplate(`/modal/edit${options.type}`).then(dom => {
       const name = dom.querySelector(`#${options.type}-name`);
       const description = dom.querySelector(`#${options.type}-desc`);
       const submit = dom.querySelector(`#${options.type}-submit`);
@@ -759,7 +759,7 @@ class BeerCrackerz extends MapHelper {
    * @param {Function} cb The function to callback with true or false depending on user's choice
    **/
   deleteMarkModal(cb) {
-    this._kom.getTemplate('/static/html/modal/deletemark.html').then(dom => {
+    this._kom.getTemplate('/modal/deletemark').then(dom => {
       // Update nls for template
       Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('deleteMarkTitle'));
       Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{MODAL_DESC}`, this.nls.modal('deleteMarkDesc'));
@@ -795,7 +795,7 @@ class BeerCrackerz extends MapHelper {
    * </blockquote>
    **/
   userProfileModal() {
-    this._kom.getTemplate('/static/html/modal/user.html').then(dom => {
+    this._kom.getTemplate('/modal/user').then(dom => {
       // Update nls for template
       Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('userTitle'));
       Utils.replaceString(dom.querySelector(`#nls-user-modal-accuracy`), `{ACCURACY_USER_MODAL}`, this.nls.modal('userAccuracyPref'));
@@ -835,7 +835,7 @@ class BeerCrackerz extends MapHelper {
    * </blockquote>
    **/
   hidShowModal() {
-    this._kom.getTemplate('/static/html/modal/hideshow.html').then(dom => {
+    this._kom.getTemplate('/modal/hideshow').then(dom => {
       // Update template nls
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-title`), `{MODAL_TITLE}`, this.nls.modal('hideShowTitle'));
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-labels`), `{LABELS_HIDESHOW_MODAL}`, this.nls.modal('hideShowLabels'));

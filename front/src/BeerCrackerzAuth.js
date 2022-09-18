@@ -355,7 +355,7 @@ class BeerCrackerzAuth {
    **/
   _loadAside(type) {
     return new Promise((resolve, reject) => {
-      this._kom.getTemplate(`/static/html/aside/${type}.html`).then(dom => {
+      this._kom.getTemplate(`/aside/${type}`).then(dom => {
         document.body.className = ''; // Clear previous css class
         document.body.classList.add(type); // Update body class with current aside view
         // We need to get aside at the last moment because of nls that changed HTML content
@@ -419,7 +419,7 @@ class BeerCrackerzAuth {
    * </blockquote>
    **/
   _loadForgotPasswordAside() {
-    this._loadAside('forgot-password').then(this._handleResetPasswordAside.bind(this)).catch(() => {
+    this._loadAside('forgotpassword').then(this._handleResetPasswordAside.bind(this)).catch(() => {
       console.error('Couldn\'t fetch or build the forgot password aside');
     });
   }
@@ -761,7 +761,7 @@ class BeerCrackerzAuth {
   **/
   _markPopupFactory(options) {
     return new Promise(resolve => {
-      this._kom.getTemplate(`/static/html/popup/${options.type}.html`).then(dom => {
+      this._kom.getTemplate(`/popup/${options.type}`).then(dom => {
         const element = document.createElement('DIV');
         element.appendChild(dom);
         const user = options.user || this.user.username;
