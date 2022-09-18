@@ -1,10 +1,11 @@
 from django.urls import path
 
-from .views import IndexView, WelcomeView, LoginAsideView, RegisterAsideView, ForgotPasswordAsideView, SpotPopupView, ShopPopupView, BarPopupView, DeleteMarkModalView, EditBarModalView, EditShopModalView, EditSpotModalView, HideShowModalView, NewBarModalView, NewShopModalView, NewSpotModalView, UserModalView
+from .views import IndexView, WelcomeView, ErrorView, LoginAsideView, RegisterAsideView, ForgotPasswordAsideView, SpotPopupView, ShopPopupView, BarPopupView, DeleteMarkModalView, EditBarModalView, EditShopModalView, EditSpotModalView, HideShowModalView, NewBarModalView, NewShopModalView, NewSpotModalView, UserModalView
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('welcome/', WelcomeView.as_view(), name='index'),
+    path('error/', ErrorView.as_view(), name='error'),
     # Aside template urls for Auth features
     path('aside/login', LoginAsideView.as_view(), name='loginAside'),
     path('aside/register', RegisterAsideView.as_view(), name='registerAside'),

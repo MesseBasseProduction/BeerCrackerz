@@ -3,7 +3,6 @@ import Kom from './js/core/Kom.js';
 import LangManager from './js/core/LangManager.js';
 
 import ZoomSlider from './js/ui/ZoomSlider.js';
-import Notification from './js/ui/Notification.js';
 
 import Providers from './js/utils/ProviderEnum.js';
 import Markers from './js/utils/MarkerEnum.js';
@@ -82,7 +81,8 @@ class BeerCrackerzAuth {
      **/
     this._lang = new LangManager(
       window.navigator.language.substring(0, 2),
-      this._init.bind(this)
+      this._init.bind(this),
+      this._fatalError.bind(this)
     );
   }
 
@@ -111,12 +111,19 @@ class BeerCrackerzAuth {
     // By default, the template contains the login aside, no need to fetch it
     this._handleLoginAside();
     this._kom = new Kom();
-    this._notification = new Notification();
-
-    this._initMap()
+    // We ensure the Kom layer is valid and ready to go any further
+    if (this._kom.isValid === true) {
+      this._initMap()
       .then(this._initGeolocation.bind(this))
       .then(this._initEvents.bind(this))
-      .then(this._initMarkers.bind(this));
+      .then(this._initMarkers.bind(this))
+      .catch(this._fatalError.bind(this));
+    } else {
+      this._fatalError({
+        file: 'Kom.js',
+        msg: (this._kom.csrf === null) ? `The CSRF token doesn't exists in cookies` : `The headers amount is invalid`
+      });
+    }
   }
 
 
@@ -194,7 +201,6 @@ class BeerCrackerzAuth {
         }, null, Utils.HIGH_ACCURACY);
         resolve();
       } else {
-        this._notification.raise(this.nls.notif('geolocationError'));
         resolve();
       }
     });
@@ -302,6 +308,43 @@ class BeerCrackerzAuth {
   }
 
 
+  /**
+   * @method
+   * @name _fatalError
+   * @private
+   * @memberof BeerCrackerzAuth
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * <blockquote>
+   * The _fatalError() method will handle all fatal errors from which the app
+   * can't recover. It redirects to the error page and send info through the referrer
+   * so the error page can properly displays it to the user
+   * </blockquote>
+   * @param {Object} err - The error object with its info
+   * @param {Number} [err.status] - The HTTP error code
+   * @param {String} [err.url] - The URL that generated the HTTP error
+   * @param {String} [err.file] - The file in which the fatal error happened
+   * @param {String} [err.msg] - The custom error message
+   **/
+  _fatalError(err) {
+    if (window.DEBUG === false) { // In production, do the actual redirection
+      // We add params to referrer then redirect to error page so the information can be displayed
+      if (err && err.status) { // HTTP or related error
+        window.history.pushState('', '', `/welcome?&page=welcome&code=${err.status}&url=${err.url}&msg=${err.msg}`);
+      } else if (err && err.file && err.msg) { // File or process error
+        window.history.pushState('', '', `/welcome?&page=welcome&file=${err.file}&msg=${err.msg}`);
+      } else { // Generic error fallback
+        window.history.pushState('', '', `/welcome?&page=welcome&file=BeerCrackerzAuth.js&msg=An unknown error occured`);
+      }
+      // Now redirect the user to error page
+      window.location.href = '/error';
+    } else {
+      console.error(err);
+    }
+  }
+
+
   // ======================================================================== //
   // -------------------------- Aside interactivity ------------------------- //
   // ======================================================================== //
@@ -317,7 +360,7 @@ class BeerCrackerzAuth {
    * @description
    * <blockquote>
    * The _toggleAside() method will expand or collapse the aside, depending on the
-   * `this._isAsideExpanded` flag state. To be used as a callback on aside expander.
+   * `this._isAsideExpanded` flag state. To be used as a callba, adding useful parameters to url before redirectck on aside expander.
    * </blockquote>
    **/
   _toggleAside() {
@@ -381,8 +424,9 @@ class BeerCrackerzAuth {
    * </blockquote>
    **/
   _loadLoginAside() {
-    this._loadAside('login').then(this._handleLoginAside.bind(this)).catch(() => {
-      console.error('Couldn\'t fetch or build the login aside');
+    this._loadAside('login').then(this._handleLoginAside.bind(this)).catch(err => {
+      err.msg = `Couldn't fetch or build the login aside`;
+      this._fatalError(err);
     });
   }
 
@@ -400,8 +444,9 @@ class BeerCrackerzAuth {
    * </blockquote>
    **/
   _loadRegisterAside() {
-    this._loadAside('register').then(this._handleRegisterAside.bind(this)).catch(() => {
-      console.error('Couldn\'t fetch or build the register aside');
+    this._loadAside('register').then(this._handleRegisterAside.bind(this)).catch(err => {
+      err.msg = `Couldn't fetch or build the register aside`;
+      this._fatalError(err);
     });
   }
 
@@ -419,8 +464,9 @@ class BeerCrackerzAuth {
    * </blockquote>
    **/
   _loadForgotPasswordAside() {
-    this._loadAside('forgotpassword').then(this._handleResetPasswordAside.bind(this)).catch(() => {
-      console.error('Couldn\'t fetch or build the forgot password aside');
+    this._loadAside('forgotpassword').then(this._handleResetPasswordAside.bind(this)).catch(err => {
+      err.msg = `Couldn't fetch or build the forgot password aside`;
+      this._fatalError(err);
     });
   }
 

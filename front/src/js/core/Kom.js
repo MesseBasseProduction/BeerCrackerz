@@ -27,8 +27,12 @@ class Kom {
      * @private
      **/
     this._headers = this._createRequestHeaders();
-    // Check that CSRF token exists and that headers are properly created
-    this._checkValidity();
+    /** 
+     * Wether the Kom class headers are properly built
+     * @type {Boolean}
+     * @public
+     **/
+    this.isValid = this._checkValidity(); // Check that CSRF token exists and that headers are properly created
   }
 
 
@@ -64,7 +68,7 @@ class Kom {
       }
     }
     // Return empty string by default, POST calls may fail
-    return '';
+    return null;
   }
 
 
@@ -104,13 +108,15 @@ class Kom {
    * </blockquote> 
    **/
   _checkValidity() {
-    if (this._csrfToken !== '') {
+    if (this._csrfToken !== null) {
       if (this._headers.length !== 3) {
-        console.error('F_KOM_HEADERS_ERROR');
+        return false;
       }
     } else {
-      console.error('F_KOM_NO_CSRF_TOKEN');
+      return false;
     }
+
+    return true;
   }
 
 
@@ -259,7 +265,13 @@ class Kom {
       };
 
       fetch(url, options)
-        .then(resolution)
+        .then(data => {
+          // In case the request wen well but didn't gave the expected 200 status
+          if (data.status !== 200) {
+            reject(data);
+          } 
+          return resolution(data);         
+        })
         .then(resolve)
         .catch(reject);
     });
@@ -342,7 +354,13 @@ class Kom {
       };
 
       fetch(url, options)
-        .then(resolution)
+        .then(data => {
+          // In case the request wen well but didn't gave the expected 200 status
+          if (data.status !== 200) {
+            reject(data);
+          } 
+          return resolution(data);         
+        })
         .then(resolve)
         .catch(reject);
     });
@@ -421,6 +439,10 @@ class Kom {
     return this._savePoint('bar', data);    
   }
 
+
+  get csrf() {
+    return null;
+  }
 
 
 }

@@ -6,6 +6,8 @@ class IndexView(TemplateView):
     template_name = 'index.html'
 class WelcomeView(TemplateView):
     template_name = 'welcome.html'
+class ErrorView(TemplateView):
+    template_name = 'error.html'
 
 
 # Aside views for Auth features
