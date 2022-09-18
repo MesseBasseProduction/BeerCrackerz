@@ -1,9 +1,18 @@
 @import 'scss/keyframes';
 @import 'scss/base';
 
+/*  ----------------------------------------------------------  *
+ * The BeerCrackerzAuth style bundle                            *
+ * Elements have given z-index :                                *
+ * 10 : Main map, that occupies the whole page                  *
+ * 20 : The page header, only displayed when aside is collapsed *
+ * 30 : The Aside that must be over everything at anytime       *
+ *  ----------------------------------------------------------  */
+
 :root {
   --aside-width: 40rem;
   --aside-offset: 0rem;
+  --aside-transtion-duration: .5s;
 }
 
 body {
@@ -11,6 +20,102 @@ body {
   height: 100%;
   position: relative;
   width: 100%;
+}
+
+nav {
+  bottom: 2.8rem;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  /* Force nav to stick to aside's left even when collapsed */
+  right: calc(var(--aside-width) + var(--aside-offset) + 1rem);
+  width: 4.8rem;
+  z-index: 20;
+
+  transition: right var(--aside-transtion-duration);
+
+  img {
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px #424242;
+    width: 100%;
+  }
+
+  .cmd-bar {
+    .cmd-wrapper {
+      align-items: center;
+      background: white;
+      background-clip: padding-box;
+      border: 2px solid rgba(0, 0, 0, .2);
+      border-radius: .5rem;
+      display: flex;
+      justify-content: center;
+      margin-top: 0;
+      padding: .2rem;
+
+      img {
+        box-shadow: inherit;
+        transition: all var(--transition);
+
+        &:active,
+        &:focus,
+        &:hover {
+          border: solid 1px rgb(185, 185, 185);
+          border-radius: .5rem;
+          padding: .2rem;
+
+          filter: invert(70%) sepia(67%) saturate(455%) hue-rotate(67deg) brightness(163%) contrast(85%);
+        }
+
+        &[class$="-on"] {
+          filter: invert(53%) sepia(30%) saturate(1977%) hue-rotate(155deg) brightness(88%) contrast(102%);
+        }
+      }
+    }
+  }
+}
+
+.page-header {
+  background-color: rgba(255, 255, 255, .8);
+  border: 2px solid rgba(0, 0, 0, .2);
+  border-radius: .5rem;
+  left: 0;
+  margin: 1rem;
+  max-width: 40rem;
+  opacity: 0;
+  padding: 1rem;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  z-index: 20;
+
+  transition: opacity var(--aside-transtion-duration);
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
+main.beer-crakerz-map {
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+
+  transition: width var(--aside-transtion-duration);
+
+  .marker-tooltip {
+    font-style: italic;
+    text-align: center;
+  }
+  .leaflet-control-layers.leaflet-control {
+    right: calc(var(--aside-width) + var(--aside-offset) + 5.8rem);
+    transition: right var(--aside-transtion-duration);
+  }
+  /* Endure attribution and layers controls are stiking to aside when collapsing/expanding*/
+  .leaflet-control-attribution.leaflet-control {
+    right: calc(var(--aside-width) + var(--aside-offset));
+    transition: right var(--aside-transtion-duration);
+  }
 }
 
 aside {
@@ -25,9 +130,9 @@ aside {
   text-align: center;
   top: 0;
   width: 100%;
-  z-index: 30; /* So Aside is on top of slider */
+  z-index: 30;
 
-  transition: all .5s;
+  transition: all var(--aside-transtion-duration);
 
   .aside-expander {
     cursor: pointer;
@@ -35,8 +140,9 @@ aside {
     left: 0;
     position: absolute;
     top: 0;
+    filter: drop-shadow(0 0 .5rem #FFF);
 
-    transition: left .2s;
+    transition: left var(--transition);
   }
 
   h1 {
@@ -56,6 +162,7 @@ aside {
     }
 
     p {
+      margin-bottom: .5rem;
       text-align: right;
 
       &[class*="error"] {
@@ -64,7 +171,7 @@ aside {
         font-weight: bold;
         text-align: center;
   
-        transition: color .2s;
+        transition: color var(--transition);
   
         &.visible {
           color: #ff5454;
@@ -78,26 +185,11 @@ aside {
   }
 }
 
-main.beer-crakerz-map {
-  height: 100%;
-  width: 100%;
-  z-index: 10;
-
-  transition: width .5s;
-
-  .marker-tooltip {
-    font-style: italic;
-    text-align: center;
-  }
-  /* Endure attribution and layers controls are stiking to aside when collapsing/expanding*/
-  .leaflet-control-layers.leaflet-control,
-  .leaflet-control-attribution.leaflet-control {
-    right: calc(var(--aside-width) + var(--aside-offset));
-    transition: right .5s;
-  }
+.zoom-slider.opened {
+  /* Force slider to stick to aside's left even when collapsed */
+  right: calc(var(--aside-width) + var(--aside-offset) + 1rem);
 }
 
 @import 'scss/overlay';
-@import 'scss/component/notification';
 @import 'scss/component/zoomslider';
 @import 'scss/leaflet';

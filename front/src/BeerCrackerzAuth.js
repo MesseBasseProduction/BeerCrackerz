@@ -223,13 +223,8 @@ class BeerCrackerzAuth {
         // Constrain pan to the map bounds
         this._map.panInsideBounds(Utils.MAP_BOUNDS, { animate: true });
       });
-      // Map events
-      this._map.on('zoomstart', () => {
-        this._isZooming = true;
-      });
+      // Auto hide labels if zoom level is too high (and restore it when needed)
       this._map.on('zoomend', () => {
-        this._isZooming = false;
-        // Auto hide labels if zoom level is too high (and restore it when needed)
         if (this._map.getZoom() < 15) {
           this._setMarkerLabels(this._marks.spot, false);
           this._setMarkerLabels(this._marks.shop, false);
@@ -239,6 +234,10 @@ class BeerCrackerzAuth {
           this._setMarkerLabels(this._marks.shop, true);
           this._setMarkerLabels(this._marks.bar, true);
         }
+      });
+      // Center on command
+      document.getElementById('center-on').addEventListener('click', () => {
+        this._map.flyTo([this._user.lat, this._user.lng], 18);
       });
       resolve();
     });
@@ -322,16 +321,18 @@ class BeerCrackerzAuth {
    * </blockquote>
    **/
   _toggleAside() {
-    if (this._isAsideExpanded === true) {
+    if (this._isAsideExpanded === true) { // Collapsing aside
       this._isAsideExpanded = false;
       document.documentElement.style.setProperty('--aside-offset', '-40rem');
       document.getElementById('aside-expander-icon').src = '/static/img/logo/left.svg';
+      document.getElementById('page-header').classList.add('visible');
       setTimeout(() => document.getElementById('aside-expander').style.left = '-5rem', 300);
-    } else {
+    } else { // Expanding aside
       this._isAsideExpanded = true;
       document.documentElement.style.setProperty('--aside-offset', '0rem');
       document.getElementById('aside-expander-icon').src = '/static/img/logo/right.svg';
       document.getElementById('aside-expander').style.left = '0';
+      document.getElementById('page-header').classList.remove('visible');
     }
   }
 
@@ -445,10 +446,11 @@ class BeerCrackerzAuth {
     Utils.replaceString(aside, '{LOGIN_HIDDEN_ERROR}', this.nls.login('hiddenError'));
     Utils.replaceString(aside, '{LOGIN_USERNAME_LABEL}', this.nls.login('username'));
     Utils.replaceString(aside, '{LOGIN_USERNAME_PASSWORD}', this.nls.login('password'));
-    Utils.replaceString(aside, '{LOGIN_FORGOT_PASSWORD}', this.nls.login('forgot'));
     Utils.replaceString(aside, '{LOGIN_BUTTON}', this.nls.login('login'));
     Utils.replaceString(aside, '{LOGIN_NOT_REGISTERED}', this.nls.login('notRegistered'));
     Utils.replaceString(aside, '{LOGIN_REGISTER}', this.nls.login('register'));
+    Utils.replaceString(aside, '{LOGIN_FORGOT_PASSWORD}', this.nls.login('forgot'));
+    Utils.replaceString(aside, '{LOGIN_PASSWORD_RESET}', this.nls.login('reset'));
 
     const error = document.getElementById('login-error');
     const username = document.getElementById('username');
