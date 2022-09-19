@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr" dir="ltr" style="height:100%;width:100%;overflow:hidden;">
+<head>
+  <meta charset="utf-8" />
+  <title>Beer Crackerz</title>
+  <meta content="ie=edge" http-equiv="x-ua-compatible" />
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <meta content="initial-scale=1" name="viewport" />
+  <meta name="description" content="The website for beer lover, to share the best spot to crack a beer, or to easily refill this beverage of the gods!">
+  <link rel="canonical" href="https://beercrackerz.org/" />
+  <!-- Favicon zone -->
+  <link rel="apple-touch-icon" sizes="57x57" href="{% static 'img/favicon/apple-icon-57x57.png' %}">
+  <link rel="apple-touch-icon" sizes="60x60" href="{% static 'img/favicon/apple-icon-60x60.png' %}">
+  <link rel="apple-touch-icon" sizes="72x72" href="{% static 'img/favicon/apple-icon-72x72.png' %}">
+  <link rel="apple-touch-icon" sizes="76x76" href="{% static 'img/favicon/apple-icon-76x76.png' %}">
+  <link rel="apple-touch-icon" sizes="114x114" href="{% static 'img/favicon/apple-icon-114x114.png' %}">
+  <link rel="apple-touch-icon" sizes="120x120" href="{% static 'img/favicon/apple-icon-120x120.png' %}">
+  <link rel="apple-touch-icon" sizes="144x144" href="{% static 'img/favicon/apple-icon-144x144.png' %}">
+  <link rel="apple-touch-icon" sizes="152x152" href="{% static 'img/favicon/apple-icon-152x152.png' %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon/apple-icon-180x180.png' %}">
+  <link rel="icon" type="image/png" sizes="192x192" href="{% static 'img/favicon/android-icon-192x192.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="96x96" href="{% static 'img/favicon/favicon-96x96.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon/favicon-16x16.png' %}">
+  <meta name="msapplication-TileColor" content="#FFFFFF">
+  <meta name="msapplication-TileImage" content="{% static 'img/favicon/ms-icon-144x144.png' %}">
+  <meta name="theme-color" content="#FFFFFF">
+  <!-- Open graph metas -->
+  <meta property="og:title" content="Beer Crackerz" />
+  <meta property="og:url" content="https://beercrackerz.org/" />
+  <meta property="og:image" content="{% static 'img/logo-social.png' %}" />
+  <meta property="og:description" content="The website for beer lover, to share the best spot to crack a beer, or to easily refill this beverage of the gods!" />
+  <meta property="og:site_name" content="Beer Crackerz" />
+  <meta property="og:type" content="website" />
+  <!-- Twitter card meta -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Beer Crackerz" />
+  <meta name="twitter:description" content="The website for beer lover, to share the best spot to crack a beer, or to easily refill this beverage of the gods!" />
+  <meta name="twitter:image:src" content="{% static 'img/logo-social.png' %}" />
+</head>
+<body style="height:100%;width:100%;margin:0;padding:5px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;background-color:#CDCDCD;font-family:sans-serif;">
+  <h1>Fatal error</h1>
+  <p style="margin:0;">Please contact administrator at <a href="mailto:contact@messe-basse-production.com">contact@messe-basse-production.com</a> and please provide the following text :</p>
+  <p style="margin:0;"><i>Contactez les administrateurs à <a href="mailto:contact@messe-basse-production.com">contact@messe-basse-production.com</a> en incluant le texte suivant :</i></p>
+  <p style="margin:0;"><i>Póngase en contacto con los administradores en <a href="mailto:contact@messe-basse-production.com">contact@messe-basse-production.com</a> incluyendo el siguiente texto :</i></p>
+  <div style="background-color:white;border-radius:10px;padding:20px;margin:30px 0;">
+    <p id="error-string" style="text-align:left;margin:0;"></p>
+  </div>
+  <p style="margin:0;"><a href="/welcome">Start BeerCrackerz again</a></p>
+  <script type="text/javascript">
+    // Get params from referrer
+    const queryString = document.referrer;
+    const params = new URLSearchParams(queryString);
+    const page = params.get('page');
+    const url = params.get('url');
+    const code = params.get('code');
+    const file = params.get('file');
+    const msg = params.get('msg');
+    // Handle error
+    if (code && url) { // HTTP error
+      document.getElementById('error-string').innerHTML = `
+        Page : <b>/${page}</b><br>
+        Target url : <b>${url}</b><br>
+        HTTP status : <b>${code}</b><br>
+        Message : <b>${msg}</b>
+      `;
+    } else if (file && msg) {
+      document.getElementById('error-string').innerHTML = `
+        Page : <b>/${page}</b><br>
+        File : <b>${file}</b><br>
+        Message : <b>${msg}</b>
+      `;
+    }
+</script>
+</body>
+</html>
