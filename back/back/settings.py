@@ -129,7 +129,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8080', 'http:/:127.0.0.1:8080']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8080', 'http://127.0.0.1:8080']
 
 EXTENDED_PAGINATION_DEFAULT_SIZE = 20
 EXTENDED_PAGINATION_DEFAULT_SIZE_QUERY_PARAM = 'size'
