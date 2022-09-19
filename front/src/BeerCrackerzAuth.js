@@ -538,7 +538,7 @@ class BeerCrackerzAuth {
       username.classList.remove('error');
       password.classList.remove('error');
       if (_frontFieldValidation()) {
-        this._kom.post('/api/login/', {
+        this._kom.post('/api/auth/login/', {
           username: username.value,
           password: password.value
         }).then(_backValidation).catch(() => {

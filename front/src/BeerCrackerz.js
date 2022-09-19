@@ -817,6 +817,12 @@ class BeerCrackerz extends MapHelper {
       document.getElementById('debug-toggle').addEventListener('change', this.toggleDebug.bind(this));
 
       setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+
+      document.getElementById('logout').addEventListener('click', () => {
+        this._kom.post('api/auth/logout/', null).then(() => {
+          window.location = '/welcome'
+        })
+      });
     });
   }
 
