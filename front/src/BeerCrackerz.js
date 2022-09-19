@@ -1041,7 +1041,7 @@ class BeerCrackerz extends MapHelper {
    **/
   formatSavedMarker(mark) {
     return {
-      userId: mark.userId || this.user.id,      
+      userId: mark.userId || this.user.id,
       name: mark.name,
       description: mark.description,
       lat: mark.lat,

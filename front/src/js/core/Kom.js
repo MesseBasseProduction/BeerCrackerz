@@ -358,8 +358,13 @@ class Kom {
           // In case the request wen well but didn't gave the expected 200 status
           if (data.status >= 400) {
             reject(data);
-          } 
-          return resolution(data);         
+          }
+
+          if (resolution !== undefined && resolution !== null) {
+            return resolution(data);
+          }
+
+          return data;
         })
         .then(resolve)
         .catch(reject);
