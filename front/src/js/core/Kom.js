@@ -90,7 +90,7 @@ class Kom {
     return [
       ['Content-Type', 'application/json; charset=UTF-8'],
       ['Accept', 'application/json'],
-      ['X-XSRF-TOKEN', this._csrfToken]
+      ['X-CSRFToken', this._csrfToken]
     ];
   }
 
@@ -356,7 +356,7 @@ class Kom {
       fetch(url, options)
         .then(data => {
           // In case the request wen well but didn't gave the expected 200 status
-          if (data.status !== 200) {
+          if (data.status >= 400) {
             reject(data);
           } 
           return resolution(data);         
