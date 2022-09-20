@@ -19,6 +19,9 @@
     "spotAdded": "New spot saved to map",
     "shopAdded": "New shop saved to map",
     "barAdded": "New bar saved to map",
+    "spotEdited": "Spot has been successfully edited",
+    "shopEdited": "Shop has been successfully edited",
+    "barEdited": "Bar has been successfully edited",
     "spotDeleted": "Spot has been successfully deleted from map",
     "shopDeleted": "Shop has been successfully deleted from map",
     "barDeleted": "Bar has been successfully deleted from map",
@@ -28,6 +31,7 @@
   },
   "nav": {
     "add": "Add",
+    "edit": "Edit",
     "cancel": "Cancel",
     "close": "Close",
     "delete": "Delete"
@@ -82,8 +86,11 @@
   },
   "popup": {
     "spotFoundBy": "A spot discovered by",
+    "spotFoundWhen": "Since the",
     "shopFoundBy": "A shop added by",
+    "shopFoundWhen": "Since the",
     "barFoundBy": "A bar added by",
+    "barFoundWhen": "Since the",
     "spotNoDesc": "No description available for this spot",
     "shopNoDesc": "No description available for this shop",
     "barNoDesc": "No description available for this bar"
