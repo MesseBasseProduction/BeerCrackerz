@@ -16,8 +16,10 @@ class UserRegisterSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         user = get_user_model()(**validated_data)
-        validate_password(password=validated_data.get('password'), user=user)
+        password = validated_data.get('password')
+        validate_password(password=password, user=user)
 
+        user.set_password(password)
         user.save()
         return user
 
@@ -32,5 +34,5 @@ class UserRegisterSerializer(serializers.Serializer):
         if password1 != password2:
             raise serializers.ValidationError('PASSWORD_NOT_MATCH')
 
-        data['password'] = make_password(password1)
+        data['password'] = password1
         return data
