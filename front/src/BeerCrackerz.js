@@ -177,11 +177,12 @@ class BeerCrackerz extends MapHelper {
    * @returns {Promise} A Promise resolved when preferences are set
    **/
   _initUser() {
-    return new Promise(resolve => {
-      // TODO fill user information from server @Raph
-      this._user.id = 1;
-      this._user.username = 'messmaker';
-      resolve();
+    return new Promise((resolve, reject) => {
+      this._kom.get('/api/user/me/').then(user => {
+        this._user.id = user.id;
+        this._user.username = user.username;
+        resolve();
+      }).catch(reject);
     });
   }
 

@@ -18,6 +18,7 @@ class LangManager {
    **/
   constructor(lang, cb, err) {
     this._lang = (Utils.SUPPORTED_LANGUAGE.indexOf(lang) !== -1) ? lang : 'en';
+    this._fullLang = lang;
     this._values = {};
     this._init().then(cb).catch(err);
   }
@@ -104,6 +105,11 @@ class LangManager {
 
   forgotPassword(key) {
     return this._values.auth.forgotPassword[key] || '';    
+  }
+
+
+  get fullLang() {
+    return this._fullLang;
   }
 
 

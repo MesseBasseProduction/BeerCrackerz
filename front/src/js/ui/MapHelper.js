@@ -209,13 +209,16 @@ class MapHelper {
       this._kom.getTemplate(`/popup/${options.type}`).then(dom => {
         const element = document.createElement('DIV');
         element.appendChild(dom);
-        const user = options.user || this.user.username;
+        const user = options.user;
         const desc = Utils.stripDom(options.description) || this.nls.popup(`${options.type}NoDesc`);
+        const date = new Intl.DateTimeFormat(this.nls.fullLang, { dateStyle: 'long' }).format(new Date(options.creationDate));
         Utils.replaceString(element, `{${options.type.toUpperCase()}_NAME}`, Utils.stripDom(options.name));
         Utils.replaceString(element, `{${options.type.toUpperCase()}_FINDER}`, user);
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_BY}`, this.nls.popup(`${options.type}FoundBy`));
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_WHEN}`, this.nls.popup(`${options.type}FoundWhen`));
+        Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_DATE}`, date);
         Utils.replaceString(element, `{${options.type.toUpperCase()}_RATE}`, options.rate + 1);
         Utils.replaceString(element, `{${options.type.toUpperCase()}_DESC}`, desc);
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_BY}`, this.nls.popup(`${options.type}FoundBy`));
         // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
         const rate = element.querySelector(`#${options.type}-rating`);
         for (let i = 0; i < options.rate + 1; ++i) {
@@ -224,8 +227,7 @@ class MapHelper {
         // Remove picture icon if user is not in range
         const distance = Utils.getDistanceBetweenCoords([this.user.lat, this.user.lng], [options.lat, options.lng]);
         if (distance > Utils.CIRCLE_RADIUS) {
-          console.log('Too far');
-          //element.removeChild(element.querySelector(''));
+          element.querySelector('#popup-social').parentNode.removeChild(element.querySelector('#popup-social'));
         }
         // Remove edition buttons if marker is not user's one, this does not replace a server test for edition...
         if (user !== this.user.username) {
