@@ -15,7 +15,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
 
 
-class RegisterView(CreateAPIView):
+class UserRegisterView(CreateAPIView):
     serializer_class = UserRegisterSerializer
 
 

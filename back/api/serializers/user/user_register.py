@@ -12,6 +12,7 @@ class UserRegisterSerializer(serializers.Serializer):
                                    validators=[UniqueValidator(queryset=get_user_model().objects.all())])
     password1 = serializers.CharField(max_length=15)
     password2 = serializers.CharField(max_length=15)
+    is_active = serializers.HiddenField(default=False)
 
     def create(self, validated_data):
         user = get_user_model()(**validated_data)
@@ -23,10 +24,6 @@ class UserRegisterSerializer(serializers.Serializer):
     def to_representation(self, instance):
         data = {'username': instance.username, 'email': instance.email}
         return data
-
-    # No need to implement this method as it is a POST only serializer
-    def update(self, instance, validated_data):
-        return instance
 
     def validate(self, data):
         password1 = data.pop('password1')
