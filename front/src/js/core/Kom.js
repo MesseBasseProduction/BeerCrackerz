@@ -396,11 +396,75 @@ class Kom {
 
 
   // ======================================================================== //
+  // ------------------------- PATCH server calls --------------------------- //
+  // ======================================================================== //
+
+
+  patch(url, data, resolution = this._resolveAsJSON.bind(this)) {
+    return new Promise((resolve, reject) => {
+      const options = {
+        method: 'PATCH',
+        headers: new Headers(this._headers), // PATCH needs all previously defined headers
+        body: JSON.stringify(data)
+      };
+
+      fetch(url, options)
+        .then(data => {
+          // In case the request wen well but didn't gave the expected 200 status
+          if (data.status >= 400) {
+            reject(data);
+          }
+
+          if (resolution !== undefined && resolution !== null) {
+            return resolution(data);
+          }
+
+          return data;
+        })
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
+
+  // ======================================================================== //
+  // ------------------------- DELETE server calls -------------------------- //
+  // ======================================================================== //
+
+
+  delete(url, data, resolution = this._resolveAsJSON.bind(this)) {
+    return new Promise((resolve, reject) => {
+      const options = {
+        method: 'DELETE',
+        headers: new Headers(this._headers), // DELETE needs all previously defined headers
+        body: JSON.stringify(data)
+      };
+
+      fetch(url, options)
+        .then(data => {
+          // In case the request wen well but didn't gave the expected 200 status
+          if (data.status >= 400) {
+            reject(data);
+          }
+
+          if (resolution !== undefined && resolution !== null) {
+            return resolution(data);
+          }
+
+          return data;
+        })
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
+
+  // ======================================================================== //
   // ------------------ BeerCrackerz server call shortcuts ------------------ //
   // ======================================================================== //
 
 
-  _getPoints(type) {
+  _getMarks(type) {
     return new Promise((resolve, reject) => {
       this.get(`http://localhost:8080/api/${type}`).then(resolve).catch(reject);
     });
@@ -408,21 +472,21 @@ class Kom {
 
 
   getSpots() {
-    return this._getPoints('spot');
+    return this._getMarks('spot');
   }
 
 
   getShops() {
-    return this._getPoints('shop');
+    return this._getMarks('shop');
   }
 
 
   getBars() {
-    return this._getPoints('bar');
+    return this._getMarks('bar');
   }
 
 
-  _savePoint(type, data) {
+  _saveMark(type, data) {
     return new Promise((resolve, reject) => {
       // Send null to resolveAs to ensure nothing is done after post call
       this.post(`http://localhost:8080/api/${type}/`, data, null).then(resolve).catch(reject);
@@ -431,17 +495,63 @@ class Kom {
 
 
   spotCreated(data) {
-    return this._savePoint('spot', data);    
+    return this._saveMark('spot', data);    
   }
 
 
   shopCreated(data) {
-    return this._savePoint('shop', data);    
+    return this._saveMark('shop', data);    
   }
 
 
   barCreated(data) {
-    return this._savePoint('bar', data);    
+    return this._saveMark('bar', data);    
+  }
+
+
+  _editMark(type, id, data) {
+    return new Promise((resolve, reject) => {
+      // Send null to resolveAs to ensure nothing is done after post call
+      this.patch(`http://localhost:8080/api/${type}/${id}/`, data, null).then(resolve).catch(reject);
+    });
+  }
+
+
+  spotEdited(id, data) {
+    return this._editMark('spot', id, data);    
+  }
+
+
+  shopEdited(id, data) {
+    return this._editMark('shop', id, data);    
+  }
+
+
+  barEdited(id, data) {
+    return this._editMark('bar', id, data);    
+  }
+
+
+  _deleteMark(type, id, data) {
+    return new Promise((resolve, reject) => {
+      // Send null to resolveAs to ensure nothing is done after post call
+      this.delete(`http://localhost:8080/api/${type}/${id}/`, data, null).then(resolve).catch(reject);
+    });
+  }
+
+
+  spotDeleted(id, data) {
+    return this._deleteMark('spot', id, data);    
+  }
+
+
+  shopDeleted(id, data) {
+    return this._deleteMark('shop', id, data);    
+  }
+
+
+  barDeleted(id, data) {
+    return this._deleteMark('bar', id, data);    
   }
 
 

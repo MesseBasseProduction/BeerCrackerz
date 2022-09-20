@@ -531,8 +531,7 @@ class BeerCrackerzAuth {
       // the server should reject the request as the user is not authenticated
       window.location = '/';
     };
-    // Submit click event
-    document.getElementById('login-submit').addEventListener('click', () => {
+    const _submit = () => {
       // Reset error css classes
       error.classList.remove('visible');
       username.classList.remove('error');
@@ -546,7 +545,10 @@ class BeerCrackerzAuth {
           error.innerHTML = this.nls.login('serverError');
         });
       }
-    }, false);
+    };
+    // Submit click event
+    document.getElementById('login-submit').addEventListener('click', _submit.bind(this), false);
+    password.addEventListener('keydown', e => { if (e.key === 'Enter') { _submit(); } });
     // Register event
     document.getElementById('register-aside').addEventListener('click', this._loadRegisterAside.bind(this), false);
     document.getElementById('forgot-password').addEventListener('click', this._loadForgotPasswordAside.bind(this), false);
@@ -611,10 +613,9 @@ class BeerCrackerzAuth {
       // If all front and back tests are ok, redirect to auth
       // If the user ma nually force redirection to authindex,
       // the server should reject the request as the user is not authenticated
-      window.location = 'authindex.html';
+      window.location = '/';
     };
-    // Submit click event
-    document.getElementById('register-submit').addEventListener('click', () => {
+    const _submit = () => {
       // Reset error css classes
       error.classList.remove('visible');
       username.classList.remove('error');
@@ -632,7 +633,10 @@ class BeerCrackerzAuth {
           error.innerHTML = this.nls.register('serverError');
         });
       }
-    }, false);
+    };
+    // Submit click event
+    document.getElementById('register-submit').addEventListener('click', _submit.bind(this), false);
+    password2.addEventListener('keydown', e => { if (e.key === 'Enter') { _submit(); } });
     // Register event
     document.getElementById('login-aside').addEventListener('click', this._loadLoginAside.bind(this), false);
     document.getElementById('aside-expander').addEventListener('click', this._toggleAside.bind(this), false);
@@ -686,8 +690,7 @@ class BeerCrackerzAuth {
       // the server should reject the request as the user is not authenticated
       window.location = 'authindex.html';
     };
-    // Submit click event
-    document.getElementById('forgot-password-submit').addEventListener('click', () => {
+    const _submit = () => {
       // Reset error css classes
       error.classList.remove('visible');
       mail.classList.remove('error');
@@ -699,7 +702,10 @@ class BeerCrackerzAuth {
           error.innerHTML = this.nls.forgotPassword('serverError');
         });
       }
-    }, false);
+    };
+    // Submit click event
+    document.getElementById('forgot-password-submit').addEventListener('click', _submit.bind(this), false);
+    mail.addEventListener('keydown', e => { if (e.key === 'Enter') { _submit(); } });
 
     document.getElementById('login-aside').addEventListener('click', this._loadLoginAside.bind(this), false);
     document.getElementById('aside-expander').addEventListener('click', this._toggleAside.bind(this), false);

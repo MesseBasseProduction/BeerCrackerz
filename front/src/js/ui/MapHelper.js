@@ -209,8 +209,11 @@ class MapHelper {
       this._kom.getTemplate(`/popup/${options.type}`).then(dom => {
         const element = document.createElement('DIV');
         element.appendChild(dom);
-        const user = options.user;
+        const user = options.user || this.user.username;
         const desc = Utils.stripDom(options.description) || this.nls.popup(`${options.type}NoDesc`);
+        if (!options.creationDate) { // For new marker, we write date of today
+          options.creationDate = new Date().toISOString().slice(0, 10);
+        }
         const date = new Intl.DateTimeFormat(this.nls.fullLang, { dateStyle: 'long' }).format(new Date(options.creationDate));
         Utils.replaceString(element, `{${options.type.toUpperCase()}_NAME}`, Utils.stripDom(options.name));
         Utils.replaceString(element, `{${options.type.toUpperCase()}_FINDER}`, user);

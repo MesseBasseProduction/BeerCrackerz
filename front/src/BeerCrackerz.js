@@ -7,6 +7,7 @@ import ZoomSlider from './js/ui/ZoomSlider.js';
 import Notification from './js/ui/Notification.js';
 import Rating from './js/ui/Rating.js';
 
+import Clusters from './js/utils/ClusterEnum.js';
 import Providers from './js/utils/ProviderEnum.js';
 import Utils from './js/utils/Utils.js';
 
@@ -443,44 +444,9 @@ class BeerCrackerz extends MapHelper {
   _initMarkers() {
     return new Promise(resolve => {
       // Init map clusters for marks to be displayed (disable clustering at opened popup zoom level)
-      const clusterOptions = {
-        animateAddingMarkers: true,
-        disableClusteringAtZoom: 18,
-        spiderfyOnMaxZoom: false
-      };
-      this._clusters.spot = new window.L.MarkerClusterGroup(Object.assign(clusterOptions, {
-        iconCreateFunction: cluster => {
-          return window.L.divIcon({
-            className: 'cluster-icon-wrapper',
-            html: `
-              <img src="/static/img/marker/cluster-icon-green.png" class="cluster-icon">
-              <span class="cluster-label">${cluster.getChildCount()}</span>
-            `
-          });
-        }
-      }));
-      this._clusters.shop = new window.L.MarkerClusterGroup(Object.assign(clusterOptions, {
-        iconCreateFunction: cluster => {
-          return window.L.divIcon({
-            className: 'cluster-icon-wrapper',
-            html: `
-              <img src="/static/img/marker/cluster-icon-blue.png" class="cluster-icon">
-              <span class="cluster-label">${cluster.getChildCount()}</span>
-            `
-          });
-        }
-      }));
-      this._clusters.bar = new window.L.MarkerClusterGroup(Object.assign(clusterOptions, {
-        iconCreateFunction: cluster => {
-          return window.L.divIcon({
-            className: 'cluster-icon-wrapper',
-            html: `
-              <img src="/static/img/marker/cluster-icon-red.png" class="cluster-icon">
-              <span class="cluster-label">${cluster.getChildCount()}</span>
-            `
-          });
-        }
-      }));
+      this._clusters.spot = Clusters.spot;
+      this._clusters.shop = Clusters.shop;
+      this._clusters.bar = Clusters.bar;
       // Append clusters to the map depending on user preferences
       if (Utils.getPreference(`poi-show-spot`) === 'true') {
         this._map.addLayer(this._clusters.spot);
@@ -706,7 +672,7 @@ class BeerCrackerz extends MapHelper {
       Utils.replaceString(dom.querySelector(`#nls-${options.type}-name`), `{${options.type.toUpperCase()}_NAME}`, this.nls[options.type]('nameLabel'));
       Utils.replaceString(dom.querySelector(`#nls-${options.type}-desc`), `{${options.type.toUpperCase()}_DESC}`, this.nls[options.type]('descLabel'));
       Utils.replaceString(dom.querySelector(`#nls-${options.type}-rate`), `{${options.type.toUpperCase()}_RATE}`, this.nls[options.type]('rateLabel'));
-      Utils.replaceString(submit, `{${options.type.toUpperCase()}_SUBMIT}`, this.nls.nav('add'));
+      Utils.replaceString(submit, `{${options.type.toUpperCase()}_SUBMIT}`, this.nls.nav('edit'));
       Utils.replaceString(cancel, `{${options.type.toUpperCase()}_CANCEL}`, this.nls.nav('cancel'));
       name.value = options.name;
       description.value = options.description;
@@ -722,19 +688,15 @@ class BeerCrackerz extends MapHelper {
             this.markPopupFactory(options).then(dom => {
               options.dom = dom;
               options.marker.setPopupContent(options.dom);
+              this._kom[`${options.type}Edited`](options.id, this.formatMarker(options)).then(() => {
+                // Notify user through UI that marker has been successfully deleted
+                this._notification.raise(this.nls.notif(`${options.type}Edited`));
+                this.closeModal(null, true);
+              });
             });
             break;
           }
         }
-        // Format marks to be saved and then update user preference with
-        const formattedMarks = [];
-        for (let i = 0; i < this._marks[options.type].length; ++i) {
-          formattedMarks.push(this.formatSavedMarker(this._marks[options.type][i]));
-        }
-        Utils.setPreference(`saved-${options.type}`, JSON.stringify(formattedMarks));
-        // Notify user through UI that marker has been successfully deleted
-        this._notification.raise(this.nls.notif(`${options.type}Deleted`));
-        this.closeModal(null, true);
       });
 
       cancel.addEventListener('click', this.closeModal.bind(this, null, true));
@@ -959,17 +921,18 @@ class BeerCrackerz extends MapHelper {
    * @param {Object} options The new marker options
    **/
   _markerSaved(options) {
-    // Save marke in marks and clusters for the map
-    this._marks[options.type].push(options);
-    this._clusters[options.type].addLayer(options.marker);
-    // Notify user that new marker has been saved
-    this._notification.raise(this.nls.notif(`${options.type}Added`));
-    // Update marker circles visibility according to user position
-    this.updateMarkerCirclesVisibility();
-    // Clear new marker to let user add other stuff
-    this._newMarker = null;
     // Save new marker in local storage, later to be sent to the server
-    this._kom[`${options.type}Created`](this.formatSavedMarker(options));
+    this._kom[`${options.type}Created`](this.formatMarker(options)).then(() => {
+      // Save marke in marks and clusters for the map
+      this._marks[options.type].push(options);
+      this._clusters[options.type].addLayer(options.marker);
+      // Notify user that new marker has been saved
+      this._notification.raise(this.nls.notif(`${options.type}Added`));
+      // Update marker circles visibility according to user position
+      this.updateMarkerCirclesVisibility();
+      // Clear new marker to let user add other stuff
+      this._newMarker = null;
+    });
   }
 
 
@@ -1028,7 +991,7 @@ class BeerCrackerz extends MapHelper {
 
   /**
    * @method
-   * @name formatSavedMarker
+   * @name formatMarker
    * @public
    * @memberof BeerCrackerz
    * @author Arthur Beaulieu
@@ -1036,11 +999,11 @@ class BeerCrackerz extends MapHelper {
    * @description
    * <blockquote>
    * This method formats a mark returned from MapHelper so it can be parsed
-   * using JSON.parse (in order to store it in local storage/database)
+   * using JSON.parse (in order to store it in database)
    * </blockquote>
    * @param {Object} mark The mark options from internal this._marks[type]
    **/
-  formatSavedMarker(mark) {
+  formatMarker(mark) {
     return {
       name: mark.name,
       description: mark.description,
@@ -1091,23 +1054,19 @@ class BeerCrackerz extends MapHelper {
         for (let i = 0; i < marks.length; ++i) {
           // We found, remove circle, label and marker from map/clusters
           if (options.lat === marks[i].lat && options.lng === marks[i].lng) {
-            this.setMarkerCircles([ marks[i] ], false);
-            this.setMarkerLabels([marks[i]], false);
-            this._clusters[options.type].removeLayer(marks[i].marker);
-            marks.splice(i, 1);
+            this._kom[`${options.type}Deleted`](marks[i].id, this.formatMarker(marks[i])).then(() => {
+              this.setMarkerCircles([ marks[i] ], false);
+              this.setMarkerLabels([marks[i]], false);
+              this._clusters[options.type].removeLayer(marks[i].marker);
+              marks.splice(i, 1);
+              // Update internal marks array
+              this._marks[options.type] = marks;
+              // Notify user through UI that marker has been successfully deleted
+              this._notification.raise(this.nls.notif(`${options.type}Deleted`));
+            });
             break;
           }
         }
-        // Update internal marks array
-        this._marks[options.type] = marks;
-        // Format marks to be saved and then update user preference with
-        const formattedMarks = [];
-        for (let i = 0; i < this._marks[options.type].length; ++i) {
-          formattedMarks.push(this.formatSavedMarker(this._marks[options.type][i]));
-        }
-        Utils.setPreference(`saved-${options.type}`, JSON.stringify(formattedMarks));
-        // Notify user through UI that marker has been successfully deleted
-        this._notification.raise(this.nls.notif(`${options.type}Deleted`));
       }
     });
   }
