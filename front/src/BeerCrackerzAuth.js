@@ -610,10 +610,6 @@ class BeerCrackerzAuth {
     const _backValidation = (response) => {
       // Check response and handle status codes
       console.log(response);
-      // If all front and back tests are ok, redirect to auth
-      // If the user ma nually force redirection to authindex,
-      // the server should reject the request as the user is not authenticated
-      window.location = '/';
     };
     const _submit = () => {
       // Reset error css classes
@@ -623,7 +619,7 @@ class BeerCrackerzAuth {
       password1.classList.remove('error');
       password2.classList.remove('error');
       if (_frontFieldValidation()) {
-        this._kom.post('/api/register/submit', {
+        this._kom.post('/api/auth/register/', {
           username: username.value,
           email: mail.value,
           password1: password1.value,
