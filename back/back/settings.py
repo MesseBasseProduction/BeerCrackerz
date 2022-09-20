@@ -134,6 +134,10 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:8080', 'http://127.0.0.1:8080']
 EXTENDED_PAGINATION_DEFAULT_SIZE = 20
 EXTENDED_PAGINATION_DEFAULT_SIZE_QUERY_PARAM = 'size'
 
+DEFAULT_FROM_EMAIL = 'no-reply@beer-crackerz.org'
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'tmp/email')
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
