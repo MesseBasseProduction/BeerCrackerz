@@ -770,7 +770,7 @@ class BeerCrackerzAuth {
       password2.classList.remove('error');
       if (_frontFieldValidation()) {
         console.log(params)
-        this._kom.post('/api/auth/register/', {
+        this._kom.post(`/api/auth/password-reset/?uidb64=${params.uidb64}&token=${params.token}`, {
           password1: password1.value,
           password2: password2.value
         }).then(_backValidation).catch(() => {
