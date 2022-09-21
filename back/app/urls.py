@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import IndexView, WelcomeView, ErrorView, LoginAsideView, RegisterAsideView, ForgotPasswordAsideView, SpotPopupView, ShopPopupView, BarPopupView, DeleteMarkModalView, EditBarModalView, EditShopModalView, EditSpotModalView, HideShowModalView, NewBarModalView, NewShopModalView, NewSpotModalView, UserModalView
+from .views import IndexView, WelcomeView, ErrorView, LoginAsideView, RegisterAsideView, ForgotPasswordAsideView, ResetPasswordAsideView, SpotPopupView, ShopPopupView, BarPopupView, DeleteMarkModalView, EditBarModalView, EditShopModalView, EditSpotModalView, HideShowModalView, NewBarModalView, NewShopModalView, NewSpotModalView, UserModalView
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
@@ -10,6 +10,7 @@ urlpatterns = [
     path('aside/login', LoginAsideView.as_view(), name='loginAside'),
     path('aside/register', RegisterAsideView.as_view(), name='registerAside'),
     path('aside/forgotpassword', ForgotPasswordAsideView.as_view(), name='forgotPasswordAside'),
+    path('aside/resetpassword', ResetPasswordAsideView.as_view(), name='resetPasswordAside'),    
     # Markers popup template urls
     path('popup/spot', SpotPopupView.as_view(), name='spotPopup'),
     path('popup/shop', ShopPopupView.as_view(), name='shopPopup'),

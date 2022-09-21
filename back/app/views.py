@@ -30,6 +30,10 @@ class ForgotPasswordAsideView(TemplateView):
     template_name = 'aside/forgot-password.html'
 
 
+class ResetPasswordAsideView(TemplateView):
+    template_name = 'aside/reset-password.html'
+
+
 # Popup views for markers
 class SpotPopupView(TemplateView):
     template_name = 'popup/spot.html'

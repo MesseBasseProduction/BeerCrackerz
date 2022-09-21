@@ -108,6 +108,11 @@ class LangManager {
   }
 
 
+  resetPassword(key) {
+    return this._values.auth.resetPassword[key] || '';    
+  }
+
+
   get fullLang() {
     return this._fullLang;
   }

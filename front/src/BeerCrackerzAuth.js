@@ -113,11 +113,26 @@ class BeerCrackerzAuth {
     this._kom = new Kom();
     // We ensure the Kom layer is valid and ready to go any further
     if (this._kom.isValid === true) {
+      const urlSearchParams = new URLSearchParams(window.location.search);
+      const params = Object.fromEntries(urlSearchParams.entries());
+      if (params.activate) {
+        const error = document.getElementById('login-error');
+        error.classList.add('visible');
+        if (params.activate === 'True') {
+          error.classList.add('success');
+          error.innerHTML = this.nls.register('activationSuccess');
+        } else {
+          error.innerHTML = this.nls.register('activationError');
+        }
+      } else if (params.uidb64 && params.token) {
+        this._loadForgotPasswordAside(params);
+      }
+
       this._initMap()
-      .then(this._initGeolocation.bind(this))
-      .then(this._initEvents.bind(this))
-      .then(this._initMarkers.bind(this))
-      .catch(this._fatalError.bind(this));
+        .then(this._initGeolocation.bind(this))
+        .then(this._initEvents.bind(this))
+        .then(this._initMarkers.bind(this))
+        .catch(this._fatalError.bind(this));
     } else {
       this._fatalError({
         file: 'Kom.js',
@@ -463,11 +478,18 @@ class BeerCrackerzAuth {
    * The _loadForgotPasswordAside() method will load the forgot password content into the aside
    * </blockquote>
    **/
-  _loadForgotPasswordAside() {
-    this._loadAside('forgotpassword').then(this._handleResetPasswordAside.bind(this)).catch(err => {
-      err.msg = `Couldn't fetch or build the forgot password aside`;
-      this._fatalError(err);
-    });
+  _loadForgotPasswordAside(params) {
+    if (params.uidb64 && params.token) {
+      this._loadAside('resetpassword').then(this._handleResetPasswordAside.bind(this, params)).catch(err => {
+        err.msg = `Couldn't fetch or build the forgot password aside`;
+        this._fatalError(err);
+      });
+    } else {
+      this._loadAside('forgotpassword').then(this._handleForgotPasswordAside.bind(this)).catch(err => {
+        err.msg = `Couldn't fetch or build the forgot password aside`;
+        this._fatalError(err);
+      });
+    }
   }
 
 
@@ -503,6 +525,7 @@ class BeerCrackerzAuth {
     const password = document.getElementById('password');
     // useful login method for field check and server response check
     const _frontFieldValidation = () => {
+      error.className = '';
       // Handling empty error cases
       if (username.value === '' && password.value === '') {
         error.classList.add('visible');
@@ -641,19 +664,19 @@ class BeerCrackerzAuth {
 
   /**
    * @method
-   * @name _handleResetPasswordAside
+   * @name _handleForgotPasswordAside
    * @private
    * @memberof BeerCrackerzAuth
    * @author Arthur Beaulieu
    * @since September 2022
    * @description
    * <blockquote>
-   * The _handleResetPasswordAside() method will replace the aside content with the fogot password
+   * The _handleForgotPasswordAside() method will replace the aside content with the fogot password
    * template, then it will handle its i18n, and all of its interactivity to submit forgot password
    * form to the server.
    * </blockquote>
    **/
-  _handleResetPasswordAside() {
+  _handleForgotPasswordAside() {
     // Update page nls according to browser language
     const aside = document.getElementById('aside');
     document.title = this.nls.forgotPassword('headTitle');
@@ -698,6 +721,67 @@ class BeerCrackerzAuth {
     // Submit click event
     document.getElementById('forgot-password-submit').addEventListener('click', _submit.bind(this), false);
     mail.addEventListener('keydown', e => { if (e.key === 'Enter') { _submit(); } });
+
+    document.getElementById('login-aside').addEventListener('click', this._loadLoginAside.bind(this), false);
+    document.getElementById('aside-expander').addEventListener('click', this._toggleAside.bind(this), false);
+  }
+
+
+  _handleResetPasswordAside(params) {
+    // Update page nls according to browser language
+    const aside = document.getElementById('aside');
+    document.title = this.nls.resetPassword('headTitle');
+    Utils.replaceString(aside, '{RESET_PASSWORD_SUBTITLE}', this.nls.resetPassword('subtitle'));
+    Utils.replaceString(aside, '{RESET_PASSWORD_HIDDEN_ERROR}', this.nls.resetPassword('hiddenError'));
+    Utils.replaceString(aside, '{RESET_PASSWORD_1}', this.nls.resetPassword('password1'));
+    Utils.replaceString(aside, '{RESET_PASSWORD_2}', this.nls.resetPassword('password2'));
+    Utils.replaceString(aside, '{RESET_PASSWORD_BUTTON}', this.nls.resetPassword('reset'));
+    Utils.replaceString(aside, '{RESET_PASSWORD_LOGIN_LABEL}', this.nls.resetPassword('loginLabel'));
+    Utils.replaceString(aside, '{RESET_PASSWORD_LOGIN}', this.nls.resetPassword('login'));
+    const error = document.getElementById('reset-password-error');
+    const password1 = document.getElementById('password1');
+    const password2 = document.getElementById('password2');
+    // useful login method for field check and server response check
+    const _frontFieldValidation = () => {
+      // Handling empty error cases
+      if (password1.value === '' || password2.value === '') {
+        error.classList.add('visible');
+        error.innerHTML = this.nls.resetPassword('fieldEmpty');
+        if (password1.value === '') { password1.classList.add('error'); }
+        if (password2.value === '') { password2.classList.add('error'); }
+        return false;
+      } else if (password1.value !== password2.value) {
+        error.classList.add('visible');
+        error.innerHTML = this.nls.resetPassword('notMatchingPassword');
+        password1.classList.add('error');
+        password2.classList.add('error');
+        return false;
+      }
+      return true;
+    };
+    const _backValidation = (response) => {
+      // Check response and handle status codes
+      console.log(response);
+    };
+    const _submit = () => {
+      // Reset error css classes
+      error.classList.remove('visible');
+      password1.classList.remove('error');
+      password2.classList.remove('error');
+      if (_frontFieldValidation()) {
+        console.log(params)
+        this._kom.post('/api/auth/register/', {
+          password1: password1.value,
+          password2: password2.value
+        }).then(_backValidation).catch(() => {
+          error.classList.add('visible');
+          error.innerHTML = this.nls.resetPassword('serverError');
+        });
+      }
+    };
+    // Submit click event
+    document.getElementById('reset-password-submit').addEventListener('click', _submit.bind(this), false);
+    password2.addEventListener('keydown', e => { if (e.key === 'Enter') { _submit(); } });
 
     document.getElementById('login-aside').addEventListener('click', this._loadLoginAside.bind(this), false);
     document.getElementById('aside-expander').addEventListener('click', this._toggleAside.bind(this), false);

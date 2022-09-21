@@ -124,7 +124,9 @@
       "notRegistered": "Déjà inscrit?",
       "login": "Se connecter",
       "fieldEmpty": "Veuillez remplir tous les champs du formulaire",
-      "notMatchingPassword": "Les deux mots de passe ne correspondent pas"
+      "notMatchingPassword": "Les deux mots de passe ne correspondent pas",
+      "activationSuccess": "Votre compte à été activé avec succès!",
+      "activationError": "Erreur lors de l'activation de votre compte"
     },
     "forgotPassword": {
       "headTitle": "Mot de passe oublié | BeerCrackerz",
@@ -136,6 +138,16 @@
       "login": "Se connecter",
       "fieldEmpty": "Renseignez votre adresse mail",
       "serverError": "Une erreur serveur est survenue, contactez le support"
+    },
+    "resetPassword": {
+      "headTitle": "Réinitialiser le mot de passe | BeerCrackerz",
+      "subtitle": "Réinitialiser le mot de passe",
+      "hiddenError": "Oh! Un texte caché!",
+      "password1": "Mot de passe",
+      "password2": "Confirmer le mot de passe",
+      "reset": "Réinitialiser votre mot de passe",
+      "loginLabel": "Vous vous en souvenez?",
+      "login": "Se connecter"
     }
   }
 }
