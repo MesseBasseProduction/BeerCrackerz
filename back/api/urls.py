@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 
 from api.views import UserViewSet, SpotViewSet, ShopViewSet, BarViewSet, user_connected, UserRegisterView
-from api.views.auth import LoginView, LogoutView, ActivationView, PasswordResetRequest
+from api.views.auth import LoginView, LogoutView, ActivationView, PasswordResetRequest, PasswordReset
 
 router = routers.DefaultRouter()
 router.register(r'user', UserViewSet, basename='user')
@@ -18,5 +18,6 @@ urlpatterns = [
     path('auth/register/', UserRegisterView.as_view(), name='register'),
     path('auth/activation/', ActivationView.as_view(), name='user-activation'),
     path('auth/password-reset-request/', PasswordResetRequest.as_view(), name='password-reset-request'),
+    path('auth/password-reset/', PasswordReset.as_view(), name='password-reset-request'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.password_validation import validate_password
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -82,3 +83,36 @@ class PasswordResetRequest(APIView):
             EmailService.send_reset_password_email(user)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PasswordReset(APIView):
+    def post(self, request):
+        user_model = get_user_model()
+
+        uidb64, token = request.query_params.get('uidb64'), request.query_params.get('token')
+        password1, password2 = request.data.get('password1'), request.data.get('password2')
+        if not uidb64 or not token or not password1 or not password2:
+            raise ParseError()
+
+        if password1 != password2:
+            raise ParseError()
+
+        try:
+            uid = decode_uid(uidb64)
+            user = user_model.objects.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, user_model.DoesNotExist):
+            raise ParseError()
+
+        if check_token(user, token):
+            validate_password(password=password1, user=user)
+            user.set_password(password1)
+            user.save()
+            # TODO : See if we send a confirmation mail
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+
+
+
+
