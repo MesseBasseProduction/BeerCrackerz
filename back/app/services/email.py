@@ -33,3 +33,19 @@ class EmailService:
         body = template.render(context)
 
         EmailService._send_mail_async(subject=subject, to=to, body=body)
+
+    @staticmethod
+    def send_reset_password_email(user):
+        subject = 'Beer Crackerz - Réinitialisation de mot de passe'
+        to = (user.email,)
+
+        template = get_template('email/password-reset.html')
+        uidb64 = encode_uid(user.pk)
+        token = get_token_from_user(user)
+        link = f'{settings.SERVER_URL}{reverse("welcome")}?uidb64={uidb64}&token={token}'
+        context = {'user': user, 'link': link}
+        body = template.render(context)
+
+        EmailService._send_mail_async(subject=subject, to=to, body=body)
+
+

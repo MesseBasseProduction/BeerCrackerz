@@ -9,6 +9,7 @@ from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from app.services.email import EmailService
 from app.utils.token import decode_uid, check_token
 
 
@@ -43,7 +44,6 @@ class ActivationView(View):
         user_model = get_user_model()
 
         uidb64, token = request.GET.get('uidb64'), request.GET.get('token')
-        print(uidb64, token)
         if not uidb64 or not token:
             return self.redirect_to_welcome(activate=False)
 
@@ -63,3 +63,22 @@ class ActivationView(View):
     def redirect_to_welcome(self, activate):
         url = f'{reverse("welcome")}?activate={activate}'
         return redirect(url)
+
+
+class PasswordResetRequest(APIView):
+    def post(self, request):
+        user_model = get_user_model()
+
+        email = request.data.get('email')
+        if not email:
+            raise ParseError()
+
+        try:
+            user = user_model.objects.get(email=email)
+        except user_model.DoesNotExist:
+            user = None
+
+        if user is not None:
+            EmailService.send_reset_password_email(user)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -681,17 +681,13 @@ class BeerCrackerzAuth {
     const _backValidation = (response) => {
       // Check response and handle status codes
       console.log(response);
-      // If all front and back tests are ok, redirect to auth
-      // If the user ma nually force redirection to authindex,
-      // the server should reject the request as the user is not authenticated
-      window.location = 'authindex.html';
     };
     const _submit = () => {
       // Reset error css classes
       error.classList.remove('visible');
       mail.classList.remove('error');
       if (_frontFieldValidation()) {
-        this._kom.post('/api/password/reset', {
+        this._kom.post('/api/auth/password-reset-request/', {
           email: mail.value
         }).then(_backValidation).catch(() => {
           error.classList.add('visible');
