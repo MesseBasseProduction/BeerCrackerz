@@ -4,7 +4,7 @@ from .views import IndexView, WelcomeView, ErrorView, LoginAsideView, RegisterAs
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
-    path('welcome/', WelcomeView.as_view(), name='index'),
+    path('welcome/', WelcomeView.as_view(), name='welcome'),
     path('error/', ErrorView.as_view(), name='error'),
     # Aside template urls for Auth features
     path('aside/login', LoginAsideView.as_view(), name='loginAside'),

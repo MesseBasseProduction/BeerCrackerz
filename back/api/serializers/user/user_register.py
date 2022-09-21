@@ -1,17 +1,18 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+
+from app.services.email import EmailService
 
 
 class UserRegisterSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=50,
                                      validators=[UniqueValidator(queryset=get_user_model().objects.all())])
-    email = serializers.EmailField(max_length=50,
+    email = serializers.EmailField(max_length=264,
                                    validators=[UniqueValidator(queryset=get_user_model().objects.all())])
-    password1 = serializers.CharField(max_length=15)
-    password2 = serializers.CharField(max_length=15)
+    password1 = serializers.CharField(max_length=64)
+    password2 = serializers.CharField(max_length=64)
     is_active = serializers.HiddenField(default=False)
 
     def create(self, validated_data):
@@ -21,6 +22,8 @@ class UserRegisterSerializer(serializers.Serializer):
 
         user.set_password(password)
         user.save()
+
+        EmailService.send_user_creation_email(user)
         return user
 
     def to_representation(self, instance):

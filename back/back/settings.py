@@ -33,6 +33,8 @@ ALLOWED_HOSTS.extend(
     )
 )
 
+SERVER_URL = os.environ.get('SERVER_URL')
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -80,8 +82,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'back.wsgi.application'
-
-CORS_ORIGIN_ALLOW_ALL = True
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

@@ -1,6 +1,11 @@
 import threading
 
+from django.conf import settings
 from django.core.mail import EmailMessage
+from django.template.loader import get_template
+from django.urls import reverse
+
+from app.utils.token import get_token_from_user, encode_uid
 
 
 class EmailService:
@@ -14,3 +19,17 @@ class EmailService:
     @staticmethod
     def _send_mail_async(**kwargs):
         threading.Thread(target=EmailService._send_mail, kwargs=kwargs).start()
+
+    @staticmethod
+    def send_user_creation_email(user):
+        subject = 'Beer Crackerz - Création de compte'
+        to = (user.email,)
+
+        template = get_template('email/user-creation.html')
+        uidb64 = encode_uid(user.pk)
+        token = get_token_from_user(user)
+        link = f'{settings.SERVER_URL}{reverse("user-activation")}?uidb64={uidb64}&token={token}'
+        context = {'user': user, 'link': link}
+        body = template.render(context)
+
+        EmailService._send_mail_async(subject=subject, to=to, body=body)
