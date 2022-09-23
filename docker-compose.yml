@@ -30,6 +30,9 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      BACKEND_USE_EMAIL_FILE_SYSTEM: ${BACKEND_USE_EMAIL_FILE_SYSTEM}
+      MAILJET_API_KEY: ${MAILJET_API_KEY}
+      MAILJET_API_SECRET: ${MAILJET_API_SECRET}
     volumes:
       - ./back:/back
     depends_on:
@@ -45,8 +48,19 @@ services:
       - ${DB_PORT}:${DB_CONTAINER_PORT}
     volumes:
       - beer_crakerz_db:/var/lib/postgresql/data
+#  email:
+#    image: juanluisbaptiste/postfix:alpine
+#    container_name: ${EMAIL_HOST}
+#    expose:
+#      - ${EMAIL_PORT}
+#    environment:
+#      SMTP_SERVER: ${EMAIL_HOST}
+#      SMTP_PORT: ${EMAIL_PORT}
+##      SMTP_USERNAME: ${EMAIL_USERNAME}
+##      SMTP_PASSWORD: ${EMAIL_PASSWORD}
+#      SERVER_HOSTNAME: ${EMAIL_HOST}
   adminer:
-    container_name: ${DB_ADMIN_NAME}
+    container_name: ${DB_ADMINER_NAME}
     image: adminer
     ports:
       - ${DB_ADMINER_PORT}:${DB_ADMINER_CONTAINER_PORT}
