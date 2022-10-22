@@ -7,6 +7,7 @@ import ZoomSlider from './js/ui/ZoomSlider.js';
 import Notification from './js/ui/Notification.js';
 import Rating from './js/ui/Rating.js';
 
+import DropElement from './js/utils/DropElement.js';
 import Clusters from './js/utils/ClusterEnum.js';
 import Providers from './js/utils/ProviderEnum.js';
 import Utils from './js/utils/Utils.js';
@@ -764,6 +765,12 @@ class BeerCrackerz extends MapHelper {
       Utils.replaceString(dom.querySelector(`#nls-user-modal-accuracy`), `{ACCURACY_USER_MODAL}`, this.nls.modal('userAccuracyPref'));
       Utils.replaceString(dom.querySelector(`#nls-user-modal-debug`), `{DEBUG_USER_MODAL}`, this.nls.modal('userDebugPref'));
       Utils.replaceString(dom.querySelector(`#nls-about-desc`), `{BEERCRACKERZ_DESC}`, this.nls.modal('aboutDesc'));
+      Utils.replaceString(dom.querySelector(`#nls-update-pp`), `{UPDATE_PROFILE_PIC_LABEL}`, this.nls.modal('updatePP'));
+
+      new DropElement({
+        target: dom.querySelector('#update-pp-wrapper'),
+        onDrop: this.updateProfilePictureModal.bind(this)
+      });
 
       document.getElementById('overlay').appendChild(dom);
       document.getElementById('overlay').style.display = 'flex';
@@ -778,6 +785,7 @@ class BeerCrackerz extends MapHelper {
 
       document.getElementById('high-accuracy-toggle').addEventListener('change', this.toggleHighAccuracy.bind(this));
       document.getElementById('debug-toggle').addEventListener('change', this.toggleDebug.bind(this));
+      document.getElementById('update-pp').addEventListener('change', this.updateProfilePictureModal.bind(this));
 
       setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
 
@@ -787,6 +795,38 @@ class BeerCrackerz extends MapHelper {
         })
       });
     });
+  }
+
+
+  updateProfilePictureModal(event) {
+    const fileInput = document.getElementById('update-pp');
+    let files = { files: fileInput.files }; // From input change
+    if (event.files && event.files.length === 1) { // From drop
+      files = { files: event.files };
+    }
+
+    if (files.files && files.files.length === 1) {
+      // Open image edit modal (perfectly over options with previous)
+      // place resizer around en transparence
+      // when done, compute et envoi file
+      this._kom.getTemplate('/modal/updatepp').then(dom => {
+        Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('updatePPTitle'));
+        Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{UPDATE_PP_DESC}`, this.nls.modal('updatePPDesc'));
+
+        document.getElementById('overlay').appendChild(dom);
+        document.getElementById('overlay').style.display = 'flex';
+
+        if (FileReader) {
+          const fr = new FileReader();
+          fr.onload = () => {
+            document.getElementById('wip-pp').src = fr.result;
+          };
+          fr.readAsDataURL(files.files[0]);
+        } else {
+          console.error('Couldnt read file');
+        }
+      });
+    }
   }
 
 

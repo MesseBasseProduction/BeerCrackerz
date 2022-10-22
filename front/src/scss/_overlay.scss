@@ -130,6 +130,27 @@
         width: auto;
       }
     }
+
+    .update-pp-wrapper {
+      padding: 10px;
+    }
+  }
+
+  .update-pp-modal {
+    align-items: center;
+    background: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    z-index: 50; /* Highest value, must be on top user profile modal */
+
+    img {
+      max-height: 500px;
+      max-width: 500px;
+    }
   }
 }
 
