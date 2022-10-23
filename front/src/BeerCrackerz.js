@@ -832,10 +832,10 @@ class BeerCrackerz extends MapHelper {
           document.getElementById(`update-pp-submit`).addEventListener('click', () => {
             this._kom.patchImage(`api/user/${this._user.id}/profile-picture/`, {
               profile_picture: document.getElementById('wip-pp').src,
-              minX: imageResizer.getMinPoint().x,
-              minY: imageResizer.getMinPoint().y,
-              maxX: imageResizer.getMaxPoint().x,
-              maxY: imageResizer.getMaxPoint().y
+              minX: Math.round(imageResizer.getMinPoint().x),
+              minY: Math.round(imageResizer.getMinPoint().y),
+              maxX: Math.round(imageResizer.getMaxPoint().x),
+              maxY: Math.round(imageResizer.getMaxPoint().y)
             }).then(() => {
               console.log('done')
             }).catch(() => {
