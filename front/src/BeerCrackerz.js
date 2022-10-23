@@ -806,20 +806,40 @@ class BeerCrackerz extends MapHelper {
     }
 
     if (files.files && files.files.length === 1) {
-      // Open image edit modal (perfectly over options with previous)
       // place resizer around en transparence
-      // when done, compute et envoi file
       this._kom.getTemplate('/modal/updatepp').then(dom => {
         Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('updatePPTitle'));
         Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{UPDATE_PP_DESC}`, this.nls.modal('updatePPDesc'));
+        Utils.replaceString(dom.querySelector(`#update-pp-cancel`), `{UPDATE_PP_CANCEL}`, this.nls.nav('cancel'));
+        Utils.replaceString(dom.querySelector(`#update-pp-submit`), `{UPDATE_PP_SUBMIT}`, this.nls.nav('upload'));
 
         document.getElementById('overlay').appendChild(dom);
         document.getElementById('overlay').style.display = 'flex';
+
+        const _onFileLoaded = () => {
+          // Send PP to the server
+          document.getElementById(`update-pp-submit`).addEventListener('click', () => {
+            this._kom.postImage('user/id/profile-picture', {
+              profile_picture: document.getElementById('wip-pp').src,
+              min: { x: 0, y: 0 },
+              max: { x: 0, y: 0 }
+            }).then(() => {
+              console.log('done')
+            }).catch(() => {
+              // Send notif
+              console.log('Failed')
+              this.closeModal(null, true);              
+            });
+          });
+          // Cancel
+          document.getElementById(`update-pp-cancel`).addEventListener('click', this.closeModal.bind(this, null, true));
+        };
 
         if (FileReader) {
           const fr = new FileReader();
           fr.onload = () => {
             document.getElementById('wip-pp').src = fr.result;
+            _onFileLoaded();
           };
           fr.readAsDataURL(files.files[0]);
         } else {

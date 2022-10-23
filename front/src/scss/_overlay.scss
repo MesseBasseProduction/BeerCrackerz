@@ -141,10 +141,10 @@
     background: rgb(255, 255, 255);
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: calc(100% - 2rem);
     justify-content: center;
     position: absolute;
-    width: 100%;
+    width: calc(100% - 2rem);
     z-index: 50; /* Highest value, must be on top user profile modal */
 
     img {
