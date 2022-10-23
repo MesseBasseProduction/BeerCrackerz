@@ -307,13 +307,13 @@ class ImageResizer {
 
   _computMinMax() {
     this._min = {
-      x: this.resizerRect.x - this.containerRect.x,
-      y: this.resizerRect.y - this.containerRect.y
+      x: this.resizerRect.x - this.containerRect.x || 0,
+      y: this.resizerRect.y - this.containerRect.y || 0
     };
 
     this._max = {
-      x: this.resizerRect.x + this.resizerRect.width - this.containerRect.x,
-      y: this.resizerRect.y + this.resizerRect.height - this.containerRect.y
+      x: this.resizerRect.x + this.resizerRect.width - this.containerRect.x || this.containerRect.x,
+      y: this.resizerRect.y + this.resizerRect.height - this.containerRect.y || this.containerRect.y
     };
   }
 
@@ -332,11 +332,13 @@ class ImageResizer {
 
 
   getMinPoint() {
+    this._computMinMax();
     return this._min;
   }
 
 
   getMaxPoint() {
+    this._computMinMax();
     return this._max;
   }
 
