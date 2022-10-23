@@ -815,18 +815,42 @@ class BeerCrackerz extends MapHelper {
         return;
       }
 
-      // place resizer around en transparence
-      this._kom.getTemplate('/modal/updatepp').then(dom => {
-        Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('updatePPTitle'));
-        Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{UPDATE_PP_DESC}`, this.nls.modal('updatePPDesc'));
-        Utils.replaceString(dom.querySelector(`#update-pp-cancel`), `{UPDATE_PP_CANCEL}`, this.nls.nav('cancel'));
-        Utils.replaceString(dom.querySelector(`#update-pp-submit`), `{UPDATE_PP_SUBMIT}`, this.nls.nav('upload'));
-        document.getElementById('overlay').appendChild(dom);
-        document.getElementById('overlay').style.display = 'flex';
+      if (FileReader) {
+        const fr = new FileReader();
+        fr.onload = () => {
+          var image = new Image();
+          image.src = fr.result;
+          image.onload = () => {
+            if (image.width < 512 || image.height < 512) {
+              document.getElementById('update-pp').value = '';
+              document.getElementById('update-pp').classList.add('error');
+              document.getElementById('update-pp-error').innerHTML = this.nls.modal('updatePPDimensionError');
+              return;
+            } else {
+              _onFileLoaded(image.width, image.height, fr.result);
+            }
+          };
+        };
+        fr.readAsDataURL(files.files[0]);
+      } else {
+        console.error('Couldnt read file');
+      }
 
-        const _onFileLoaded = () => {
+      // place resizer around en transparence
+      const _onFileLoaded = (width, height, b64) => {
+        this._kom.getTemplate('/modal/updatepp').then(dom => {
+          Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('updatePPTitle'));
+          Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{UPDATE_PP_DESC}`, this.nls.modal('updatePPDesc'));
+          Utils.replaceString(dom.querySelector(`#update-pp-cancel`), `{UPDATE_PP_CANCEL}`, this.nls.nav('cancel'));
+          Utils.replaceString(dom.querySelector(`#update-pp-submit`), `{UPDATE_PP_SUBMIT}`, this.nls.nav('upload'));
+          document.getElementById('overlay').appendChild(dom);
+          document.getElementById('overlay').style.display = 'flex';
+          document.getElementById('wip-pp').src = b64;
+
           const imageResizer = new ImageResizer({
-            wrapper: document.getElementById('wip-pp-wrapper')
+            wrapper: document.getElementById('wip-pp-wrapper'),
+            width: width,
+            height: height
           });          
           // Send PP to the server
           document.getElementById(`update-pp-submit`).addEventListener('click', () => {
@@ -845,19 +869,8 @@ class BeerCrackerz extends MapHelper {
           });
           // Cancel
           document.getElementById(`update-pp-cancel`).addEventListener('click', this.closeModal.bind(this, null, true));
-        };
-
-        if (FileReader) {
-          const fr = new FileReader();
-          fr.onload = () => {
-            document.getElementById('wip-pp').src = fr.result;
-            _onFileLoaded();
-          };
-          fr.readAsDataURL(files.files[0]);
-        } else {
-          console.error('Couldnt read file');
-        }
-      });
+        });
+      };
     }
   }
 

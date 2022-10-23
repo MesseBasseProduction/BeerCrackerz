@@ -2,6 +2,9 @@ class ImageResizer {
 
 
   constructor(options) {
+    this._width = options.width;
+    this._height = options.height;
+
     this._dom = {
       wrapper: options.wrapper,
       container: null,
@@ -84,6 +87,11 @@ class ImageResizer {
 
     this._dom.wrapper.appendChild(this._dom.container);
     this._dom.wrapper.appendChild(this._dom.resizer);
+
+    requestAnimationFrame(() => {
+      this.containerRect = this._dom.container.getBoundingClientRect();
+      this.resizerRect = this._dom.resizer.getBoundingClientRect();
+    });
   }
 
 
@@ -114,7 +122,7 @@ class ImageResizer {
 
 
   _mouseMove(event) {
-    if (this._isGrabbed())  {
+    if (this._isGrabbed())  {      
       if (event.touches && event.touches.length) {
         event.pageX = event.touches[0].clientX;
         event.pageY = event.touches[0].clientY;        
@@ -140,12 +148,16 @@ class ImageResizer {
       const offsetT = this.resizerRect.y - this.containerRect.y;
       const offsetR = this.resizerRect.x + this.resizerRect.width - this.containerRect.x;
       const offsetB = this.resizerRect.y + this.resizerRect.height - this.containerRect.y;
+      const minWidth = this.containerRect.width - (512 * this.containerRect.width / this._width);
+      const minHeight = this.containerRect.height - (512 * this.containerRect.height / this._height);
 
       if (this._grab.tl) { // Top/Left
         if (offsetT + (offsetX - offsetL) < 0) { // Top blocking
           const offset = this._dom.resizer.style.top.slice(0, -2);
           this._dom.resizer.style.top = 0;
           this._dom.resizer.style.left = this._dom.resizer.style.left.slice(0, -2) - offset;
+          return;
+        } else if (offsetT + (offsetX - offsetL) > minHeight) {
           return;
         }
         this._dom.resizer.style.left =  offsetL + (offsetX - offsetL);
@@ -156,6 +168,8 @@ class ImageResizer {
           this._dom.resizer.style.top = 0;
           this._dom.resizer.style.right = this._dom.resizer.style.right.slice(0, -2) - offset;
           return;
+        } else if (offsetT + (offsetR - offsetX) > minHeight) {
+          return;
         }
         this._dom.resizer.style.right = (this.containerRect.width - offsetR) + offsetR - offsetX;
         this._dom.resizer.style.top = offsetT + (offsetR - offsetX);
@@ -165,6 +179,8 @@ class ImageResizer {
           this._dom.resizer.style.bottom = 0;
           this._dom.resizer.style.right = this._dom.resizer.style.right.slice(0, -2) - offset;
           return;
+        } else if ((this.containerRect.height - offsetB) + offsetR - offsetX > minHeight) {
+          return;
         }
         this._dom.resizer.style.right = (this.containerRect.width - offsetR) + offsetR - offsetX;
         this._dom.resizer.style.bottom = (this.containerRect.height - offsetB) + offsetR - offsetX;
@@ -173,6 +189,8 @@ class ImageResizer {
           const offset = this._dom.resizer.style.bottom.slice(0, -2);
           this._dom.resizer.style.bottom = 0;
           this._dom.resizer.style.left = this._dom.resizer.style.left.slice(0, -2) - offset;
+          return;
+        } else if ((this.containerRect.height - offsetB) + (offsetX - offsetL) > minHeight) {
           return;
         }
         this._dom.resizer.style.left = offsetL + (offsetX - offsetL);
@@ -189,6 +207,8 @@ class ImageResizer {
           this._dom.resizer.style.bottom = 0;
           this._dom.resizer.style.top = this._dom.resizer.style.top.slice(0, -2) - (offset / 2);
           this._dom.resizer.style.left = this._dom.resizer.style.left.slice(0, -2) - (offset / 2);
+          return;
+        } else if (offsetL + (offsetX - offsetL) > minWidth) {
           return;
         }
         this._dom.resizer.style.left = offsetL + (offsetX - offsetL);
@@ -207,6 +227,8 @@ class ImageResizer {
           this._dom.resizer.style.top = this._dom.resizer.style.top.slice(0, -2) - (offset / 2);
           this._dom.resizer.style.left = this._dom.resizer.style.left.slice(0, -2) - (offset / 2);
           return;
+        } else if (offsetT + (offsetY - offsetT) > minHeight) {
+          return;
         }
         this._dom.resizer.style.top = offsetT + (offsetY - offsetT);
         this._dom.resizer.style.left = offsetL + ((offsetY - offsetT) / 2);
@@ -224,6 +246,8 @@ class ImageResizer {
           this._dom.resizer.style.top = this._dom.resizer.style.top.slice(0, -2) - (offset / 2);
           this._dom.resizer.style.right = this._dom.resizer.style.right.slice(0, -2) - (offset / 2);
           return;
+        } else if ((this.containerRect.width - offsetR) + offsetR - offsetX > minWidth) {
+          return;
         }
         this._dom.resizer.style.right = (this.containerRect.width - offsetR) + offsetR - offsetX;
         this._dom.resizer.style.bottom = (this.containerRect.height - offsetB) + (offsetR - offsetX) / 2;
@@ -240,6 +264,8 @@ class ImageResizer {
           this._dom.resizer.style.right = 0;
           this._dom.resizer.style.bottom = this._dom.resizer.style.bottom.slice(0, -2) - (offset / 2);
           this._dom.resizer.style.left = this._dom.resizer.style.left.slice(0, -2) - (offset / 2);
+          return;
+        } else if ((this.containerRect.height - offsetB) + offsetB - offsetY > minHeight) {
           return;
         }
         this._dom.resizer.style.bottom = (this.containerRect.height - offsetB) + offsetB - offsetY;
@@ -306,6 +332,9 @@ class ImageResizer {
 
 
   _computMinMax() {
+    this.containerRect = this._dom.container.getBoundingClientRect();
+    this.resizerRect = this._dom.resizer.getBoundingClientRect();
+
     this._min = {
       x: this.resizerRect.x - this.containerRect.x || 0,
       y: this.resizerRect.y - this.containerRect.y || 0
@@ -333,13 +362,20 @@ class ImageResizer {
 
   getMinPoint() {
     this._computMinMax();
-    return this._min;
+    console.log(this._min, this._max)
+    return {
+      x: (this._min.x / this.containerRect.width) * this._width,
+      y: (this._min.y / this.containerRect.height) * this._height
+    };
   }
 
 
   getMaxPoint() {
     this._computMinMax();
-    return this._max;
+    return {
+      x: (this._max.x / this.containerRect.width) * this._width,
+      y: (this._max.y / this.containerRect.height) * this._height      
+    };
   }
 
 
