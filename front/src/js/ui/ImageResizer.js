@@ -148,7 +148,7 @@ class ImageResizer {
           this._dom.resizer.style.bottom = 0;
           this._dom.resizer.style.right = this._dom.resizer.style.right.slice(0, -2) - offset;
           return;
-        }        
+        }
         this._dom.resizer.style.right = (this.containerRect.width - offsetR) + offsetR - offsetX;
         this._dom.resizer.style.bottom = (this.containerRect.height - offsetB) + offsetR - offsetX;
       } else if (this._grab.bl) { // Bottom/Left
@@ -157,7 +157,7 @@ class ImageResizer {
           this._dom.resizer.style.bottom = 0;
           this._dom.resizer.style.left = this._dom.resizer.style.left.slice(0, -2) - offset;
           return;
-        }  
+        }
         this._dom.resizer.style.left = offsetL + (offsetX - offsetL);
         this._dom.resizer.style.bottom = (this.containerRect.height - offsetB) + (offsetX - offsetL);
       } else if (this._grab.l) { // Left
@@ -173,7 +173,7 @@ class ImageResizer {
           this._dom.resizer.style.top = this._dom.resizer.style.top.slice(0, -2) - (offset / 2);
           this._dom.resizer.style.left = this._dom.resizer.style.left.slice(0, -2) - (offset / 2);
           return;
-        }   
+        }
         this._dom.resizer.style.left = offsetL + (offsetX - offsetL);
         this._dom.resizer.style.bottom = (this.containerRect.height - offsetB) + ((offsetX - offsetL) / 2);
         this._dom.resizer.style.top = offsetT + ((offsetX - offsetL) / 2);
@@ -256,10 +256,10 @@ class ImageResizer {
     this._max = {
       x: this.resizerRect.x + this.resizerRect.width - this.containerRect.x,
       y: this.resizerRect.y + this.resizerRect.height - this.containerRect.y
-    };    
+    };
   }
 
-  
+
   _isGrabbed() {
     if (this._grab.tl || this._grab.tr || this._grab.bl || this._grab.br) {
       return true;
@@ -276,7 +276,7 @@ class ImageResizer {
   }
 
 
-  getMaxPoit() {
+  getMaxPoint() {
     return this._max;
   }
 

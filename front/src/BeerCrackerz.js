@@ -830,16 +830,17 @@ class BeerCrackerz extends MapHelper {
           });          
           // Send PP to the server
           document.getElementById(`update-pp-submit`).addEventListener('click', () => {
-            this._kom.postImage('user/id/profile-picture', {
+            this._kom.patchImage(`api/user/${this._user.id}/profile-picture/`, {
               profile_picture: document.getElementById('wip-pp').src,
-              min: imageResizer.getMinPoint(),
-              max: imageResizer.getMaxPoint()
+              minX: imageResizer.getMinPoint().x,
+              minY: imageResizer.getMinPoint().y,
+              maxX: imageResizer.getMaxPoint().x,
+              maxY: imageResizer.getMaxPoint().y
             }).then(() => {
               console.log('done')
             }).catch(() => {
               // Send notif
               console.log('Failed')
-              this.closeModal(null, true);              
             });
           });
           // Cancel
