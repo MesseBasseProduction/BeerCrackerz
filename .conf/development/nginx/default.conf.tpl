@@ -6,6 +6,10 @@ server {
 		alias /vol/static;
 	}
 
+	location /media {
+	    alias /vol/media;
+	}
+
 	location / {
 		proxy_pass		    http://${BACKEND_NAME}:${BACKEND_PORT};
 		proxy_redirect		off;

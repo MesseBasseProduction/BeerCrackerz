@@ -14,6 +14,9 @@ services:
       BACKEND_PORT: ${BACKEND_PORT}
     volumes:
       - ./static:/vol/static
+      - beer_crackerz_media:/vol/media
+    depends_on:
+      - backend
   backend:
     container_name: ${BACKEND_NAME}
     build:
@@ -35,6 +38,7 @@ services:
       MAILJET_API_SECRET: ${MAILJET_API_SECRET}
     volumes:
       - ./back:/back
+      - beer_crackerz_media:/vol/media
     depends_on:
       - db
   db:
@@ -48,17 +52,17 @@ services:
       - ${DB_PORT}:${DB_CONTAINER_PORT}
     volumes:
       - beer_crakerz_db:/var/lib/postgresql/data
-#  email:
-#    image: juanluisbaptiste/postfix:alpine
-#    container_name: ${EMAIL_HOST}
-#    expose:
-#      - ${EMAIL_PORT}
-#    environment:
-#      SMTP_SERVER: ${EMAIL_HOST}
-#      SMTP_PORT: ${EMAIL_PORT}
-##      SMTP_USERNAME: ${EMAIL_USERNAME}
-##      SMTP_PASSWORD: ${EMAIL_PASSWORD}
-#      SERVER_HOSTNAME: ${EMAIL_HOST}
+  #  email:
+  #    image: juanluisbaptiste/postfix:alpine
+  #    container_name: ${EMAIL_HOST}
+  #    expose:
+  #      - ${EMAIL_PORT}
+  #    environment:
+  #      SMTP_SERVER: ${EMAIL_HOST}
+  #      SMTP_PORT: ${EMAIL_PORT}
+  ##      SMTP_USERNAME: ${EMAIL_USERNAME}
+  ##      SMTP_PASSWORD: ${EMAIL_PASSWORD}
+  #      SERVER_HOSTNAME: ${EMAIL_HOST}
   adminer:
     container_name: ${DB_ADMINER_NAME}
     image: adminer
@@ -67,3 +71,5 @@ services:
 volumes:
   beer_crakerz_db:
     name: beer_crakerz_db
+  beer_crackerz_media:
+    name: beer_crackerz_media

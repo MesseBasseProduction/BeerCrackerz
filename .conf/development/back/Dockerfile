@@ -9,13 +9,14 @@ ENV PATH="/scripts:$PATH"
 
 COPY ./back/requirements.txt .
 
-RUN apk add --update --no-cache postgresql-client && \
+RUN apk add --update --no-cache postgresql-client zlib-dev jpeg-dev libwebp-dev && \
     apk add --update --no-cache --virtual .tmp-deps \
-      build-base postgresql-dev musl-dev linux-headers && \
+      build-base postgresql-dev musl-dev linux-headers  && \
     pip install -r requirements.txt && \
     apk del .tmp-deps && \
     adduser --disabled-password --no-create-home back && \
-    mkdir /static && \
+    mkdir -p /vol/static && \
+    mkdir -p /vol/media && \
     chmod -R +x /scripts
 
 COPY ./back .
