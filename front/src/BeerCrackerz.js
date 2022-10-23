@@ -6,6 +6,7 @@ import MapHelper from './js/ui/MapHelper.js';
 import ZoomSlider from './js/ui/ZoomSlider.js';
 import Notification from './js/ui/Notification.js';
 import Rating from './js/ui/Rating.js';
+import ImageResizer from './js/ui/ImageResizer.js';
 
 import DropElement from './js/utils/DropElement.js';
 import Clusters from './js/utils/ClusterEnum.js';
@@ -806,23 +807,33 @@ class BeerCrackerz extends MapHelper {
     }
 
     if (files.files && files.files.length === 1) {
+      // Check if file is conform to what's expected
+      if (files.files[0].size > 2621440) { // 2.5Mo
+        document.getElementById('update-pp').value = '';
+        document.getElementById('update-pp').classList.add('error');
+        document.getElementById('update-pp-error').innerHTML = this.nls.modal('updatePPSizeError');
+        return;
+      }
+
       // place resizer around en transparence
       this._kom.getTemplate('/modal/updatepp').then(dom => {
         Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('updatePPTitle'));
         Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{UPDATE_PP_DESC}`, this.nls.modal('updatePPDesc'));
         Utils.replaceString(dom.querySelector(`#update-pp-cancel`), `{UPDATE_PP_CANCEL}`, this.nls.nav('cancel'));
         Utils.replaceString(dom.querySelector(`#update-pp-submit`), `{UPDATE_PP_SUBMIT}`, this.nls.nav('upload'));
-
         document.getElementById('overlay').appendChild(dom);
         document.getElementById('overlay').style.display = 'flex';
 
         const _onFileLoaded = () => {
+          const imageResizer = new ImageResizer({
+            wrapper: document.getElementById('wip-pp-wrapper')
+          });          
           // Send PP to the server
           document.getElementById(`update-pp-submit`).addEventListener('click', () => {
             this._kom.postImage('user/id/profile-picture', {
               profile_picture: document.getElementById('wip-pp').src,
-              min: { x: 0, y: 0 },
-              max: { x: 0, y: 0 }
+              min: imageResizer.getMinPoint(),
+              max: imageResizer.getMaxPoint()
             }).then(() => {
               console.log('done')
             }).catch(() => {
@@ -835,6 +846,7 @@ class BeerCrackerz extends MapHelper {
           document.getElementById(`update-pp-cancel`).addEventListener('click', this.closeModal.bind(this, null, true));
         };
 
+        console.log(files.files[0])
         if (FileReader) {
           const fr = new FileReader();
           fr.onload = () => {

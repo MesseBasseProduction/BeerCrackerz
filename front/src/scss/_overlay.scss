@@ -132,7 +132,14 @@
     }
 
     .update-pp-wrapper {
+      border-radius: .5rem;
       padding: 10px;
+      
+      .update-pp-error {
+        color: red;
+        font-style: italic;
+        margin-bottom: 0;
+      }
     }
   }
 
@@ -147,9 +154,13 @@
     width: calc(100% - 2rem);
     z-index: 50; /* Highest value, must be on top user profile modal */
 
-    img {
-      max-height: 500px;
-      max-width: 500px;
+    .wip-pp-wrapper {
+      position: relative;
+      
+      img {
+        max-height: 500px;
+        max-width: 500px;
+      }      
     }
   }
 }
