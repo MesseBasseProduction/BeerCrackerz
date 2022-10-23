@@ -82,3 +82,7 @@ class NewSpotModalView(TemplateView):
 
 class UserModalView(TemplateView):
     template_name = 'modal/user.html'
+
+
+class UpdatePPModalView(TemplateView):
+    template_name = 'modal/updatepp.html'

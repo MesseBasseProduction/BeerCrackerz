@@ -32,6 +32,7 @@
   "nav": {
     "add": "Add",
     "edit": "Edit",
+    "upload": "Upload",
     "cancel": "Cancel",
     "close": "Close",
     "delete": "Delete"
@@ -72,6 +73,10 @@
     "userDebugPref": "Debug interface",
     "aboutTitle": "About BeerCrackerz",
     "aboutDesc": "A brilliant idea from David Béché!<br>BeerCrackerz is the beer lovers comunity, filled with pint slayers and cereals lovers",
+    "updatePP": "Update your profile pic",
+    "updatePPSizeError": "Please select an image below 2.5 Mo",
+    "updatePPTitle": "New profile picture pic",
+    "updatePPDesc": "Crop the picture if needed and go!",
     "hideShowTitle": "Map options",
     "hideShowLabels": "Labels",
     "hideShowCircles": "Circles",
@@ -147,7 +152,10 @@
       "password2": "Confirmer le mot de passe",
       "reset": "Réinitialiser votre mot de passe",
       "loginLabel": "Vous vous en souvenez?",
-      "login": "Se connecter"
+      "login": "Se connecter",
+      "fieldEmpty": "Veuillez remplir tous les champs du formulaire",
+      "notMatchingPassword": "Les deux mots de passe ne correspondent pas",
+      "serverError": "Une erreur serveur est survenue, contactez le support"
     }
   }
 }
