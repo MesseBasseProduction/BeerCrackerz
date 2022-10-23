@@ -846,7 +846,6 @@ class BeerCrackerz extends MapHelper {
           document.getElementById(`update-pp-cancel`).addEventListener('click', this.closeModal.bind(this, null, true));
         };
 
-        console.log(files.files[0])
         if (FileReader) {
           const fr = new FileReader();
           fr.onload = () => {

@@ -18,17 +18,68 @@
     right: 0;
     top: 0;
 
-    .tl-grab, .tr-grab, .bl-grab .rl-grab {
+    .tl-grab, .tr-grab, .br-grab, .bl-grab {
       background-color: red;
-      height: 6px;
+      height: 9px;
       position: absolute;
-      width: 6px;      
+      width: 9px;
     }
 
     .tl-grab {
       cursor: nwse-resize;
-      left: 0;
-      top: 0;
+      left: -3px;
+      top: -3px;
+    }
+    .tr-grab {
+      cursor: nesw-resize;
+      right: -3px;
+      top: -3px;
+    }
+    .br-grab {
+      cursor: nwse-resize;
+      right: -3px;
+      bottom: -3px;
+    }
+    .bl-grab {
+      cursor: nesw-resize;
+      left: -3px;
+      bottom: -3px;
+    }
+
+    .l-grab, .r-grab {
+      background-color: red;
+      cursor: ew-resize;
+      height: calc(100% - 12px);
+      position: absolute;
+      width: 9px;
+    }
+
+    .t-grab, .b-grab {
+      background-color: red;
+      cursor: ns-resize;
+      height: 9px;
+      position: absolute;
+      width: calc(100% - 12px);
+    }
+
+    .l-grab {
+      left: -3px;
+      top: 6px;
+    }
+
+    .t-grab {
+      top: -3px;
+      left: 6px;
+    }
+
+    .r-grab {
+      right: -3px;
+      top: 6px;
+    }
+
+    .b-grab {
+      bottom: -3px;
+      right: 6px;
     }
   }
 }
