@@ -18,7 +18,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         user = self.get_object()
         serializer = UserProfilePictureSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            user.profile_picture = serializer.validated_data.get('profile_picture')
+            user.profile_picture = serializer.save()
             user.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
