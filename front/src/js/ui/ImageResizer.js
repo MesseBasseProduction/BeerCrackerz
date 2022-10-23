@@ -53,7 +53,9 @@ class ImageResizer {
 
 
   _mouseOver(event) {
+    console.log(event)
     if (this._grab.tl) {
+      event.preventDefault();
       console.log('dragging')
     }
   }
