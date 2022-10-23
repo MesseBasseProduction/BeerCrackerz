@@ -155,11 +155,12 @@
     z-index: 50; /* Highest value, must be on top user profile modal */
 
     .wip-pp-wrapper {
+      overflow: hidden;
       position: relative;
-      
+
       img {
-        max-height: 500px;
-        max-width: 500px;
+        aspect-ratio: 1/1;
+        width: 100%;
       }      
     }
   }

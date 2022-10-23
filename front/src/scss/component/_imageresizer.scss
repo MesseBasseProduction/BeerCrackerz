@@ -9,8 +9,9 @@
   }
 
   .resizer {
-    border: solid 3px grey;
+    border: solid 3px rgba(0, 0, 0, .2);
     bottom: 0;
+    box-shadow: 0px 0px 500px 500px rgba(0, 0, 0, .7);
     display: flex;
     left: 0;
     position: absolute;

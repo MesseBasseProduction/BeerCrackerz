@@ -24,11 +24,13 @@ class ImageResizer {
       l: false,
       t: false,
       r: false,
-      b: false
+      b: false,
+      resizer: false
     };
 
     this._min = { x: 0, y: 0 };
     this._max = { x: 500, y: 500 };
+    this._pointer = { x: 0, y: 0 };
 
     this.containerRect = {};
     this.resizerRect = {};
@@ -69,6 +71,7 @@ class ImageResizer {
     this._dom.r.dataset.loc = 'r';
     this._dom.b.classList.add('b-grab');
     this._dom.b.dataset.loc = 'b';
+    this._dom.resizer.dataset.loc = 'resizer';
 
     this._dom.resizer.appendChild(this._dom.tl);
     this._dom.resizer.appendChild(this._dom.tr);
@@ -88,6 +91,9 @@ class ImageResizer {
     this._dom.resizer.addEventListener('mousedown', this._mouseDown.bind(this));
     document.body.addEventListener('mousemove', this._mouseMove.bind(this));
     document.body.addEventListener('mouseup', this._mouseUp.bind(this));
+    this._dom.resizer.addEventListener('touchstart', this._mouseDown.bind(this));
+    document.body.addEventListener('touchmove', this._mouseMove.bind(this));
+    document.body.addEventListener('touchend', this._mouseUp.bind(this));
   }
 
 
@@ -97,12 +103,23 @@ class ImageResizer {
       // Need to compute bounding rect before being in mousemove loop
       this.containerRect = this._dom.container.getBoundingClientRect();
       this.resizerRect = this._dom.resizer.getBoundingClientRect();
+      this._pointer.x = event.pageX - this.containerRect.x;
+      this._pointer.y = event.pageY - this.containerRect.y;
+      if (event.touches && event.touches.length) {
+        this._pointer.x = event.touches[0].clientX - this.containerRect.x;
+        this._pointer.y = event.touches[0].clientY - this.containerRect.y;
+      }      
     }
   }
 
 
   _mouseMove(event) {
     if (this._isGrabbed())  {
+      if (event.touches && event.touches.length) {
+        event.pageX = event.touches[0].clientX;
+        event.pageY = event.touches[0].clientY;        
+      }
+
       let offsetX = event.pageX - this.containerRect.x;
       let offsetY = event.pageY - this.containerRect.y;
 
@@ -228,6 +245,46 @@ class ImageResizer {
         this._dom.resizer.style.bottom = (this.containerRect.height - offsetB) + offsetB - offsetY;
         this._dom.resizer.style.left = offsetL + (offsetB - offsetY) / 2;
         this._dom.resizer.style.right = (this.containerRect.width - offsetR) + (offsetB - offsetY) / 2;
+      } else if (this._grab.resizer) {
+        if (this._pointer.x - offsetX > 0) { // Left
+          if (offsetL - (this._pointer.x - offsetX) < 0) {
+            const offset = this._dom.resizer.style.left.slice(0, -2);
+            this._dom.resizer.style.left = 0;
+            this._dom.resizer.style.right = this._dom.resizer.style.right.slice(0, -2) - offset;
+          } else {
+            this._dom.resizer.style.left = offsetL - (this._pointer.x - offsetX);
+            this._dom.resizer.style.right = (this.containerRect.width - offsetR) + (this._pointer.x - offsetX);            
+          }
+        } else { // Right
+          if ((this.containerRect.width - offsetR) + (this._pointer.x - offsetX) < 0) {
+            const offset = this._dom.resizer.style.right.slice(0, -2);
+            this._dom.resizer.style.right = 0;
+            this._dom.resizer.style.left = this._dom.resizer.style.left.slice(0, -2) - offset;
+          } else {
+            this._dom.resizer.style.left = offsetL - (this._pointer.x - offsetX);
+            this._dom.resizer.style.right = (this.containerRect.width - offsetR) + (this._pointer.x - offsetX);            
+          }
+        } 
+
+        if (this._pointer.y - offsetY > 0) { // Top
+          if (offsetT - (this._pointer.y - offsetY) < 0) {
+            const offset = this._dom.resizer.style.top.slice(0, -2);
+            this._dom.resizer.style.top = 0;
+            this._dom.resizer.style.bottom = this._dom.resizer.style.bottom.slice(0, -2) - offset;
+          } else {
+            this._dom.resizer.style.top = offsetT - (this._pointer.y - offsetY);
+            this._dom.resizer.style.bottom = (this.containerRect.height - offsetB) + (this._pointer.y - offsetY);            
+          }
+        } else { // Bottom
+          if ((this.containerRect.height - offsetB) + (this._pointer.y - offsetY) < 0) {
+            const offset = this._dom.resizer.style.bottom.slice(0, -2);
+            this._dom.resizer.style.bottom = 0;
+            this._dom.resizer.style.top = this._dom.resizer.style.top.slice(0, -2) - offset;
+          } else {
+            this._dom.resizer.style.top = offsetT - (this._pointer.y - offsetY);
+            this._dom.resizer.style.bottom = (this.containerRect.height - offsetB) + (this._pointer.y - offsetY);            
+          }
+        }
       }
     }
   }
@@ -243,6 +300,7 @@ class ImageResizer {
     this._grab.t = false;
     this._grab.r = false;
     this._grab.b = false;
+    this._grab.resizer = false;
     this._computMinMax();
   }
 
@@ -264,6 +322,8 @@ class ImageResizer {
     if (this._grab.tl || this._grab.tr || this._grab.bl || this._grab.br) {
       return true;
     } else if (this._grab.l || this._grab.t || this._grab.r || this._grab.b) {
+      return true;
+    } else if (this._grab.resizer) {
       return true;
     }
 
