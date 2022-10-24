@@ -313,32 +313,32 @@ class BeerCrackerz extends MapHelper {
       this.drawUserMarker();
       // Add OSM credits to the map next to leaflet credits
       const osm = Providers.planOsm;
-      //const plan = Providers.planGeo;
       const esri = Providers.satEsri;
-      //const geo = Providers.satGeo;
+      const mono = Providers.mapMono;
+      const asphalt = Providers.mapAsphalt;
       // Prevent panning outside of the world's edge
       this._map.setMaxBounds(Utils.MAP_BOUNDS);
       // Add layer group to interface
       const baseMaps = {};
       baseMaps[`<p>${this.nls.map('planLayerOSM')}</p>`] = osm;
-      //baseMaps[`<p>${this.nls.map('planLayerGeo')}</p>`] = plan;
       baseMaps[`<p>${this.nls.map('satLayerEsri')}</p>`] = esri;
-      //baseMaps[`<p>${this.nls.map('satLayerGeo')}</p>`] = geo;
+      baseMaps[`<p>${this.nls.map('planLayerMapMono')}</p>`] = mono;
+      baseMaps[`<p>${this.nls.map('planLayerMapAsphalt')}</p>`] = asphalt;
       // Append layer depending on user preference
       if (Utils.getPreference('map-plan-layer')) {
         switch (Utils.getPreference('map-plan-layer')) {
           case this.nls.map('planLayerOSM'):
             osm.addTo(this._map);
             break;
-          /*case this.nls.map('planLayerGeo'):
-            plan.addTo(this._map);
-            break;*/
           case this.nls.map('satLayerEsri'):
             esri.addTo(this._map);
             break;
-          /*case this.nls.map('satLayerGeo'):
-            geo.addTo(this._map);
-            break;*/
+          case this.nls.map('planLayerMapMono'):
+            mono.addTo(this._map);
+            break;
+          case this.nls.map('planLayerMapAsphalt'):
+            asphalt.addTo(this._map);
+            break;
           default:
             osm.addTo(this._map);
             break;
