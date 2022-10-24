@@ -55,7 +55,9 @@
     "newBar": "Add a bar",
     "planLayerOSM": "Plan OSM",
     "planStadiaOut": "Plan Stadia Outdoor",
-    "satLayerEsri": "Satellite ESRI"
+    "satLayerEsri": "Satellite ESRI",
+    "planLayerMapMono": "Mapiful Mono",
+    "planLayerMapAsphalt": "Mapiful Asphalt"
   },
   "spot": {
     "title": "New spot",
