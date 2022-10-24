@@ -1,44 +1,122 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-<path style="fill:#AFB6BB;" d="M256,7.918c137.026,0,248.082,111.056,248.082,248.082S393.026,504.082,256,504.082
-	S7.918,393.026,7.918,256S118.974,7.918,256,7.918z"/>
-<path d="M437.024,74.976C388.676,26.627,324.386,0,256,0S123.324,26.627,74.976,74.976S0,187.614,0,256
-	s26.627,132.676,74.976,181.024C123.324,485.373,187.614,512,256,512s132.676-26.627,181.024-74.976
-	C485.373,388.676,512,324.386,512,256S485.373,123.324,437.024,74.976z M425.828,425.828
-	C380.47,471.185,320.157,496.165,256,496.165s-124.47-24.98-169.828-70.337S15.835,320.157,15.835,256s24.98-124.47,70.337-169.828
-	S191.843,15.835,256,15.835s124.47,24.98,169.828,70.337S496.165,191.843,496.165,256S471.185,380.47,425.828,425.828z"/>
-<polygon points="263.918,213.773 248.082,213.773 248.082,248.082 213.773,248.082 213.773,263.918 248.082,263.918 
-	248.082,298.227 263.918,298.227 263.918,263.918 298.227,263.918 298.227,248.082 263.918,248.082 "/>
-<g>
+
+<svg
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 512 512"
+   style="enable-background:new 0 0 512 512;"
+   xml:space="preserve"
+   sodipodi:docname="circle.svg"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs2825" /><sodipodi:namedview
+   id="namedview2823"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   showgrid="false"
+   inkscape:zoom="0.84605514"
+   inkscape:cx="292.53412"
+   inkscape:cy="362.86051"
+   inkscape:window-width="1920"
+   inkscape:window-height="1021"
+   inkscape:window-x="0"
+   inkscape:window-y="30"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Layer_1" />
+
+<path
+   d="M 419.06419,92.935807 C 375.51291,49.383623 317.60127,25.398348 256,25.398348 c -61.60127,0 -119.51291,23.985275 -163.064193,67.537459 C 49.384523,136.48799 25.398348,194.39873 25.398348,256 c 0,61.60127 23.985275,119.51291 67.537459,163.06419 C 136.48709,462.61638 194.39873,486.60165 256,486.60165 c 61.60127,0 119.51291,-23.98527 163.06419,-67.53746 C 462.61638,375.51291 486.60165,317.60127 486.60165,256 c 0,-61.60127 -23.98527,-119.51291 -67.53746,-163.064193 z M 408.97897,408.97897 C 368.12105,449.836 313.79184,472.33768 256,472.33768 198.20816,472.33768 143.87895,449.836 103.02103,408.97897 62.163098,368.12195 39.662322,313.79184 39.662322,256 c 0,-57.79184 22.501676,-112.12105 63.358708,-152.97897 C 143.87805,62.163098 198.20816,39.662322 256,39.662322 c 57.79184,0 112.12105,22.501676 152.97897,63.358708 40.85793,40.85702 63.35871,95.18713 63.35871,152.97897 0,57.79184 -22.50168,112.12105 -63.35871,152.97897 z"
+   id="path2788"
+   style="fill:#e2e2e2;fill-opacity:1;stroke-width:0.900788" />
+<polygon
+   points="248.082,213.773 248.082,248.082 213.773,248.082 213.773,263.918 248.082,263.918 248.082,298.227 263.918,298.227 263.918,263.918 298.227,263.918 298.227,248.082 263.918,248.082 263.918,213.773 "
+   id="polygon2790"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)" />
+<g
+   id="g2792"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2794"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2796"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2798"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2800"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2802"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2804"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2806"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2808"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2810"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2812"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2814"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2816"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2818"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
-<g>
+<g
+   id="g2820"
+   style="fill:#e2e2e2;fill-opacity:1"
+   transform="matrix(0.9007877,0,0,0.9007877,25.398348,25.398348)">
 </g>
 </svg>

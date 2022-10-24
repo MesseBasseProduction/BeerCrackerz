@@ -1,7 +1,21 @@
 {% load static %}
 <div class="user-profile-modal">
   <p id="modal-close" class="modal-close">&times;</p>
-  <p id="nls-modal-title">{MODAL_TITLE}</p>
+  <h1 id="nls-modal-title">{MODAL_TITLE}</h1>
+  <div class="user-info">
+    <div id="drop-user-pp" class="drop-user-pp">
+      <img src="{% static 'img/logo/profile.svg' %}" id="user-pp" alt="user-pp">
+    </div>
+    <div>
+      <h2 id="user-name"></h2>
+      <p id="user-email"></p>
+    </div>
+  </div>
+  <label id="nls-update-pp" for="pp">{UPDATE_PROFILE_PIC_LABEL}:</label>
+  <div id="update-pp-wrapper" class="update-pp-wrapper">
+    <input type="file" id="update-pp" name="update-pp" accept="image/png, image/jpeg">
+    <p id="update-pp-error" class="update-pp-error"></p>
+  </div>
   <div class="item">
     <img src="{% static 'img/logo/precision.svg' %}" alt="high-accuracy-toggle">
     <label id="nls-user-modal-accuracy" for="high-accuracy-toggle">{ACCURACY_USER_MODAL}</label>
@@ -13,10 +27,5 @@
     <input type="checkbox" id="debug-toggle" name="labels">
   </div>
   <p id="nls-about-desc">{BEERCRACKERZ_DESC}</p>
-  <label id="nls-update-pp" for="pp">{UPDATE_PROFILE_PIC_LABEL}:</label>
-  <div id="update-pp-wrapper" class="update-pp-wrapper">
-    <input type="file" id="update-pp" name="update-pp" accept="image/png, image/jpeg">
-    <p id="update-pp-error" class="update-pp-error"></p>
-  </div>
   <button id="logout">LOGOUT</button>
 </div>
