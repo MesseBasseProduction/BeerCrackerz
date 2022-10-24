@@ -184,6 +184,9 @@ class BeerCrackerz extends MapHelper {
       this._kom.get('/api/user/me/').then(user => {
         this._user.id = user.id;
         this._user.username = user.username;
+        this._user.email = user.email;
+        this._user.pp = user.profilePicture;
+        this._user.isActive = user.isActive;
         resolve();
       }).catch(reject);
     });
@@ -591,8 +594,22 @@ class BeerCrackerz extends MapHelper {
   toggleMarkers(type) {
     const visible = !(Utils.getPreference(`poi-show-${type}`) === 'true');
     if (visible === true) {
+      for (let i = 0; i < this._marks[type].length; ++i) {
+        this._marks[type][i].visible = true;
+        this._marks[type][i].circle.setStyle({
+          opacity: 1,
+          fillOpacity: 0.1
+        });
+      }
       this._map.addLayer(this._clusters[type]);
     } else {
+      for (let i = 0; i < this._marks[type].length; ++i) {
+        this._marks[type][i].visible = false;
+        this._marks[type][i].circle.setStyle({
+          opacity: 0,
+          fillOpacity: 0
+        });
+      }
       this._map.removeLayer(this._clusters[type]);
     }
     Utils.setPreference(`poi-show-${type}`, visible);
@@ -690,10 +707,19 @@ class BeerCrackerz extends MapHelper {
             this.markPopupFactory(options).then(dom => {
               options.dom = dom;
               options.marker.setPopupContent(options.dom);
-              this._kom[`${options.type}Edited`](options.id, this.formatMarker(options)).then(() => {
+              this._kom[`${options.type}Edited`](options.id, this.formatMarker(options)).then(data => {
+                // Update marker data to session memory
+                options.id = data.id;
+                options.name = data.name;
+                options.description = data.description;
+                options.lat = data.lat;
+                options.lng = data.lng;
                 // Notify user through UI that marker has been successfully deleted
                 this._notification.raise(this.nls.notif(`${options.type}Edited`));
-                this.closeModal(null, true);
+              }).catch(() => {
+                this._notification.raise(this.nls.notif(`${options.type}NotEdited`));                
+              }).finally(() => {
+                this.closeModal(null, true);                
               });
             });
             break;
@@ -768,8 +794,16 @@ class BeerCrackerz extends MapHelper {
       Utils.replaceString(dom.querySelector(`#nls-about-desc`), `{BEERCRACKERZ_DESC}`, this.nls.modal('aboutDesc'));
       Utils.replaceString(dom.querySelector(`#nls-update-pp`), `{UPDATE_PROFILE_PIC_LABEL}`, this.nls.modal('updatePP'));
 
+      dom.querySelector(`#user-pp`).src = this._user.pp;
+      dom.querySelector(`#user-name`).innerHTML = this._user.username;
+      dom.querySelector(`#user-email`).innerHTML = this._user.email;
+
       new DropElement({
         target: dom.querySelector('#update-pp-wrapper'),
+        onDrop: this.updateProfilePictureModal.bind(this)
+      });
+      new DropElement({
+        target: dom.querySelector('#drop-user-pp'),
         onDrop: this.updateProfilePictureModal.bind(this)
       });
 
@@ -787,6 +821,7 @@ class BeerCrackerz extends MapHelper {
       document.getElementById('high-accuracy-toggle').addEventListener('change', this.toggleHighAccuracy.bind(this));
       document.getElementById('debug-toggle').addEventListener('change', this.toggleDebug.bind(this));
       document.getElementById('update-pp').addEventListener('change', this.updateProfilePictureModal.bind(this));
+      document.getElementById('user-pp').addEventListener('click', this.updateProfilePictureModal.bind(this));
 
       setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
 
@@ -799,7 +834,15 @@ class BeerCrackerz extends MapHelper {
   }
 
 
+  // TODo split into component and stuff
   updateProfilePictureModal(event) {
+    if (event.type === 'click') { // Clicked on actual pp
+      const evt = document.createEvent('MouseEvents');
+      evt.initEvent('click', true, false);
+      document.getElementById('update-pp').dispatchEvent(evt);
+      return;
+    }
+
     const fileInput = document.getElementById('update-pp');
     let files = { files: fileInput.files }; // From input change
     if (event.files && event.files.length === 1) { // From drop
@@ -861,10 +904,13 @@ class BeerCrackerz extends MapHelper {
               maxX: Math.round(imageResizer.getMaxPoint().x),
               maxY: Math.round(imageResizer.getMaxPoint().y)
             }).then(() => {
-              console.log('done')
-            }).catch(() => {
-              // Send notif
-              console.log('Failed')
+              this._notification.raise(this.nls.notif('uploadPPSuccess'));
+            }).catch(err => {
+              this._notification.raise(this.nls.notif('uploadPPFailed'));
+              console.error(err)
+            }).finally(() => {
+              // Reload user from server with new path and close modal
+              this._initUser().then(this.closeModal.bind(this, null, true));              
             });
           });
           // Cancel
@@ -897,7 +943,9 @@ class BeerCrackerz extends MapHelper {
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-spots`), `{SPOTS_HIDESHOW_MODAL}`, this.nls.modal('hideShowSpots'));
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-shops`), `{SHOPS_HIDESHOW_MODAL}`, this.nls.modal('hideShowShops'));
       Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-bars`), `{BARS_HIDESHOW_MODAL}`, this.nls.modal('hideShowBars'));
+      Utils.replaceString(dom.querySelector(`#nls-view-helper-label`), `{HELPER_LABEL}`, this.nls.modal('hideShowHelperLabel'));
       Utils.replaceString(dom.querySelector(`#modal-close-button`), `{MODAL_CLOSE}`, this.nls.nav('close'));
+
       document.getElementById('overlay').appendChild(dom);
       document.getElementById('overlay').style.display = 'flex';
       // Init modal checkbox state according to local storage preferences
@@ -921,11 +969,21 @@ class BeerCrackerz extends MapHelper {
         document.getElementById('show-bars').checked = true;
       }
 
+      const updateHelper = type => {
+        document.getElementById('nls-viewer-helper').innerHTML = this.nls.modal(`${type}HelperHideShow`) || '';
+      };
+
       document.getElementById('label-toggle').addEventListener('change', this.toggleLabel.bind(this));
       document.getElementById('circle-toggle').addEventListener('change', this.toggleCircle.bind(this));
       document.getElementById('show-spots').addEventListener('change', this.toggleMarkers.bind(this, 'spot'));
       document.getElementById('show-shops').addEventListener('change', this.toggleMarkers.bind(this, 'shop'));
       document.getElementById('show-bars').addEventListener('change', this.toggleMarkers.bind(this, 'bar'));
+
+      document.getElementById('labels-toggle').addEventListener('mouseover', updateHelper.bind(this, 'labels'));
+      document.getElementById('circles-toggle').addEventListener('mouseover', updateHelper.bind(this, 'circles'));
+      document.getElementById('spots-toggle').addEventListener('mouseover', updateHelper.bind(this, 'spots'));
+      document.getElementById('shops-toggle').addEventListener('mouseover', updateHelper.bind(this, 'shops'));      
+      document.getElementById('bars-toggle').addEventListener('mouseover', updateHelper.bind(this, 'bars'));
 
       setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
     });
@@ -1007,7 +1065,13 @@ class BeerCrackerz extends MapHelper {
    **/
   _markerSaved(options) {
     // Save new marker in local storage, later to be sent to the server
-    this._kom[`${options.type}Created`](this.formatMarker(options)).then(() => {
+    this._kom[`${options.type}Created`](this.formatMarker(options)).then(data => {
+      // Update marker data to session memory
+      options.id = data.id;
+      options.name = data.name;
+      options.description = data.description;
+      options.lat = data.lat;
+      options.lng = data.lng;
       // Save marke in marks and clusters for the map
       this._marks[options.type].push(options);
       this._clusters[options.type].addLayer(options.marker);
@@ -1017,6 +1081,8 @@ class BeerCrackerz extends MapHelper {
       this.updateMarkerCirclesVisibility();
       // Clear new marker to let user add other stuff
       this._newMarker = null;
+    }).catch(() => {
+      this._notification.raise(this.nls.notif(`${options.type}NotAdded`));      
     });
   }
 
@@ -1148,6 +1214,8 @@ class BeerCrackerz extends MapHelper {
               this._marks[options.type] = marks;
               // Notify user through UI that marker has been successfully deleted
               this._notification.raise(this.nls.notif(`${options.type}Deleted`));
+            }).catch(() => {
+              this._notification.raise(this.nls.notif(`${options.type}NotDeleted`));
             });
             break;
           }

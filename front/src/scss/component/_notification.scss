@@ -1,8 +1,8 @@
 .notification-wrapper {
   align-items: center;
-  background-color: rgba(255, 255, 255, .8);
+  background-color: var(--color-bg);
   border-radius: .5rem;
-  box-shadow: 0 0 10px #424242;
+  box-shadow: 0 0 1rem var(--color-bg-a5);
   display: flex;
   flex-direction: column;
   height: 3rem;

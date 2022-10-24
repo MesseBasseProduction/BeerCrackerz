@@ -1,10 +1,10 @@
 .zoom-slider {
   align-items: center;
-  background: white;
+  background: var(--color-bg-a9);
   background-clip: padding-box;
   border: 2px solid rgba(0, 0, 0, .2);
   border-radius: .5rem;
-  box-shadow: 0 0 10px #424242;
+  box-shadow: 0 0 10px var(--color-bg-a5);
   display: flex;
   flex-direction: column;
   height: 20rem;
@@ -29,12 +29,21 @@
     margin: .5rem 0;
     user-select: none;
 
+    transition: .2s color;
+
     &:last-child {
       margin-bottom: 0;
+    }
+
+    &:active,
+    &:focus,
+    &:hover {
+      color: var(--color-primary);
     }
   }
 
   .slider-wrapper {
+    background-color: var(--color-txt);
     border-radius: .5rem;
     box-shadow: 0 0 10px #424242;
     height: 80%;
@@ -43,8 +52,9 @@
     width: 20%;
 
     .slider-position {
-      background-color: lime;
+      background-color: var(--color-primary);
       bottom: 0;
+      border-top: solid 1px var(--color-primary-a5);
       position: absolute;
       width: 100%;
 

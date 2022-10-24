@@ -96,7 +96,7 @@ class DropElement {
     _dragEnter(event) {
       this._eventBehavior(event);
       ++this._movementCounter;
-      this._target.style.border = 'dashed 3px rgb(255, 100, 100)';
+      this._target.style.border = 'dashed 3px #ffa800';
     }
   
   

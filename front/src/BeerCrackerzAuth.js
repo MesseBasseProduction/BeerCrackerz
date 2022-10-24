@@ -525,7 +525,7 @@ class BeerCrackerzAuth {
     const password = document.getElementById('password');
     // useful login method for field check and server response check
     const _frontFieldValidation = () => {
-      error.className = '';
+      error.className = 'error';
       // Handling empty error cases
       if (username.value === '' && password.value === '') {
         error.classList.add('visible');

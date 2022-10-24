@@ -1,6 +1,6 @@
 .overlay {
   align-items: center;
-  background: rgba(255, 255, 255, .8);
+  background: var(--color-bg-a75);
   display: none;
   height: 100%;
   justify-content: center;
@@ -13,9 +13,9 @@
   transition: opacity .3s;
 
   [class$="-modal"] {
-    background: rgba(255, 255, 255, .8);
+    background: var(--color-bg-a9);
     border-radius: .5rem;
-    box-shadow: 0px 0px 10px #424242;
+    box-shadow: 0 0 1rem var(--color-bg-a5);
     padding: 3rem 4rem;
     position: relative;
     text-align: center;
@@ -29,7 +29,7 @@
     }
 
     .modal-close {
-      color: #999;
+      color: var(--color-txt);
       cursor: pointer;
       font-size: 2.2rem;
       font-weight: bold;
@@ -37,6 +37,14 @@
       right: 1rem;
       position: absolute;
       top: 1rem;
+
+      transition: color .2s;
+
+      &:active,
+      &:focus,
+      &:hover {
+        color: var(--color-primary);
+      }
     }
 
     .button-wrapper {
@@ -69,10 +77,10 @@
         width: 2.5rem;
 
         &.active {
-          filter: invert(95%) sepia(39%) saturate(3136%) hue-rotate(323deg) brightness(96%) contrast(115%);
+          filter: invert(53%) sepia(30%) saturate(1977%) hue-rotate(155deg) brightness(88%) contrast(102%);
 
           &.selected {
-            filter: invert(75%) sepia(9%) saturate(4002%) hue-rotate(67deg) brightness(81%) contrast(83%);
+            filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
           }
         }
       }
@@ -80,6 +88,31 @@
   }
 
   .hide-show-modal {
+    .view-options-wrapper {
+      display: flex;
+
+      .view-options {
+        border-right: solid 1px var(--color-txt-a5);
+        width: 20rem;
+      }
+
+      .view-helper {
+        margin-left: 1rem;
+        text-align: left;
+        width: 20rem;
+
+        p:first-child {
+          font-style: italic;
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+
+        p:last-child {
+          text-indent: 2.4rem;
+        }
+      }
+    }
+
     .item {
       align-items: center;
       display: flex;
@@ -104,73 +137,12 @@
     }
   }
 
-  .user-profile-modal {
-    height: calc(100% - 2rem);
-    width: calc(100% - 2rem);
-
-    .item {
-      align-items: center;
-      display: flex;
-      justify-content: space-between;
-      margin: 1rem auto;
-      max-width: 25rem;
-
-      img {
-        margin-right: 2rem;
-        height: 2rem;
-      }
-
-      label {
-        margin-bottom: 0;
-        margin-right: 2rem;
-      }
-
-      input {
-        margin: 0;
-        width: auto;
-      }
-    }
-
-    .update-pp-wrapper {
-      border-radius: .5rem;
-      padding: 10px;
-      
-      .update-pp-error {
-        color: red;
-        font-style: italic;
-        margin-bottom: 0;
-      }
-    }
-  }
-
-  .update-pp-modal {
-    align-items: center;
-    background: rgb(255, 255, 255);
-    display: flex;
-    flex-direction: column;
-    height: calc(100% - 2rem);
-    justify-content: center;
-    position: absolute;
-    width: calc(100% - 2rem);
-    z-index: 50; /* Highest value, must be on top user profile modal */
-
-    .wip-pp-wrapper {
-      overflow: hidden;
-      position: relative;
-
-      img {
-        /*max-height: 500px;
-        max-width: 500px;*/
-        width: 100%;
-      }      
-    }
-  }
+  @import 'modal/userprofile';
 }
 
 .debug-container {
-  background-color: rgba(255, 255, 255, .8);
+  background-color: var(--color-bg-a9);
   border-radius: .5rem;
-  color: black;
   left: 1rem;
   padding: 1rem;
   position: absolute;
@@ -203,7 +175,7 @@
       height: 1.2rem;
 
       &.active {
-        filter: invert(95%) sepia(39%) saturate(3136%) hue-rotate(323deg) brightness(96%) contrast(115%);
+        filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
       }
     }
 
@@ -259,16 +231,22 @@
   }
 
   .cluster-label {
-    background-color: white;
-    border: solid black 1px;
+    background-color: var(--color-bg-a9);
+    border: solid var(--color-bg) 1px;
     border-radius: .75rem;
     box-shadow: 0 0 10px #424242;
-    color: black;
+    color: var(--color-txt);
     font-size: 1.1rem;
     font-weight: bold;
     left: 15px;
     padding: .1rem .4rem;
     position: absolute;
     top: -15px;
+
+    &:active,
+    &:focus,
+    &:hover {
+      color: var(--color-primary);
+    }
   }
 }

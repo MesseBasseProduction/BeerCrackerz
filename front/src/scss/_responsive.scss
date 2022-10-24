@@ -1,17 +1,11 @@
 @media (min-width: 720px) {
   .overlay [class$="-modal"] {
+    max-width: 70%;
+  }
+}
+
+@media (min-width: 1080px) {
+  .overlay [class$="-modal"] {
     max-width: 50%;
   }
 }
-/*
-@media (max-width: 512px) {
-
-}
-
-@media (max-height: 740px) {
-
-}
-
-@media (max-height: 512px) {
-
-}*/

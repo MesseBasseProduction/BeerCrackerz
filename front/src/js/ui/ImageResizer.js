@@ -362,7 +362,6 @@ class ImageResizer {
 
   getMinPoint() {
     this._computMinMax();
-    console.log(this._min, this._max)
     return {
       x: (this._min.x / this.containerRect.width) * this._width,
       y: (this._min.y / this.containerRect.height) * this._height

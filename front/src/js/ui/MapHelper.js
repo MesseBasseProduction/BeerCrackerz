@@ -26,14 +26,7 @@ class MapHelper {
       icon = Markers.user;
     }
 
-    const marker = window.L.marker([options.lat, options.lng], { icon: icon }).on('click', () => {
-      // Disable center on lock if previously set to true
-      if (Utils.getPreference('map-center-on-user') === 'true') {
-        this.toggleFocusLock();
-      }
-      // Actual fly to the marker
-      this.map.flyTo([options.lat, options.lng], 18);
-    });
+    const marker = window.L.marker([options.lat, options.lng], { icon: icon }).on('click', this.centerOn.bind(this, options));
 
     if (options.dom) {
       marker.bindPopup(options.dom);
@@ -162,7 +155,9 @@ class MapHelper {
       };
       // Submit or cancel event subscriptions
       submit.addEventListener('click', () => {
+        name.classList.remove('error');
         if (name.value === '') {
+          name.classList.add('error');
           this._notification.raise(this.nls.notif('markNameEmpty'));
         } else {
           _cleanDefineUI();
@@ -250,9 +245,16 @@ class MapHelper {
           interactive: true
         }).setContent(options.name)
           .setLatLng(options.circle.getLatLng());
-        // Only make it visible if preference is to true
-        if (Utils.getPreference('poi-marker-label') === 'true') {
-          options.tooltip.addTo(this.map);
+
+        options.tooltip.addTo(this.map);
+        options.tooltip.getElement().addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.centerOn(options);
+        });
+        // Remove it if preference is to true
+        if (Utils.getPreference('poi-marker-label') === 'false') {
+          options.tooltip.removeFrom(this.map);
         }
         // Send back the popup
         resolve(element);
@@ -300,6 +302,16 @@ class MapHelper {
         marks[i].tooltip.removeFrom(this.map);
       }
     }
+  }
+
+
+  centerOn(options) {
+    // Disable center on lock if previously set to true
+    if (Utils.getPreference('map-center-on-user') === 'true') {
+      this.toggleFocusLock();
+    }
+    // Actual fly to the marker
+    this.map.flyTo([options.lat, options.lng], 18);    
   }
 
 

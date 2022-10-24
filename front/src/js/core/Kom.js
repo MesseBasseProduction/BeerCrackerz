@@ -497,10 +497,7 @@ class Kom {
 
 
   _saveMark(type, data) {
-    return new Promise((resolve, reject) => {
-      // Send null to resolveAs to ensure nothing is done after post call
-      this.post(`http://localhost:8080/api/${type}/`, data, null).then(resolve).catch(reject);
-    });
+    return this.post(`http://localhost:8080/api/${type}/`, data, this._resolveAsJSON.bind(this));
   }
 
 
@@ -520,10 +517,8 @@ class Kom {
 
 
   _editMark(type, id, data) {
-    return new Promise((resolve, reject) => {
-      // Send null to resolveAs to ensure nothing is done after post call
-      this.patch(`http://localhost:8080/api/${type}/${id}/`, data, null).then(resolve).catch(reject);
-    });
+    if (!type || !id || !data) { Promise.reject(); }
+    return this.patch(`http://localhost:8080/api/${type}/${id}/`, data, this._resolveAsJSON.bind(this));
   }
 
 
@@ -543,10 +538,8 @@ class Kom {
 
 
   _deleteMark(type, id, data) {
-    return new Promise((resolve, reject) => {
-      // Send null to resolveAs to ensure nothing is done after post call
-      this.delete(`http://localhost:8080/api/${type}/${id}/`, data, null).then(resolve).catch(reject);
-    });
+    if (!type || !id || !data) { Promise.reject(); }
+    return this.delete(`http://localhost:8080/api/${type}/${id}/`, data, null);
   }
 
 
