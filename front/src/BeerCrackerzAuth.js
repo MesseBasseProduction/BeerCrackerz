@@ -508,17 +508,8 @@ class BeerCrackerzAuth {
    **/
   _handleLoginAside() {
     // Update page nls according to browser language
-    const aside = document.getElementById('aside');
     document.title = this.nls.login('headTitle');
-    Utils.replaceString(aside, '{LOGIN_SUBTITLE}', this.nls.login('subtitle'));
-    Utils.replaceString(aside, '{LOGIN_HIDDEN_ERROR}', this.nls.login('hiddenError'));
-    Utils.replaceString(aside, '{LOGIN_USERNAME_LABEL}', this.nls.login('username'));
-    Utils.replaceString(aside, '{LOGIN_USERNAME_PASSWORD}', this.nls.login('password'));
-    Utils.replaceString(aside, '{LOGIN_BUTTON}', this.nls.login('login'));
-    Utils.replaceString(aside, '{LOGIN_NOT_REGISTERED}', this.nls.login('notRegistered'));
-    Utils.replaceString(aside, '{LOGIN_REGISTER}', this.nls.login('register'));
-    Utils.replaceString(aside, '{LOGIN_FORGOT_PASSWORD}', this.nls.login('forgot'));
-    Utils.replaceString(aside, '{LOGIN_PASSWORD_RESET}', this.nls.login('reset'));
+    this.nls.handleLoginAside(document.getElementById('aside'));
 
     const error = document.getElementById('login-error');
     const username = document.getElementById('username');
@@ -596,15 +587,7 @@ class BeerCrackerzAuth {
     // Update page nls according to browser language
     const aside = document.getElementById('aside');
     document.title = this.nls.register('headTitle');
-    Utils.replaceString(aside, '{REGISTER_SUBTITLE}', this.nls.register('subtitle'));
-    Utils.replaceString(aside, '{REGISTER_HIDDEN_ERROR}', this.nls.register('hiddenError'));
-    Utils.replaceString(aside, '{REGISTER_USERNAME_LABEL}', this.nls.register('username'));
-    Utils.replaceString(aside, '{REGISTER_MAIL_LABEL}', this.nls.register('mail'));
-    Utils.replaceString(aside, '{REGISTER_USERNAME_PASSWORD_1}', this.nls.register('password1'));
-    Utils.replaceString(aside, '{REGISTER_USERNAME_PASSWORD_2}', this.nls.register('password2'));
-    Utils.replaceString(aside, '{REGISTER_BUTTON}', this.nls.register('register'));
-    Utils.replaceString(aside, '{REGISTER_ALREADY_DONE}', this.nls.register('notRegistered'));
-    Utils.replaceString(aside, '{REGISTER_LOGIN}', this.nls.register('login'));
+    this.nls.handleRegisterAside(aside);
     const error = document.getElementById('register-error');
     const username = document.getElementById('username');
     const mail = document.getElementById('mail');
@@ -680,12 +663,7 @@ class BeerCrackerzAuth {
     // Update page nls according to browser language
     const aside = document.getElementById('aside');
     document.title = this.nls.forgotPassword('headTitle');
-    Utils.replaceString(aside, '{FORGOT_PASSWORD_SUBTITLE}', this.nls.forgotPassword('subtitle'));
-    Utils.replaceString(aside, '{FORGOT_PASSWORD_ERROR}', this.nls.register('hiddenError'));
-    Utils.replaceString(aside, '{FORGOT_PASSWORD_MAIL_LABEL}', this.nls.forgotPassword('mail'));
-    Utils.replaceString(aside, '{FORGOT_PASSWORD_BUTTON}', this.nls.forgotPassword('submit'));
-    Utils.replaceString(aside, '{FORGOT_PASSWORD_LOGIN_LABEL}', this.nls.forgotPassword('loginLabel'));
-    Utils.replaceString(aside, '{FORGOT_PASSWORD_LOGIN}', this.nls.forgotPassword('login'));
+    this.nls.handleForgotPasswordAside(aside);
     const error = document.getElementById('forgot-password-error');
     const mail = document.getElementById('mail');
     // useful login method for field check and server response check
@@ -731,13 +709,7 @@ class BeerCrackerzAuth {
     // Update page nls according to browser language
     const aside = document.getElementById('aside');
     document.title = this.nls.resetPassword('headTitle');
-    Utils.replaceString(aside, '{RESET_PASSWORD_SUBTITLE}', this.nls.resetPassword('subtitle'));
-    Utils.replaceString(aside, '{RESET_PASSWORD_HIDDEN_ERROR}', this.nls.resetPassword('hiddenError'));
-    Utils.replaceString(aside, '{RESET_PASSWORD_1}', this.nls.resetPassword('password1'));
-    Utils.replaceString(aside, '{RESET_PASSWORD_2}', this.nls.resetPassword('password2'));
-    Utils.replaceString(aside, '{RESET_PASSWORD_BUTTON}', this.nls.resetPassword('reset'));
-    Utils.replaceString(aside, '{RESET_PASSWORD_LOGIN_LABEL}', this.nls.resetPassword('loginLabel'));
-    Utils.replaceString(aside, '{RESET_PASSWORD_LOGIN}', this.nls.resetPassword('login'));
+    this.nls.handleResetPasswordAside(aside);
     const error = document.getElementById('reset-password-error');
     const password1 = document.getElementById('password1');
     const password2 = document.getElementById('password2');

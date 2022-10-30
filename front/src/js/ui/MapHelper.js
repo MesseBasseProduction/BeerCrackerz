@@ -174,8 +174,6 @@ class MapHelper {
       });
       cancel.addEventListener('click', _cleanDefineUI);
       close.addEventListener('click', _cleanDefineUI);
-      document.getElementById('overlay').addEventListener('click', _cleanDefineUI.bind(this));
-
       this.newMarkModal(dom, type);
     });
   }

@@ -113,6 +113,106 @@ class LangManager {
   }
 
 
+  // Auth page shortcut to update UI chunks of text in views 
+
+
+  handleLoginAside(aside) {
+    Utils.replaceString(aside, '{LOGIN_SUBTITLE}', this.login('subtitle'));
+    Utils.replaceString(aside, '{LOGIN_HIDDEN_ERROR}', this.login('hiddenError'));
+    Utils.replaceString(aside, '{LOGIN_USERNAME_LABEL}', this.login('username'));
+    Utils.replaceString(aside, '{LOGIN_USERNAME_PASSWORD}', this.login('password'));
+    Utils.replaceString(aside, '{LOGIN_BUTTON}', this.login('login'));
+    Utils.replaceString(aside, '{LOGIN_NOT_REGISTERED}', this.login('notRegistered'));
+    Utils.replaceString(aside, '{LOGIN_REGISTER}', this.login('register'));
+    Utils.replaceString(aside, '{LOGIN_FORGOT_PASSWORD}', this.login('forgot'));
+    Utils.replaceString(aside, '{LOGIN_PASSWORD_RESET}', this.login('reset'));    
+  }
+
+
+  handleRegisterAside(aside) {
+    Utils.replaceString(aside, '{REGISTER_SUBTITLE}', this.register('subtitle'));
+    Utils.replaceString(aside, '{REGISTER_HIDDEN_ERROR}', this.register('hiddenError'));
+    Utils.replaceString(aside, '{REGISTER_USERNAME_LABEL}', this.register('username'));
+    Utils.replaceString(aside, '{REGISTER_MAIL_LABEL}', this.register('mail'));
+    Utils.replaceString(aside, '{REGISTER_USERNAME_PASSWORD_1}', this.register('password1'));
+    Utils.replaceString(aside, '{REGISTER_USERNAME_PASSWORD_2}', this.register('password2'));
+    Utils.replaceString(aside, '{REGISTER_BUTTON}', this.register('register'));
+    Utils.replaceString(aside, '{REGISTER_ALREADY_DONE}', this.register('notRegistered'));
+    Utils.replaceString(aside, '{REGISTER_LOGIN}', this.register('login'));    
+  }
+
+
+  handleForgotPasswordAside(aside) {
+    Utils.replaceString(aside, '{FORGOT_PASSWORD_SUBTITLE}', this.forgotPassword('subtitle'));
+    Utils.replaceString(aside, '{FORGOT_PASSWORD_ERROR}', this.register('hiddenError'));
+    Utils.replaceString(aside, '{FORGOT_PASSWORD_MAIL_LABEL}', this.forgotPassword('mail'));
+    Utils.replaceString(aside, '{FORGOT_PASSWORD_BUTTON}', this.forgotPassword('submit'));
+    Utils.replaceString(aside, '{FORGOT_PASSWORD_LOGIN_LABEL}', this.forgotPassword('loginLabel'));
+    Utils.replaceString(aside, '{FORGOT_PASSWORD_LOGIN}', this.forgotPassword('login'));
+  }
+
+
+  handleResetPasswordAside(aside) {
+    Utils.replaceString(aside, '{RESET_PASSWORD_SUBTITLE}', this.resetPassword('subtitle'));
+    Utils.replaceString(aside, '{RESET_PASSWORD_HIDDEN_ERROR}', this.resetPassword('hiddenError'));
+    Utils.replaceString(aside, '{RESET_PASSWORD_1}', this.resetPassword('password1'));
+    Utils.replaceString(aside, '{RESET_PASSWORD_2}', this.resetPassword('password2'));
+    Utils.replaceString(aside, '{RESET_PASSWORD_BUTTON}', this.resetPassword('reset'));
+    Utils.replaceString(aside, '{RESET_PASSWORD_LOGIN_LABEL}', this.resetPassword('loginLabel'));
+    Utils.replaceString(aside, '{RESET_PASSWORD_LOGIN}', this.resetPassword('login'));    
+  }
+
+
+  // Main App shortcut to update UI chunks of text in views 
+
+
+  editMarkModal(dom, type) {
+    Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.modal(`${type}EditTitle`));
+    Utils.replaceString(dom.querySelector(`#nls-${type}-name`), `{${type.toUpperCase()}_NAME}`, this[type]('nameLabel'));
+    Utils.replaceString(dom.querySelector(`#nls-${type}-desc`), `{${type.toUpperCase()}_DESC}`, this[type]('descLabel'));
+    Utils.replaceString(dom.querySelector(`#nls-${type}-rate`), `{${type.toUpperCase()}_RATE}`, this[type]('rateLabel'));
+    Utils.replaceString(dom.querySelector(`#${type}-submit`), `{${type.toUpperCase()}_SUBMIT}`, this.nav('edit'));
+    Utils.replaceString(dom.querySelector(`#${type}-cancel`), `{${type.toUpperCase()}_CANCEL}`, this.nav('cancel'));    
+  }
+
+
+  deleteMarkModal(dom) {
+    Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.modal('deleteMarkTitle'));
+    Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{MODAL_DESC}`, this.modal('deleteMarkDesc'));
+    Utils.replaceString(dom.querySelector(`#cancel-close`), `{MODAL_CANCEL}`, this.nav('cancel'));
+    Utils.replaceString(dom.querySelector(`#delete-close`), `{MODAL_DELETE}`, this.nav('delete'));    
+  }
+
+
+  userProfileModal(dom) {
+    Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.modal('userTitle'));
+    Utils.replaceString(dom.querySelector(`#nls-user-modal-accuracy`), `{ACCURACY_USER_MODAL}`, this.modal('userAccuracyPref'));
+    Utils.replaceString(dom.querySelector(`#nls-user-modal-debug`), `{DEBUG_USER_MODAL}`, this.modal('userDebugPref'));
+    Utils.replaceString(dom.querySelector(`#nls-about-desc`), `{BEERCRACKERZ_DESC}`, this.modal('aboutDesc'));
+    Utils.replaceString(dom.querySelector(`#nls-update-pp`), `{UPDATE_PROFILE_PIC_LABEL}`, this.modal('updatePP'));    
+  }
+
+
+  updateProfilePictureModal(dom) {
+    Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.modal('updatePPTitle'));
+    Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{UPDATE_PP_DESC}`, this.modal('updatePPDesc'));
+    Utils.replaceString(dom.querySelector(`#update-pp-cancel`), `{UPDATE_PP_CANCEL}`, this.nav('cancel'));
+    Utils.replaceString(dom.querySelector(`#update-pp-submit`), `{UPDATE_PP_SUBMIT}`, this.nav('upload'));
+  }
+
+
+  hideShowModal(dom) {
+    Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-title`), `{MODAL_TITLE}`, this.modal('hideShowTitle'));
+    Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-labels`), `{LABELS_HIDESHOW_MODAL}`, this.modal('hideShowLabels'));
+    Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-circles`), `{CIRCLES_HIDESHOW_MODAL}`, this.modal('hideShowCircles'));
+    Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-spots`), `{SPOTS_HIDESHOW_MODAL}`, this.modal('hideShowSpots'));
+    Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-shops`), `{SHOPS_HIDESHOW_MODAL}`, this.modal('hideShowShops'));
+    Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-bars`), `{BARS_HIDESHOW_MODAL}`, this.modal('hideShowBars'));
+    Utils.replaceString(dom.querySelector(`#nls-view-helper-label`), `{HELPER_LABEL}`, this.modal('hideShowHelperLabel'));
+    Utils.replaceString(dom.querySelector(`#modal-close-button`), `{MODAL_CLOSE}`, this.nav('close'));    
+  }
+
+
   get fullLang() {
     return this._fullLang;
   }

@@ -8,11 +8,15 @@ import Notification from './js/ui/Notification.js';
 import Rating from './js/ui/Rating.js';
 import ImageResizer from './js/ui/ImageResizer.js';
 
+import CustomEvents from './js/utils/CustomEvents.js';
 import DropElement from './js/utils/DropElement.js';
 import Clusters from './js/utils/ClusterEnum.js';
 import Providers from './js/utils/ProviderEnum.js';
 import MarkTypes from './js/utils/MarkTypesEnum.js';
 import Utils from './js/utils/Utils.js';
+
+
+window.Evts = new CustomEvents();
 
 
 /**
@@ -373,9 +377,10 @@ class BeerCrackerz extends MapHelper {
   _initEvents() {
     return new Promise(resolve => {
       // Command events
-      document.getElementById('user-profile').addEventListener('click', this.userProfileModal.bind(this));
-      document.getElementById('hide-show').addEventListener('click', this.hidShowModal.bind(this));
-      document.getElementById('center-on').addEventListener('click', this.toggleFocusLock.bind(this));
+      window.Evts.addEvent('click', document.getElementById('user-profile'), this.userProfileModal, this);
+      window.Evts.addEvent('click', document.getElementById('hide-show'), this.hidShowModal, this);
+      window.Evts.addEvent('click', document.getElementById('center-on'), this.toggleFocusLock, this);
+      window.Evts.addEvent('click', document.getElementById('overlay'), this.closeModal, this);
       // Subscribe to click event on map to react
       this._map.on('click', this.mapClicked.bind(this));
       // Map is dragged by user mouse/finger
@@ -706,6 +711,7 @@ class BeerCrackerz extends MapHelper {
     }
   }
 
+  
   editMarkModal(options) {
     this._kom.getTemplate(`/modal/edit${options.type}`).then(dom => {
       const name = dom.querySelector(`#${options.type}-name`);
@@ -714,13 +720,9 @@ class BeerCrackerz extends MapHelper {
       const cancel = dom.querySelector(`#${options.type}-cancel`);
       const rate = dom.querySelector(`#${options.type}-rating`);
       const rating = new Rating(rate, options.rate);
-      // Update nls for template
-      Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal(`${options.type}EditTitle`));
-      Utils.replaceString(dom.querySelector(`#nls-${options.type}-name`), `{${options.type.toUpperCase()}_NAME}`, this.nls[options.type]('nameLabel'));
-      Utils.replaceString(dom.querySelector(`#nls-${options.type}-desc`), `{${options.type.toUpperCase()}_DESC}`, this.nls[options.type]('descLabel'));
-      Utils.replaceString(dom.querySelector(`#nls-${options.type}-rate`), `{${options.type.toUpperCase()}_RATE}`, this.nls[options.type]('rateLabel'));
-      Utils.replaceString(submit, `{${options.type.toUpperCase()}_SUBMIT}`, this.nls.nav('edit'));
-      Utils.replaceString(cancel, `{${options.type.toUpperCase()}_CANCEL}`, this.nls.nav('cancel'));
+
+      this.nls.editMarkModal(dom, options.type);
+
       name.value = options.name;
       description.value = options.description;
       submit.addEventListener('click', () => {
@@ -759,8 +761,6 @@ class BeerCrackerz extends MapHelper {
       document.getElementById('overlay').appendChild(dom);
       document.getElementById('overlay').style.display = 'flex';
       setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
-
-      document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));
     });
   }
 
@@ -781,26 +781,19 @@ class BeerCrackerz extends MapHelper {
    **/
   deleteMarkModal(cb) {
     this._kom.getTemplate('/modal/deletemark').then(dom => {
-      // Update nls for template
-      Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('deleteMarkTitle'));
-      Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{MODAL_DESC}`, this.nls.modal('deleteMarkDesc'));
-      Utils.replaceString(dom.querySelector(`#cancel-close`), `{MODAL_CANCEL}`, this.nls.nav('cancel'));
-      Utils.replaceString(dom.querySelector(`#delete-close`), `{MODAL_DELETE}`, this.nls.nav('delete'));
-
-      document.getElementById('overlay').appendChild(dom);
-      document.getElementById('overlay').style.display = 'flex';
-      setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
-
+      this.nls.deleteMarkModal(dom);
       // Setup callback for confirm/cancel buttons
-      document.getElementById('cancel-close').addEventListener('click', e => {
+      dom.querySelector('#cancel-close').addEventListener('click', e => {
         this.closeModal(e);
         cb(false);
       }, false);
-      document.getElementById('delete-close').addEventListener('click', e => {
+      dom.querySelector('#delete-close').addEventListener('click', e => {
         this.closeModal(e);
         cb(true);
-      }, false);      
-      document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));      
+      }, false);
+      document.getElementById('overlay').appendChild(dom);
+      document.getElementById('overlay').style.display = 'flex';
+      setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
     });
   }
 
@@ -820,13 +813,7 @@ class BeerCrackerz extends MapHelper {
    **/
   userProfileModal() {
     this._kom.getTemplate('/modal/user').then(dom => {
-      // Update nls for template
-      Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('userTitle'));
-      Utils.replaceString(dom.querySelector(`#nls-user-modal-accuracy`), `{ACCURACY_USER_MODAL}`, this.nls.modal('userAccuracyPref'));
-      Utils.replaceString(dom.querySelector(`#nls-user-modal-debug`), `{DEBUG_USER_MODAL}`, this.nls.modal('userDebugPref'));
-      Utils.replaceString(dom.querySelector(`#nls-about-desc`), `{BEERCRACKERZ_DESC}`, this.nls.modal('aboutDesc'));
-      Utils.replaceString(dom.querySelector(`#nls-update-pp`), `{UPDATE_PROFILE_PIC_LABEL}`, this.nls.modal('updatePP'));
-
+      this.nls.userProfileModal(dom);
       dom.querySelector(`#user-pp`).src = this._user.pp;
       dom.querySelector(`#user-name`).innerHTML = this._user.username;
       dom.querySelector(`#user-email`).innerHTML = this._user.email;
@@ -842,11 +829,11 @@ class BeerCrackerz extends MapHelper {
 
       // Init modal checkbox state according to local storage preferences
       if (Utils.getPreference('map-high-accuracy') === 'true') {
-        document.getElementById('high-accuracy-toggle').checked = true;
+        dom.querySelector('#high-accuracy-toggle').checked = true;
       }
 
       if (window.DEBUG === true || (Utils.getPreference('app-debug') === 'true')) {
-        document.getElementById('debug-toggle').checked = true;
+        dom.querySelector('#debug-toggle').checked = true;
       }
 
       document.getElementById('overlay').appendChild(dom);
@@ -857,7 +844,6 @@ class BeerCrackerz extends MapHelper {
       document.getElementById('debug-toggle').addEventListener('change', this.toggleDebug.bind(this));
       document.getElementById('update-pp').addEventListener('change', this.updateProfilePictureModal.bind(this));
       document.getElementById('user-pp').addEventListener('click', this.updateProfilePictureModal.bind(this));
-      document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));
       document.getElementById('logout').addEventListener('click', () => {
         this._kom.post('api/auth/logout/', null).then(() => {
           window.location = '/welcome'
@@ -915,10 +901,8 @@ class BeerCrackerz extends MapHelper {
       // place resizer around en transparence
       const _onFileLoaded = (width, height, b64) => {
         this._kom.getTemplate('/modal/updatepp').then(dom => {
-          Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.nls.modal('updatePPTitle'));
-          Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{UPDATE_PP_DESC}`, this.nls.modal('updatePPDesc'));
-          Utils.replaceString(dom.querySelector(`#update-pp-cancel`), `{UPDATE_PP_CANCEL}`, this.nls.nav('cancel'));
-          Utils.replaceString(dom.querySelector(`#update-pp-submit`), `{UPDATE_PP_SUBMIT}`, this.nls.nav('upload'));
+          this.nls.updateProfilePictureModal(dom);
+
           document.getElementById('overlay').appendChild(dom);
           document.getElementById('overlay').style.display = 'flex';
           document.getElementById('wip-pp').src = b64;
@@ -948,7 +932,6 @@ class BeerCrackerz extends MapHelper {
           });
           // Cancel
           document.getElementById(`update-pp-cancel`).addEventListener('click', this.closeModal.bind(this, null, true));
-          document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));
         });
       };
     }
@@ -970,55 +953,46 @@ class BeerCrackerz extends MapHelper {
    **/
   hidShowModal() {
     this._kom.getTemplate('/modal/hideshow').then(dom => {
-      // Update template nls
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-title`), `{MODAL_TITLE}`, this.nls.modal('hideShowTitle'));
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-labels`), `{LABELS_HIDESHOW_MODAL}`, this.nls.modal('hideShowLabels'));
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-circles`), `{CIRCLES_HIDESHOW_MODAL}`, this.nls.modal('hideShowCircles'));
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-spots`), `{SPOTS_HIDESHOW_MODAL}`, this.nls.modal('hideShowSpots'));
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-shops`), `{SHOPS_HIDESHOW_MODAL}`, this.nls.modal('hideShowShops'));
-      Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-bars`), `{BARS_HIDESHOW_MODAL}`, this.nls.modal('hideShowBars'));
-      Utils.replaceString(dom.querySelector(`#nls-view-helper-label`), `{HELPER_LABEL}`, this.nls.modal('hideShowHelperLabel'));
-      Utils.replaceString(dom.querySelector(`#modal-close-button`), `{MODAL_CLOSE}`, this.nls.nav('close'));
+      this.nls.hideShowModal(dom);
 
-      document.getElementById('overlay').appendChild(dom);
-      document.getElementById('overlay').style.display = 'flex';
-      // Init modal checkbox state according to local storage preferences
       if (Utils.getPreference('poi-marker-label') === 'true') {
-        document.getElementById('label-toggle').checked = true;
+        dom.querySelector('#label-toggle').checked = true;
       }
 
       if (Utils.getPreference('poi-show-circle') === 'true') {
-        document.getElementById('circle-toggle').checked = true;
+        dom.querySelector('#circle-toggle').checked = true;
       }
 
       if (Utils.getPreference('poi-show-spot') === 'true') {
-        document.getElementById('show-spots').checked = true;
+        dom.querySelector('#show-spots').checked = true;
       }
 
       if (Utils.getPreference('poi-show-shop') === 'true') {
-        document.getElementById('show-shops').checked = true;
+        dom.querySelector('#show-shops').checked = true;
       }
 
       if (Utils.getPreference('poi-show-bar') === 'true') {
-        document.getElementById('show-bars').checked = true;
+        dom.querySelector('#show-bars').checked = true;
       }
 
       const updateHelper = type => {
         document.getElementById('nls-viewer-helper').innerHTML = this.nls.modal(`${type}HelperHideShow`) || '';
       };
 
-      document.getElementById('label-toggle').addEventListener('change', this.toggleLabel.bind(this));
-      document.getElementById('circle-toggle').addEventListener('change', this.toggleCircle.bind(this));
-      document.getElementById('show-spots').addEventListener('change', this.toggleMarkers.bind(this, 'spot'));
-      document.getElementById('show-shops').addEventListener('change', this.toggleMarkers.bind(this, 'shop'));
-      document.getElementById('show-bars').addEventListener('change', this.toggleMarkers.bind(this, 'bar'));
+      dom.querySelector('#label-toggle').addEventListener('change', this.toggleLabel.bind(this));
+      dom.querySelector('#circle-toggle').addEventListener('change', this.toggleCircle.bind(this));
+      dom.querySelector('#show-spots').addEventListener('change', this.toggleMarkers.bind(this, 'spot'));
+      dom.querySelector('#show-shops').addEventListener('change', this.toggleMarkers.bind(this, 'shop'));
+      dom.querySelector('#show-bars').addEventListener('change', this.toggleMarkers.bind(this, 'bar'));
 
-      document.getElementById('labels-toggle').addEventListener('mouseover', updateHelper.bind(this, 'labels'));
-      document.getElementById('circles-toggle').addEventListener('mouseover', updateHelper.bind(this, 'circles'));
-      document.getElementById('spots-toggle').addEventListener('mouseover', updateHelper.bind(this, 'spots'));
-      document.getElementById('shops-toggle').addEventListener('mouseover', updateHelper.bind(this, 'shops'));      
-      document.getElementById('bars-toggle').addEventListener('mouseover', updateHelper.bind(this, 'bars'));
+      dom.querySelector('#labels-toggle').addEventListener('mouseover', updateHelper.bind(this, 'labels'));
+      dom.querySelector('#circles-toggle').addEventListener('mouseover', updateHelper.bind(this, 'circles'));
+      dom.querySelector('#spots-toggle').addEventListener('mouseover', updateHelper.bind(this, 'spots'));
+      dom.querySelector('#shops-toggle').addEventListener('mouseover', updateHelper.bind(this, 'shops'));      
+      dom.querySelector('#bars-toggle').addEventListener('mouseover', updateHelper.bind(this, 'bars'));
 
+      document.getElementById('overlay').appendChild(dom);
+      document.getElementById('overlay').style.display = 'flex';
       setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
     });
   }
