@@ -85,6 +85,28 @@
         }
       }
     }
+
+    .type {
+      display: flex;
+      justify-content: center;
+      margin: .5rem auto 1.2rem;
+
+      p {
+        border: solid 1px var(--color-txt);
+        border-radius: .5rem;
+        color: var(--color-txt);
+        cursor: pointer;
+        margin: 0 .5rem;
+        padding: .5rem 1rem;
+
+        transition: color .2s;
+
+        &.selected {
+          border-color: var(--color-primary);
+          color: var(--color-primary);
+        }
+      }
+    }
   }
 
   .hide-show-modal {

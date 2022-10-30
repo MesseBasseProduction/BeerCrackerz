@@ -11,6 +11,7 @@ import ImageResizer from './js/ui/ImageResizer.js';
 import DropElement from './js/utils/DropElement.js';
 import Clusters from './js/utils/ClusterEnum.js';
 import Providers from './js/utils/ProviderEnum.js';
+import MarkTypes from './js/utils/MarkTypesEnum.js';
 import Utils from './js/utils/Utils.js';
 
 
@@ -375,7 +376,6 @@ class BeerCrackerz extends MapHelper {
       document.getElementById('user-profile').addEventListener('click', this.userProfileModal.bind(this));
       document.getElementById('hide-show').addEventListener('click', this.hidShowModal.bind(this));
       document.getElementById('center-on').addEventListener('click', this.toggleFocusLock.bind(this));
-      document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));
       // Subscribe to click event on map to react
       this._map.on('click', this.mapClicked.bind(this));
       // Map is dragged by user mouse/finger
@@ -671,12 +671,40 @@ class BeerCrackerz extends MapHelper {
   // ======================================================================== //
 
 
-  newMarkModal(dom) {
+  newMarkModal(dom, type) {
+    if (type === 'spot') {
+      this._newSpotModalContent(dom);
+    }
+
+    // Append modal
     document.getElementById('overlay').appendChild(dom);
     document.getElementById('overlay').style.display = 'flex';
     setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
   }
 
+
+  _newSpotModalContent(dom) {
+    // Spot type manual radio
+    Utils.replaceString(dom.querySelector('#nls-spot-type'), '{SPOT_TYPE}', this.nls.spot('typeLabel'));
+    const parent = dom.querySelector('#spot-type');
+
+    const _typeChecked = e => {
+      for (let i = 0; i < parent.children.length; ++i) {
+        parent.children[i].classList.remove('selected');
+        if (parent.children[i].dataset.type === e.target.dataset.type) {
+          parent.children[i].classList.add('selected');
+        }
+      }
+    };
+
+    for (let i = 0; i < MarkTypes.spot.length; ++i) {
+      const type = document.createElement('P');
+      type.dataset.type = MarkTypes.spot[i];
+      type.innerHTML = this.nls.spot(`${MarkTypes.spot[i]}Type`);
+      parent.appendChild(type);
+      type.addEventListener('click', _typeChecked.bind(this));
+    }
+  }
 
   editMarkModal(options) {
     this._kom.getTemplate(`/modal/edit${options.type}`).then(dom => {
@@ -731,6 +759,8 @@ class BeerCrackerz extends MapHelper {
       document.getElementById('overlay').appendChild(dom);
       document.getElementById('overlay').style.display = 'flex';
       setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+
+      document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));
     });
   }
 
@@ -756,8 +786,11 @@ class BeerCrackerz extends MapHelper {
       Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{MODAL_DESC}`, this.nls.modal('deleteMarkDesc'));
       Utils.replaceString(dom.querySelector(`#cancel-close`), `{MODAL_CANCEL}`, this.nls.nav('cancel'));
       Utils.replaceString(dom.querySelector(`#delete-close`), `{MODAL_DELETE}`, this.nls.nav('delete'));
+
       document.getElementById('overlay').appendChild(dom);
       document.getElementById('overlay').style.display = 'flex';
+      setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+
       // Setup callback for confirm/cancel buttons
       document.getElementById('cancel-close').addEventListener('click', e => {
         this.closeModal(e);
@@ -766,8 +799,8 @@ class BeerCrackerz extends MapHelper {
       document.getElementById('delete-close').addEventListener('click', e => {
         this.closeModal(e);
         cb(true);
-      }, false);
-      setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+      }, false);      
+      document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));      
     });
   }
 
@@ -807,8 +840,6 @@ class BeerCrackerz extends MapHelper {
         onDrop: this.updateProfilePictureModal.bind(this)
       });
 
-      document.getElementById('overlay').appendChild(dom);
-      document.getElementById('overlay').style.display = 'flex';
       // Init modal checkbox state according to local storage preferences
       if (Utils.getPreference('map-high-accuracy') === 'true') {
         document.getElementById('high-accuracy-toggle').checked = true;
@@ -818,13 +849,15 @@ class BeerCrackerz extends MapHelper {
         document.getElementById('debug-toggle').checked = true;
       }
 
+      document.getElementById('overlay').appendChild(dom);
+      document.getElementById('overlay').style.display = 'flex';
+      setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+
       document.getElementById('high-accuracy-toggle').addEventListener('change', this.toggleHighAccuracy.bind(this));
       document.getElementById('debug-toggle').addEventListener('change', this.toggleDebug.bind(this));
       document.getElementById('update-pp').addEventListener('change', this.updateProfilePictureModal.bind(this));
       document.getElementById('user-pp').addEventListener('click', this.updateProfilePictureModal.bind(this));
-
-      setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
-
+      document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));
       document.getElementById('logout').addEventListener('click', () => {
         this._kom.post('api/auth/logout/', null).then(() => {
           window.location = '/welcome'
@@ -915,6 +948,7 @@ class BeerCrackerz extends MapHelper {
           });
           // Cancel
           document.getElementById(`update-pp-cancel`).addEventListener('click', this.closeModal.bind(this, null, true));
+          document.getElementById('overlay').addEventListener('click', this.closeModal.bind(this));
         });
       };
     }

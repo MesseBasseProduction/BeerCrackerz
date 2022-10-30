@@ -76,16 +76,18 @@ nav {
   background-color: var(--color-bg-a9);
   border: 2px solid var(--color-bg);
   border-radius: .5rem;
-  left: 0;
+  left: 50%;
   margin: 1rem;
-  max-width: 40rem;
+  max-width: 90%;
   opacity: 0;
   padding: 1rem;
   position: absolute;
   text-align: center;
   top: 0;
+  width: 40rem;
   z-index: 20;
 
+  transform: translateX(-50%);
   transition: opacity var(--aside-transtion-duration);
 
   &.visible {

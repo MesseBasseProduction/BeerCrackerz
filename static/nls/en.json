@@ -64,7 +64,13 @@
     "subtitle": "A spot is a remarkable place to crack a beer ! Share it with the community, wether it is for the astonishing view of for whatever it is enjoyable to drink a beer!",
     "nameLabel": "Name that spot",
     "descLabel": "Why don't you describe it",
-    "rateLabel": "Give it a note"
+    "rateLabel": "Give it a note",
+    "typeLabel": "What kind of spot it is",
+    "forestType": "Forest",
+    "beachType": "Beach",
+    "mountainType": "Mountain",    
+    "riverType": "River",
+    "cityType": "City"
   },
   "shop": {
     "title": "New shop",
