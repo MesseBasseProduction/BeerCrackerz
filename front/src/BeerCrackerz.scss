@@ -1,4 +1,4 @@
-@import 'scss/base';
+@import 'scss/utils/base';
 
 main.beer-crakerz-map {
   color: var(--color-txt);
@@ -41,7 +41,7 @@ nav {
       align-items: center;
       background: var(--color-bg);
       background-clip: padding-box;
-      border: 2px solid rgba(0, 0, 0, .2);
+      border: 2px solid var(--color-bg-a1);
       border-radius: .5rem;
       box-shadow: 0 0 1rem var(--color-bg-a9);
       display: flex;
@@ -86,9 +86,9 @@ nav {
   }
 }
 
-@import 'scss/overlay';
+@import 'scss/utils/overlay';
 @import 'scss/component/notification';
 @import 'scss/component/zoomslider';
 @import 'scss/component/imageresizer';
-@import 'scss/leaflet';
-@import 'scss/responsive';
+@import 'scss/utils/leaflet';
+@import 'scss/utils/responsive';

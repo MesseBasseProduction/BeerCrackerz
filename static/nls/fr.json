@@ -55,23 +55,42 @@
     "newBar": "Add a bar",
     "planLayerOSM": "Plan OSM",
     "planStadiaOut": "Plan Stadia Outdoor",
-    "satLayerEsri": "Satellite ESRI",
-    "planLayerMapMono": "Mapiful Mono",
-    "planLayerMapAsphalt": "Mapiful Asphalt"
+    "satLayerEsri": "Satellite ESRI"
   },
   "spot": {
     "title": "New spot",
     "subtitle": "A spot is a remarkable place to crack a beer ! Share it with the community, wether it is for the astonishing view of for whatever it is enjoyable to drink a beer!",
     "nameLabel": "Name that spot",
     "descLabel": "Why don't you describe it",
-    "rateLabel": "Give it a note"
+    "rateLabel": "Give it a note",
+    "typeLabel": "What kind of spot it is",
+    "forestType": "Forest",
+    "beachType": "Beach",
+    "mountainType": "Mountain",    
+    "riverType": "River",
+    "cityType": "City",
+    "povType": "Point of View",
+    "modifiersLabel": "Has it any specific features",
+    "benchModifier": "Bench",
+    "coveredModifier": "Covered",
+    "toiletModifier": "Toilet",
+    "trashModifier": "Trash"
   },
   "shop": {
     "title": "New shop",
     "subtitle": "The must have place to refill your beer stock. The more info you provide, the better you help your fellow beer crackerz!",
     "nameLabel": "Shop name",
     "descLabel": "Why don't you describe it",
-    "rateLabel": "Give it a note"
+    "rateLabel": "Give it a note",
+    "typeLabel": "What kind of shop it is",
+    "smallType": "Grocery store",
+    "mediumType": "Supermarket",
+    "largeType": "Hypermarket",
+    "cellarType": "Cellar",
+    "modifiersLabel": "Has it any specific features",
+    "freshModifier": "Refrigerated",
+    "cardModifier": "Credit card",
+    "craftModifier": "Craft"
   },
   "bar": {
     "title": "New bar",

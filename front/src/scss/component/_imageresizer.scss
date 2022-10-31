@@ -13,7 +13,7 @@
   }
 
   .resizer {
-    border: solid 3px rgba(0, 0, 0, .2);
+    border: solid 3px var(--color-bg-a1);
     bottom: 0;
     box-shadow: 0px 0px 500px 500px rgba(86, 68, 40, .7);
     display: flex;

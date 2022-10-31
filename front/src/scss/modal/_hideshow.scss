@@ -1,0 +1,49 @@
+.hide-show-modal {
+  .view-options-wrapper {
+    display: flex;
+
+    .view-options {
+      border-right: solid 1px var(--color-txt-a5);
+      width: 20rem;
+    }
+
+    .view-helper {
+      margin-left: 1rem;
+      text-align: left;
+      width: 20rem;
+
+      p:first-child {
+        font-style: italic;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      p:last-child {
+        text-indent: 2.4rem;
+      }
+    }
+  }
+
+  .item {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem auto;
+    max-width: 15rem;
+
+    img {
+      margin-right: 2rem;
+      height: 2rem;
+    }
+
+    label {
+      margin-bottom: 0;
+      margin-right: 2rem;
+    }
+
+    input {
+      margin: 0;
+      width: auto;
+    }
+  }
+}

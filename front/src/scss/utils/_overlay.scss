@@ -16,7 +16,7 @@
     background: var(--color-bg-a9);
     border-radius: .5rem;
     box-shadow: 0 0 1rem var(--color-bg-a5);
-    padding: 3rem 4rem;
+    padding: 2rem;
     position: relative;
     text-align: center;
 
@@ -59,107 +59,9 @@
     }
   }
 
-  .new-mark-modal,
-  .edit-mark-modal {
-    width: calc(100% - 2rem);
-
-    h1, p {
-      text-align: center;
-    }
-
-    .rating {
-      margin-bottom: 1.2rem;
-
-      img {
-        cursor: pointer;
-        height: 2.5rem;
-        margin: 0 .25rem;
-        width: 2.5rem;
-
-        &.active {
-          filter: invert(53%) sepia(30%) saturate(1977%) hue-rotate(155deg) brightness(88%) contrast(102%);
-
-          &.selected {
-            filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
-          }
-        }
-      }
-    }
-
-    .type {
-      display: flex;
-      justify-content: center;
-      margin: .5rem auto 1.2rem;
-
-      p {
-        border: solid 1px var(--color-txt);
-        border-radius: .5rem;
-        color: var(--color-txt);
-        cursor: pointer;
-        margin: 0 .5rem;
-        padding: .5rem 1rem;
-
-        transition: color .2s;
-
-        &.selected {
-          border-color: var(--color-primary);
-          color: var(--color-primary);
-        }
-      }
-    }
-  }
-
-  .hide-show-modal {
-    .view-options-wrapper {
-      display: flex;
-
-      .view-options {
-        border-right: solid 1px var(--color-txt-a5);
-        width: 20rem;
-      }
-
-      .view-helper {
-        margin-left: 1rem;
-        text-align: left;
-        width: 20rem;
-
-        p:first-child {
-          font-style: italic;
-          text-align: center;
-          margin-bottom: 2rem;
-        }
-
-        p:last-child {
-          text-indent: 2.4rem;
-        }
-      }
-    }
-
-    .item {
-      align-items: center;
-      display: flex;
-      justify-content: space-between;
-      margin: 1rem auto;
-      max-width: 15rem;
-
-      img {
-        margin-right: 2rem;
-        height: 2rem;
-      }
-
-      label {
-        margin-bottom: 0;
-        margin-right: 2rem;
-      }
-
-      input {
-        margin: 0;
-        width: auto;
-      }
-    }
-  }
-
-  @import 'modal/userprofile';
+  @import '../modal/mark';
+  @import '../modal/hideshow';
+  @import '../modal/userprofile';
 }
 
 .debug-container {
@@ -241,13 +143,13 @@
     line-height: 50px;
     margin-left: -21px;
     margin-top: -13px;
-    filter: drop-shadow(0 0 .25rem #424242);
+    filter: drop-shadow(0 0 .25rem var(--color-bg));
     transition: transform .2s, filter .2s;
 
     &:active,
     &:focus,
     &:hover {
-      filter: drop-shadow(0 0 .33rem #A8A8A8);
+      filter: drop-shadow(0 0 .33rem var(--color-txt));
       transform: scale(1.066);
     }
   }
@@ -256,7 +158,7 @@
     background-color: var(--color-bg-a9);
     border: solid var(--color-bg) 1px;
     border-radius: .75rem;
-    box-shadow: 0 0 10px #424242;
+    box-shadow: 0 0 1rem var(--color-bg);
     color: var(--color-txt);
     font-size: 1.1rem;
     font-weight: bold;

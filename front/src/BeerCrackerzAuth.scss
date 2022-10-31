@@ -1,4 +1,4 @@
-@import 'scss/base';
+@import 'scss/utils/base';
 
 /*  ----------------------------------------------------------  *
  * The BeerCrackerzAuth style bundle                            *
@@ -38,7 +38,7 @@ nav {
   img {
     cursor: pointer;
     border-radius: 50%;
-    box-shadow: 0px 0px 10px #424242;
+    box-shadow: 0px 0px 1rem var(--color-bg);
     width: 100%;
   }
 
@@ -47,7 +47,7 @@ nav {
       align-items: center;
       background: var(--color-bg-a9);
       background-clip: padding-box;
-      border: 2px solid rgba(0, 0, 0, .2);
+      border: 2px solid var(--color-bg-a1);
       border-radius: .5rem;
       display: flex;
       justify-content: center;
@@ -184,11 +184,11 @@ aside {
   }
 }
 
+@import 'scss/utils/overlay';
+@import 'scss/component/zoomslider';
+@import 'scss/utils/leaflet';
+
 .zoom-slider.opened {
   /* Force slider to stick to aside's left even when collapsed */
   right: calc(var(--aside-width) + var(--aside-offset) + 1rem);
 }
-
-@import 'scss/overlay';
-@import 'scss/component/zoomslider';
-@import 'scss/leaflet';

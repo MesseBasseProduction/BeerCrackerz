@@ -48,6 +48,19 @@ class LangManager {
   }
 
 
+  updateLang(lang) {
+    return new Promise((resolve, reject) => {
+      if (this._lang !== lang) {
+        this._lang = (Utils.SUPPORTED_LANGUAGE.indexOf(lang) !== -1) ? lang : 'en';
+        this._fullLang = lang;
+        this._init().then(resolve).catch(reject);
+      } else {
+        resolve();
+      }
+    });
+  }
+
+
   debug(key) {
     return this._values.debug[key] || '';
   }
@@ -164,6 +177,25 @@ class LangManager {
 
 
   // Main App shortcut to update UI chunks of text in views 
+
+
+  newSpotModalContent(dom) {
+    Utils.replaceString(dom.querySelector('#nls-spot-type'), '{SPOT_TYPE}', this.spot('typeLabel'));
+    Utils.replaceString(dom.querySelector('#nls-spot-modifiers'), '{SPOT_MODIFIERS}', this.spot('modifiersLabel'));
+    Utils.replaceString(dom.querySelector('#spot-bench'), '{SPOT_BENCH}', this.spot('benchModifier'));
+    Utils.replaceString(dom.querySelector('#spot-covered'), '{SPOT_COVERED}', this.spot('coveredModifier'));
+    Utils.replaceString(dom.querySelector('#spot-toilet'), '{SPOT_TOILET}', this.spot('toiletModifier'));
+    Utils.replaceString(dom.querySelector('#spot-trash'), '{SPOT_TRASH}', this.spot('trashModifier'));    
+  }
+
+
+  newShopModalContent(dom) {
+    Utils.replaceString(dom.querySelector('#nls-shop-type'), '{SHOP_TYPE}', this.shop('typeLabel'));
+    Utils.replaceString(dom.querySelector('#nls-shop-modifiers'), '{SHOP_MODIFIERS}', this.shop('modifiersLabel'));
+    Utils.replaceString(dom.querySelector('#shop-fresh'), '{SHOP_FRESH}', this.shop('freshModifier'));
+    Utils.replaceString(dom.querySelector('#shop-card'), '{SHOP_CARD}', this.shop('cardModifier'));
+    Utils.replaceString(dom.querySelector('#shop-craft'), '{SHOP_CRAFT}', this.shop('craftModifier'));
+  }
 
 
   editMarkModal(dom, type) {

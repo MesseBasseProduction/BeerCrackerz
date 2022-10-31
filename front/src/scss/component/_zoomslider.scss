@@ -1,10 +1,11 @@
 .zoom-slider {
   align-items: center;
-  background: var(--color-bg-a9);
+
+  background: var(--color-bg);
   background-clip: padding-box;
-  border: 2px solid rgba(0, 0, 0, .2);
+  border: 2px solid var(--color-bg-a1);
   border-radius: .5rem;
-  box-shadow: 0 0 10px var(--color-bg-a5);
+  box-shadow: 0 0 1rem var(--color-bg-a9);
   display: flex;
   flex-direction: column;
   height: 20rem;
@@ -20,6 +21,7 @@
 
   &.opened {
     opacity: 1;
+    right: 1rem;
   }
 
   p {
@@ -45,7 +47,8 @@
   .slider-wrapper {
     background-color: var(--color-txt);
     border-radius: .5rem;
-    box-shadow: 0 0 10px #424242;
+    box-shadow: 0 0 1rem var(--color-bg);
+    cursor: pointer;
     height: 80%;
     overflow: hidden;
     position: relative;
@@ -58,7 +61,7 @@
       position: absolute;
       width: 100%;
 
-      transition: height .2s;
+      transition: height .2s ease-in;
     }
   }
 }

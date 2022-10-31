@@ -2,7 +2,7 @@ import './BeerCrackerzAuth.scss';
 import Kom from './js/core/Kom.js';
 import LangManager from './js/core/LangManager.js';
 
-import ZoomSlider from './js/ui/ZoomSlider.js';
+import ZoomSlider from './js/ui/component/ZoomSlider.js';
 
 import Providers from './js/utils/ProviderEnum.js';
 import Markers from './js/utils/MarkerEnum.js';

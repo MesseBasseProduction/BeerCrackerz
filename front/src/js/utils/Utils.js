@@ -4,7 +4,7 @@ class Utils {
   constructor() { /* Not meant to be instantiated, all methods should be static */ }
 
 
-  static stripDom(html){
+  static stripDom(html) {
     let doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent || '';
   }
@@ -92,7 +92,7 @@ class Utils {
     debugContainer.appendChild(zoomLevel);
     debugContainer.appendChild(marks);
     debugContainer.appendChild(exportData);
-    exportData.addEventListener('click', window.BeerCrackerz.downloadData.bind(window.BeerCrackerz));
+    exportData.addEventListener('click', Utils.downloadData.bind(Utils));
     return debugContainer;
   }
 
@@ -131,6 +131,52 @@ class Utils {
         <b>${lang('marks')}</b> : ${marks}
       `;
     }
+  }
+
+
+  /**
+   * @method
+   * @name downloadData
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+   * @since August 2022
+   * @description
+   * <blockquote>
+   * The downloadData() method will save to user disk the saved spots as a JSON file
+   * </blockquote>
+   **/
+  static downloadData() {
+    const dataString = `data:text/json;charset=utf-8,${encodeURIComponent(Utils.getPreference('saved-spot'))}`;
+    const link = document.createElement('A');
+    link.setAttribute('href', dataString);
+    link.setAttribute('download', 'BeerCrackerzData.json');
+    link.click();
+  }
+
+
+  /**
+   * @method
+   * @name formatMarker
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+   * @since February 2022
+   * @description
+   * <blockquote>
+   * This method formats a mark returned from MapHelper so it can be parsed
+   * using JSON.parse (in order to store it in database)
+   * </blockquote>
+   * @param {Object} mark The mark options from internal this._marks[type]
+   **/
+   static formatMarker(mark) {
+    return {
+      name: mark.name,
+      description: mark.description,
+      lat: mark.lat,
+      lng: mark.lng,
+      rate: mark.rate
+    };
   }
 
 

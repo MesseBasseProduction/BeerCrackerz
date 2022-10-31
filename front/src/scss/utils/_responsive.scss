@@ -2,6 +2,10 @@
   .overlay [class$="-modal"] {
     max-width: 70%;
   }
+
+  .overlay [class$=-modal] {
+    padding: 3rem 4rem;
+  }
 }
 
 @media (min-width: 1080px) {

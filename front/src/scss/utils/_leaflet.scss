@@ -16,9 +16,11 @@
 }
 
 .leaflet-control-layers.leaflet-control {
-  background-color: var(--color-bg-a9);
+  background: var(--color-bg);
+  background-clip: padding-box;
+  border: 2px solid var(--color-bg-a1);
+  border-radius: .5rem;
   box-shadow: 0 0 1rem var(--color-bg-a9);
-  transition: all .2s;
 
   a {
     margin-bottom: 0;

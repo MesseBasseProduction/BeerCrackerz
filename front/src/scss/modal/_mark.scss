@@ -1,0 +1,70 @@
+.new-mark-modal,
+.edit-mark-modal {
+  width: calc(100% - 2rem);
+
+  h1, p {
+    text-align: center;
+  }
+
+  .rating {
+    margin-bottom: 1.2rem;
+
+    img {
+      cursor: pointer;
+      height: 2.5rem;
+      margin: 0 .25rem;
+      width: 2.5rem;
+
+      &.active {
+        filter: invert(53%) sepia(30%) saturate(1977%) hue-rotate(155deg) brightness(88%) contrast(102%);
+
+        &.selected {
+          filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
+        }
+      }
+    }
+  }
+
+  .type, .modifiers {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: .5rem auto 1.2rem;
+
+    p {
+      border: solid 1px var(--color-txt);
+      border-radius: .5rem;
+      color: var(--color-txt);
+      cursor: pointer;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: .5rem;
+      padding: .5rem 1rem;
+
+      transition: color .2s;
+
+      &.selected {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+      }
+    }
+
+    &.modifiers p {
+      min-width: 10rem;
+      user-select: none;
+
+      &.selected img {
+        filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
+      }
+    }
+
+    img {
+      margin-bottom: 1rem;
+      user-select: none;
+      width: 3rem;
+    }
+  }
+}
