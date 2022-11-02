@@ -179,7 +179,18 @@ class LangManager {
   // Main App shortcut to update UI chunks of text in views 
 
 
-  newSpotModalContent(dom) {
+  addMarkModal(dom, type) {
+    Utils.replaceString(dom.querySelector(`#nls-${type}-title`), `{${type.toUpperCase()}_TITLE}`, this[type]('title'));
+    Utils.replaceString(dom.querySelector(`#nls-${type}-subtitle`), `{${type.toUpperCase()}_SUBTITLE}`, this[type]('subtitle'));
+    Utils.replaceString(dom.querySelector(`#nls-${type}-name`), `{${type.toUpperCase()}_NAME}`, this[type]('nameLabel'));
+    Utils.replaceString(dom.querySelector(`#nls-${type}-desc`), `{${type.toUpperCase()}_DESC}`, this[type]('descLabel'));
+    Utils.replaceString(dom.querySelector(`#nls-${type}-rate`), `{${type.toUpperCase()}_RATE}`, this[type]('rateLabel'));
+    Utils.replaceString(dom.querySelector(`#${type}-submit`), `{${type.toUpperCase()}_SUBMIT}`, this.nav('add'));
+    Utils.replaceString(dom.querySelector(`#${type}-cancel`), `{${type.toUpperCase()}_CANCEL}`, this.nav('cancel'));    
+  }
+
+
+  addSpotModalContent(dom) {
     Utils.replaceString(dom.querySelector('#nls-spot-type'), '{SPOT_TYPE}', this.spot('typeLabel'));
     Utils.replaceString(dom.querySelector('#nls-spot-modifiers'), '{SPOT_MODIFIERS}', this.spot('modifiersLabel'));
     Utils.replaceString(dom.querySelector('#spot-bench'), '{SPOT_BENCH}', this.spot('benchModifier'));
@@ -189,7 +200,7 @@ class LangManager {
   }
 
 
-  newShopModalContent(dom) {
+  addShopModalContent(dom) {
     Utils.replaceString(dom.querySelector('#nls-shop-type'), '{SHOP_TYPE}', this.shop('typeLabel'));
     Utils.replaceString(dom.querySelector('#nls-shop-modifiers'), '{SHOP_MODIFIERS}', this.shop('modifiersLabel'));
     Utils.replaceString(dom.querySelector('#shop-fresh'), '{SHOP_FRESH}', this.shop('freshModifier'));
@@ -204,7 +215,7 @@ class LangManager {
     Utils.replaceString(dom.querySelector(`#nls-${type}-desc`), `{${type.toUpperCase()}_DESC}`, this[type]('descLabel'));
     Utils.replaceString(dom.querySelector(`#nls-${type}-rate`), `{${type.toUpperCase()}_RATE}`, this[type]('rateLabel'));
     Utils.replaceString(dom.querySelector(`#${type}-submit`), `{${type.toUpperCase()}_SUBMIT}`, this.nav('edit'));
-    Utils.replaceString(dom.querySelector(`#${type}-cancel`), `{${type.toUpperCase()}_CANCEL}`, this.nav('cancel'));    
+    Utils.replaceString(dom.querySelector(`#${type}-close`), `{${type.toUpperCase()}_CANCEL}`, this.nav('cancel'));    
   }
 
 

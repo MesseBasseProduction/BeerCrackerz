@@ -119,13 +119,17 @@ class BaseModal {
 
 
   close(event, force) {
+    if (event && event.stopPropagation) {
+      event.stopPropagation();
+    }
+
     if (force === true || event.target.id === 'overlay' || event.target.id.indexOf('close') !== -1) {
       this._modalOverlay.style.opacity = 0;
       setTimeout(() => {
         this._modalOverlay.style.display = 'none';
         this._modalOverlay.innerHTML = '';
         this.destroy();
-      }, 300);
+      }, 200);
     }
   }
 

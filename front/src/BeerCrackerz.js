@@ -4,7 +4,6 @@ import LangManager from './js/core/LangManager.js';
 
 import ZoomSlider from './js/ui/component/ZoomSlider.js';
 import Notification from './js/ui/component/Notification.js';
-import Rating from './js/ui/component/Rating.js';
 import ImageResizer from './js/ui/component/ImageResizer.js';
 import VisuHelper from './js/ui/VisuHelper.js';
 
@@ -13,7 +12,6 @@ import CustomEvents from './js/utils/CustomEvents.js';
 import DropElement from './js/utils/DropElement.js';
 import Clusters from './js/utils/ClusterEnum.js';
 import Providers from './js/utils/ProviderEnum.js';
-import MarkTypes from './js/utils/MarkTypesEnum.js';
 import Utils from './js/utils/Utils.js';
 import MarkPopup from './js/ui/MarkPopup';
 import ModalFactory from './js/ui/ModalFactory';
@@ -292,7 +290,7 @@ class BeerCrackerz {
           resolve();
         }, resolve, options);
       } else {
-        this._notification.raise(this.nls.notif('geolocationError'));
+        this.notification.raise(this.nls.notif('geolocationError'));
         resolve();
       }
     });
@@ -377,7 +375,6 @@ class BeerCrackerz {
       window.Evts.addEvent('click', document.getElementById('user-profile'), this.userProfileModal, this);
       window.Evts.addEvent('click', document.getElementById('hide-show'), this.hidShowMenu, this);
       window.Evts.addEvent('click', document.getElementById('center-on'), VisuHelper.toggleFocusLock, this);
-      window.Evts.addEvent('click', document.getElementById('overlay'), this.closeModal, this);
       // Subscribe to click event on map to react
       this._map.on('click', this.mapClicked.bind(this));
       // Map is dragged by user mouse/finger
@@ -418,9 +415,12 @@ class BeerCrackerz {
         Utils.setPreference('map-plan-layer', Utils.stripDom(event.name));
       });
 
-      window.Evts.subscribe('editMark', this.editMarker.bind(this));
-      window.Evts.subscribe('deleteMark', this.deleteMark.bind(this));
-      window.Evts.subscribe('onMarkDeleted', this._onMarkDeleted.bind(this));
+      window.Evts.subscribe('addMark', this.addMark.bind(this)); // Event from MarkPopup
+      window.Evts.subscribe('onMarkAdded', this._onMarkAdded.bind(this)); // Event from MarkPopup
+      window.Evts.subscribe('deleteMark', this.deleteMark.bind(this)); // Event from MarkPopup
+      window.Evts.subscribe('onMarkDeleted', this._onMarkDeleted.bind(this)); // User confirmed the mark deletion
+      window.Evts.subscribe('editMark', this.editMark.bind(this)); // Event from MarkPopup
+      window.Evts.subscribe('onMarkEdited', this._onMarkEdited.bind(this)); // User confirmed the mark edition
 
       window.Evts.subscribe('centerOn', VisuHelper.centerOn.bind(VisuHelper));
 
@@ -525,148 +525,248 @@ class BeerCrackerz {
 
 
   // ======================================================================== //
-  // ----------------- App modals display and interaction ------------------- //
+  // -------------------------- Map interaction ----------------------------- //
   // ======================================================================== //
 
 
-  newMarkModal(dom, type) {
-    if (type === 'spot') {
-      this._newSpotModalContent(dom);
-    } else if (type === 'shop') {
-      this._newShopModalContent(dom);
-    }
-
-    // Append modal
-    document.getElementById('overlay').appendChild(dom);
-    document.getElementById('overlay').style.display = 'flex';
-    setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
-  }
-
-
-  _newSpotModalContent(dom) {
-    this.nls.newSpotModalContent(dom);
-    // Handle spot types
-    const parent = dom.querySelector('#spot-type');
-    const _typeChecked = e => {
-      for (let i = 0; i < parent.children.length; ++i) {
-        parent.children[i].classList.remove('selected');
-        if (parent.children[i].dataset.type === e.target.dataset.type) {
-          parent.children[i].classList.add('selected');
-        }
-      }
-    };
-
-    for (let i = 0; i < MarkTypes.spot.length; ++i) {
-      const type = document.createElement('P');
-      type.dataset.type = MarkTypes.spot[i];
-      type.innerHTML = this.nls.spot(`${MarkTypes.spot[i]}Type`);
-      parent.appendChild(type);
-      type.addEventListener('click', _typeChecked.bind(this));
-    }
-    // Handle spot modifiers
-    const modifiers = dom.querySelector('#spot-modifiers');
-    const _modifierChecked = e => {
-      if (e.target.closest('p').classList.contains('selected')) {
-        e.target.closest('p').classList.remove('selected');
+  /**
+   * @method
+   * @name mapClicked
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+   * @since January 2022
+   * @description
+   * <blockquote>
+   * The mapClicked() method is the callback used when the user clicked on the Leaflet.js map
+   * </blockquote>
+   * @param {Event} event The click event
+   **/
+  mapClicked(event) {
+    if (this._newMarker && this._newMarker.popupClosed) {
+      // Avoid to open new marker right after popup closing
+      this._newMarker = null;
+    } else if (this._newMarker === null || !this._newMarker.isBeingDefined) {
+      // Only create new marker if none is in progress, and that click is max range to add a marker
+      const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [event.latlng.lat, event.latlng.lng]);
+      if (distance < Utils.NEW_MARKER_RANGE) {
+        this.addMarkPopup(event.latlng);
       } else {
-        e.target.closest('p').classList.add('selected');
+        this.notification.raise(this.nls.notif('newMarkerOutside'));
       }
-    };
-
-    for (let i = 0; i < modifiers.children.length; ++i) {
-      modifiers.children[i].addEventListener('click', _modifierChecked.bind(this));
     }
   }
 
 
-  _newShopModalContent(dom) {
-    this.nls.newShopModalContent(dom);
-    // Handle shop types
-    const parent = dom.querySelector('#shop-type');
-    const _typeChecked = e => {
-      for (let i = 0; i < parent.children.length; ++i) {
-        parent.children[i].classList.remove('selected');
-        if (parent.children[i].dataset.type === e.target.dataset.type) {
-          parent.children[i].classList.add('selected');
-        }
-      }
+  // ======================================================================== //
+  // ----------------------- Marker manipulation ---------------------------- //
+  // ======================================================================== //
+
+
+  addMarkPopup(options) {
+    const dom = {
+      wrapper: document.createElement('DIV'),
+      title: document.createElement('P'),
+      spot: document.createElement('BUTTON'),
+      shop: document.createElement('BUTTON'),
+      bar: document.createElement('BUTTON'),
     };
-
-    for (let i = 0; i < MarkTypes.shop.length; ++i) {
-      const type = document.createElement('P');
-      type.dataset.type = MarkTypes.shop[i];
-      type.innerHTML = this.nls.shop(`${MarkTypes.shop[i]}Type`);
-      parent.appendChild(type);
-      type.addEventListener('click', _typeChecked.bind(this));
-    }
-    // Handle shop modifiers
-    const modifiers = dom.querySelector('#shop-modifiers');
-    const _modifierChecked = e => {
-      if (e.target.closest('p').classList.contains('selected')) {
-        e.target.closest('p').classList.remove('selected');
-      } else {
-        e.target.closest('p').classList.add('selected');
-      }
+    // Update class and inner HTMl content according to user's nls
+    dom.wrapper.className = 'new-poi';
+    dom.title.innerHTML = this.nls.map('newTitle');
+    dom.spot.innerHTML = this.nls.map('newSpot');
+    dom.shop.innerHTML = this.nls.map('newShop');
+    dom.bar.innerHTML = this.nls.map('newBar');
+    // Atach data type to each button (to be used in clicked callback)
+    dom.spot.dataset.type = 'spot';
+    dom.shop.dataset.type = 'shop';
+    dom.bar.dataset.type = 'bar';
+    // DOM chaining
+    dom.wrapper.appendChild(dom.title);
+    dom.wrapper.appendChild(dom.spot);
+    dom.wrapper.appendChild(dom.shop);
+    dom.wrapper.appendChild(dom.bar);
+    // Update popup content with DOM elements
+    options.dom = dom.wrapper;
+    // Create temporary mark with wrapper content and open it to offer user the creation menu
+    this._newMarker = this.placeMarker(options).openPopup();
+    options.marker = this._newMarker; // Attach marker to option so it can be manipulated in clicked callbacks
+    // Callback on button clicked (to open modal and define a new mark)
+    const _prepareNewMark = e => {
+      this._newMarker.isBeingDefined = true;
+      this._newMarker.closePopup();
+      options.type = e.target.dataset.type;
+      window.Evts.publish('addMark', options);
     };
-
-    for (let i = 0; i < modifiers.children.length; ++i) {
-      modifiers.children[i].addEventListener('click', _modifierChecked.bind(this));
-    }
-  }
-
-  
-  editMarkModal(options) {
-    this._kom.getTemplate(`/modal/edit${options.type}`).then(dom => {
-      const name = dom.querySelector(`#${options.type}-name`);
-      const description = dom.querySelector(`#${options.type}-desc`);
-      const submit = dom.querySelector(`#${options.type}-submit`);
-      const cancel = dom.querySelector(`#${options.type}-cancel`);
-      const rate = dom.querySelector(`#${options.type}-rating`);
-      const rating = new Rating(rate, options.rate);
-
-      this.nls.editMarkModal(dom, options.type);
-
-      name.value = options.name;
-      description.value = options.description;
-      submit.addEventListener('click', () => {
-        // Iterate through marks to find matching one (by coord as marks coordinates are unique)
-        for (let i = 0; i < this._marks[options.type].length; ++i) {
-          // We found, remove circle, label and marker from map/clusters
-          if (options.lat === this._marks[options.type][i].lat && options.lng === this._marks[options.type][i].lng) {
-            this._marks[options.type][i].name = name.value;
-            this._marks[options.type][i].description = description.value;
-            this._marks[options.type][i].rate = rating.currentRate;
-            options.tooltip.removeFrom(this.map);
-            const popup = new MarkPopup(options, dom => {
-              options.dom = dom;
-              options.marker.setPopupContent(options.dom);
-              options.popup = popup;
-              this._kom[`${options.type}Edited`](options.id, Utils.formatMarker(options)).then(data => {
-                // Update marker data to session memory
-                options.id = data.id;
-                options.name = data.name;
-                options.description = data.description;
-                options.lat = data.lat;
-                options.lng = data.lng;
-                // Notify user through UI that marker has been successfully deleted
-                this._notification.raise(this.nls.notif(`${options.type}Edited`));
-              }).catch(() => {
-                this._notification.raise(this.nls.notif(`${options.type}NotEdited`));                
-              }).finally(() => {
-                this.closeModal(null, true);                
-              });
-            });
-            break;
-          }
-        }
-      });
-
-      cancel.addEventListener('click', this.closeModal.bind(this, null, true));
-      document.getElementById('overlay').appendChild(dom);
-      document.getElementById('overlay').style.display = 'flex';
-      setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
+    // Buttons click events
+    dom.spot.addEventListener('click', _prepareNewMark);
+    dom.shop.addEventListener('click', _prepareNewMark);
+    dom.bar.addEventListener('click', _prepareNewMark);
+    // Listen to clicks outside of popup to close new mark
+    this._newMarker.on('popupclose', () => {
+      if (!this._newMarker.isBeingDefined) {
+        this._newMarker.popupClosed = true;
+        this._newMarker.removeFrom(this.map);
+      }
     });
   }
+
+
+  addMark(options) {
+    this._modal = new ModalFactory('AddMark', options);
+  }
+
+
+  _onMarkAdded(options) {
+    const popup = new MarkPopup(options, dom => {
+      options.dom = dom;
+      options.marker = this.placeMarker(options); // Create final marker
+      options.popup = popup;
+      // Save new marker in local storage, later to be sent to the server
+      this._kom[`${options.type}Created`](Utils.formatMarker(options)).then(data => {
+        // Update marker data to session memory
+        options.id = data.id;
+        options.name = data.name;
+        options.description = data.description;
+        options.lat = data.lat;
+        options.lng = data.lng;
+        // Save marke in marks and clusters for the map
+        this._marks[options.type].push(options);
+        this._clusters[options.type].addLayer(options.marker);
+        // Notify user that new marker has been saved
+        this.notification.raise(this.nls.notif(`${options.type}Added`));
+        // Update marker circles visibility according to user position
+        VisuHelper.updateMarkerCirclesVisibility();
+        // Clear new marker to let user add other stuff
+        this._newMarker = null;
+      }).catch(() => {
+        this.notification.raise(this.nls.notif(`${options.type}NotAdded`));      
+      });
+    });
+  }
+
+
+  /**
+   * @method
+   * @name deleteMark
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+   * @since February 2022
+   * @description
+   * <blockquote>
+   * This method will delete a mark after prompting the user if he trully wants to
+   * </blockquote>
+   * @param {Object} options The mark options to delete
+   **/
+  deleteMark(options) {
+    this._map.closePopup();
+    this._modal = new ModalFactory('DeleteMark', options);
+  }
+
+
+  _onMarkDeleted(options) {
+    // Iterate through marks to find matching one (by coord as marks coordinates are unique)
+    const marks = this._marks[options.type];
+    for (let i = 0; i < marks.length; ++i) {
+      // We found, remove circle, label and marker from map/clusters
+      if (options.lat === marks[i].lat && options.lng === marks[i].lng) {
+        // Send data to server
+        this._kom[`${options.type}Deleted`](marks[i].id, Utils.formatMarker(marks[i])).then(() => {
+          VisuHelper.removeMarkDecoration(marks[i]);
+          this._clusters[options.type].removeLayer(marks[i].marker);
+          marks.splice(i, 1);
+          // Update internal marks array
+          this._marks[options.type] = marks;
+          // Notify user through UI that marker has been successfully deleted
+          this.notification.raise(this.nls.notif(`${options.type}Deleted`));
+        }).catch(() => {
+          this.notification.raise(this.nls.notif(`${options.type}NotDeleted`));
+        });
+        break;
+      }
+    }
+
+    this._modal.close(null, true);
+  }
+
+
+  /**
+   * @method
+   * @name editMark
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+   * @since February 2022
+   * @description
+   * <blockquote>
+   * This method will open a mark edition modal
+   * </blockquote>
+   * @param {Object} options The mark options to edit
+   **/
+   editMark(options) {
+    this._map.closePopup();
+    this._modal = new ModalFactory('EditMark', options);
+  }
+
+
+  _onMarkEdited(options) {
+    // Iterate through marks to find matching one (by coord as marks coordinates are unique)
+    for (let i = 0; i < this._marks[options.type].length; ++i) {
+      // We found, remove circle, label and marker from map/clusters
+      if (options.lat === this._marks[options.type][i].lat && options.lng === this._marks[options.type][i].lng) {
+        this._marks[options.type][i].name = options.name.value;
+        this._marks[options.type][i].description = options.description.value;
+        this._marks[options.type][i].rate = options.rating.currentRate;
+        options.tooltip.removeFrom(this.map);
+        const popup = new MarkPopup(options, dom => {
+          options.dom = dom;
+          options.marker.setPopupContent(options.dom);
+          options.popup = popup;
+          // Send data to server
+          this._kom[`${options.type}Edited`](options.id, Utils.formatMarker(options)).then(data => {
+            // Update marker data to session memory
+            options.id = data.id;
+            options.name = data.name;
+            options.description = data.description;
+            options.lat = data.lat;
+            options.lng = data.lng;
+            // Notify user through UI that marker has been successfully deleted
+            this.notification.raise(this.nls.notif(`${options.type}Edited`));
+          }).catch(() => {
+            this.notification.raise(this.nls.notif(`${options.type}NotEdited`));                
+          }).finally(() => {
+            this._modal.close(null, true);
+          });
+        });
+        break;
+      }
+    }    
+  }
+
+
+  /**
+   * @method
+   * @name hidShowMenu
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+   * @since January 2022
+   * @description
+   * <blockquote>
+   * The hidShowMenu() method will request the hide show modal, which all
+   * toggles for map elements ; labels/circles/spots/shops/bars
+   * </blockquote>
+   **/
+  hidShowMenu() {
+    this._modal = new ModalFactory('HideShow');
+  }
+
+
+  // ======================================================================== //
+  // --------------------------- User profile ------------------------------- //
+  // ======================================================================== //
+
 
 
   /**
@@ -682,7 +782,7 @@ class BeerCrackerz {
    * the user preferences, and the user profile information
    * </blockquote>
    **/
-  userProfileModal() {
+   userProfileModal() {
     this._kom.getTemplate('/modal/user').then(dom => {
       this.nls.userProfileModal(dom);
       dom.querySelector(`#user-pp`).src = this._user.pp;
@@ -792,202 +892,20 @@ class BeerCrackerz {
               maxX: Math.round(imageResizer.getMaxPoint().x),
               maxY: Math.round(imageResizer.getMaxPoint().y)
             }).then(() => {
-              this._notification.raise(this.nls.notif('uploadPPSuccess'));
+              this.notification.raise(this.nls.notif('uploadPPSuccess'));
             }).catch(err => {
-              this._notification.raise(this.nls.notif('uploadPPFailed'));
+              this.notification.raise(this.nls.notif('uploadPPFailed'));
               console.error(err)
             }).finally(() => {
               // Reload user from server with new path and close modal
-              this._initUser().then(this.closeModal.bind(this, null, true));              
+              //this._initUser().then(this.closeModal.bind(this, null, true));              
             });
           });
           // Cancel
-          document.getElementById(`update-pp-cancel`).addEventListener('click', this.closeModal.bind(this, null, true));
+          //document.getElementById(`update-pp-cancel`).addEventListener('click', this.closeModal.bind(this, null, true));
         });
       };
     }
-  }
-
-
-  /**
-   * @method
-   * @name closeModal
-   * @public
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since January 2022
-   * @description
-   * <blockquote>
-   * The closeModal() method will close any opened modal if the click event is
-   * targeted on the modal overlay or on close buttons
-   * </blockquote>
-   * @param {Event} event The click event
-   **/
-  closeModal(event, force) {
-    if (force === true || event.target.id === 'overlay' || event.target.id.indexOf('close') !== -1) {
-      document.getElementById('overlay').style.opacity = 0;
-      setTimeout(() => {
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('overlay').innerHTML = '';
-      }, 300);
-    }
-  }
-
-
-  // ======================================================================== //
-  // -------------------------- Map interaction ----------------------------- //
-  // ======================================================================== //
-
-
-  /**
-   * @method
-   * @name mapClicked
-   * @public
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since January 2022
-   * @description
-   * <blockquote>
-   * The mapClicked() method is the callback used when the user clicked on the Leaflet.js map
-   * </blockquote>
-   * @param {Event} event The click event
-   **/
-  mapClicked(event) {
-    if (this._newMarker && this._newMarker.popupClosed) {
-      // Avoid to open new marker right after popup closing
-      this._newMarker = null;
-    } else if (this._newMarker === null || !this._newMarker.isBeingDefined) {
-      // Only create new marker if none is in progress, and that click is max range to add a marker
-      const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [event.latlng.lat, event.latlng.lng]);
-      if (distance < Utils.NEW_MARKER_RANGE) {
-        this._newMarker = this.definePOI(event.latlng, this._markerSaved.bind(this));
-      } else {
-        this._notification.raise(this.nls.notif('newMarkerOutside'));
-      }
-    }
-  }
-
-
-  /**
-   * @method
-   * @name _markerSaved
-   * @private
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since January 2022
-   * @description
-   * <blockquote>
-   * The _markerSaved() method is the callback used when a marker is created and added
-   * to the map. It is the last method of a new marker proccess.
-   * </blockquote>
-   * @param {Object} options The new marker options
-   **/
-  _markerSaved(options) {
-    // Save new marker in local storage, later to be sent to the server
-    this._kom[`${options.type}Created`](Utils.formatMarker(options)).then(data => {
-      // Update marker data to session memory
-      options.id = data.id;
-      options.name = data.name;
-      options.description = data.description;
-      options.lat = data.lat;
-      options.lng = data.lng;
-      // Save marke in marks and clusters for the map
-      this._marks[options.type].push(options);
-      this._clusters[options.type].addLayer(options.marker);
-      // Notify user that new marker has been saved
-      this._notification.raise(this.nls.notif(`${options.type}Added`));
-      // Update marker circles visibility according to user position
-      VisuHelper.updateMarkerCirclesVisibility();
-      // Clear new marker to let user add other stuff
-      this._newMarker = null;
-    }).catch(() => {
-      this._notification.raise(this.nls.notif(`${options.type}NotAdded`));      
-    });
-  }
-
-
-  // ======================================================================== //
-  // -------------------------- Marker edition ------------------------------ //
-  // ======================================================================== //
-
-
-  /**
-   * @method
-   * @name editMarker
-   * @public
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since February 2022
-   * @description
-   * <blockquote>
-   * This method will open a mark edition modal
-   * </blockquote>
-   * @param {Object} options The mark options to edit
-   **/
-  editMarker(options) {
-    this._map.closePopup();
-    this.editMarkModal(options);
-  }
-
-
-  /**
-   * @method
-   * @name deleteMark
-   * @public
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since February 2022
-   * @description
-   * <blockquote>
-   * This method will delete a mark after prompting the user if he trully wants to
-   * </blockquote>
-   * @param {Object} options The mark options to delete
-   **/
-  deleteMark(options) {
-    this._modal = new ModalFactory('DeleteMark', options);
-  }
-
-
-  _onMarkDeleted(options) {
-    // Iterate through marks to find matching one (by coord as marks coordinates are unique)
-    const marks = this._marks[options.type];
-    for (let i = 0; i < marks.length; ++i) {
-      // We found, remove circle, label and marker from map/clusters
-      if (options.lat === marks[i].lat && options.lng === marks[i].lng) {
-        this._kom[`${options.type}Deleted`](marks[i].id, Utils.formatMarker(marks[i])).then(() => {
-          VisuHelper.removeMarkDecoration(marks[i]);
-          this._clusters[options.type].removeLayer(marks[i].marker);
-          marks.splice(i, 1);
-          // Update internal marks array
-          this._marks[options.type] = marks;
-          // Notify user through UI that marker has been successfully deleted
-          this._notification.raise(this.nls.notif(`${options.type}Deleted`));
-        }).catch(() => {
-          this._notification.raise(this.nls.notif(`${options.type}NotDeleted`));
-        });
-        break;
-      }
-    }
-
-    this._modal.close(null, true);
-  }
-
-
-  /**
-   * @method
-   * @name hidShowMenu
-   * @public
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since January 2022
-   * @description
-   * <blockquote>
-   * The hidShowMenu() method will request the hide show modal, which all
-   * toggles for map elements ; labels/circles/spots/shops/bars
-   * </blockquote>
-   **/
-   hidShowMenu() {
-    this._modal = new ModalFactory('HideShow');
   }
 
 
@@ -1057,127 +975,6 @@ class BeerCrackerz {
       this.user.circle.setLatLng(this.user);
       this.user.circle.setRadius(this.user.accuracy);
     }
-  }
-
-
-  definePOI(options, callback) {
-    const dom = {
-      wrapper: document.createElement('DIV'),
-      title: document.createElement('P'),
-      spot: document.createElement('BUTTON'),
-      shop: document.createElement('BUTTON'),
-      bar: document.createElement('BUTTON'),
-    };
-    // Update class and inner HTMl content according to user's nls
-    dom.wrapper.className = 'new-poi';
-    dom.title.innerHTML = this.nls.map('newTitle');
-    dom.spot.innerHTML = this.nls.map('newSpot');
-    dom.shop.innerHTML = this.nls.map('newShop');
-    dom.bar.innerHTML = this.nls.map('newBar');
-    // Atach data type to each button (to be used in clicked callback)
-    dom.spot.dataset.type = 'spot';
-    dom.shop.dataset.type = 'shop';
-    dom.bar.dataset.type = 'bar';
-    // DOM chaining
-    dom.wrapper.appendChild(dom.title);
-    dom.wrapper.appendChild(dom.spot);
-    dom.wrapper.appendChild(dom.shop);
-    dom.wrapper.appendChild(dom.bar);
-    // Update popup content with DOM elements
-    options.dom = dom.wrapper;
-    // Create temporary mark with wrapper content and open it to offer user the creation menu
-    const marker = this.placeMarker(options).openPopup();
-    options.marker = marker; // Attach marker to option so it can be manipulated in clicked callbacks
-    options.addedCallback = callback; // Attach callback to be called when marker addition is done
-    // Callback on button clicked (to open modal and define a new mark)
-    const _prepareNewMark = e => {
-      marker.isBeingDefined = true;
-      marker.closePopup();
-      this.defineMarkFactory(e.target.dataset.type, options);
-    };
-    // Buttons click events
-    dom.spot.addEventListener('click', _prepareNewMark);
-    dom.shop.addEventListener('click', _prepareNewMark);
-    dom.bar.addEventListener('click', _prepareNewMark);
-    // Listen to clicks outside of popup to close new mark
-    marker.on('popupclose', () => {
-      if (!marker.isBeingDefined) {
-        marker.popupClosed = true;
-        marker.removeFrom(this.map);
-      }
-    });
-
-    return marker;
-  }
-
-
-  // ======================================================================== //
-  // ---------------------- New mark in modal helper ------------------------ //
-  // ======================================================================== //
-
-
-  defineMarkFactory(type, options) {
-    this._kom.getTemplate(`/modal/new${type}`).then(dom => {
-      const name = dom.querySelector(`#${type}-name`);
-      const description = dom.querySelector(`#${type}-desc`);
-      const rating = new Rating(dom.querySelector(`#${type}-rating`));
-      const submit = dom.querySelector(`#${type}-submit`);
-      const cancel = dom.querySelector(`#${type}-cancel`);
-      const close = dom.querySelector('#modal-close');
-      // Update nls for template
-      Utils.replaceString(dom.querySelector(`#nls-${type}-title`), `{${type.toUpperCase()}_TITLE}`, this.nls[type]('title'));
-      Utils.replaceString(dom.querySelector(`#nls-${type}-subtitle`), `{${type.toUpperCase()}_SUBTITLE}`, this.nls[type]('subtitle'));
-      Utils.replaceString(dom.querySelector(`#nls-${type}-name`), `{${type.toUpperCase()}_NAME}`, this.nls[type]('nameLabel'));
-      Utils.replaceString(dom.querySelector(`#nls-${type}-desc`), `{${type.toUpperCase()}_DESC}`, this.nls[type]('descLabel'));
-      Utils.replaceString(dom.querySelector(`#nls-${type}-rate`), `{${type.toUpperCase()}_RATE}`, this.nls[type]('rateLabel'));
-      Utils.replaceString(submit, `{${type.toUpperCase()}_SUBMIT}`, this.nls.nav('add'));
-      Utils.replaceString(cancel, `{${type.toUpperCase()}_CANCEL}`, this.nls.nav('cancel'));
-      // Method to clear modal and hide it, and remove temporary marker on the map
-      const _cleanDefineUI = () => {
-        options.marker.isBeingDefined = false;
-        options.marker.removeFrom(this.map); // Clear temporary black marker
-        this.closeModal(null, true);
-      };
-      // Submit or cancel event subscriptions
-      submit.addEventListener('click', () => {
-        name.classList.remove('error');
-        if (name.value === '') {
-          name.classList.add('error');
-          this._notification.raise(this.nls.notif('markNameEmpty'));
-        } else {
-          _cleanDefineUI();
-          options.type = type;
-          options.name = name.value,
-          options.description = description.value;
-          options.rate = rating.currentRate;
-          options.user = this._user.username;
-          const popup = new MarkPopup(options, dom => {
-            options.dom = dom;
-            options.marker = this.placeMarker(options); // Create final marker
-            options.popup = popup;
-            options.addedCallback(options);
-          });
-        }
-      });
-      cancel.addEventListener('click', _cleanDefineUI);
-      close.addEventListener('click', _cleanDefineUI);
-      this.newMarkModal(dom, type);
-    });
-  }
-
-
-  defineNewSpot(options) {
-    this.defineMarkFactory('spot', options);
-  }
-
-
-  defineNewShop(options) {
-    this.defineMarkFactory('shop', options);
-  }
-
-
-  defineNewBar(options) {
-    this.defineMarkFactory('bar', options);
   }
 
 
