@@ -239,7 +239,7 @@ class LangManager {
   updateProfilePictureModal(dom) {
     Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.modal('updatePPTitle'));
     Utils.replaceString(dom.querySelector(`#nls-modal-desc`), `{UPDATE_PP_DESC}`, this.modal('updatePPDesc'));
-    Utils.replaceString(dom.querySelector(`#update-pp-cancel`), `{UPDATE_PP_CANCEL}`, this.nav('cancel'));
+    Utils.replaceString(dom.querySelector(`#update-pp-close`), `{UPDATE_PP_CANCEL}`, this.nav('cancel'));
     Utils.replaceString(dom.querySelector(`#update-pp-submit`), `{UPDATE_PP_SUBMIT}`, this.nav('upload'));
   }
 

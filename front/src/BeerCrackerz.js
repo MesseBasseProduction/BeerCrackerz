@@ -4,12 +4,10 @@ import LangManager from './js/core/LangManager.js';
 
 import ZoomSlider from './js/ui/component/ZoomSlider.js';
 import Notification from './js/ui/component/Notification.js';
-import ImageResizer from './js/ui/component/ImageResizer.js';
 import VisuHelper from './js/ui/VisuHelper.js';
 
 import Markers from './js/utils/MarkerEnum.js';
 import CustomEvents from './js/utils/CustomEvents.js';
-import DropElement from './js/utils/DropElement.js';
 import Clusters from './js/utils/ClusterEnum.js';
 import Providers from './js/utils/ProviderEnum.js';
 import Utils from './js/utils/Utils.js';
@@ -238,11 +236,11 @@ class BeerCrackerz {
       }
       // Update LangManager if pref is !english
       this.nls.updateLang(Utils.getPreference('selected-lang')).then(() => {
+        this.debugElement = Utils.initDebugInterface();
         // Create and append debug UI with proper nls settings
         if (window.DEBUG === true || (Utils.getPreference('app-debug') === 'true')) {
           window.DEBUG = true; // Ensure to set global flag if preference comes from local storage
           Utils.setPreference('app-debug', true); // Ensure to set local storage preference if debug flag was added to the url
-          this.debugElement = Utils.initDebugInterface();        
           VisuHelper.addDebugUI();
         }
         resolve();        
@@ -371,10 +369,6 @@ class BeerCrackerz {
    **/
   _initEvents() {
     return new Promise(resolve => {
-      // Command events
-      window.Evts.addEvent('click', document.getElementById('user-profile'), this.userProfileModal, this);
-      window.Evts.addEvent('click', document.getElementById('hide-show'), this.hidShowMenu, this);
-      window.Evts.addEvent('click', document.getElementById('center-on'), VisuHelper.toggleFocusLock, this);
       // Subscribe to click event on map to react
       this._map.on('click', this.mapClicked.bind(this));
       // Map is dragged by user mouse/finger
@@ -415,12 +409,19 @@ class BeerCrackerz {
         Utils.setPreference('map-plan-layer', Utils.stripDom(event.name));
       });
 
-      window.Evts.subscribe('addMark', this.addMark.bind(this)); // Event from MarkPopup
+      // Command events
+      window.Evts.addEvent('click', document.getElementById('user-profile'), this.userProfile, this);
+      window.Evts.addEvent('click', document.getElementById('hide-show'), this.hidShowMenu, this);
+      window.Evts.addEvent('click', document.getElementById('center-on'), VisuHelper.toggleFocusLock, this);
+      // Bus events
+      window.Evts.subscribe('addMark', this.addMark.bind(this)); // Event from addMarkPopup
       window.Evts.subscribe('onMarkAdded', this._onMarkAdded.bind(this)); // Event from MarkPopup
       window.Evts.subscribe('deleteMark', this.deleteMark.bind(this)); // Event from MarkPopup
       window.Evts.subscribe('onMarkDeleted', this._onMarkDeleted.bind(this)); // User confirmed the mark deletion
       window.Evts.subscribe('editMark', this.editMark.bind(this)); // Event from MarkPopup
       window.Evts.subscribe('onMarkEdited', this._onMarkEdited.bind(this)); // User confirmed the mark edition
+      window.Evts.subscribe('updateProfile', this.updateProfilePicture.bind(this)); // Event from user modal
+      window.Evts.subscribe('onProfilePictureUpdated', this._onProfilePictureUpdated.bind(this)); // Event from update pp modal
 
       window.Evts.subscribe('centerOn', VisuHelper.centerOn.bind(VisuHelper));
 
@@ -771,141 +772,45 @@ class BeerCrackerz {
 
   /**
    * @method
-   * @name userProfileModal
+   * @name userProfile
    * @public
    * @memberof BeerCrackerz
    * @author Arthur Beaulieu
    * @since January 2022
    * @description
    * <blockquote>
-   * The userProfileModal() method will request the user modal, which contains
+   * The userProfile() method will request the user modal, which contains
    * the user preferences, and the user profile information
    * </blockquote>
    **/
-   userProfileModal() {
-    this._kom.getTemplate('/modal/user').then(dom => {
-      this.nls.userProfileModal(dom);
-      dom.querySelector(`#user-pp`).src = this._user.pp;
-      dom.querySelector(`#user-name`).innerHTML = this._user.username;
-      dom.querySelector(`#user-email`).innerHTML = this._user.email;
-
-      new DropElement({
-        target: dom.querySelector('#update-pp-wrapper'),
-        onDrop: this.updateProfilePictureModal.bind(this)
-      });
-      new DropElement({
-        target: dom.querySelector('#drop-user-pp'),
-        onDrop: this.updateProfilePictureModal.bind(this)
-      });
-
-      // Init modal checkbox state according to local storage preferences
-      if (Utils.getPreference('map-high-accuracy') === 'true') {
-        dom.querySelector('#high-accuracy-toggle').checked = true;
-      }
-
-      if (window.DEBUG === true || (Utils.getPreference('app-debug') === 'true')) {
-        dom.querySelector('#debug-toggle').checked = true;
-      }
-
-      document.getElementById('overlay').appendChild(dom);
-      document.getElementById('overlay').style.display = 'flex';
-      setTimeout(() => document.getElementById('overlay').style.opacity = 1, 50);
-
-      document.getElementById('high-accuracy-toggle').addEventListener('change', this.toggleHighAccuracy.bind(this));
-      document.getElementById('debug-toggle').addEventListener('change', VisuHelper.toggleDebug.bind(VisuHelper));
-      document.getElementById('update-pp').addEventListener('change', this.updateProfilePictureModal.bind(this));
-      document.getElementById('user-pp').addEventListener('click', this.updateProfilePictureModal.bind(this));
-      document.getElementById('logout').addEventListener('click', () => {
-        this._kom.post('api/auth/logout/', null).then(() => {
-          window.location = '/welcome'
-        })
-      });
-    });
+  userProfile() {
+    this._modal = new ModalFactory('User');
   }
 
 
-  // TODo split into component and stuff
-  updateProfilePictureModal(event) {
-    if (event.type === 'click') { // Clicked on actual pp
-      const evt = document.createEvent('MouseEvents');
-      evt.initEvent('click', true, false);
-      document.getElementById('update-pp').dispatchEvent(evt);
-      return;
-    }
+  updateProfilePicture(options) {
+    this._modal = new ModalFactory('UpdateProfilePicture', options);
+  }
 
-    const fileInput = document.getElementById('update-pp');
-    let files = { files: fileInput.files }; // From input change
-    if (event.files && event.files.length === 1) { // From drop
-      files = { files: event.files };
-    }
 
-    if (files.files && files.files.length === 1) {
-      // Check if file is conform to what's expected
-      if (files.files[0].size > 2621440) { // 2.5Mo
-        document.getElementById('update-pp').value = '';
-        document.getElementById('update-pp').classList.add('error');
-        document.getElementById('update-pp-error').innerHTML = this.nls.modal('updatePPSizeError');
-        return;
-      }
-
-      if (FileReader) {
-        const fr = new FileReader();
-        fr.onload = () => {
-          var image = new Image();
-          image.src = fr.result;
-          image.onload = () => {
-            if (image.width < 512 || image.height < 512) {
-              document.getElementById('update-pp').value = '';
-              document.getElementById('update-pp').classList.add('error');
-              document.getElementById('update-pp-error').innerHTML = this.nls.modal('updatePPDimensionError');
-              return;
-            } else {
-              _onFileLoaded(image.width, image.height, fr.result);
-            }
-          };
-        };
-        fr.readAsDataURL(files.files[0]);
-      } else {
-        console.error('Couldnt read file');
-      }
-
-      // place resizer around en transparence
-      const _onFileLoaded = (width, height, b64) => {
-        this._kom.getTemplate('/modal/updatepp').then(dom => {
-          this.nls.updateProfilePictureModal(dom);
-
-          document.getElementById('overlay').appendChild(dom);
-          document.getElementById('overlay').style.display = 'flex';
-          document.getElementById('wip-pp').src = b64;
-
-          const imageResizer = new ImageResizer({
-            wrapper: document.getElementById('wip-pp-wrapper'),
-            width: width,
-            height: height
-          });          
-          // Send PP to the server
-          document.getElementById(`update-pp-submit`).addEventListener('click', () => {
-            this._kom.patchImage(`api/user/${this._user.id}/profile-picture/`, {
-              profile_picture: document.getElementById('wip-pp').src,
-              minX: Math.round(imageResizer.getMinPoint().x),
-              minY: Math.round(imageResizer.getMinPoint().y),
-              maxX: Math.round(imageResizer.getMaxPoint().x),
-              maxY: Math.round(imageResizer.getMaxPoint().y)
-            }).then(() => {
-              this.notification.raise(this.nls.notif('uploadPPSuccess'));
-            }).catch(err => {
-              this.notification.raise(this.nls.notif('uploadPPFailed'));
-              console.error(err)
-            }).finally(() => {
-              // Reload user from server with new path and close modal
-              //this._initUser().then(this.closeModal.bind(this, null, true));              
-            });
-          });
-          // Cancel
-          //document.getElementById(`update-pp-cancel`).addEventListener('click', this.closeModal.bind(this, null, true));
-        });
-      };
-    }
+  _onProfilePictureUpdated(options) {
+    this._kom.patchImage(`api/user/${this._user.id}/profile-picture/`, {
+      profile_picture: document.getElementById('wip-pp').src,
+      minX: Math.round(options.imageResizer.getMinPoint().x),
+      minY: Math.round(options.imageResizer.getMinPoint().y),
+      maxX: Math.round(options.imageResizer.getMaxPoint().x),
+      maxY: Math.round(options.imageResizer.getMaxPoint().y)
+    }).then(() => {
+      this.notification.raise(this.nls.notif('uploadPPSuccess'));
+    }).catch(err => {
+      this.notification.raise(this.nls.notif('uploadPPFailed'));
+      console.error(err)
+    }).finally(() => {
+      // Reload user from server with new path and close modal
+      this._initUser().then(() => {
+        this._modal.close(null, true);        
+      });              
+    });
   }
 
 
