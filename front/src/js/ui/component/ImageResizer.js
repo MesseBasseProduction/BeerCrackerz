@@ -90,6 +90,7 @@ class ImageResizer {
 
     requestAnimationFrame(() => {
       this.containerRect = this._dom.container.getBoundingClientRect();
+      this._initResizer();
       this.resizerRect = this._dom.resizer.getBoundingClientRect();
     });
   }
@@ -102,6 +103,19 @@ class ImageResizer {
     this._dom.resizer.addEventListener('touchstart', this._mouseDown.bind(this));
     document.body.addEventListener('touchmove', this._mouseMove.bind(this));
     document.body.addEventListener('touchend', this._mouseUp.bind(this));
+  }
+
+
+  _initResizer() {
+    if (this._width > this._height) { // Landscape
+      const bRect = this._dom.resizer.getBoundingClientRect();
+      this._dom.resizer.style.left = (bRect.width - bRect.height) / 2;
+      this._dom.resizer.style.right = (bRect.width - bRect.height) / 2;
+    } else if (this._width < this._height) { // Portrait
+      const bRect = this._dom.resizer.getBoundingClientRect();
+      this._dom.resizer.style.top = (bRect.height - bRect.width) / 2;
+      this._dom.resizer.style.bottom = (bRect.height - bRect.width) / 2;
+    }
   }
 
 
