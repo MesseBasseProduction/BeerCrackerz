@@ -108,6 +108,7 @@
   "modal": {
     "userTitle": "User account",
     "userAccuracyPref": "High precision",
+    "darkThemePref": "Dark theme",
     "userDebugPref": "Debug interface",
     "aboutTitle": "About BeerCrackerz",
     "aboutDesc": "A brilliant idea from David Béché!<br>BeerCrackerz is the beer lovers comunity, filled with pint slayers and cereals lovers",

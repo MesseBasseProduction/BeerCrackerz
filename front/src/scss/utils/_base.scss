@@ -10,7 +10,9 @@
 
   --color-secondary: #0057ff;
   --color-tertiary: #80abff;
+}
 
+body.dark-theme {
   --color-bg: #2E2E2E;
   --color-bg-a9: rgba(46, 46, 46, .9);
   --color-bg-a75: rgba(46, 46, 46, .75);
@@ -24,6 +26,22 @@
   --color-txt-a5: rgba(226, 226, 226, .5);
   --color-txt-a25: rgba(226, 226, 226, .25);
   --color-txt-a1: rgba(226, 226, 226, .1);
+}
+
+body.light-theme {
+  --color-bg: #E2E2E2;
+  --color-bg-a9: rgba(226, 226, 226, .9);
+  --color-bg-a75: rgba(226, 226, 226, .75);
+  --color-bg-a5: rgba(226, 226, 226, .5);
+  --color-bg-a25: rgba(226, 226, 226, .25);
+  --color-bg-a1: rgba(226, 226, 226, .1);
+
+  --color-txt: #2E2E2E;
+  --color-txt-a9: rgba(46, 46, 46, .9);
+  --color-txt-a75: rgba(46, 46, 46, .75);
+  --color-txt-a5: rgba(46, 46, 46, .5);
+  --color-txt-a25: rgba(46, 46, 46, .25);
+  --color-txt-a1: rgba(46, 46, 46, .1);
 }
 
 * {

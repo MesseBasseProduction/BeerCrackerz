@@ -63,14 +63,19 @@ class UserModal extends BaseModal {
 
     // Init modal checkbox state according to local storage preferences
     if (Utils.getPreference('map-high-accuracy') === 'true') {
-        this._rootElement.querySelector('#high-accuracy-toggle').checked = true;
+      this._rootElement.querySelector('#high-accuracy-toggle').checked = true;
+    }
+
+    if (Utils.getPreference('dark-theme') === 'true') {
+      this._rootElement.querySelector('#dark-theme-toggle').checked = true;
     }
 
     if (window.DEBUG === true || (Utils.getPreference('app-debug') === 'true')) {
-        this._rootElement.querySelector('#debug-toggle').checked = true;
+      this._rootElement.querySelector('#debug-toggle').checked = true;
     }
 
     document.getElementById('high-accuracy-toggle').addEventListener('change', window.BeerCrackerz.toggleHighAccuracy.bind(window.BeerCrackerz));
+    document.getElementById('dark-theme-toggle').addEventListener('change', VisuHelper.toggleDarkTheme.bind(VisuHelper));
     document.getElementById('debug-toggle').addEventListener('change', VisuHelper.toggleDebug.bind(VisuHelper));
     document.getElementById('update-pp').addEventListener('change', this.updateProfilePicture.bind(this));
     document.getElementById('user-pp').addEventListener('click', this.updateProfilePicture.bind(this));

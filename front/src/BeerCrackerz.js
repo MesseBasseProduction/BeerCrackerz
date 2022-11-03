@@ -233,6 +233,14 @@ class BeerCrackerz {
       if (Utils.getPreference('selected-lang') === null) {
         Utils.setPreference('selected-lang', 'en'); // Default lang to EN
       }
+
+      if (Utils.getPreference('dark-theme') === null) {
+        Utils.setPreference('dark-theme', true);
+      } else {
+        document.body.classList.remove('dark-theme');
+        document.body.classList.add('light-theme');        
+      }
+
       // Update LangManager if pref is !english
       this.nls.updateLang(Utils.getPreference('selected-lang')).then(() => {
         this.debugElement = Utils.initDebugInterface();

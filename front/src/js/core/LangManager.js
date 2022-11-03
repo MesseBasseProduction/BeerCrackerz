@@ -232,8 +232,9 @@ class LangManager {
 
   userProfileModal(dom) {
     Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.modal('userTitle'));
-    Utils.replaceString(dom.querySelector(`#nls-user-modal-accuracy`), `{ACCURACY_USER_MODAL}`, this.modal('userAccuracyPref'));
-    Utils.replaceString(dom.querySelector(`#nls-user-modal-debug`), `{DEBUG_USER_MODAL}`, this.modal('userDebugPref'));
+    Utils.replaceString(dom.querySelector(`#nls-user-high-accuracy`), `{ACCURACY_USER_MODAL}`, this.modal('userAccuracyPref'));
+    Utils.replaceString(dom.querySelector(`#nls-user-dark-theme`), `{DARK_THEME_MODAL}`, this.modal('darkThemePref'));
+    Utils.replaceString(dom.querySelector(`#nls-user-debug`), `{DEBUG_USER_MODAL}`, this.modal('userDebugPref'));
     Utils.replaceString(dom.querySelector(`#nls-about-desc`), `{BEERCRACKERZ_DESC}`, this.modal('aboutDesc'));
     Utils.replaceString(dom.querySelector(`#nls-update-pp`), `{UPDATE_PROFILE_PIC_LABEL}`, this.modal('updatePP'));    
   }

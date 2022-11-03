@@ -258,7 +258,6 @@ class VisuHelper {
   }
 
 
-
   /**
    * @method
    * @name toggleCircle
@@ -342,6 +341,19 @@ class VisuHelper {
       VisuHelper.addDebugUI();
     } else {
       VisuHelper.removeDebugUI();
+    }
+  }
+
+
+  static toggleDarkTheme() {
+    const isDark = (Utils.getPreference(`dark-theme`) === 'true');
+    Utils.setPreference('dark-theme', !isDark);
+    if (isDark === true) {
+      document.body.classList.remove('dark-theme');
+      document.body.classList.add('light-theme');
+    } else {
+      document.body.classList.remove('light-theme');
+      document.body.classList.add('dark-theme');
     }
   }
 
