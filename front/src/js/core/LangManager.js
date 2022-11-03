@@ -232,9 +232,15 @@ class LangManager {
 
   userProfileModal(dom) {
     Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.modal('userTitle'));
-    Utils.replaceString(dom.querySelector(`#nls-user-high-accuracy`), `{ACCURACY_USER_MODAL}`, this.modal('userAccuracyPref'));
-    Utils.replaceString(dom.querySelector(`#nls-user-dark-theme`), `{DARK_THEME_MODAL}`, this.modal('darkThemePref'));
-    Utils.replaceString(dom.querySelector(`#nls-user-debug`), `{DEBUG_USER_MODAL}`, this.modal('userDebugPref'));
+    Utils.replaceString(dom.querySelector(`#nls-user-high-accuracy`), `{ACCURACY_USER_CHECK}`, this.modal('userAccuracyPref'));
+    Utils.replaceString(dom.querySelector(`#nls-user-dark-theme`), `{DARK_THEME_CHECK}`, this.modal('darkThemePref'));
+    Utils.replaceString(dom.querySelector(`#nls-user-debug`), `{DEBUG_USER_CHECK}`, this.modal('userDebugPref'));
+    Utils.replaceString(dom.querySelector(`#nls-lang-select`), `{LANG_SELECT}`, this.modal('langPref'));
+    Utils.replaceString(dom.querySelector(`#nls-lang-fr`), `{LANG_FR}`, this.modal('langFr'));
+    Utils.replaceString(dom.querySelector(`#nls-lang-en`), `{LANG_EN}`, this.modal('langEn'));
+    Utils.replaceString(dom.querySelector(`#nls-lang-es`), `{LANG_ES}`, this.modal('langEs'));
+    Utils.replaceString(dom.querySelector(`#nls-lang-de`), `{LANG_DE}`, this.modal('langDe'));
+    Utils.replaceString(dom.querySelector(`#nls-lang-pt`), `{LANG_PT}`, this.modal('langPt')); 
     Utils.replaceString(dom.querySelector(`#nls-about-desc`), `{BEERCRACKERZ_DESC}`, this.modal('aboutDesc'));
     Utils.replaceString(dom.querySelector(`#nls-update-pp`), `{UPDATE_PROFILE_PIC_LABEL}`, this.modal('updatePP'));    
   }

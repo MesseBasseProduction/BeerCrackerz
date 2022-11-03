@@ -532,6 +532,12 @@ class BeerCrackerz {
   }
 
 
+  updateLang(event) {
+    Utils.setPreference('selected-lang', event.target.value);
+    window.location.reload();
+  }
+
+
   // ======================================================================== //
   // -------------------------- Map interaction ----------------------------- //
   // ======================================================================== //

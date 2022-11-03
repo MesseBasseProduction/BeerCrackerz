@@ -18,18 +18,28 @@
   </div>
   <div class="item">
     <img src="{% static 'img/logo/precision.svg' %}" alt="high-accuracy-toggle">
-    <label id="nls-user-high-accuracy" for="high-accuracy-toggle">{ACCURACY_USER_MODAL}</label>
+    <label id="nls-user-high-accuracy" for="high-accuracy-toggle">{ACCURACY_USER_CHECK}</label>
     <input type="checkbox" id="high-accuracy-toggle" name="high-accuracy">
   </div>
   <div class="item">
     <img src="{% static 'img/logo/night.svg' %}" alt="dark-theme-toggle">
-    <label id="nls-user-dark-theme" for="dark-theme-toggle">{DARK_THEME_MODAL}</label>
+    <label id="nls-user-dark-theme" for="dark-theme-toggle">{DARK_THEME_CHECK}</label>
     <input type="checkbox" id="dark-theme-toggle" name="dark-theme">
   </div>
   <div class="item">
     <img src="{% static 'img/logo/debug.svg' %}" alt="debug-toggle">
-    <label id="nls-user-debug" for="debug-toggle">{DEBUG_USER_MODAL}</label>
+    <label id="nls-user-debug" for="debug-toggle">{DEBUG_USER_CHECK}</label>
     <input type="checkbox" id="debug-toggle" name="debug">
+  </div>
+  <div class="item">
+    <label id="nls-lang-select" for="lang-select">{LANG_SELECT}</label>
+    <select name="lang" id="lang-select">
+      <option id="nls-lang-fr" value="fr">{LANG_FR}</option>
+      <option id="nls-lang-en" value="en">{LANG_EN}</option>
+      <option id="nls-lang-es" value="es">{LANG_ES}</option>
+      <option id="nls-lang-de" value="de">{LANG_DE}</option>
+      <option id="nls-lang-pt" value="pt">{LANG_PT}</option>
+  </select>
   </div>
   <p id="nls-about-desc">{BEERCRACKERZ_DESC}</p>
   <button id="logout">LOGOUT</button>

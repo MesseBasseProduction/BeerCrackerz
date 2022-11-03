@@ -74,9 +74,18 @@ class UserModal extends BaseModal {
       this._rootElement.querySelector('#debug-toggle').checked = true;
     }
 
+    const options = this._rootElement.querySelector('#lang-select').getElementsByTagName('option');
+    const lang = Utils.getPreference('selected-lang');
+    for (let i = 0; i < options.length; ++i) {
+      if (options[i].value === lang) {
+        options[i].selected = 'selected';
+      }
+    }
+
     document.getElementById('high-accuracy-toggle').addEventListener('change', window.BeerCrackerz.toggleHighAccuracy.bind(window.BeerCrackerz));
     document.getElementById('dark-theme-toggle').addEventListener('change', VisuHelper.toggleDarkTheme.bind(VisuHelper));
     document.getElementById('debug-toggle').addEventListener('change', VisuHelper.toggleDebug.bind(VisuHelper));
+    document.getElementById('lang-select').addEventListener('change', window.BeerCrackerz.updateLang.bind(VisuHelper));
     document.getElementById('update-pp').addEventListener('change', this.updateProfilePicture.bind(this));
     document.getElementById('user-pp').addEventListener('click', this.updateProfilePicture.bind(this));
     document.getElementById('logout').addEventListener('click', () => {
