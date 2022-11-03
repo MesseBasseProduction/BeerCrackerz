@@ -5,8 +5,13 @@
   <p id="nls-bar-subtitle">{BAR_SUBTITLE}</p>
   <label id="nls-bar-name" for="bar-name">{BAR_NAME} :</label>
   <input id="bar-name" type="text">
+  <label id="nls-bar-type" for="bar-type">{BAR_TYPE} :</label>
+  <div id="bar-type" class="type"></div>
   <label id="nls-bar-desc" for="bar-desc">{BAR_DESC} :</label>
   <textarea id="bar-desc" name="spot-desc" rows="4" style="resize:none"></textarea>
+  <label id="nls-bar-modifiers">{BAR_MODIFIERS} :</label>
+  <div id="bar-modifiers" class="modifiers">
+  </div>
   <label id="nls-bar-rate" for="star-rating">{BAR_RATE} :</label>
   <div id="bar-rating" class="rating" data-rate="0">
     <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="0" class="active">

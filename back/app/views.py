@@ -69,15 +69,15 @@ class HideShowModalView(TemplateView):
 
 
 class NewBarModalView(TemplateView):
-    template_name = 'modal/newbar.html'
+    template_name = 'modal/addbar.html'
 
 
 class NewShopModalView(TemplateView):
-    template_name = 'modal/newshop.html'
+    template_name = 'modal/addshop.html'
 
 
 class NewSpotModalView(TemplateView):
-    template_name = 'modal/newspot.html'
+    template_name = 'modal/addspot.html'
 
 
 class UserModalView(TemplateView):

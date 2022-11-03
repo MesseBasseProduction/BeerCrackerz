@@ -185,14 +185,14 @@ class LangManager {
     Utils.replaceString(dom.querySelector(`#nls-${type}-name`), `{${type.toUpperCase()}_NAME}`, this[type]('nameLabel'));
     Utils.replaceString(dom.querySelector(`#nls-${type}-desc`), `{${type.toUpperCase()}_DESC}`, this[type]('descLabel'));
     Utils.replaceString(dom.querySelector(`#nls-${type}-rate`), `{${type.toUpperCase()}_RATE}`, this[type]('rateLabel'));
+    Utils.replaceString(dom.querySelector(`#nls-${type}-type`), `{${type.toUpperCase()}_TYPE}`, this[type]('typeLabel'));
+    Utils.replaceString(dom.querySelector(`#nls-${type}-modifiers`), `{${type.toUpperCase()}_MODIFIERS}`, this[type]('modifiersLabel'));
     Utils.replaceString(dom.querySelector(`#${type}-submit`), `{${type.toUpperCase()}_SUBMIT}`, this.nav('add'));
     Utils.replaceString(dom.querySelector(`#${type}-cancel`), `{${type.toUpperCase()}_CANCEL}`, this.nav('cancel'));    
   }
 
 
   addSpotModalContent(dom) {
-    Utils.replaceString(dom.querySelector('#nls-spot-type'), '{SPOT_TYPE}', this.spot('typeLabel'));
-    Utils.replaceString(dom.querySelector('#nls-spot-modifiers'), '{SPOT_MODIFIERS}', this.spot('modifiersLabel'));
     Utils.replaceString(dom.querySelector('#spot-bench'), '{SPOT_BENCH}', this.spot('benchModifier'));
     Utils.replaceString(dom.querySelector('#spot-covered'), '{SPOT_COVERED}', this.spot('coveredModifier'));
     Utils.replaceString(dom.querySelector('#spot-toilet'), '{SPOT_TOILET}', this.spot('toiletModifier'));
@@ -201,11 +201,14 @@ class LangManager {
 
 
   addShopModalContent(dom) {
-    Utils.replaceString(dom.querySelector('#nls-shop-type'), '{SHOP_TYPE}', this.shop('typeLabel'));
-    Utils.replaceString(dom.querySelector('#nls-shop-modifiers'), '{SHOP_MODIFIERS}', this.shop('modifiersLabel'));
     Utils.replaceString(dom.querySelector('#shop-fresh'), '{SHOP_FRESH}', this.shop('freshModifier'));
     Utils.replaceString(dom.querySelector('#shop-card'), '{SHOP_CARD}', this.shop('cardModifier'));
     Utils.replaceString(dom.querySelector('#shop-craft'), '{SHOP_CRAFT}', this.shop('craftModifier'));
+  }
+
+
+  addBarModalContent(dom) {
+    console.log(dom, 'TODO bar modifiers');
   }
 
 
@@ -253,6 +256,17 @@ class LangManager {
     Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-bars`), `{BARS_HIDESHOW_MODAL}`, this.modal('hideShowBars'));
     Utils.replaceString(dom.querySelector(`#nls-view-helper-label`), `{HELPER_LABEL}`, this.modal('hideShowHelperLabel'));
     Utils.replaceString(dom.querySelector(`#modal-close-button`), `{MODAL_CLOSE}`, this.nav('close'));    
+  }
+
+
+  markPopup(dom, options) {
+    Utils.replaceString(dom, `{${options.type.toUpperCase()}_NAME}`, Utils.stripDom(options.name));
+    Utils.replaceString(dom, `{${options.type.toUpperCase()}_FINDER}`, options.user);
+    Utils.replaceString(dom, `{${options.type.toUpperCase()}_FOUND_BY}`, this.popup(`${options.type}FoundBy`));
+    Utils.replaceString(dom, `{${options.type.toUpperCase()}_FOUND_WHEN}`, this.popup(`${options.type}FoundWhen`));
+    Utils.replaceString(dom, `{${options.type.toUpperCase()}_FOUND_DATE}`, options.date);
+    Utils.replaceString(dom, `{${options.type.toUpperCase()}_RATE}`, options.rate + 1);
+    Utils.replaceString(dom, `{${options.type.toUpperCase()}_DESC}`, options.desc);    
   }
 
 

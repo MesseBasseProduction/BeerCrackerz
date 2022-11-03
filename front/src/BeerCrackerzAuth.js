@@ -867,13 +867,14 @@ class BeerCrackerzAuth {
         const user = options.user;
         const desc = Utils.stripDom(options.description) || this.nls.popup(`${options.type}NoDesc`);
         const date = new Intl.DateTimeFormat(this.nls.fullLang, { dateStyle: 'long' }).format(new Date(options.creationDate));
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_NAME}`, Utils.stripDom(options.name));
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_FINDER}`, user);
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_BY}`, this.nls.popup(`${options.type}FoundBy`));
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_WHEN}`, this.nls.popup(`${options.type}FoundWhen`));
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_DATE}`, date);
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_RATE}`, options.rate + 1);
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_DESC}`, desc);
+        this.nls.markPopup(element, {
+          type: options.type,
+          name: options.name,
+          user: user,
+          rate: options.rate,
+          desc: desc,
+          date: date
+        });
         // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
         const rate = element.querySelector(`#${options.type}-rating`);
         for (let i = 0; i < options.rate + 1; ++i) {

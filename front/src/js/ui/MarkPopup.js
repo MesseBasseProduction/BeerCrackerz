@@ -47,13 +47,14 @@ class MarkPopup {
         this._opts.creationDate = new Date().toISOString().slice(0, 10);
       }
       const date = new Intl.DateTimeFormat(window.BeerCrackerz.nls.fullLang, { dateStyle: 'long' }).format(new Date(this._opts.creationDate));
-      Utils.replaceString(this._popup, `{${this._opts.type.toUpperCase()}_NAME}`, Utils.stripDom(this._opts.name));
-      Utils.replaceString(this._popup, `{${this._opts.type.toUpperCase()}_FINDER}`, user);
-      Utils.replaceString(this._popup, `{${this._opts.type.toUpperCase()}_FOUND_BY}`, window.BeerCrackerz.nls.popup(`${this._opts.type}FoundBy`));
-      Utils.replaceString(this._popup, `{${this._opts.type.toUpperCase()}_FOUND_WHEN}`, window.BeerCrackerz.nls.popup(`${this._opts.type}FoundWhen`));
-      Utils.replaceString(this._popup, `{${this._opts.type.toUpperCase()}_FOUND_DATE}`, date);
-      Utils.replaceString(this._popup, `{${this._opts.type.toUpperCase()}_RATE}`, this._opts.rate + 1);
-      Utils.replaceString(this._popup, `{${this._opts.type.toUpperCase()}_DESC}`, desc);
+      window.BeerCrackerz.nls.markPopup(this._popup, {
+        type: this._opts.type,
+        name: this._opts.name,
+        user: user,
+        rate: this._opts.rate,
+        desc: desc,
+        date: date
+      });
       // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
       const rate = this._popup.querySelector(`#${this._opts.type}-rating`);
       for (let i = 0; i < this._opts.rate + 1; ++i) {

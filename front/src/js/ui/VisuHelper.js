@@ -1,3 +1,4 @@
+import Markers from '../utils/MarkerEnum.js';
 import Utils from '../utils/Utils.js';
 
 
@@ -56,6 +57,44 @@ class VisuHelper {
   static updateDebugUI() {
     const options = (Utils.getPreference('map-high-accuracy') === 'true') ? Utils.HIGH_ACCURACY : Utils.OPTIMIZED_ACCURACY;
     Utils.updateDebugInterface(window.BeerCrackerz.debugElement, window.BeerCrackerz.user, options);
+  }
+
+
+  static drawUserMarker() {
+    if (!window.BeerCrackerz.user.marker) { // Create user marker if not existing
+      window.BeerCrackerz.user.type = 'user';
+      window.BeerCrackerz.user.marker = VisuHelper.addMark(window.BeerCrackerz.user);
+      // Append circle around marker for accuracy and range for new marker
+      window.BeerCrackerz.user.radius = window.BeerCrackerz.user.accuracy;
+      window.BeerCrackerz.user.circle = VisuHelper.drawCircle(window.BeerCrackerz.user);
+      window.BeerCrackerz.user.range = VisuHelper.drawCircle({
+        lat: window.BeerCrackerz.user.lat,
+        lng: window.BeerCrackerz.user.lng,
+        radius: Utils.NEW_MARKER_RANGE,
+        color: Utils.RANGE_COLOR
+      });
+
+      window.BeerCrackerz.user.circle.addTo(window.BeerCrackerz.map);
+      window.BeerCrackerz.user.range.addTo(window.BeerCrackerz.map);
+      // Update circle opacity if pref is at true
+      if (Utils.getPreference('poi-show-circle') === 'true') {
+        window.BeerCrackerz.user.circle.setStyle({
+          opacity: 1,
+          fillOpacity: 0.1
+        });
+        window.BeerCrackerz.user.range.setStyle({
+          opacity: 1,
+          fillOpacity: 0.1
+        });
+      }
+      // Callback on marker clicked to add marker on user position
+      window.BeerCrackerz.user.marker.on('click', window.BeerCrackerz.mapClicked.bind(window.BeerCrackerz));
+    } else { // Update user marker position, range, and accuracy circle
+      window.BeerCrackerz.user.marker.setLatLng(window.BeerCrackerz.user);
+      window.BeerCrackerz.user.range.setLatLng(window.BeerCrackerz.user);
+      window.BeerCrackerz.user.circle.setLatLng(window.BeerCrackerz.user);
+      window.BeerCrackerz.user.circle.setRadius(window.BeerCrackerz.user.accuracy);
+    }    
   }
 
 
@@ -170,6 +209,31 @@ class VisuHelper {
     if (mark.popup) {
       mark.popup.destroy();
     } 
+  }
+
+
+  static addMark(mark) {
+    let icon = Markers.black;
+    if (mark.type === 'shop') {
+      icon = Markers.blue;
+    } else if (mark.type === 'spot') {
+      icon = Markers.green;
+    } else if (mark.type === 'bar') {
+      icon = Markers.red;
+    } else if (mark.type === 'user') {
+      icon = Markers.user;
+    }
+
+    const marker = window.L.marker([mark.lat, mark.lng], { icon: icon }).on('click', VisuHelper.centerOn.bind(VisuHelper, mark));
+    if (mark.dom) {
+      marker.bindPopup(mark.dom);
+    }
+    // All markers that are not spot/shop/bar should be appended to the map
+    if (['spot', 'shop', 'bar'].indexOf(mark.type) === -1) {
+      marker.addTo(window.BeerCrackerz.map);
+    }
+
+    return marker;
   }
 
 

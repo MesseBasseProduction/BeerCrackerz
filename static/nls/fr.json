@@ -97,7 +97,13 @@
     "subtitle": "A bar is a holly place where you can get some nicely colded draft beers!",
     "nameLabel": "Bar name",
     "descLabel": "Why don't you describe it",
-    "rateLabel": "Give it a note"
+    "rateLabel": "Give it a note",
+    "typeLabel": "What kind of bar it is",
+    "sportType": "Sports",
+    "danceType": "Dancing",
+    "tastingType": "Tasting",
+    "funType": "Fun",
+    "modifiersLabel": "Has it any specific features"
   },
   "modal": {
     "userTitle": "User account",

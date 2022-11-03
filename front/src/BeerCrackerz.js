@@ -6,7 +6,6 @@ import ZoomSlider from './js/ui/component/ZoomSlider.js';
 import Notification from './js/ui/component/Notification.js';
 import VisuHelper from './js/ui/VisuHelper.js';
 
-import Markers from './js/utils/MarkerEnum.js';
 import CustomEvents from './js/utils/CustomEvents.js';
 import Clusters from './js/utils/ClusterEnum.js';
 import Providers from './js/utils/ProviderEnum.js';
@@ -276,7 +275,7 @@ class BeerCrackerz {
           this._user.accuracy = position.coords.accuracy;
           // Only draw marker if map is already created
           if (this._map) {
-            this.drawUserMarker();
+            VisuHelper.drawUserMarker();
             VisuHelper.updateMarkerCirclesVisibility();
             // Update map position if focus lock is active
             if (Utils.getPreference('map-center-on-user') === 'true' && !this._isZooming) {
@@ -318,7 +317,7 @@ class BeerCrackerz {
       // Add meter and feet scale on map
       window.L.control.scale().addTo(this._map);
       // Place user marker on the map
-      this.drawUserMarker();
+      VisuHelper.drawUserMarker();
       // Add OSM credits to the map next to leaflet credits
       const osm = Providers.planOsm;
       const esri = Providers.satEsri;
@@ -464,7 +463,7 @@ class BeerCrackerz {
       const iterateMarkers = mark => {
         const popup = new MarkPopup(mark, dom => {
           mark.dom = dom;
-          mark.marker = this.placeMarker(mark);
+          mark.marker = VisuHelper.addMark(mark);
           mark.popup = popup;          
           this._marks[mark.type].push(mark);
           this._clusters[mark.type].addLayer(mark.marker);
@@ -590,7 +589,7 @@ class BeerCrackerz {
     // Update popup content with DOM elements
     options.dom = dom.wrapper;
     // Create temporary mark with wrapper content and open it to offer user the creation menu
-    this._newMarker = this.placeMarker(options).openPopup();
+    this._newMarker = VisuHelper.addMark(options).openPopup();
     options.marker = this._newMarker; // Attach marker to option so it can be manipulated in clicked callbacks
     // Callback on button clicked (to open modal and define a new mark)
     const _prepareNewMark = e => {
@@ -621,7 +620,7 @@ class BeerCrackerz {
   _onMarkAdded(options) {
     const popup = new MarkPopup(options, dom => {
       options.dom = dom;
-      options.marker = this.placeMarker(options); // Create final marker
+      options.marker = VisuHelper.addMark(options); // Create final marker
       options.popup = popup;
       // Save new marker in local storage, later to be sent to the server
       this._kom[`${options.type}Created`](Utils.formatMarker(options)).then(data => {
@@ -746,24 +745,6 @@ class BeerCrackerz {
   }
 
 
-  /**
-   * @method
-   * @name hidShowMenu
-   * @public
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since January 2022
-   * @description
-   * <blockquote>
-   * The hidShowMenu() method will request the hide show modal, which all
-   * toggles for map elements ; labels/circles/spots/shops/bars
-   * </blockquote>
-   **/
-  hidShowMenu() {
-    this._modal = new ModalFactory('HideShow');
-  }
-
-
   // ======================================================================== //
   // --------------------------- User profile ------------------------------- //
   // ======================================================================== //
@@ -814,72 +795,21 @@ class BeerCrackerz {
   }
 
 
-  // ======================================================================== //
-  // ---------------------------- Debug methods ----------------------------- //
-  // ======================================================================== //
-
-
-  placeMarker(options) {
-    let icon = Markers.black;
-    if (options.type === 'shop') {
-      icon = Markers.blue;
-    } else if (options.type === 'spot') {
-      icon = Markers.green;
-    } else if (options.type === 'bar') {
-      icon = Markers.red;
-    } else if (options.type === 'user') {
-      icon = Markers.user;
-    }
-
-    const marker = window.L.marker([options.lat, options.lng], { icon: icon }).on('click', VisuHelper.centerOn.bind(VisuHelper, options));
-
-    if (options.dom) {
-      marker.bindPopup(options.dom);
-    }
-    // All markers that are not spot/shop/bar should be appended to the map
-    if (['spot', 'shop', 'bar'].indexOf(options.type) === -1) {
-      marker.addTo(this.map);
-    }
-
-    return marker;
-  }
-
-
-  drawUserMarker() {
-    if (!this.user.marker) { // Create user marker if not existing
-      this.user.type = 'user';
-      this.user.marker = this.placeMarker(this.user);
-      // Append circle around marker for accuracy and range for new marker
-      this.user.radius = this.user.accuracy;
-      this.user.circle = VisuHelper.drawCircle(this.user);
-      this.user.range = VisuHelper.drawCircle({
-        lat: this.user.lat,
-        lng: this.user.lng,
-        radius: Utils.NEW_MARKER_RANGE,
-        color: Utils.RANGE_COLOR
-      });
-
-      this.user.circle.addTo(this._map);
-      this.user.range.addTo(this._map);
-      // Update circle opacity if pref is at true
-      if (Utils.getPreference('poi-show-circle') === 'true') {
-        this.user.circle.setStyle({
-          opacity: 1,
-          fillOpacity: 0.1
-        });
-        this.user.range.setStyle({
-          opacity: 1,
-          fillOpacity: 0.1
-        });
-      }
-      // Callback on marker clicked to add marker on user position
-      this.user.marker.on('click', this.mapClicked.bind(this));
-    } else { // Update user marker position, range, and accuracy circle
-      this.user.marker.setLatLng(this.user);
-      this.user.range.setLatLng(this.user);
-      this.user.circle.setLatLng(this.user);
-      this.user.circle.setRadius(this.user.accuracy);
-    }
+  /**
+   * @method
+   * @name hidShowMenu
+   * @public
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+   * @since January 2022
+   * @description
+   * <blockquote>
+   * The hidShowMenu() method will request the hide show modal, which all
+   * toggles for map elements ; labels/circles/spots/shops/bars
+   * </blockquote>
+   **/
+   hidShowMenu() {
+    this._modal = new ModalFactory('HideShow');
   }
 
 

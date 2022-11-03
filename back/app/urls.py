@@ -21,9 +21,9 @@ urlpatterns = [
     path('modal/editshop', EditShopModalView.as_view(), name='editShopModal'),
     path('modal/editspot', EditSpotModalView.as_view(), name='editSpotModal'),
     path('modal/hideshow', HideShowModalView.as_view(), name='hideShowModal'),
-    path('modal/newbar', NewBarModalView.as_view(), name='newBarModal'),
-    path('modal/newshop', NewShopModalView.as_view(), name='newShopModal'),
-    path('modal/newspot', NewSpotModalView.as_view(), name='newSpotModal'),
+    path('modal/addbar', NewBarModalView.as_view(), name='newBarModal'),
+    path('modal/addshop', NewShopModalView.as_view(), name='newShopModal'),
+    path('modal/addspot', NewSpotModalView.as_view(), name='newSpotModal'),
     path('modal/user', UserModalView.as_view(), name='userModal'),
     path('modal/updatepp', UpdatePPModalView.as_view(), name='updatePPModal')
 ]
