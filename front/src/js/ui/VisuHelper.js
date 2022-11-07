@@ -252,9 +252,9 @@ class VisuHelper {
    * </blockquote>
    **/
   static toggleLabel() {
-    const visible = !(Utils.getPreference('poi-marker-label') === 'true');
+    const visible = !(Utils.getPreference('poi-show-label') === 'true');
     VisuHelper.setMarkerLabels(visible);
-    Utils.setPreference('poi-marker-label', visible);
+    Utils.setPreference('poi-show-label', visible);
   }
 
 
@@ -398,7 +398,7 @@ class VisuHelper {
 
 
   static checkClusteredMark(type) {
-    if (Utils.getPreference('poi-marker-label') === 'true') {
+    if (Utils.getPreference('poi-show-label') === 'true') {
       const layers = window.BeerCrackerz.marks[type];
       for (let i = 0; i < layers.length; ++i) {
         const visible = window.BeerCrackerz.map.hasLayer(layers[i].marker);

@@ -16,11 +16,10 @@ class LangManager {
    * @param {Function} cb - The callback to call once i18n keys are loaded
    * @param {Function} err - The callback to call if anything went wrong
    **/
-  constructor(lang, cb, err) {
-    this._lang = (Utils.SUPPORTED_LANGUAGE.indexOf(lang) !== -1) ? lang : 'en';
-    this._fullLang = lang;
+  constructor() {
+    this._lang = '';
+    this._fullLang = '';
     this._values = {};
-    this._init().then(cb).catch(err);
   }
 
 

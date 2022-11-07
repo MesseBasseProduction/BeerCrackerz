@@ -48,6 +48,53 @@ class Utils {
   }
 
 
+  static setDefaultPreferences() {
+    if (Utils.getPreference('poi-show-spot') === null) {
+      Utils.setPreference('poi-show-spot', true);
+    }
+
+    if (Utils.getPreference('poi-show-shop') === null) {
+      Utils.setPreference('poi-show-shop', true);
+    }
+
+    if (Utils.getPreference('poi-show-bar') === null) {
+      Utils.setPreference('poi-show-bar', true);
+    }
+
+    if (Utils.getPreference('poi-show-circle') === null) {
+      Utils.setPreference('poi-show-circle', true);
+    }
+
+    if (Utils.getPreference('poi-show-label') === null) {
+      Utils.setPreference('poi-show-label', true);
+    }
+
+    if (Utils.getPreference('map-plan-layer') === null) {
+      Utils.setPreference('map-plan-layer', true);
+    }
+
+    if (Utils.getPreference('selected-lang') === null) {
+      Utils.setPreference('selected-lang', 'en');
+    }
+
+    if (Utils.getPreference('app-debug') === null) {
+      Utils.setPreference('app-debug', false);
+    }
+
+    if (Utils.getPreference('map-high-accuracy') === null) {
+      Utils.setPreference('map-high-accuracy', false);
+    }
+
+    if (Utils.getPreference('map-center-on-user') === null) {
+      Utils.setPreference('map-center-on-user', false);
+    }
+    
+    if (Utils.getPreference('dark-theme') === null) {
+      Utils.setPreference('dark-theme', true);
+    }
+  }
+
+
   static initDebugInterface() {
     const lang = window.BeerCrackerz.nls.debug.bind(window.BeerCrackerz.nls);
     const debugContainer = document.createElement('DIV');

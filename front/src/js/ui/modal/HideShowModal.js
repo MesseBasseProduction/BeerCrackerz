@@ -17,7 +17,7 @@ class HideShowModal extends BaseModal {
   _fillAttributes() {
     window.BeerCrackerz.nls.hideShowModal(this._rootElement);
 
-    if (Utils.getPreference('poi-marker-label') === 'true') {
+    if (Utils.getPreference('poi-show-label') === 'true') {
       this._rootElement.querySelector('#label-toggle').checked = true;
     }
 

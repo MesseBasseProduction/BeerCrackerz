@@ -129,10 +129,9 @@ class BeerCrackerz {
      * @private
      **/
     // The BeerCrackerz app is only initialized once nls are set up
-    this._lang = new LangManager(
-      window.navigator.language.substring(0, 2),
-      this._init.bind(this)
-    );
+    this._lang = new LangManager();
+    // Start app initialization
+    this._init();
   }
 
 
@@ -211,40 +210,18 @@ class BeerCrackerz {
    **/
   _initPreferences() {
     return new Promise((resolve, reject) => {
-      if (Utils.getPreference('poi-show-spot') === null) {
-        Utils.setPreference('poi-show-spot', true);
-      }
-
-      if (Utils.getPreference('poi-show-shop') === null) {
-        Utils.setPreference('poi-show-shop', true);
-      }
-
-      if (Utils.getPreference('poi-show-bar') === null) {
-        Utils.setPreference('poi-show-bar', true);
-      }
-
-      if (Utils.getPreference('map-plan-layer') === null) {
-        Utils.setPreference('map-plan-layer', true);
-      }
+      // If no pref, set fallbacks
+      Utils.setDefaultPreferences();
       // Update icon class if center on preference is set to true
       if (Utils.getPreference('map-center-on-user') === 'true') {
         document.getElementById('center-on').classList.add('lock-center-on');
       }
-
-      if (Utils.getPreference('selected-lang') === null) {
-        Utils.setPreference('selected-lang', 'en'); // Default lang to EN
-      }
-
-      if (Utils.getPreference('dark-theme') === null || Utils.getPreference('dark-theme') === 'true') {
-        Utils.setPreference('dark-theme', true);
-        document.body.classList.remove('light-theme');
-        document.body.classList.add('dark-theme');
-      } else {
+      // Replace dark-theme class with light-theme class on body
+      if (Utils.getPreference('dark-theme') === 'false') {
         document.body.classList.remove('dark-theme');
         document.body.classList.add('light-theme');
       }
-
-      // Update LangManager if pref is !english
+      // Update LangManager with pref language
       this.nls.updateLang(Utils.getPreference('selected-lang')).then(() => {
         this.debugElement = Utils.initDebugInterface();
         // Create and append debug UI with proper nls settings
@@ -471,7 +448,7 @@ class BeerCrackerz {
           }
         }
         // Auto hide labels if zoom level is too high (and restore it when needed)
-        if (Utils.getPreference('poi-marker-label') === 'true') {
+        if (Utils.getPreference('poi-show-label') === 'true') {
           if (this._map.getZoom() < 16) {
             VisuHelper.setMarkerLabels(false);
           } else {

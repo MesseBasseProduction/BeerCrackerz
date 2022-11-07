@@ -99,7 +99,7 @@ class MarkPopup {
 
       this._opts.tooltip.addTo(window.BeerCrackerz.map);
       // Remove it if preference is to true
-      if (Utils.getPreference('poi-marker-label') === 'false') {
+      if (Utils.getPreference('poi-show-label') === 'false') {
         this._opts.tooltip.removeFrom(window.BeerCrackerz.map);
       }
 
