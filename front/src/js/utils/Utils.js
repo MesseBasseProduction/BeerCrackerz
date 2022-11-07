@@ -217,7 +217,7 @@ class Utils {
 
 
   static get NEW_MARKER_RANGE() {
-    return 2000000000; // TODO fallback to 200 when roles are implement server side
+    return 2^53; // TODO fallback to 200 when roles are implement server side
   }
 
 
