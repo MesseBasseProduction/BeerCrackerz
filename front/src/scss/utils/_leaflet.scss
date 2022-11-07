@@ -20,7 +20,10 @@
   background-clip: padding-box;
   border: 2px solid var(--color-bg-a1);
   border-radius: .5rem;
+  bottom: 0;
   box-shadow: 0 0 1rem var(--color-bg-a9);
+  position: absolute;
+  right: 17.2rem;
 
   a {
     margin-bottom: 0;
@@ -29,6 +32,7 @@
 
 .leaflet-control-layers-expanded {
   padding: 2rem !important;
+  width: 16rem;
 
   label {
     margin: 0;
@@ -54,6 +58,10 @@
   }
 }
 
+.leaflet-control-scale {
+  bottom: 20px;  
+}
+
 .leaflet-control-scale-line {
   background-color: var(--color-bg-a75);
   border: solid 2px var(--color-txt-a5);
@@ -62,7 +70,21 @@
 
 .leaflet-control-attribution.leaflet-control {
   background-color: var(--color-bg-a75);
-  color: var(--color-txt);  
+  color: var(--color-txt);
+  position: fixed;
+  left: 0;
+  bottom: 0;
+
+  a {
+    color: var(--color-txt);
+    transition: color .2s;
+
+    &:active,
+    &:focus,
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
 }
 
 .leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive {
