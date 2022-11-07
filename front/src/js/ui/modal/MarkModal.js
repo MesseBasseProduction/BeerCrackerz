@@ -1,7 +1,6 @@
 import BaseModal from './BaseModal.js';
-import MarkTypes from '../../utils/MarkTypesEnum.js';
+import MarkInfosEnum from '../../utils/MarkInfosEnum.js';
 import Rating from '../component/Rating.js';
-import Utils from '../../utils/Utils.js';
 
 
 // Abstraction for addMark and editMark (as they share same content, not values)
@@ -15,8 +14,7 @@ class MarkModal extends BaseModal {
     this._name = '';
     this._description = '';
     this._rating = null;
-    this._footerCancelButton = null;
-    this._footerSubmitButton = null;
+    this._pricing = null;
   }
 
 
@@ -33,49 +31,52 @@ class MarkModal extends BaseModal {
    * @since November 2020
    * @description <blockquote>This method doesn't do anything, the about modal is only for reading.</blockquote> **/
   _fillAttributes() {
-    this._name = this._rootElement.querySelector(`#${this._opts.type}-name`);
-    this._description = this._rootElement.querySelector(`#${this._opts.type}-desc`);
-    this._rating = new Rating(this._rootElement.querySelector(`#${this._opts.type}-rating`));
-    // The modal doesn't contain any interaction with user inputs
-    this._footerCancelButton = this._rootElement.querySelector(`#${this._opts.type}-close`);
-    this._footerSubmitButton = this._rootElement.querySelector(`#${this._opts.type}-submit`);
     this._opts.user = window.BeerCrackerz.user.username;
     // Generic mark modal section
     window.BeerCrackerz.nls.addMarkModal(this._rootElement, this._opts.type, this._action);
-    // Specific mark modal section
-    window.BeerCrackerz.nls[`add${Utils.capitalize(this._opts.type)}ModalContent`](this._rootElement);
-    // Handle shop types
-    const parent = this._rootElement.querySelector(`#${this._opts.type}-type`);
-    const _typeChecked = e => {
-      for (let i = 0; i < parent.children.length; ++i) {
-        parent.children[i].classList.remove('selected');
-        if (parent.children[i].dataset.type === e.target.dataset.type) {
-          parent.children[i].classList.add('selected');
-        }
+    // Type and modifier handling
+    const _elementChecked = event => {
+      if (event.target.closest('p').classList.contains('selected')) {
+        event.target.closest('p').classList.remove('selected');
+      } else {
+        event.target.closest('p').classList.add('selected');
       }
     };
-
-    for (let i = 0; i < MarkTypes[this._opts.type].length; ++i) {
+    // Mark title
+    this._name = this._rootElement.querySelector(`#${this._opts.type}-name`);
+    // Handle mark types
+    const types = this._rootElement.querySelector(`#${this._opts.type}-types`);  
+    for (let i = 0; i < MarkInfosEnum[this._opts.type].types.length; ++i) {
       const type = document.createElement('P');
-      type.dataset.type = MarkTypes[this._opts.type][i];
-      type.innerHTML = window.BeerCrackerz.nls[this._opts.type](`${MarkTypes[this._opts.type][i]}Type`);
-      parent.appendChild(type);
-      this._evtIds.push(window.Evts.addEvent('click', type, _typeChecked, this));
+      const icon = document.createElement('IMG');
+      type.dataset.type = MarkInfosEnum[this._opts.type].types[i];
+      icon.dataset.type = type.dataset.type;
+      icon.src = `/static/img/logo/${MarkInfosEnum[this._opts.type].types[i]}.svg`;
+      type.innerHTML = window.BeerCrackerz.nls[this._opts.type](`${MarkInfosEnum[this._opts.type].types[i]}Type`);
+      type.insertBefore(icon, type.firstChild);
+      types.appendChild(type);
+      this._evtIds.push(window.Evts.addEvent('click', type, _elementChecked, this));
     }
+    // Mark description
+    this._description = this._rootElement.querySelector(`#${this._opts.type}-desc`);
     // Handle shop modifiers
     const modifiers = this._rootElement.querySelector(`#${this._opts.type}-modifiers`);
-    const _modifierChecked = e => {
-      if (e.target.closest('p').classList.contains('selected')) {
-        e.target.closest('p').classList.remove('selected');
-      } else {
-        e.target.closest('p').classList.add('selected');
-      }
-    };
-
-    for (let i = 0; i < modifiers.children.length; ++i) {
-      this._evtIds.push(window.Evts.addEvent('click', modifiers.children[i], _modifierChecked, this));
+    for (let i = 0; i < MarkInfosEnum[this._opts.type].modifiers.length; ++i) {
+      const modifier = document.createElement('P');
+      const icon = document.createElement('IMG');
+      modifier.dataset.type = MarkInfosEnum[this._opts.type].modifiers[i];
+      icon.dataset.type = modifier.dataset.type;
+      icon.src = `/static/img/logo/${MarkInfosEnum[this._opts.type].modifiers[i]}.svg`;
+      modifier.innerHTML = window.BeerCrackerz.nls[this._opts.type](`${MarkInfosEnum[this._opts.type].modifiers[i]}Modifier`);
+      modifier.insertBefore(icon, modifier.firstChild);
+      modifiers.appendChild(modifier);
+      this._evtIds.push(window.Evts.addEvent('click', modifier, _elementChecked, this));
     }
-
+    // Rating and pricing if any
+    this._rating = new Rating(this._rootElement.querySelector(`#${this._opts.type}-rating`));
+    if (this._rootElement.querySelector(`#nls-${this._opts.type}-price`)) {
+      this._pricing = new Rating(this._rootElement.querySelector(`#${this._opts.type}-pricing`));      
+    }
     this._events();
   }
 
@@ -89,8 +90,52 @@ class MarkModal extends BaseModal {
    * @description <blockquote>This method will listen to any click on the submit button to process the textarea
    * content to send it to the backend if needed.</blockquote> **/
   _events() {
-    this._evtIds.push(window.Evts.addEvent('click', this._footerCancelButton, this.close, this));
-    this._evtIds.push(window.Evts.addEvent('click', this._footerSubmitButton, this.submit, this));
+    this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector(`#${this._opts.type}-close`), this.close, this));
+    this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector(`#${this._opts.type}-submit`), this.submit, this));
+  }
+
+
+  submit(event) {
+    event.preventDefault();
+    let allowed = true;
+    this._rootElement.querySelector(`#nls-${this._opts.type}-name`).classList.remove('error');
+    this._name.classList.remove('error');
+    this._rootElement.querySelector(`#nls-${this._opts.type}-type`).classList.remove('error');
+    if (this._name.value === '') {
+      this._rootElement.querySelector(`#nls-${this._opts.type}-name`).classList.add('error');
+      this._name.classList.add('error');
+      window.BeerCrackerz.notification.raise(window.BeerCrackerz.nls.notif('markNameEmpty'));
+      allowed = false;
+    } else if (this.getTypes().length === 0) {
+      this._rootElement.querySelector(`#nls-${this._opts.type}-type`).classList.add('error');
+      window.BeerCrackerz.notification.raise(window.BeerCrackerz.nls.notif('markTypeEmpty'));
+      allowed = false;
+    }
+    return allowed;
+  }
+
+
+  getTypes() {
+    const output = [];
+    const types = this._rootElement.querySelector(`#${this._opts.type}-types`);  
+    for (let i = 0; i < types.children.length; ++i) {
+      if (types.children[i].classList.contains('selected')) {
+        output.push(types.children[i].dataset.type);
+      }
+    }
+    return output;
+  }
+
+
+  getModifiers() {
+    const output = [];
+    const modifiers = this._rootElement.querySelector(`#${this._opts.type}-modifiers`);  
+    for (let i = 0; i < modifiers.children.length; ++i) {
+      if (modifiers.children[i].classList.contains('selected')) {
+        output.push(modifiers.children[i].dataset.type);
+      }
+    }
+    return output;
   }
 
 

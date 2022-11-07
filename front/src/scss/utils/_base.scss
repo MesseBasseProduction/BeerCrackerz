@@ -10,6 +10,13 @@
 
   --color-secondary: #0057ff;
   --color-tertiary: #80abff;
+
+  --font-size: 1.375rem;
+  --font-size-l1: 1.45rem;
+  --font-size-l2: 1.6rem;
+  --font-size-l3: 1.9rem;
+  --font-size-l4: 2.4rem;
+  --font-size-l5: 2.8rem;
 }
 
 body.dark-theme {
@@ -26,6 +33,7 @@ body.dark-theme {
   --color-txt-a5: rgba(226, 226, 226, .5);
   --color-txt-a25: rgba(226, 226, 226, .25);
   --color-txt-a1: rgba(226, 226, 226, .1);
+  /* No overrides at all, dark theme is default one */
 }
 
 body.light-theme {
@@ -42,6 +50,14 @@ body.light-theme {
   --color-txt-a5: rgba(46, 46, 46, .5);
   --color-txt-a25: rgba(46, 46, 46, .25);
   --color-txt-a1: rgba(46, 46, 46, .1);
+  /* I,vert svg icon that are white on white */
+  .info-mark img, .edit img,
+  .rating img, .pricing img,
+  .types p img, .modifiers p img,
+  .item[data-type="label"] img, .item[data-type="circle"] img,
+  .item img {
+    filter: invert(1);
+  }
 }
 
 * {
@@ -61,29 +77,35 @@ body {
   background: var(--color-bg);
   color: var(--color-txt);
   font-family: sans-serif;
+  font-size: 1.4rem;
   position: relative;
 }
 
 h1 {
   color: var(--color-txt);
-  font-size: 2.8rem;
-  margin-bottom: 1.2rem;
+  font-size: var(--font-size-l5);
+  margin-bottom: var(--font-size);
 }
 
 h2 {
-  font-size: 2.4rem;
+  font-size: var(--font-size-l4);
 }
 
 a {
   color: var(--color-primary);
-  font-size: 1.2rem;
-  margin-bottom: 1.2rem;
+  font-size: var(--font-size);
+  margin-bottom: var(--font-size);
 }
 
 p, label {
   color: var(--color-txt);
-  font-size: 1.2rem;
-  margin-bottom: 1.2rem;
+  font-size: var(--font-size);
+  margin-bottom: var(--font-size);
+
+  &.error {
+    color: var(--color-primary);
+    font-weight: bold;
+  }
 }
 
 label {
@@ -97,7 +119,7 @@ input, textarea {
   color: var(--color-txt);
   display: block;
   margin: .5rem auto;
-  margin-bottom: 1.2rem;
+  margin-bottom: var(--font-size);
   padding: .5rem;
   width: 100%;
 

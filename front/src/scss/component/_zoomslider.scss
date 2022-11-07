@@ -26,7 +26,7 @@
 
   p {
     cursor: pointer;
-    font-size: 1.6rem;
+    font-size: var(--font-size-l3);
     font-weight: bold;
     margin: .5rem 0;
     user-select: none;

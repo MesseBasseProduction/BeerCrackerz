@@ -5,23 +5,27 @@
   <p id="nls-shop-subtitle">{SHOP_SUBTITLE}</p>
   <label id="nls-shop-name" for="shop-name">{SHOP_NAME} :</label>
   <input id="shop-name" type="text">
-  <label id="nls-shop-type" for="shop-type">{SHOP_TYPE} :</label>
-  <div id="shop-type" class="type"></div>
+  <label id="nls-shop-type" for="shop-types">{SHOP_TYPE} :</label>
+  <div id="shop-types" class="types"></div>
   <label id="nls-shop-desc" for="shop-desc">{SHOP_DESC} :</label>
   <textarea id="shop-desc" name="shop-desc" rows="4" style="resize:none"></textarea>
   <label id="nls-shop-modifiers">{SHOP_MODIFIERS} :</label>
-  <div id="shop-modifiers" class="modifiers">
-    <p id="shop-fresh"><img src="{% static 'img/logo/ice.svg' %}">{SHOP_FRESH}</p>
-    <p id="shop-card"><img src="{% static 'img/logo/card.svg' %}">{SHOP_CARD}</p>
-    <p id="shop-craft"><img src="{% static 'img/logo/craft.svg' %}">{SHOP_CRAFT}</p>
-  </div>
-  <label id="nls-shop-rate" for="price-rating">{SHOP_RATE} :</label>
-  <div id="shop-rating" class="rating" data-rate="0">
-    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="0" class="active">
-    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="1">
-    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="2">
-    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="3">
-    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="4">
+  <div id="shop-modifiers" class="modifiers"></div>
+  <div class="votes">
+    <label id="nls-shop-rate" for="shop-rating">{SHOP_RATE} :</label>
+    <label id="nls-shop-price" for="shop-pricing">{SHOP_PRICE} :</label>
+    <div id="shop-rating" class="rating" data-rate="0">
+      <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="0" class="active">
+      <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="1">
+      <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="2">
+      <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="3">
+      <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="4">
+    </div>
+    <div id="shop-pricing" class="pricing" data-rate="0">
+      <img src="{% static 'img/logo/dollar.svg' %}" alt="pricing-dollar" data-id="0" class="active">
+      <img src="{% static 'img/logo/dollar.svg' %}" alt="pricing-dollar" data-id="1">
+      <img src="{% static 'img/logo/dollar.svg' %}" alt="pricing-dollar" data-id="2">
+    </div>
   </div>
   <div class="button-wrapper">
     <button id="shop-close" class="cancel">{SHOP_CANCEL}</button>

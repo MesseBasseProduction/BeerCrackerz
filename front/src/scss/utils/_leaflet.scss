@@ -54,6 +54,17 @@
   }
 }
 
+.leaflet-control-scale-line {
+  background-color: var(--color-bg-a75);
+  border: solid 2px var(--color-txt-a5);
+  color: var(--color-txt);
+}
+
+.leaflet-control-attribution.leaflet-control {
+  background-color: var(--color-bg-a75);
+  color: var(--color-txt);  
+}
+
 .leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive {
   filter: drop-shadow(0 0 .25rem #424242);
   transition: transform .2s, filter .2s;
@@ -73,4 +84,20 @@
   font-style: italic;
   text-align: center;
   top: 2rem;
+
+  p {
+    margin: 0;
+  }
+
+  .label-pricing {
+    bottom: -2.4rem;
+    position: absolute;
+    left: -1.2rem;
+    right: -1.2rem;
+
+    img {
+      filter: invert(69%) sepia(10%) saturate(2908%) hue-rotate(72deg) brightness(107%) contrast(74%) drop-shadow(0 0 1px var(--color-txt));
+      width: var(--font-size-l2);
+    }
+  }
 }

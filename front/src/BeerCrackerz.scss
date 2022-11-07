@@ -10,12 +10,12 @@ main.beer-crakerz-map {
     text-align: center;
 
     p {
-      font-size: 1.6rem;
+      font-size: var(--font-size-l3);
       font-weight: bold;
     }
 
     button {
-      margin: 1.2rem 0;
+      margin: var(--font-size) 0;
     }
   }
 }

@@ -51,6 +51,7 @@ class Utils {
   static initDebugInterface() {
     const lang = window.BeerCrackerz.nls.debug.bind(window.BeerCrackerz.nls);
     const debugContainer = document.createElement('DIV');
+    const title = document.createElement('H1');
     const userLat = document.createElement('P');
     const userLng = document.createElement('P');
     const updatesAmount = document.createElement('P');
@@ -72,16 +73,18 @@ class Utils {
     zoomLevel.classList.add('debug-zoom-level');
     marks.classList.add('debug-marks-amount');
     exportData.classList.add('debug-export-data');
-    userLat.innerHTML = `<b>${lang('lat')}</b> : -`;
-    userLng.innerHTML = `<b>${lang('lng')}</b> : -`;
-    updatesAmount.innerHTML = `<b>${lang('updates')}</b> : 0`;
-    userAccuracy.innerHTML = `<b>${lang('accuracy')}</b> : -`;
-    highAccuracy.innerHTML = `<b>${lang('highAccuracy')}</b> : -`;
-    maxAge.innerHTML = `<b>${lang('posAge')}</b> : -`;
-    posTimeout.innerHTML = `<b>${lang('posTimeout')}</b> : -`;
-    zoomLevel.innerHTML = `<b>${lang('zoom')}</b> : -`;
-    marks.innerHTML = `<b>${lang('marks')}</b> : -`;
+    title.innerHTML = `BeerCrackerz v${window.VERSION}`;
+    userLat.innerHTML = `<b>${lang('lat')}</b> -`;
+    userLng.innerHTML = `<b>${lang('lng')}</b> -`;
+    updatesAmount.innerHTML = `<b>${lang('updates')}</b> 0`;
+    userAccuracy.innerHTML = `<b>${lang('accuracy')}</b> -`;
+    highAccuracy.innerHTML = `<b>${lang('highAccuracy')}</b> -`;
+    maxAge.innerHTML = `<b>${lang('posAge')}</b> -`;
+    posTimeout.innerHTML = `<b>${lang('posTimeout')}</b> -`;
+    zoomLevel.innerHTML = `<b>${lang('zoom')}</b> -`;
+    marks.innerHTML = `<b>${lang('marks')}</b> -`;
     exportData.innerHTML = lang('export');
+    debugContainer.appendChild(title);
     debugContainer.appendChild(userLat);
     debugContainer.appendChild(userLng);
     debugContainer.appendChild(updatesAmount);
@@ -101,35 +104,17 @@ class Utils {
     if (window.DEBUG === true) {
       const bc = window.BeerCrackerz;
       const lang = bc.nls.debug.bind(bc.nls);
-      const updates = parseInt(element.querySelector('.debug-updates-amount').innerHTML.split(' : ')[1]) + 1;
+      const updates = parseInt(element.querySelector('.debug-updates-amount').innerHTML.split(' ')[1]) + 1;
       const marks = bc.marks.spot.length + bc.marks.shop.length + bc.marks.bar.length;
-      element.querySelector('.debug-user-lat').innerHTML = `
-        <b>${lang('lat')}</b> : ${user.lat}
-      `;
-      element.querySelector('.debug-user-lng').innerHTML = `
-        <b>${lang('lng')}</b> : ${user.lng}
-      `;
-      element.querySelector('.debug-updates-amount').innerHTML = `
-        <b>${lang('updates')}</b> : ${updates}
-      `;
-      element.querySelector('.debug-user-accuracy').innerHTML = `
-        <b>${lang('accuracy')}</b> : ${Utils.precisionRound(user.accuracy, 2)}m
-      `;
-      element.querySelector('.debug-high-accuracy').innerHTML = `
-        <b>${lang('highAccuracy')}</b> : ${options.enableHighAccuracy === true ? lang('enabled') : lang('disabled')}
-      `;
-      element.querySelector('.debug-pos-max-age').innerHTML = `
-        <b>${lang('posAge')}</b> : ${options.maximumAge / 1000}s
-      `;
-      element.querySelector('.debug-pos-timeout').innerHTML = `
-        <b>${lang('posTimeout')}</b> : ${options.timeout / 1000}s
-      `;
-      element.querySelector('.debug-zoom-level').innerHTML = `
-        <b>${lang('zoom')}</b> : ${bc.map.getZoom()}
-      `;
-      element.querySelector('.debug-marks-amount').innerHTML = `
-        <b>${lang('marks')}</b> : ${marks}
-      `;
+      element.querySelector('.debug-user-lat').innerHTML = `<b>${lang('lat')}</b> ${user.lat}`;
+      element.querySelector('.debug-user-lng').innerHTML = `<b>${lang('lng')}</b> ${user.lng}`;
+      element.querySelector('.debug-updates-amount').innerHTML = `<b>${lang('updates')}</b> ${updates}`;
+      element.querySelector('.debug-user-accuracy').innerHTML = `<b>${lang('accuracy')}</b> ${Utils.precisionRound(user.accuracy, 2)}m`;
+      element.querySelector('.debug-high-accuracy').innerHTML = `<b>${lang('highAccuracy')}</b> ${options.enableHighAccuracy === true ? lang('enabled') : lang('disabled')}`;
+      element.querySelector('.debug-pos-max-age').innerHTML = `<b>${lang('posAge')}</b> ${options.maximumAge / 1000}s`;
+      element.querySelector('.debug-pos-timeout').innerHTML = `<b>${lang('posTimeout')}</b> ${options.timeout / 1000}s`;
+      element.querySelector('.debug-zoom-level').innerHTML = `<b>${lang('zoom')}</b> ${bc.map.getZoom()}`;
+      element.querySelector('.debug-marks-amount').innerHTML = `<b>${lang('marks')}</b> ${marks}`;
     }
   }
 
@@ -175,7 +160,10 @@ class Utils {
       description: mark.description,
       lat: mark.lat,
       lng: mark.lng,
-      rate: mark.rate
+      rate: mark.rate,
+      types: mark.types,
+      modifiers: mark.modifiers,
+      price: (mark.price) ? mark.price : undefined
     };
   }
 
@@ -229,7 +217,7 @@ class Utils {
 
 
   static get NEW_MARKER_RANGE() {
-    return 200;
+    return 2000000000; // TODO fallback to 200 when roles are implement server side
   }
 
 

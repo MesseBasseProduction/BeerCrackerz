@@ -33,7 +33,7 @@
       cursor: pointer;
       font-size: 2.2rem;
       font-weight: bold;
-      line-height: 1.4rem; /* Because the cross symbol doesn't fit font height */
+      line-height: var(--font-size-l2); /* Because the cross symbol doesn't fit font height */
       right: 1rem;
       position: absolute;
       top: 1rem;
@@ -73,8 +73,24 @@
   top: 1rem;
   z-index: 20;
 
+  h1 {
+    font-size: var(--font-size-l3);
+    margin-bottom: var(--font-size);
+    text-align: center;
+  }
+
   p {
+    display: flex;
+    justify-content: space-between;
     margin-bottom: .2rem;
+
+    b {
+      margin-right: 2rem;
+    }
+  }
+
+  button {
+    margin-top: var(--font-size);
   }
 }
 
@@ -87,7 +103,7 @@
 
   h1 {
     font-size: 2rem;
-    margin-bottom: 1.2rem;
+    margin-bottom: var(--font-size);
   }
 
   .rating {
@@ -97,7 +113,7 @@
     width: 100%;
 
     img {
-      height: 1.2rem;
+      height: var(--font-size);
 
       &.active {
         filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
@@ -115,9 +131,9 @@
   }
 
   h2 {
-    font-size: 1.3rem;
+    font-size: var(--font-size-l1);
     font-weight: inherit;
-    margin-top: 1.2rem;
+    margin-top: var(--font-size);
   }
 
   footer {
@@ -125,7 +141,7 @@
     display: flex;
     position: relative;
     justify-content: space-between;
-    margin-top: 1.2rem;
+    margin-top: var(--font-size);
 
     img {
       cursor: pointer;

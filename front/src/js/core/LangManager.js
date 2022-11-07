@@ -189,26 +189,9 @@ class LangManager {
     Utils.replaceString(dom.querySelector(`#nls-${type}-modifiers`), `{${type.toUpperCase()}_MODIFIERS}`, this[type]('modifiersLabel'));
     Utils.replaceString(dom.querySelector(`#${type}-submit`), `{${type.toUpperCase()}_SUBMIT}`, this.nav('add'));
     Utils.replaceString(dom.querySelector(`#${type}-close`), `{${type.toUpperCase()}_CANCEL}`, this.nav('cancel'));    
-  }
-
-
-  addSpotModalContent(dom) {
-    Utils.replaceString(dom.querySelector('#spot-bench'), '{SPOT_BENCH}', this.spot('benchModifier'));
-    Utils.replaceString(dom.querySelector('#spot-covered'), '{SPOT_COVERED}', this.spot('coveredModifier'));
-    Utils.replaceString(dom.querySelector('#spot-toilet'), '{SPOT_TOILET}', this.spot('toiletModifier'));
-    Utils.replaceString(dom.querySelector('#spot-trash'), '{SPOT_TRASH}', this.spot('trashModifier'));    
-  }
-
-
-  addShopModalContent(dom) {
-    Utils.replaceString(dom.querySelector('#shop-fresh'), '{SHOP_FRESH}', this.shop('freshModifier'));
-    Utils.replaceString(dom.querySelector('#shop-card'), '{SHOP_CARD}', this.shop('cardModifier'));
-    Utils.replaceString(dom.querySelector('#shop-craft'), '{SHOP_CRAFT}', this.shop('craftModifier'));
-  }
-
-
-  addBarModalContent(dom) {
-    console.log(dom, 'TODO bar modifiers');
+    if (dom.querySelector(`#nls-${type}-price`)) {
+      Utils.replaceString(dom.querySelector(`#nls-${type}-price`), `{${type.toUpperCase()}_PRICE}`, this[type]('priceLabel'));
+    }
   }
 
 

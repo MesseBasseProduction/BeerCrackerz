@@ -3,11 +3,12 @@ export default Object.freeze({
     animateAddingMarkers: true,
     disableClusteringAtZoom: 18,
     spiderfyOnMaxZoom: false,
+    maxClusterRadius: 360,
     iconCreateFunction: cluster => {
       return window.L.divIcon({
         className: 'cluster-icon-wrapper',
         html: `
-          <img src="/static/img/marker/cluster-icon-green.png" class="cluster-icon">
+          <img src="/static/img/marker/marker-icon-green.png" class="cluster-icon">
           <span class="cluster-label">${cluster.getChildCount()}</span>
         `
       });
@@ -17,11 +18,12 @@ export default Object.freeze({
     animateAddingMarkers: true,
     disableClusteringAtZoom: 18,
     spiderfyOnMaxZoom: false,
+    maxClusterRadius: 360,
     iconCreateFunction: cluster => {
       return window.L.divIcon({
         className: 'cluster-icon-wrapper',
         html: `
-          <img src="/static/img/marker/cluster-icon-blue.png" class="cluster-icon">
+          <img src="/static/img/marker/marker-icon-blue.png" class="cluster-icon">
           <span class="cluster-label">${cluster.getChildCount()}</span>
         `
       });
@@ -31,11 +33,12 @@ export default Object.freeze({
     animateAddingMarkers: true,
     disableClusteringAtZoom: 18,
     spiderfyOnMaxZoom: false,
+    maxClusterRadius: 360,
     iconCreateFunction: cluster => {
       return window.L.divIcon({
         className: 'cluster-icon-wrapper',
         html: `
-          <img src="/static/img/marker/cluster-icon-red.png" class="cluster-icon">
+          <img src="/static/img/marker/marker-icon-red.png" class="cluster-icon">
           <span class="cluster-label">${cluster.getChildCount()}</span>
         `
       });

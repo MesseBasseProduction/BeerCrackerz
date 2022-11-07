@@ -5,17 +5,12 @@
   <p id="nls-spot-subtitle">{SPOT_SUBTITLE}</p>
   <label id="nls-spot-name" for="spot-name">{SPOT_NAME} :</label>
   <input id="spot-name" type="text">
-  <label id="nls-spot-type" for="spot-type">{SPOT_TYPE} :</label>
-  <div id="spot-type" class="type"></div>
+  <label id="nls-spot-type" for="spot-types">{SPOT_TYPE} :</label>
+  <div id="spot-types" class="types"></div>
   <label id="nls-spot-desc" for="spot-desc">{SPOT_DESC} :</label>
   <textarea id="spot-desc" name="spot-desc" rows="4" style="resize:none"></textarea>
   <label id="nls-spot-modifiers">{SPOT_MODIFIERS} :</label>
-  <div id="spot-modifiers" class="modifiers">
-    <p id="spot-bench"><img src="{% static 'img/logo/bench.svg' %}">{SPOT_BENCH}</p>
-    <p id="spot-covered"><img src="{% static 'img/logo/umbrella.svg' %}">{SPOT_COVERED}</p>
-    <p id="spot-toilet"><img src="{% static 'img/logo/toilet.svg' %}">{SPOT_TOILET}</p>
-    <p id="spot-trash"><img src="{% static 'img/logo/delete.svg' %}">{SPOT_TRASH}</p>
-  </div>
+  <div id="spot-modifiers" class="modifiers"></div>
   <label id="nls-spot-rate" for="star-rating">{SPOT_RATE} :</label>
   <div id="spot-rating" class="rating" data-rate="0">
     <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="0" class="active">

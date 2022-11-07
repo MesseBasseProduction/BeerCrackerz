@@ -15,11 +15,11 @@
       p:first-child {
         font-style: italic;
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: var(--font-size-l4);
       }
 
       p:last-child {
-        text-indent: 2.4rem;
+        text-indent: var(--font-size-l4);
       }
     }
   }
@@ -32,13 +32,13 @@
     max-width: 15rem;
 
     img {
-      margin-right: 2rem;
-      height: 2rem;
+      margin-right: var(--font-size-l4);
+      height: var(--font-size-l4);
     }
 
     label {
       margin-bottom: 0;
-      margin-right: 2rem;
+      margin-right: var(--font-size-l4);
     }
 
     input {

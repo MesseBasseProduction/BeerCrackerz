@@ -5,20 +5,27 @@
   <p id="nls-bar-subtitle">{BAR_SUBTITLE}</p>
   <label id="nls-bar-name" for="bar-name">{BAR_NAME} :</label>
   <input id="bar-name" type="text">
-  <label id="nls-bar-type" for="bar-type">{BAR_TYPE} :</label>
-  <div id="bar-type" class="type"></div>
+  <label id="nls-bar-type" for="bar-types">{BAR_TYPE} :</label>
+  <div id="bar-types" class="types"></div>
   <label id="nls-bar-desc" for="bar-desc">{BAR_DESC} :</label>
   <textarea id="bar-desc" name="spot-desc" rows="4" style="resize:none"></textarea>
   <label id="nls-bar-modifiers">{BAR_MODIFIERS} :</label>
-  <div id="bar-modifiers" class="modifiers">
-  </div>
-  <label id="nls-bar-rate" for="star-rating">{BAR_RATE} :</label>
-  <div id="bar-rating" class="rating" data-rate="0">
-    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="0" class="active">
-    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="1">
-    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="2">
-    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="3">
-    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="4">
+  <div id="bar-modifiers" class="modifiers"></div>
+  <div class="votes">
+    <label id="nls-bar-rate" for="bar-rating">{BAR_RATE} :</label>
+    <label id="nls-bar-price" for="bar-pricing">{BAR_PRICE} :</label>
+    <div id="bar-rating" class="rating" data-rate="0">
+      <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="0" class="active">
+      <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="1">
+      <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="2">
+      <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="3">
+      <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="4">
+    </div>
+    <div id="bar-pricing" class="pricing" data-rate="0">
+      <img src="{% static 'img/logo/dollar.svg' %}" alt="pricing-dollar" data-id="0" class="active">
+      <img src="{% static 'img/logo/dollar.svg' %}" alt="pricing-dollar" data-id="1">
+      <img src="{% static 'img/logo/dollar.svg' %}" alt="pricing-dollar" data-id="2">
+    </div>
   </div>
   <div class="button-wrapper">
     <button id="bar-close" class="cancel">{BAR_CANCEL}</button>

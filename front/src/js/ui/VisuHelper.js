@@ -181,7 +181,7 @@ class VisuHelper {
   static setMarkerLabels(visible) {
     const _updateTooltip = list => {
       for (let i = 0; i < list.length; ++i) {
-        if (visible) {
+        if (visible && list[i].clustered === false) {
           list[i].tooltip.addTo(window.BeerCrackerz.map);
         } else {
           list[i].tooltip.removeFrom(window.BeerCrackerz.map);
@@ -394,6 +394,22 @@ class VisuHelper {
     }
     // Actual fly to the marker
     window.BeerCrackerz.map.flyTo([options.lat, options.lng], 18);    
+  }
+
+
+  static checkClusteredMark(type) {
+    if (Utils.getPreference('poi-marker-label') === 'true') {
+      const layers = window.BeerCrackerz.marks[type];
+      for (let i = 0; i < layers.length; ++i) {
+        const visible = window.BeerCrackerz.map.hasLayer(layers[i].marker);
+        layers[i].clustered = !visible;
+        if (visible) {
+          layers[i].tooltip.addTo(window.BeerCrackerz.map);
+        } else {
+          layers[i].tooltip.removeFrom(window.BeerCrackerz.map);
+        }
+      }
+    }
   }
 
 

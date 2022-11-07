@@ -10,15 +10,15 @@ class AddMarkModal extends MarkModal {
 
 
   submit(event) {
-    event.preventDefault();
-    this._name.classList.remove('error');
-    if (this._name.value === '') {
-      this._name.classList.add('error');
-      window.BeerCrackerz.notification.raise(window.BeerCrackerz.nls.notif('markNameEmpty'));
-    } else {
+    if (super.submit(event)) {
       this._opts.name = this._name.value,
       this._opts.description = this._description.value;
+      this._opts.types = this.getTypes();
+      this._opts.modifiers = this.getModifiers();
       this._opts.rate = this._rating.currentRate;
+      if (this._rootElement.querySelector(`#nls-${this._opts.type}-price`)) {
+        this._opts.price = this._pricing.currentRate;
+      }
       window.Evts.publish('onMarkAdded', this._opts);
       this.close(null, true);
     }

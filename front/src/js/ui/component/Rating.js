@@ -38,7 +38,7 @@ class Rating {
     if (event.target.tagName === 'IMG') {
       this._currentRate = parseInt(event.target.dataset.id);
       this._container.dataset.rate = this._currentRate;
-      this.updateStars();
+      this.updateVisu();
     }
   }
 
@@ -46,7 +46,7 @@ class Rating {
   _pointerExit() {
     this._currentRate = (this._clicked === -1) ? 0 : this._clicked;
     this._container.dataset.rate = this._currentRate;
-    this.updateStars();
+    this.updateVisu();
   }
 
 
@@ -54,11 +54,11 @@ class Rating {
     this._currentRate = parseInt(event.target.dataset.id);
     this._container.dataset.rate = this._currentRate;
     this._clicked = this._currentRate;
-    this.updateStars();
+    this.updateVisu();
   }
 
 
-  updateStars() {
+  updateVisu() {
     for (let i = 0; i < this._items.length; ++i) {
       if (i <= this._currentRate) {
         this._items[i].classList.add('active');
@@ -73,6 +73,12 @@ class Rating {
   }
 
 
+  updateRate(rate) {
+    this.currentRate = rate;
+    this.clicked = rate;
+  }
+
+
   get currentRate() {
     return this._currentRate;
   }
@@ -80,6 +86,11 @@ class Rating {
 
   set currentRate(rate) {
     this._currentRate = rate;
+  }
+
+
+  set clicked(rate) {
+    this._clicked = rate;
   }
 
 

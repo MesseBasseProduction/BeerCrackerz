@@ -76,15 +76,27 @@ class MarkPopup {
       this._opts.color = Utils[`${this._opts.type.toUpperCase()}_COLOR`];
       this._opts.circle = VisuHelper.drawCircle(this._opts);
       this._opts.circle.addTo(window.BeerCrackerz.map);
-      // Create label for new marker
+      // Create label for new marker (and add pricing label if any)
+      const element = document.createElement('P');
+      element.innerHTML = this._opts.name;
+      if (this._opts.price) {
+        const pricing = document.createElement('DIV');
+        pricing.classList.add('label-pricing');
+        for (let i = 0; i < this._opts.price + 1; ++i) {
+          const dollar = document.createElement('IMG');
+          dollar.src = 'static/img/logo/dollar.svg';
+          pricing.appendChild(dollar);
+        }
+        element.appendChild(pricing);
+      }
       this._opts.tooltip = window.L.tooltip({
         permanent: true,
         direction: 'center',
         className: 'marker-tooltip',
         interactive: true
-      }).setContent(this._opts.name)
+      }).setContent(element)
         .setLatLng(this._opts.circle.getLatLng());
-  
+
       this._opts.tooltip.addTo(window.BeerCrackerz.map);
       // Remove it if preference is to true
       if (Utils.getPreference('poi-marker-label') === 'false') {

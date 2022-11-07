@@ -14,6 +14,7 @@ import MarkPopup from './js/ui/MarkPopup';
 import ModalFactory from './js/ui/ModalFactory';
 
 
+window.VERSION = '0.0.2';
 window.Evts = new CustomEvents();
 
 
@@ -160,8 +161,8 @@ class BeerCrackerz {
       .then(this._initPreferences.bind(this))
       .then(this._initGeolocation.bind(this))
       .then(this._initMap.bind(this))
-      .then(this._initEvents.bind(this))
-      .then(this._initMarkers.bind(this));
+      .then(this._initMarkers.bind(this))
+      .then(this._initEvents.bind(this));
   }
 
 
@@ -364,83 +365,6 @@ class BeerCrackerz {
 
   /**
    * @method
-   * @name _initEvents
-   * @private
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since January 2022
-   * @description
-   * <blockquote>
-   * The _initEvents() method will listen to all required events to manipulate the map. Those events
-   * are both for commands and for map events (click, drag, zoom and layer change).
-   * </blockquote>
-   * @returns {Promise} A Promise resolved when preferences are set
-   **/
-  _initEvents() {
-    return new Promise(resolve => {
-      // Subscribe to click event on map to react
-      this._map.on('click', this.mapClicked.bind(this));
-      // Map is dragged by user mouse/finger
-      this._map.on('drag', () => {
-        // Constrain pan to the map bounds
-        this._map.panInsideBounds(Utils.MAP_BOUNDS, { animate: true });
-        // Disable lock focus if user drags the map
-        if (Utils.getPreference('map-center-on-user') === 'true') {
-          VisuHelper.toggleFocusLock();
-        }
-      });
-      // Map events
-      this._map.on('zoomstart', () => {
-        this._isZooming = true;
-        if (Utils.getPreference('poi-show-circle') === 'true') {
-          VisuHelper.setMarkerCircles(false);
-        }
-      });
-      this._map.on('zoomend', () => {
-        this._isZooming = false;
-        if (Utils.getPreference('poi-show-circle') === 'true') {
-          if (this._map.getZoom() >= 15) {
-            VisuHelper.setMarkerCircles(true);
-          }
-        }
-        // Auto hide labels if zoom level is too high (and restore it when needed)
-        if (Utils.getPreference('poi-marker-label') === 'true') {
-          if (this._map.getZoom() < 15) {
-            VisuHelper.setMarkerLabels(false);
-          } else {
-            VisuHelper.setMarkerLabels(true);
-          }
-        }
-        // Updating debug info
-        VisuHelper.updateDebugUI();
-      });
-      this._map.on('baselayerchange', event => {
-        Utils.setPreference('map-plan-layer', Utils.stripDom(event.name));
-      });
-
-      // Command events
-      window.Evts.addEvent('click', document.getElementById('user-profile'), this.userProfile, this);
-      window.Evts.addEvent('click', document.getElementById('hide-show'), this.hidShowMenu, this);
-      window.Evts.addEvent('click', document.getElementById('center-on'), VisuHelper.toggleFocusLock, this);
-      // Bus events
-      window.Evts.subscribe('addMark', this.addMark.bind(this)); // Event from addMarkPopup
-      window.Evts.subscribe('onMarkAdded', this._onMarkAdded.bind(this)); // Event from MarkPopup
-      window.Evts.subscribe('deleteMark', this.deleteMark.bind(this)); // Event from MarkPopup
-      window.Evts.subscribe('onMarkDeleted', this._onMarkDeleted.bind(this)); // User confirmed the mark deletion
-      window.Evts.subscribe('editMark', this.editMark.bind(this)); // Event from MarkPopup
-      window.Evts.subscribe('onMarkEdited', this._onMarkEdited.bind(this)); // User confirmed the mark edition
-      window.Evts.subscribe('updateProfile', this.updateProfilePicture.bind(this)); // Event from user modal
-      window.Evts.subscribe('onProfilePictureUpdated', this._onProfilePictureUpdated.bind(this)); // Event from update pp modal
-
-      window.Evts.subscribe('centerOn', VisuHelper.centerOn.bind(VisuHelper));
-
-      resolve();
-    });
-  }
-
-
-  /**
-   * @method
    * @name _initMarkers
    * @private
    * @memberof BeerCrackerz
@@ -499,6 +423,86 @@ class BeerCrackerz {
       });
 
       VisuHelper.updateMarkerCirclesVisibility();
+
+      resolve();
+    });
+  }
+
+
+  /**
+   * @method
+   * @name _initEvents
+   * @private
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+   * @since January 2022
+   * @description
+   * <blockquote>
+   * The _initEvents() method will listen to all required events to manipulate the map. Those events
+   * are both for commands and for map events (click, drag, zoom and layer change).
+   * </blockquote>
+   * @returns {Promise} A Promise resolved when preferences are set
+   **/
+   _initEvents() {
+    return new Promise(resolve => {
+      // Subscribe to click event on map to react
+      this._map.on('click', this.mapClicked.bind(this));
+      // Map is dragged by user mouse/finger
+      this._map.on('drag', () => {
+        // Constrain pan to the map bounds
+        this._map.panInsideBounds(Utils.MAP_BOUNDS, { animate: true });
+        // Disable lock focus if user drags the map
+        if (Utils.getPreference('map-center-on-user') === 'true') {
+          VisuHelper.toggleFocusLock();
+        }
+      });
+      // Map events
+      this._map.on('zoomstart', () => {
+        this._isZooming = true;
+        if (Utils.getPreference('poi-show-circle') === 'true') {
+          VisuHelper.setMarkerCircles(false);
+        }
+      });
+      this._map.on('zoomend', () => {
+        this._isZooming = false;
+        if (Utils.getPreference('poi-show-circle') === 'true') {
+          if (this._map.getZoom() >= 10) {
+            VisuHelper.setMarkerCircles(true);
+          }
+        }
+        // Auto hide labels if zoom level is too high (and restore it when needed)
+        if (Utils.getPreference('poi-marker-label') === 'true') {
+          if (this._map.getZoom() < 16) {
+            VisuHelper.setMarkerLabels(false);
+          } else {
+            VisuHelper.setMarkerLabels(true);
+          }
+        }
+        // Updating debug info
+        VisuHelper.updateDebugUI();
+      });
+      this._map.on('baselayerchange', event => {
+        Utils.setPreference('map-plan-layer', Utils.stripDom(event.name));
+      });
+      // Clustering events
+      this._clusters.spot.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'spot'));
+      this._clusters.shop.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'shop'));      
+      this._clusters.bar.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'bar'));
+      // Command events
+      window.Evts.addEvent('click', document.getElementById('user-profile'), this.userProfile, this);
+      window.Evts.addEvent('click', document.getElementById('hide-show'), this.hidShowMenu, this);
+      window.Evts.addEvent('click', document.getElementById('center-on'), VisuHelper.toggleFocusLock, this);
+      // Bus events
+      window.Evts.subscribe('addMark', this.addMark.bind(this)); // Event from addMarkPopup
+      window.Evts.subscribe('onMarkAdded', this._onMarkAdded.bind(this)); // Event from MarkPopup
+      window.Evts.subscribe('deleteMark', this.deleteMark.bind(this)); // Event from MarkPopup
+      window.Evts.subscribe('onMarkDeleted', this._onMarkDeleted.bind(this)); // User confirmed the mark deletion
+      window.Evts.subscribe('editMark', this.editMark.bind(this)); // Event from MarkPopup
+      window.Evts.subscribe('onMarkEdited', this._onMarkEdited.bind(this)); // User confirmed the mark edition
+      window.Evts.subscribe('updateProfile', this.updateProfilePicture.bind(this)); // Event from user modal
+      window.Evts.subscribe('onProfilePictureUpdated', this._onProfilePictureUpdated.bind(this)); // Event from update pp modal
+
+      window.Evts.subscribe('centerOn', VisuHelper.centerOn.bind(VisuHelper));
 
       resolve();
     });
