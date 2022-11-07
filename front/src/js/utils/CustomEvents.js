@@ -90,11 +90,11 @@ class CustomEvents {
       err();
       return false;
     }
-    if ((scope !== null && scope !== undefined) && typeof scope !== 'object') {
+    if ((scope !== null && scope !== undefined) && typeof scope !== 'object' && typeof scope !== 'function') {
       err();
       return false;
     }
-    if ((options !== null && options !== undefined) && (typeof options !== 'object' && typeof options !== 'boolean')) {
+    if ((options !== null && options !== undefined) && (typeof options !== 'object' && typeof options !== 'boolean' && typeof options !== 'string' && typeof options !== 'number')) {
       err();
       return false;
     }

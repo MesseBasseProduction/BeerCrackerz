@@ -78,6 +78,11 @@ class Rating {
   }
 
 
+  set currentRate(rate) {
+    this._currentRate = rate;
+  }
+
+
 }
 
 

@@ -234,11 +234,13 @@ class BeerCrackerz {
         Utils.setPreference('selected-lang', 'en'); // Default lang to EN
       }
 
-      if (Utils.getPreference('dark-theme') === null) {
+      if (Utils.getPreference('dark-theme') === null || Utils.getPreference('dark-theme') === 'true') {
         Utils.setPreference('dark-theme', true);
+        document.body.classList.remove('light-theme');
+        document.body.classList.add('dark-theme');
       } else {
         document.body.classList.remove('dark-theme');
-        document.body.classList.add('light-theme');        
+        document.body.classList.add('light-theme');
       }
 
       // Update LangManager if pref is !english
@@ -250,7 +252,7 @@ class BeerCrackerz {
           Utils.setPreference('app-debug', true); // Ensure to set local storage preference if debug flag was added to the url
           VisuHelper.addDebugUI();
         }
-        resolve();        
+        resolve();
       }).catch(reject);
     });
   }
@@ -472,7 +474,7 @@ class BeerCrackerz {
         const popup = new MarkPopup(mark, dom => {
           mark.dom = dom;
           mark.marker = VisuHelper.addMark(mark);
-          mark.popup = popup;          
+          mark.popup = popup;
           this._marks[mark.type].push(mark);
           this._clusters[mark.type].addLayer(mark.marker);
         });
@@ -488,13 +490,13 @@ class BeerCrackerz {
         for (let i = 0; i < shops.length; ++i) {
           iterateMarkers(shops[i]);
         }
-      }); 
-    
+      });
+
       this._kom.getBars().then(bars => {
         for (let i = 0; i < bars.length; ++i) {
           iterateMarkers(bars[i]);
         }
-      }); 
+      });
 
       VisuHelper.updateMarkerCirclesVisibility();
 
@@ -534,7 +536,15 @@ class BeerCrackerz {
 
   updateLang(event) {
     Utils.setPreference('selected-lang', event.target.value);
-    window.location.reload();
+    this.nls.updateLang(Utils.getPreference('selected-lang')).then(() => {
+      if (this._modal) {
+        this._modal.close(null, true);
+        VisuHelper.updateDebugUI();
+        setTimeout(this.userProfile.bind(this), 200);
+      } else { // Lang update from elsewhere than user modal
+        window.location.reload();
+      }
+    });
   }
 
 
@@ -654,7 +664,7 @@ class BeerCrackerz {
         // Clear new marker to let user add other stuff
         this._newMarker = null;
       }).catch(() => {
-        this.notification.raise(this.nls.notif(`${options.type}NotAdded`));      
+        this.notification.raise(this.nls.notif(`${options.type}NotAdded`));
       });
     });
   }
@@ -700,8 +710,6 @@ class BeerCrackerz {
         break;
       }
     }
-
-    this._modal.close(null, true);
   }
 
 
@@ -748,14 +756,14 @@ class BeerCrackerz {
             // Notify user through UI that marker has been successfully deleted
             this.notification.raise(this.nls.notif(`${options.type}Edited`));
           }).catch(() => {
-            this.notification.raise(this.nls.notif(`${options.type}NotEdited`));                
+            this.notification.raise(this.nls.notif(`${options.type}NotEdited`));
           }).finally(() => {
             this._modal.close(null, true);
           });
         });
         break;
       }
-    }    
+    }
   }
 
 
@@ -803,8 +811,8 @@ class BeerCrackerz {
     }).finally(() => {
       // Reload user from server with new path and close modal
       this._initUser().then(() => {
-        this._modal.close(null, true);        
-      });              
+        this._modal.close(null, true);
+      });
     });
   }
 

@@ -294,7 +294,8 @@ class VisuHelper {
    * </blockquote>
    * @param {String} type - The mark type in spots/tores/bars
    **/
-  static toggleMarkers(type) {
+  static toggleMarkers(event) {
+    const type = event.target.dataset.type;
     const visible = !(Utils.getPreference(`poi-show-${type}`) === 'true');
     if (visible === true) {
       for (let i = 0; i < window.BeerCrackerz.marks[type].length; ++i) {

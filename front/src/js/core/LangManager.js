@@ -179,8 +179,8 @@ class LangManager {
   // Main App shortcut to update UI chunks of text in views 
 
 
-  addMarkModal(dom, type) {
-    Utils.replaceString(dom.querySelector(`#nls-${type}-title`), `{${type.toUpperCase()}_TITLE}`, this[type]('title'));
+  addMarkModal(dom, type, action) {
+    Utils.replaceString(dom.querySelector(`#nls-${type}-title`), `{${type.toUpperCase()}_TITLE}`, this[type](`${action}Title`));
     Utils.replaceString(dom.querySelector(`#nls-${type}-subtitle`), `{${type.toUpperCase()}_SUBTITLE}`, this[type]('subtitle'));
     Utils.replaceString(dom.querySelector(`#nls-${type}-name`), `{${type.toUpperCase()}_NAME}`, this[type]('nameLabel'));
     Utils.replaceString(dom.querySelector(`#nls-${type}-desc`), `{${type.toUpperCase()}_DESC}`, this[type]('descLabel'));
@@ -188,7 +188,7 @@ class LangManager {
     Utils.replaceString(dom.querySelector(`#nls-${type}-type`), `{${type.toUpperCase()}_TYPE}`, this[type]('typeLabel'));
     Utils.replaceString(dom.querySelector(`#nls-${type}-modifiers`), `{${type.toUpperCase()}_MODIFIERS}`, this[type]('modifiersLabel'));
     Utils.replaceString(dom.querySelector(`#${type}-submit`), `{${type.toUpperCase()}_SUBMIT}`, this.nav('add'));
-    Utils.replaceString(dom.querySelector(`#${type}-cancel`), `{${type.toUpperCase()}_CANCEL}`, this.nav('cancel'));    
+    Utils.replaceString(dom.querySelector(`#${type}-close`), `{${type.toUpperCase()}_CANCEL}`, this.nav('cancel'));    
   }
 
 
@@ -209,16 +209,6 @@ class LangManager {
 
   addBarModalContent(dom) {
     console.log(dom, 'TODO bar modifiers');
-  }
-
-
-  editMarkModal(dom, type) {
-    Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.modal(`${type}EditTitle`));
-    Utils.replaceString(dom.querySelector(`#nls-${type}-name`), `{${type.toUpperCase()}_NAME}`, this[type]('nameLabel'));
-    Utils.replaceString(dom.querySelector(`#nls-${type}-desc`), `{${type.toUpperCase()}_DESC}`, this[type]('descLabel'));
-    Utils.replaceString(dom.querySelector(`#nls-${type}-rate`), `{${type.toUpperCase()}_RATE}`, this[type]('rateLabel'));
-    Utils.replaceString(dom.querySelector(`#${type}-submit`), `{${type.toUpperCase()}_SUBMIT}`, this.nav('edit'));
-    Utils.replaceString(dom.querySelector(`#${type}-close`), `{${type.toUpperCase()}_CANCEL}`, this.nav('cancel'));    
   }
 
 

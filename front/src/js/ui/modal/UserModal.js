@@ -9,43 +9,12 @@ class UserModal extends BaseModal {
 
   constructor(options) {
     super('user');
-
+    this._opts = options;
     this._footerCancelButton = null;
     this._footerSubmitButton = null;
-
-    this._footerCancelEvtId = -1;
-    this._footerSubmitEvtId = -1;
-
-    this._opts = options;
   }
 
 
-  /** @method
-   * @name destroy
-   * @public
-   * @memberof AboutModal
-   * @author Arthur Beaulieu
-   * @since November 2020
-   * @description <blockquote>This method will destroy the Modal parent (see documentation).</blockquote> **/
-  destroy() {
-    super.destroy();
-    window.Evts.removeEvent(this._footerCancelEvtId);
-    window.Evts.removeEvent(this._footerSubmitEvtId);
-  }
-
-
-  /*  --------------------------------------------------------------------------------------------------------------- */
-  /*  ------------------------------------  MODAL INSTANTIATION SEQUENCE  ------------------------------------------  */
-  /*  --------------------------------------------------------------------------------------------------------------- */
-
-
-  /** @method
-   * @name _fillAttributes
-   * @private
-   * @memberof AboutModal
-   * @author Arthur Beaulieu
-   * @since November 2020
-   * @description <blockquote>This method doesn't do anything, the about modal is only for reading.</blockquote> **/
   _fillAttributes() {
     window.BeerCrackerz.nls.userProfileModal(this._rootElement);
     this._rootElement.querySelector(`#user-pp`).src = window.BeerCrackerz.user.pp;
@@ -82,18 +51,6 @@ class UserModal extends BaseModal {
       }
     }
 
-    document.getElementById('high-accuracy-toggle').addEventListener('change', window.BeerCrackerz.toggleHighAccuracy.bind(window.BeerCrackerz));
-    document.getElementById('dark-theme-toggle').addEventListener('change', VisuHelper.toggleDarkTheme.bind(VisuHelper));
-    document.getElementById('debug-toggle').addEventListener('change', VisuHelper.toggleDebug.bind(VisuHelper));
-    document.getElementById('lang-select').addEventListener('change', window.BeerCrackerz.updateLang.bind(VisuHelper));
-    document.getElementById('update-pp').addEventListener('change', this.updateProfilePicture.bind(this));
-    document.getElementById('user-pp').addEventListener('click', this.updateProfilePicture.bind(this));
-    document.getElementById('logout').addEventListener('click', () => {
-      window.BeerCrackerz.kom.post('api/auth/logout/', null).then(() => {
-        window.location = '/welcome'
-      })
-    });
-
     this._events();
   }
 
@@ -107,8 +64,13 @@ class UserModal extends BaseModal {
    * @description <blockquote>This method will listen to any click on the submit button to process the textarea
    * content to send it to the backend if needed.</blockquote> **/
   _events() {
-    //this._footerCancelEvtId = window.Evts.addEvent('click', this._footerCancelButton, this.close, this);
-    //this._footerSubmitEvtId = window.Evts.addEvent('click', this._footerSubmitButton, this.submit, this);
+    this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#high-accuracy-toggle'), window.BeerCrackerz.toggleHighAccuracy, window.BeerCrackerz));
+    this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#dark-theme-toggle'), VisuHelper.toggleDarkTheme, VisuHelper));
+    this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#debug-toggle'), VisuHelper.toggleDebug, VisuHelper));
+    this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#lang-select'), window.BeerCrackerz.updateLang, window.BeerCrackerz));
+    this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#update-pp'), this.updateProfilePicture, this));
+    this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector('#user-pp'), this.updateProfilePicture, this));
+    this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector('#logout'), this.logout, this));
   }
 
 
@@ -159,6 +121,13 @@ class UserModal extends BaseModal {
         console.error('Couldnt read file');
       }
     }
+  }
+
+
+  logout() {
+    window.BeerCrackerz.kom.post('api/auth/logout/', null).then(() => {
+      window.location = '/welcome'
+    });
   }
 
 

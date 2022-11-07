@@ -1,72 +1,26 @@
-import BaseModal from './BaseModal.js';
-import Rating from '../component/Rating.js';
+import MarkModal from './MarkModal.js';
 
 
-class EditMarkModal extends BaseModal {
+class EditMarkModal extends MarkModal {
 
 
   constructor(options) {
-    super(`edit${options.type}`);
-
-    this._name = '';
-    this._description = '';
-    this._rating = null;
-    
-    this._footerCancelButton = null;
-    this._footerSubmitButton = null;
-
-    this._footerCancelEvtId = -1;
-    this._footerSubmitEvtId = -1;
-
-    this._opts = options;
+    super('edit', options);
   }
-
-
-  destroy() {
-    super.destroy();
-    window.Evts.removeEvent(this._footerCancelEvtId);
-    window.Evts.removeEvent(this._footerSubmitEvtId);
-  }
-
-
-  /*  --------------------------------------------------------------------------------------------------------------- */
-  /*  ------------------------------------  MODAL INSTANTIATION SEQUENCE  ------------------------------------------  */
-  /*  --------------------------------------------------------------------------------------------------------------- */
 
 
   _fillAttributes() {
-    window.BeerCrackerz.nls.editMarkModal(this._rootElement, this._opts.type);
-
-    this._name = this._rootElement.querySelector(`#${this._opts.type}-name`);
-    this._description = this._rootElement.querySelector(`#${this._opts.type}-desc`);
-    const rate = this._rootElement.querySelector(`#${this._opts.type}-rating`);
-    this._rating = new Rating(rate, this._opts.rate);
-
-    this._name.value = this._opts.name;
-    this._description.value = this._opts.description;
-    // The modal doesn't contain any interaction with user inputs
-    this._footerCancelButton = this._rootElement.querySelector(`#${this._opts.type}-close`);
-    this._footerSubmitButton = this._rootElement.querySelector(`#${this._opts.type}-submit`);
-    this._events();
+    super._fillAttributes();
+    // Update modal inputs
+    this._rootElement.querySelector(`#${this._opts.type}-name`).value = this._opts.name;
+    this._rootElement.querySelector(`#${this._opts.type}-desc`).value = this._opts.description;
+    this._rating.currentRate = this._opts.rating + 1;
+    this._rating.updateStars();
   }
 
 
-  /** @method
-   * @name _events
-   * @private
-   * @memberof WishModal
-   * @author Arthur Beaulieu
-   * @since November 2020
-   * @description <blockquote>This method will listen to any click on the submit button to process the textarea
-   * content to send it to the backend if needed.</blockquote> **/
-  _events() {
-    this._footerCancelEvtId = window.Evts.addEvent('click', this._footerCancelButton, this.close, this);
-    this._footerSubmitEvtId = window.Evts.addEvent('click', this._footerSubmitButton, this.submit, this);
-  }
-
-
-  submit(e) {
-    e.preventDefault();
+  submit(event) {
+    event.preventDefault();
     this._opts.name = this._name;
     this._opts.description = this._description;
     this._opts.rating = this._rating.currentRate;

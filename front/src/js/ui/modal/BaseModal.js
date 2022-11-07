@@ -4,7 +4,7 @@ class BaseModal {
   constructor(type) {
     /** @private
      * @member {string} - The modal type */
-      this._type = type;
+    this._type = type;
     /** @private
      * @member {string} - The HTML template url to fetch */
     this._url = `/modal/${this._type}`;
@@ -15,14 +15,12 @@ class BaseModal {
      * @member {object} - The overlay that contains the modal, full viewport size and close modal on click */
     this._modalOverlay = null;
     /** @private
-     * @member {number} - The event ID for the overlay clicked */
-    this._overlayClickedEvtId = -1;
-    /** @private
      * @member {object} - The close button, in the modal header */
     this._closeButton = null;
     /** @private
-     * @member {number} - The event ID for the close button clicked */
-    this._closeClickedEvtId = -1;
+     * @member {array} - The event IDs */
+    this._evtIds = [];
+
     // Modal building sequence:
     // - get HTML template from server;
     // - parse template response to become DOM object;
@@ -43,15 +41,12 @@ class BaseModal {
    * properties and close event subscription. The developer must remove its abstracted properties and events after
    * calling this method, to make the destruction process complete.</blockquote> **/
   destroy() {
-    // Must be overridden in child class to clean extension properties and events
-    window.Evts.removeEvent(this._overlayClickedEvtId); // Might do nothing, as event is removed in close method
-    window.Evts.removeEvent(this._closeClickedEvtId); // Same for this event
-    delete this._url;
-    delete this._rootElement;
-    delete this._modalOverlay;
-    delete this._overlayClickedEvtId;
-    delete this._closeButton;
-    delete this._closeClickedEvtId;
+    for (let i = 0; i < this._evtIds.length; ++i) {
+      window.Evts.removeEvent(this._evtIts);
+    }
+    Object.keys(this).forEach(key => {
+      delete this[key];
+    });
   }
 
 
@@ -77,11 +72,14 @@ class BaseModal {
       this._rootElement = response.firstElementChild;
       this._rootElement.classList.add(`${this._type}-modal`);
       // Create overlay modal container
-      this._modalOverlay = document.getElementById('overlay');
+      this._modalOverlay = document.createElement('DIV');
+      this._modalOverlay.id = 'overlay';
+      this._modalOverlay.classList.add('overlay');
+      document.body.appendChild(this._modalOverlay);
       // Get close button from template
       this._closeButton = this._rootElement.querySelector('#modal-close');
       this.open();
-      this._fillAttributes();
+      this._fillAttributes(); // Override in child class to process modal UI
     }).catch(error => {
       console.error(error);
     });
@@ -108,9 +106,8 @@ class BaseModal {
 
 
   open() {
-    this._overlayClickedEvtId = window.Evts.addEvent('click', this._modalOverlay, this.close, this);
-    this._closeClickedEvtId = window.Evts.addEvent('click', this._closeButton, this.close, this);
-
+    this._evtIds.push(window.Evts.addEvent('click', this._modalOverlay, this.close, this));
+    this._evtIds.push(window.Evts.addEvent('click', this._closeButton, this.close, this));
     this._modalOverlay.appendChild(this._rootElement);
     this._modalOverlay.style.display = 'flex';
     setTimeout(() => this._modalOverlay.style.opacity = 1, 50);
