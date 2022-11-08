@@ -10,8 +10,7 @@
     "zoom": "Zoom level",
     "enabled": "Enabled",
     "disabled": "Disabled",
-    "marks": "Marks",
-    "export": "Export data"
+    "marks": "Marks"
   },
   "notif": {
     "geolocationError": "Your browser doesn't implement the geolocation API",
@@ -145,11 +144,11 @@
     "hideShowShops": "Shops",
     "hideShowBars": "Bars",
     "hideShowHelperLabel": "Click on an icon to display its description",
-    "labelsHelperHideShow": "Either you want to display or not the mark name under its pin.",
-    "circlesHelperHideShow": "Display radius circles around marks (to know if you're close enough to edit) and around user for its range to add new marks.",
-    "spotsHelperHideShow": "To hide or show all spots on the map (it will also hide or show the associated circle).",
-    "shopsHelperHideShow": "To hide or show all shops on the map (it will also hide or show the associated circle).",
-    "barsHelperHideShow": "To hide or show all bars on the map (it will also hide or show the associated circle).",
+    "labelHelperHideShow": "Either you want to display or not the mark name under its pin.",
+    "circleHelperHideShow": "Display radius circles around marks (to know if you're close enough to edit) and around user for its range to add new marks.",
+    "spotHelperHideShow": "To hide or show all spots on the map (it will also hide or show the associated circle).",
+    "shopHelperHideShow": "To hide or show all shops on the map (it will also hide or show the associated circle).",
+    "barHelperHideShow": "To hide or show all bars on the map (it will also hide or show the associated circle).",
     "deleteMarkTitle": "Delete mark",
     "deleteMarkDesc": "Are you sure you want to delete this mark?<br>This action is permanent and can not be reverted.",
     "spotEditTitle": "Edit spot",

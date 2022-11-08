@@ -1,53 +1,145 @@
+/**
+ * @class
+ * @static
+ * @public
+**/
 class Utils {
 
 
-  constructor() { /* Not meant to be instantiated, all methods should be static */ }
-
-
+  /**
+   * @method
+   * @name stripDom
+   * @public
+   * @static
+   * @memberof Utils
+   * @author Arthur Beaulieu
+   * @since November 2022
+   * @description
+   * <blockquote>
+   * From a given string/number input, this method will strip all unnecessary
+   * characters and will only retrun the text content as a string.
+   * </blockquote>
+   * @param {String|Number} html - The html string to strip
+   * @return {String} The stripped text content, empty string on error
+   **/
   static stripDom(html) {
-    let doc = new DOMParser().parseFromString(html, 'text/html');
+    // Not accepting empty or not string/number
+    if (!html || (typeof html !== 'string' && typeof html !== 'number')) {
+      return '';      
+    }
+
+    const doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent || '';
   }
 
 
+  /**
+   * @method
+   * @name replaceString
+   * @public
+   * @static
+   * @memberof Utils
+   * @author Arthur Beaulieu
+   * @since November 2022
+   * @description
+   * <blockquote>
+   * Replace a given string in an HTML element with another. 
+   * </blockquote>
+   * @param {Element} element - The DOM element to replace string in
+   * @param {String} string - The string to be replaced
+   * @param {String} value - The value to apply to the replaced string
+   * @return {Boolean} The success status of the replace action
+   **/
   static replaceString(element, string, value) {
+    if (!element || !element.innerHTML || !string || typeof string !== 'string' || !value || typeof value !== 'string') {
+      return false;
+    }
+
     element.innerHTML = element.innerHTML.replace(string, value);
+    return true;
   }
 
 
+  /**
+   * @method
+   * @name getDistanceBetweenCoords
+   * @public
+   * @static
+   * @memberof Utils
+   * @author Arthur Beaulieu
+   * @since November 2022
+   * @description
+   * <blockquote>
+   * Compute the distance in meters between two points given in [Lat, Lng] arrays. 
+   * </blockquote>
+   * @param {Array} from - The first point lat and lng array
+   * @param {Array} to - The second point lat and lng array
+   * @return {Number} A floating number, the distance between two points given in meters
+   **/
   static getDistanceBetweenCoords(from, to) {
-    // return distance in meters
-    var lon1 = (from[1] * Math.PI) / 180,
-      lat1 = (from[0] * Math.PI) / 180,
-      lon2 = (to[1] * Math.PI) / 180,
-      lat2 = (to[0] * Math.PI) / 180;
-
-    var deltaLat = lat2 - lat1;
-    var deltaLon = lon2 - lon1;
-
-    var a = Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(deltaLon / 2), 2);
-    var c = 2 * Math.asin(Math.sqrt(a));
-    var EARTH_RADIUS = 6371;
-    return c * EARTH_RADIUS * 1000;
+    // Generic argument testing
+    if (!from || !to || !Array.isArray(from) || !Array.isArray(to)) {
+      return -1;
+    }
+    // From input array testing
+    if (from.length !== 2 || typeof from[0] !== 'number' || typeof from[1] !== 'number') {
+      return -1;
+    }
+    // To input array testing
+    if (to.length !== 2 || typeof to[0] !== 'number' || typeof to[1] !== 'number') {
+      return -1;
+    }
+    // Return distance in meters
+    const lat1 = (from[0] * Math.PI) / 180;
+    const lon1 = (from[1] * Math.PI) / 180;
+    const lat2 = (to[0] * Math.PI) / 180;
+    const lon2 = (to[1] * Math.PI) / 180;
+    // Delta between coords to compute output distance
+    const deltaLat = lat2 - lat1;
+    const deltaLon = lon2 - lon1;
+    const a = Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(deltaLon / 2), 2);
+    const c = 2 * Math.asin(Math.sqrt(a));
+    return (c * 6371000); // Earth radius in meters
   }
 
 
-  /** @method
+  /**
+   * @method
    * @name precisionRound
    * @public
    * @memberof Utils
    * @author Arthur Beaulieu
    * @since September 2018
-   * @description Do a Math.round with a given precision (ie amount of integers after the coma)
-   * @param {nunmber} value - The value to precisely round
-   * @param {number} precision - The number of integers after the coma
-   * @return {number} - The rounded value */
+   * @description
+   * <blockquote>
+   * Do a Math.round with a given precision (ie amount of integers after the coma). 
+   * </blockquote>
+   * @param {Nunmber} value - The value to precisely round (> 0)
+   * @param {Number} precision - The number of integers after the coma (> 0)
+   * @return {Number} - The rounded value 
+   **/
   static precisionRound(value, precision) {
+    if (typeof value !== 'number' || typeof precision !== 'number') {
+      return -1;
+    }
     const multiplier = Math.pow(10, precision || 0);
     return Math.round(value * multiplier) / multiplier;
   }
 
 
+  /**
+   * @method
+   * @name setDefaultPreferences
+   * @public
+   * @static
+   * @memberof Utils
+   * @author Arthur Beaulieu
+   * @since November 2022
+   * @description
+   * <blockquote>
+   * Analyze preferences and fallback to default values if preferences doesn't exists.
+   * </blockquote>
+   **/
   static setDefaultPreferences() {
     if (Utils.getPreference('poi-show-spot') === null) {
       Utils.setPreference('poi-show-spot', true);
@@ -70,7 +162,7 @@ class Utils {
     }
 
     if (Utils.getPreference('map-plan-layer') === null) {
-      Utils.setPreference('map-plan-layer', true);
+      Utils.setPreference('map-plan-layer', 'Plan OSM');
     }
 
     if (Utils.getPreference('selected-lang') === null) {
@@ -95,98 +187,6 @@ class Utils {
   }
 
 
-  static initDebugInterface() {
-    const lang = window.BeerCrackerz.nls.debug.bind(window.BeerCrackerz.nls);
-    const debugContainer = document.createElement('DIV');
-    const title = document.createElement('H1');
-    const userLat = document.createElement('P');
-    const userLng = document.createElement('P');
-    const updatesAmount = document.createElement('P');
-    const userAccuracy = document.createElement('P');
-    const highAccuracy = document.createElement('P');
-    const maxAge = document.createElement('P');
-    const posTimeout = document.createElement('P');
-    const zoomLevel = document.createElement('P');
-    const marks = document.createElement('P');
-    const exportData = document.createElement('BUTTON');
-    debugContainer.classList.add('debug-container');
-    userLat.classList.add('debug-user-lat');
-    userLng.classList.add('debug-user-lng');
-    updatesAmount.classList.add('debug-updates-amount');
-    userAccuracy.classList.add('debug-user-accuracy');
-    highAccuracy.classList.add('debug-high-accuracy');
-    maxAge.classList.add('debug-pos-max-age');
-    posTimeout.classList.add('debug-pos-timeout');
-    zoomLevel.classList.add('debug-zoom-level');
-    marks.classList.add('debug-marks-amount');
-    exportData.classList.add('debug-export-data');
-    title.innerHTML = `BeerCrackerz v${window.VERSION}`;
-    userLat.innerHTML = `<b>${lang('lat')}</b> -`;
-    userLng.innerHTML = `<b>${lang('lng')}</b> -`;
-    updatesAmount.innerHTML = `<b>${lang('updates')}</b> 0`;
-    userAccuracy.innerHTML = `<b>${lang('accuracy')}</b> -`;
-    highAccuracy.innerHTML = `<b>${lang('highAccuracy')}</b> -`;
-    maxAge.innerHTML = `<b>${lang('posAge')}</b> -`;
-    posTimeout.innerHTML = `<b>${lang('posTimeout')}</b> -`;
-    zoomLevel.innerHTML = `<b>${lang('zoom')}</b> -`;
-    marks.innerHTML = `<b>${lang('marks')}</b> -`;
-    exportData.innerHTML = lang('export');
-    debugContainer.appendChild(title);
-    debugContainer.appendChild(userLat);
-    debugContainer.appendChild(userLng);
-    debugContainer.appendChild(updatesAmount);
-    debugContainer.appendChild(userAccuracy);
-    debugContainer.appendChild(highAccuracy);
-    debugContainer.appendChild(maxAge);
-    debugContainer.appendChild(posTimeout);
-    debugContainer.appendChild(zoomLevel);
-    debugContainer.appendChild(marks);
-    debugContainer.appendChild(exportData);
-    exportData.addEventListener('click', Utils.downloadData.bind(Utils));
-    return debugContainer;
-  }
-
-
-  static updateDebugInterface(element, user, options) {
-    if (window.DEBUG === true) {
-      const bc = window.BeerCrackerz;
-      const lang = bc.nls.debug.bind(bc.nls);
-      const updates = parseInt(element.querySelector('.debug-updates-amount').innerHTML.split(' ')[1]) + 1;
-      const marks = bc.marks.spot.length + bc.marks.shop.length + bc.marks.bar.length;
-      element.querySelector('.debug-user-lat').innerHTML = `<b>${lang('lat')}</b> ${user.lat}`;
-      element.querySelector('.debug-user-lng').innerHTML = `<b>${lang('lng')}</b> ${user.lng}`;
-      element.querySelector('.debug-updates-amount').innerHTML = `<b>${lang('updates')}</b> ${updates}`;
-      element.querySelector('.debug-user-accuracy').innerHTML = `<b>${lang('accuracy')}</b> ${Utils.precisionRound(user.accuracy, 2)}m`;
-      element.querySelector('.debug-high-accuracy').innerHTML = `<b>${lang('highAccuracy')}</b> ${options.enableHighAccuracy === true ? lang('enabled') : lang('disabled')}`;
-      element.querySelector('.debug-pos-max-age').innerHTML = `<b>${lang('posAge')}</b> ${options.maximumAge / 1000}s`;
-      element.querySelector('.debug-pos-timeout').innerHTML = `<b>${lang('posTimeout')}</b> ${options.timeout / 1000}s`;
-      element.querySelector('.debug-zoom-level').innerHTML = `<b>${lang('zoom')}</b> ${bc.map.getZoom()}`;
-      element.querySelector('.debug-marks-amount').innerHTML = `<b>${lang('marks')}</b> ${marks}`;
-    }
-  }
-
-
-  /**
-   * @method
-   * @name downloadData
-   * @public
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since August 2022
-   * @description
-   * <blockquote>
-   * The downloadData() method will save to user disk the saved spots as a JSON file
-   * </blockquote>
-   **/
-  static downloadData() {
-    const dataString = `data:text/json;charset=utf-8,${encodeURIComponent(Utils.getPreference('saved-spot'))}`;
-    const link = document.createElement('A');
-    link.setAttribute('href', dataString);
-    link.setAttribute('download', 'BeerCrackerzData.json');
-    link.click();
-  }
-
-
   /**
    * @method
    * @name formatMarker
@@ -196,31 +196,79 @@ class Utils {
    * @since February 2022
    * @description
    * <blockquote>
-   * This method formats a mark returned from MapHelper so it can be parsed
-   * using JSON.parse (in order to store it in database)
+   * This method formats a mark so it can be parsed using JSON.parse 
+   * in order to be later stored in database.
    * </blockquote>
-   * @param {Object} mark The mark options from internal this._marks[type]
+   * @param {Object} mark - The mark options to format for server communication
+   * @return {Object} The formatted mark
    **/
-   static formatMarker(mark) {
+  static formatMarker(mark) {
+    // Mandatory arguments
+    if (!mark || !mark.name || !mark.types || !mark.lat || !mark.lng) {
+      return null;
+    }
+    // Mandatory arguments proper types
+    if (typeof mark.name !== 'string' || !Array.isArray(mark.types) || typeof mark.lat !== 'number' || typeof mark.lng !== 'number') {
+      return null;
+    }
+    // Only return if types aren't all strings
+    for (let i = 0; i < mark.types.length; ++i) {
+      if (typeof mark.types[i] !== 'string') {
+        return null;
+      }
+    }
+    // Only return if description is not properly formated
+    if (mark.description && typeof mark.description !== 'string') {
+      return null;
+    }
+    // Only return if modifiers are not properly formated
+    if (mark.modifiers) {
+      if (!Array.isArray(mark.modifiers)) {
+        return null;
+      }
+
+      for (let i = 0; i < mark.modifiers.length; ++i) {
+        if (typeof mark.modifiers[i] !== 'string') {
+          return null;
+        }
+      }
+    }
+    // Only return if rate is not a number or not between 0 and 4
+    if (mark.rate && typeof mark.rate !== 'number' || mark.rate < 0 || mark.rate > 4) {
+      return null;
+    }
+    // Only return if price is not a number or not between 0 and 2
+    if (mark.price && typeof mark.price !== 'number' || mark.price < 0 || mark.price > 2) {
+      return null;
+    }
+    // Finally return formatted mark
     return {
       name: mark.name,
-      description: mark.description,
+      types: mark.types,
       lat: mark.lat,
       lng: mark.lng,
-      rate: mark.rate,
-      types: mark.types,
+      description: mark.description,
       modifiers: mark.modifiers,
-      price: (mark.price) ? mark.price : undefined
+      rate: mark.rate,
+      price: mark.price
     };
   }
 
 
-  static capitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  static removeAllObjectKeys(obj) {
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
+      return false;
+    }
+
+    Object.keys(obj).forEach(key => {
+      delete obj[key];
+    });
+
+    return true;
   }
 
 
-  /* Preference get set (DEPRECATED) */
+  /* Preference get set (DEPRECATED, will be mgrated with user pref when ready) */
 
 
   static getPreference(pref) {
@@ -230,72 +278,6 @@ class Utils {
 
   static setPreference(pref, value) {
     localStorage.setItem(pref, value);
-  }
-
-
-  static get RANGE_COLOR() {
-    return '#ffd87d';
-  }
-
-
-  static get USER_COLOR() {
-    return '#63fff5';
-  }
-
-
-  static get SPOT_COLOR() {
-    return '#26ad23';
-  }
-
-
-  static get SHOP_COLOR() {
-    return '#247dc9';
-  }
-
-
-  static get BAR_COLOR() {
-    return '#ca2a3d';
-  }
-
-
-  static get CIRCLE_RADIUS() {
-    return 100;
-  }
-
-
-  static get NEW_MARKER_RANGE() {
-    return 2^53; // TODO fallback to 200 when roles are implement server side
-  }
-
-
-  static get MAP_BOUNDS() {
-    return window.L.latLngBounds(
-      window.L.latLng(-89.98155760646617, -180),
-      window.L.latLng(89.99346179538875, 180)
-    );
-  }
-
-
-  static get HIGH_ACCURACY() {
-    return {
-      enableHighAccuracy: true, // More consuption, better position
-      maximumAge: 1000, // A position will last 1s maximum
-      timeout: 900, // A position is updated in 0.9s maximum
-    };
-  }
-
-
-  static get OPTIMIZED_ACCURACY() {
-    return {
-      enableHighAccuracy: false, // Less consuption
-      maximumAge: 30000, // A position will last 30s maximum
-      timeout: 29000 // A position is updated in 29s maximum
-    };
-  }
-
-
-  static get SUPPORTED_LANGUAGE() {
-    return ['en', 'fr', 'es', 'de', 'pt'];
   }
 
 

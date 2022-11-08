@@ -4,10 +4,12 @@ import LangManager from './js/core/LangManager.js';
 
 import ZoomSlider from './js/ui/component/ZoomSlider.js';
 
-import Providers from './js/utils/ProviderEnum.js';
-import Markers from './js/utils/MarkerEnum.js';
-import Clusters from './js/utils/ClusterEnum.js';
 import Utils from './js/utils/Utils.js';
+import AccuracyEnum from './js/utils/enums/AccuracyEnum.js';
+import ClustersEnum from './js/utils/enums/ClusterEnum.js';
+import ProvidersEnum from './js/utils/enums/ProviderEnum.js';
+import MapEnum from './js/utils/enums/MapEnum.js';
+import MarkersEnum from './js/utils/enums/MarkerEnum.js';
 
 
 class BeerCrackerzAuth {
@@ -168,13 +170,13 @@ class BeerCrackerzAuth {
       // Place user marker on the map
       this._drawUserMarker();
       // Prevent panning outside of the world's edge
-      this._map.setMaxBounds(Utils.MAP_BOUNDS);
+      this._map.setMaxBounds(MapEnum.mapBounds);
       // Add layer group to interface
       const baseMaps = {};
-      baseMaps[`<p>${this.nls.map('planLayerOSM')}</p>`] = Providers.planOsm;
-      baseMaps[`<p>${this.nls.map('satLayerEsri')}</p>`] = Providers.satEsri;
+      baseMaps[`<p>${this.nls.map('planLayerOSM')}</p>`] = ProvidersEnum.planOsm;
+      baseMaps[`<p>${this.nls.map('satLayerEsri')}</p>`] = ProvidersEnum.satEsri;
       // Append layer depending on user preference
-      Providers.planOsm.addTo(this._map);
+      ProvidersEnum.planOsm.addTo(this._map);
       // Add layer switch radio on bottom right of the map
       window.L.control.layers(baseMaps, {}, { position: 'bottomright' }).addTo(this._map);
       // Init zoom slider when map has been created
@@ -213,7 +215,7 @@ class BeerCrackerzAuth {
           if (this._map) {
             this._drawUserMarker();
           }
-        }, null, Utils.HIGH_ACCURACY);
+        }, null, AccuracyEnum.high);
         resolve();
       } else {
         resolve();
@@ -242,7 +244,7 @@ class BeerCrackerzAuth {
       // Map is dragged by user mouse/finger
       this._map.on('drag', () => {
         // Constrain pan to the map bounds
-        this._map.panInsideBounds(Utils.MAP_BOUNDS, { animate: true });
+        this._map.panInsideBounds(MapEnum.mapBounds, { animate: true });
       });
       // Auto hide labels if zoom level is too high (and restore it when needed)
       this._map.on('zoomend', () => {
@@ -283,9 +285,9 @@ class BeerCrackerzAuth {
   _initMarkers() {
     return new Promise(resolve => {
       // Init map clusters for marks to be displayed (disable clustering at opened popup zoom level)
-      this._clusters.spot = Clusters.spot;
-      this._clusters.shop = Clusters.shop;
-      this._clusters.bar = Clusters.bar;
+      this._clusters.spot = ClustersEnum.spot;
+      this._clusters.shop = ClustersEnum.shop;
+      this._clusters.bar = ClustersEnum.bar;
 
       this._map.addLayer(this._clusters.spot);
       this._map.addLayer(this._clusters.shop);
@@ -809,15 +811,15 @@ class BeerCrackerzAuth {
    * @returns {HTMLElement} The Leaflet marker extended with option properties
   **/
    _createMarker(options) {
-    let icon = Markers.black;
+    let icon = MarkersEnum.black;
     if (options.type === 'spot') {
-      icon = Markers.green;
+      icon = MarkersEnum.green;
     } else if (options.type === 'shop') {
-      icon = Markers.blue;
+      icon = MarkersEnum.blue;
     } else if (options.type === 'bar') {
-      icon = Markers.red;
+      icon = MarkersEnum.red;
     } else if (options.type === 'user') {
-      icon = Markers.user;
+      icon = MarkersEnum.user;
     }
 
     const marker = window.L.marker([options.lat, options.lng], { icon: icon }).on('click', () => {

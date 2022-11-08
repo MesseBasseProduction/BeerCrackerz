@@ -5,13 +5,16 @@ import LangManager from './js/core/LangManager.js';
 import ZoomSlider from './js/ui/component/ZoomSlider.js';
 import Notification from './js/ui/component/Notification.js';
 import VisuHelper from './js/ui/VisuHelper.js';
-
-import CustomEvents from './js/utils/CustomEvents.js';
-import Clusters from './js/utils/ClusterEnum.js';
-import Providers from './js/utils/ProviderEnum.js';
-import Utils from './js/utils/Utils.js';
 import MarkPopup from './js/ui/MarkPopup';
 import ModalFactory from './js/ui/ModalFactory';
+
+import CustomEvents from './js/utils/CustomEvents.js';
+import Utils from './js/utils/Utils.js';
+import AccuracyEnum from './js/utils/enums/AccuracyEnum.js';
+import ClustersEnum from './js/utils/enums/ClusterEnum.js';
+import ColorEnum from './js/utils/enums/ColorEnum.js';
+import ProvidersEnum from './js/utils/enums/ProviderEnum.js';
+import MapEnum from './js/utils/enums/MapEnum.js';
 
 
 window.VERSION = '0.0.2';
@@ -69,7 +72,7 @@ class BeerCrackerz {
       marker: null, // The user marker on map
       circle: null, // The accuracy circle around the user marker
       range: null, // The range in which user can add a new marker
-      color: Utils.USER_COLOR, // The color to use for circle (match the user marker color)
+      color: ColorEnum.user, // The color to use for circle (match the user marker color)
       id: -1,
       username: ''
     };
@@ -223,7 +226,7 @@ class BeerCrackerz {
       }
       // Update LangManager with pref language
       this.nls.updateLang(Utils.getPreference('selected-lang')).then(() => {
-        this.debugElement = Utils.initDebugInterface();
+        this.debugElement = VisuHelper.initDebugUI();
         // Create and append debug UI with proper nls settings
         if (window.DEBUG === true || (Utils.getPreference('app-debug') === 'true')) {
           window.DEBUG = true; // Ensure to set global flag if preference comes from local storage
@@ -255,7 +258,7 @@ class BeerCrackerz {
   _initGeolocation() {
     return new Promise(resolve => {
       if ('geolocation' in navigator) {
-        const options = (Utils.getPreference('map-high-accuracy') === 'true') ? Utils.HIGH_ACCURACY : Utils.OPTIMIZED_ACCURACY;
+        const options = (Utils.getPreference('map-high-accuracy') === 'true') ? AccuracyEnum.high : AccuracyEnum.optimized;
         this._watchId = navigator.geolocation.watchPosition(position => {
           // Update saved user position
           this._user.lat = position.coords.latitude;
@@ -307,10 +310,10 @@ class BeerCrackerz {
       // Place user marker on the map
       VisuHelper.drawUserMarker();
       // Add OSM credits to the map next to leaflet credits
-      const osm = Providers.planOsm;
-      const esri = Providers.satEsri;
+      const osm = ProvidersEnum.planOsm;
+      const esri = ProvidersEnum.satEsri;
       // Prevent panning outside of the world's edge
-      this._map.setMaxBounds(Utils.MAP_BOUNDS);
+      this._map.setMaxBounds(MapEnum.mapBounds);
       // Add layer group to interface
       const baseMaps = {};
       baseMaps[`<p>${this.nls.map('planLayerOSM')}</p>`] = osm;
@@ -357,9 +360,9 @@ class BeerCrackerz {
   _initMarkers() {
     return new Promise(resolve => {
       // Init map clusters for marks to be displayed (disable clustering at opened popup zoom level)
-      this._clusters.spot = Clusters.spot;
-      this._clusters.shop = Clusters.shop;
-      this._clusters.bar = Clusters.bar;
+      this._clusters.spot = ClustersEnum.spot;
+      this._clusters.shop = ClustersEnum.shop;
+      this._clusters.bar = ClustersEnum.bar;
       // Append clusters to the map depending on user preferences
       if (Utils.getPreference(`poi-show-spot`) === 'true') {
         this._map.addLayer(this._clusters.spot);
@@ -427,7 +430,7 @@ class BeerCrackerz {
       // Map is dragged by user mouse/finger
       this._map.on('drag', () => {
         // Constrain pan to the map bounds
-        this._map.panInsideBounds(Utils.MAP_BOUNDS, { animate: true });
+        this._map.panInsideBounds(MapEnum.mapBounds, { animate: true });
         // Disable lock focus if user drags the map
         if (Utils.getPreference('map-center-on-user') === 'true') {
           VisuHelper.toggleFocusLock();
@@ -554,7 +557,7 @@ class BeerCrackerz {
     } else if (this._newMarker === null || !this._newMarker.isBeingDefined) {
       // Only create new marker if none is in progress, and that click is max range to add a marker
       const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [event.latlng.lat, event.latlng.lng]);
-      if (distance < Utils.NEW_MARKER_RANGE) {
+      if (distance < MapEnum.newMarkRange) {
         this.addMarkPopup(event.latlng);
       } else {
         this.notification.raise(this.nls.notif('newMarkerOutside'));
@@ -618,7 +621,7 @@ class BeerCrackerz {
 
 
   addMark(options) {
-    this._modal = new ModalFactory('AddMark', options);
+    this._modal = ModalFactory.build('AddMark', options);
   }
 
 
@@ -666,7 +669,7 @@ class BeerCrackerz {
    **/
   deleteMark(options) {
     this._map.closePopup();
-    this._modal = new ModalFactory('DeleteMark', options);
+    this._modal = ModalFactory.build('DeleteMark', options);
   }
 
 
@@ -709,7 +712,7 @@ class BeerCrackerz {
    **/
    editMark(options) {
     this._map.closePopup();
-    this._modal = new ModalFactory('EditMark', options);
+    this._modal = ModalFactory.build('EditMark', options);
   }
 
 
@@ -768,12 +771,12 @@ class BeerCrackerz {
    * </blockquote>
    **/
   userProfile() {
-    this._modal = new ModalFactory('User');
+    this._modal = ModalFactory.build('User');
   }
 
 
   updateProfilePicture(options) {
-    this._modal = new ModalFactory('UpdateProfilePicture', options);
+    this._modal = ModalFactory.build('UpdateProfilePicture', options);
   }
 
 
@@ -812,7 +815,7 @@ class BeerCrackerz {
    * </blockquote>
    **/
    hidShowMenu() {
-    this._modal = new ModalFactory('HideShow');
+    this._modal = ModalFactory.build('HideShow');
   }
 
 

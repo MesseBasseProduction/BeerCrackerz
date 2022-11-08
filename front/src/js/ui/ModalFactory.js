@@ -19,7 +19,11 @@ const Classes = {
 class ModalFactory {
 
 
-  constructor(name, options = {}) {
+  static build(name, options = {}) {
+    if (!Classes[`${name}Modal`]) {
+      return null;
+    }
+
     return new Classes[`${name}Modal`](options);
   }
 

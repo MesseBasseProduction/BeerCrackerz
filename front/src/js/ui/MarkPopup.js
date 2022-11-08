@@ -1,5 +1,6 @@
 import VisuHelper from './VisuHelper.js';
 import Utils from '../utils/Utils.js';
+import MapEnum from '../utils/enums/MapEnum.js';
 
 
 class MarkPopup {
@@ -65,7 +66,7 @@ class MarkPopup {
         [ window.BeerCrackerz.user.lat, window.BeerCrackerz.user.lng ],
         [ this._opts.lat, this._opts.lng ]
       );
-      if (distance > Utils.CIRCLE_RADIUS) {
+      if (distance > MapEnum.socialMarkRange) {
         this._popup.querySelector('#popup-social').parentNode.removeChild(this._popup.querySelector('#popup-social'));
       }
       // Remove edition buttons if marker is not user's one, this does not replace a server test for edition...

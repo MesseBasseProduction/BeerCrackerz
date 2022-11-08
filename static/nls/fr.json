@@ -10,8 +10,7 @@
     "zoom": "Zoom level",
     "enabled": "Enabled",
     "disabled": "Disabled",
-    "marks": "Marks",
-    "export": "Export data"
+    "marks": "Marks"
   },
   "notif": {
     "geolocationError": "Your browser doesn't implement the geolocation API",

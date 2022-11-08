@@ -22,7 +22,7 @@ module.exports = config => {
       'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js',
       'test/testContext.js',
       'test/testStyle.css',
-      'test/templates/welcome.html',
+      'test/templates/index.html',
       '../static/dist/*.css'
     ],
     reporters: ['kjhtml', 'progress'],

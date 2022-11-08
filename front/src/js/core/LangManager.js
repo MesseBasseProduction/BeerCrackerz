@@ -1,4 +1,5 @@
 import Utils from '../utils/Utils.js';
+import SupportedLangEnum from '../utils/enums/SupportedLangEnum.js';
 
 
 class LangManager {
@@ -50,7 +51,7 @@ class LangManager {
   updateLang(lang) {
     return new Promise((resolve, reject) => {
       if (this._lang !== lang) {
-        this._lang = (Utils.SUPPORTED_LANGUAGE.indexOf(lang) !== -1) ? lang : 'en';
+        this._lang = (SupportedLangEnum.indexOf(lang) !== -1) ? lang : 'en';
         this._fullLang = lang;
         this._init().then(resolve).catch(reject);
       } else {

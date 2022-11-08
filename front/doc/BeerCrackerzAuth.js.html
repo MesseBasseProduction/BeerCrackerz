@@ -30,12 +30,14 @@
 import Kom from './js/core/Kom.js';
 import LangManager from './js/core/LangManager.js';
 
-import ZoomSlider from './js/ui/ZoomSlider.js';
+import ZoomSlider from './js/ui/component/ZoomSlider.js';
 
-import Providers from './js/utils/ProviderEnum.js';
-import Markers from './js/utils/MarkerEnum.js';
-import Clusters from './js/utils/ClusterEnum.js';
 import Utils from './js/utils/Utils.js';
+import AccuracyEnum from './js/utils/enums/AccuracyEnum.js';
+import ClustersEnum from './js/utils/enums/ClusterEnum.js';
+import ProvidersEnum from './js/utils/enums/ProviderEnum.js';
+import MapEnum from './js/utils/enums/MapEnum.js';
+import MarkersEnum from './js/utils/enums/MarkerEnum.js';
 
 
 class BeerCrackerzAuth {
@@ -196,13 +198,13 @@ class BeerCrackerzAuth {
       // Place user marker on the map
       this._drawUserMarker();
       // Prevent panning outside of the world's edge
-      this._map.setMaxBounds(Utils.MAP_BOUNDS);
+      this._map.setMaxBounds(MapEnum.mapBounds);
       // Add layer group to interface
       const baseMaps = {};
-      baseMaps[`&lt;p>${this.nls.map('planLayerOSM')}&lt;/p>`] = Providers.planOsm;
-      baseMaps[`&lt;p>${this.nls.map('satLayerEsri')}&lt;/p>`] = Providers.satEsri;
+      baseMaps[`&lt;p>${this.nls.map('planLayerOSM')}&lt;/p>`] = ProvidersEnum.planOsm;
+      baseMaps[`&lt;p>${this.nls.map('satLayerEsri')}&lt;/p>`] = ProvidersEnum.satEsri;
       // Append layer depending on user preference
-      Providers.planOsm.addTo(this._map);
+      ProvidersEnum.planOsm.addTo(this._map);
       // Add layer switch radio on bottom right of the map
       window.L.control.layers(baseMaps, {}, { position: 'bottomright' }).addTo(this._map);
       // Init zoom slider when map has been created
@@ -241,7 +243,7 @@ class BeerCrackerzAuth {
           if (this._map) {
             this._drawUserMarker();
           }
-        }, null, Utils.HIGH_ACCURACY);
+        }, null, AccuracyEnum.high);
         resolve();
       } else {
         resolve();
@@ -270,7 +272,7 @@ class BeerCrackerzAuth {
       // Map is dragged by user mouse/finger
       this._map.on('drag', () => {
         // Constrain pan to the map bounds
-        this._map.panInsideBounds(Utils.MAP_BOUNDS, { animate: true });
+        this._map.panInsideBounds(MapEnum.mapBounds, { animate: true });
       });
       // Auto hide labels if zoom level is too high (and restore it when needed)
       this._map.on('zoomend', () => {
@@ -311,9 +313,9 @@ class BeerCrackerzAuth {
   _initMarkers() {
     return new Promise(resolve => {
       // Init map clusters for marks to be displayed (disable clustering at opened popup zoom level)
-      this._clusters.spot = Clusters.spot;
-      this._clusters.shop = Clusters.shop;
-      this._clusters.bar = Clusters.bar;
+      this._clusters.spot = ClustersEnum.spot;
+      this._clusters.shop = ClustersEnum.shop;
+      this._clusters.bar = ClustersEnum.bar;
 
       this._map.addLayer(this._clusters.spot);
       this._map.addLayer(this._clusters.shop);
@@ -536,24 +538,15 @@ class BeerCrackerzAuth {
    **/
   _handleLoginAside() {
     // Update page nls according to browser language
-    const aside = document.getElementById('aside');
     document.title = this.nls.login('headTitle');
-    Utils.replaceString(aside, '{LOGIN_SUBTITLE}', this.nls.login('subtitle'));
-    Utils.replaceString(aside, '{LOGIN_HIDDEN_ERROR}', this.nls.login('hiddenError'));
-    Utils.replaceString(aside, '{LOGIN_USERNAME_LABEL}', this.nls.login('username'));
-    Utils.replaceString(aside, '{LOGIN_USERNAME_PASSWORD}', this.nls.login('password'));
-    Utils.replaceString(aside, '{LOGIN_BUTTON}', this.nls.login('login'));
-    Utils.replaceString(aside, '{LOGIN_NOT_REGISTERED}', this.nls.login('notRegistered'));
-    Utils.replaceString(aside, '{LOGIN_REGISTER}', this.nls.login('register'));
-    Utils.replaceString(aside, '{LOGIN_FORGOT_PASSWORD}', this.nls.login('forgot'));
-    Utils.replaceString(aside, '{LOGIN_PASSWORD_RESET}', this.nls.login('reset'));
+    this.nls.handleLoginAside(document.getElementById('aside'));
 
     const error = document.getElementById('login-error');
     const username = document.getElementById('username');
     const password = document.getElementById('password');
     // useful login method for field check and server response check
     const _frontFieldValidation = () => {
-      error.className = '';
+      error.className = 'error';
       // Handling empty error cases
       if (username.value === '' &amp;&amp; password.value === '') {
         error.classList.add('visible');
@@ -624,15 +617,7 @@ class BeerCrackerzAuth {
     // Update page nls according to browser language
     const aside = document.getElementById('aside');
     document.title = this.nls.register('headTitle');
-    Utils.replaceString(aside, '{REGISTER_SUBTITLE}', this.nls.register('subtitle'));
-    Utils.replaceString(aside, '{REGISTER_HIDDEN_ERROR}', this.nls.register('hiddenError'));
-    Utils.replaceString(aside, '{REGISTER_USERNAME_LABEL}', this.nls.register('username'));
-    Utils.replaceString(aside, '{REGISTER_MAIL_LABEL}', this.nls.register('mail'));
-    Utils.replaceString(aside, '{REGISTER_USERNAME_PASSWORD_1}', this.nls.register('password1'));
-    Utils.replaceString(aside, '{REGISTER_USERNAME_PASSWORD_2}', this.nls.register('password2'));
-    Utils.replaceString(aside, '{REGISTER_BUTTON}', this.nls.register('register'));
-    Utils.replaceString(aside, '{REGISTER_ALREADY_DONE}', this.nls.register('notRegistered'));
-    Utils.replaceString(aside, '{REGISTER_LOGIN}', this.nls.register('login'));
+    this.nls.handleRegisterAside(aside);
     const error = document.getElementById('register-error');
     const username = document.getElementById('username');
     const mail = document.getElementById('mail');
@@ -708,12 +693,7 @@ class BeerCrackerzAuth {
     // Update page nls according to browser language
     const aside = document.getElementById('aside');
     document.title = this.nls.forgotPassword('headTitle');
-    Utils.replaceString(aside, '{FORGOT_PASSWORD_SUBTITLE}', this.nls.forgotPassword('subtitle'));
-    Utils.replaceString(aside, '{FORGOT_PASSWORD_ERROR}', this.nls.register('hiddenError'));
-    Utils.replaceString(aside, '{FORGOT_PASSWORD_MAIL_LABEL}', this.nls.forgotPassword('mail'));
-    Utils.replaceString(aside, '{FORGOT_PASSWORD_BUTTON}', this.nls.forgotPassword('submit'));
-    Utils.replaceString(aside, '{FORGOT_PASSWORD_LOGIN_LABEL}', this.nls.forgotPassword('loginLabel'));
-    Utils.replaceString(aside, '{FORGOT_PASSWORD_LOGIN}', this.nls.forgotPassword('login'));
+    this.nls.handleForgotPasswordAside(aside);
     const error = document.getElementById('forgot-password-error');
     const mail = document.getElementById('mail');
     // useful login method for field check and server response check
@@ -759,13 +739,7 @@ class BeerCrackerzAuth {
     // Update page nls according to browser language
     const aside = document.getElementById('aside');
     document.title = this.nls.resetPassword('headTitle');
-    Utils.replaceString(aside, '{RESET_PASSWORD_SUBTITLE}', this.nls.resetPassword('subtitle'));
-    Utils.replaceString(aside, '{RESET_PASSWORD_HIDDEN_ERROR}', this.nls.resetPassword('hiddenError'));
-    Utils.replaceString(aside, '{RESET_PASSWORD_1}', this.nls.resetPassword('password1'));
-    Utils.replaceString(aside, '{RESET_PASSWORD_2}', this.nls.resetPassword('password2'));
-    Utils.replaceString(aside, '{RESET_PASSWORD_BUTTON}', this.nls.resetPassword('reset'));
-    Utils.replaceString(aside, '{RESET_PASSWORD_LOGIN_LABEL}', this.nls.resetPassword('loginLabel'));
-    Utils.replaceString(aside, '{RESET_PASSWORD_LOGIN}', this.nls.resetPassword('login'));
+    this.nls.handleResetPasswordAside(aside);
     const error = document.getElementById('reset-password-error');
     const password1 = document.getElementById('password1');
     const password2 = document.getElementById('password2');
@@ -798,7 +772,7 @@ class BeerCrackerzAuth {
       password2.classList.remove('error');
       if (_frontFieldValidation()) {
         console.log(params)
-        this._kom.post('/api/auth/register/', {
+        this._kom.post(`/api/auth/password-reset/?uidb64=${params.uidb64}&amp;token=${params.token}`, {
           password1: password1.value,
           password2: password2.value
         }).then(_backValidation).catch(() => {
@@ -865,15 +839,15 @@ class BeerCrackerzAuth {
    * @returns {HTMLElement} The Leaflet marker extended with option properties
   **/
    _createMarker(options) {
-    let icon = Markers.black;
+    let icon = MarkersEnum.black;
     if (options.type === 'spot') {
-      icon = Markers.green;
+      icon = MarkersEnum.green;
     } else if (options.type === 'shop') {
-      icon = Markers.blue;
+      icon = MarkersEnum.blue;
     } else if (options.type === 'bar') {
-      icon = Markers.red;
+      icon = MarkersEnum.red;
     } else if (options.type === 'user') {
-      icon = Markers.user;
+      icon = MarkersEnum.user;
     }
 
     const marker = window.L.marker([options.lat, options.lng], { icon: icon }).on('click', () => {
@@ -923,13 +897,14 @@ class BeerCrackerzAuth {
         const user = options.user;
         const desc = Utils.stripDom(options.description) || this.nls.popup(`${options.type}NoDesc`);
         const date = new Intl.DateTimeFormat(this.nls.fullLang, { dateStyle: 'long' }).format(new Date(options.creationDate));
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_NAME}`, Utils.stripDom(options.name));
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_FINDER}`, user);
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_BY}`, this.nls.popup(`${options.type}FoundBy`));
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_WHEN}`, this.nls.popup(`${options.type}FoundWhen`));
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_FOUND_DATE}`, date);
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_RATE}`, options.rate + 1);
-        Utils.replaceString(element, `{${options.type.toUpperCase()}_DESC}`, desc);
+        this.nls.markPopup(element, {
+          type: options.type,
+          name: options.name,
+          user: user,
+          rate: options.rate,
+          desc: desc,
+          date: date
+        });
         // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
         const rate = element.querySelector(`#${options.type}-rating`);
         for (let i = 0; i &lt; options.rate + 1; ++i) {
@@ -1040,13 +1015,13 @@ export default BeerCrackerzAuth;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BeerCrackerz.html">BeerCrackerz</a></li><li><a href="BeerCrackerzAuth.html">BeerCrackerzAuth</a></li><li><a href="Kom.html">Kom</a></li><li><a href="LangManager.html">LangManager</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BeerCrackerz.html">BeerCrackerz</a></li><li><a href="BeerCrackerzAuth.html">BeerCrackerzAuth</a></li><li><a href="CustomEvents.html">CustomEvents</a></li><li><a href="DropElement.html">DropElement</a></li><li><a href="Kom.html">Kom</a></li><li><a href="LangManager.html">LangManager</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VisuHelper.html">VisuHelper</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Wed Sep 21 2022 20:08:47 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Tue Nov 08 2022 16:57:00 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
