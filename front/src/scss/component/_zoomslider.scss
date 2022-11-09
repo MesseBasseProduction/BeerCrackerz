@@ -17,7 +17,7 @@
   width: 4.8rem;
   z-index: 20;
 
-  transition: right .3s, opacity .2s ease-out;
+  transition: right var(--transition-x2), opacity var(--transition-x2);
 
   &.opened {
     opacity: 1;

@@ -403,7 +403,6 @@ class BeerCrackerz {
       });
 
       VisuHelper.updateMarkerCirclesVisibility();
-
       resolve();
     });
   }
@@ -466,7 +465,7 @@ class BeerCrackerz {
       });
       // Clustering events
       this._clusters.spot.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'spot'));
-      this._clusters.shop.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'shop'));      
+      this._clusters.shop.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'shop'));
       this._clusters.bar.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'bar'));
       // Command events
       window.Evts.addEvent('click', document.getElementById('user-profile'), this.userProfile, this);

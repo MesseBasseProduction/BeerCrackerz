@@ -1,5 +1,6 @@
 import VisuHelper from './VisuHelper.js';
 import Utils from '../utils/Utils.js';
+import ColorEnum from '../utils/enums/ColorEnum.js';
 import MapEnum from '../utils/enums/MapEnum.js';
 
 
@@ -74,7 +75,7 @@ class MarkPopup {
         this._popup.querySelector('#popup-edit').parentNode.removeChild(this._popup.querySelector('#popup-edit'));
       }
       // Append circle around marker
-      this._opts.color = Utils[`${this._opts.type.toUpperCase()}_COLOR`];
+      this._opts.color = ColorEnum[this._opts.type];
       this._opts.circle = VisuHelper.drawCircle(this._opts);
       this._opts.circle.addTo(window.BeerCrackerz.map);
       // Create label for new marker (and add pricing label if any)

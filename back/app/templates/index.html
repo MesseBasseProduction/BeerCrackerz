@@ -1,22 +1,20 @@
+<!DOCTYPE html>
 {% load static %}
 {% csrf_token %}
-
-<!DOCTYPE html>
 <html lang="fr" dir="ltr">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
   <title>Beer Crackerz</title>
-  <meta content="ie=edge" http-equiv="x-ua-compatible" />
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-  <meta content="initial-scale=1" name="viewport" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="ie=edge" http-equiv="x-ua-compatible">
   <meta name="description" content="The website for beer lover, to share the best spot to crack a beer, or to easily refill this beverage of the gods!">
-  <link rel="canonical" href="https://beercrackerz.org/" />
+  <link rel="canonical" href="https://beercrackerz.org/">
   <!-- Leaflet stylesheet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="">
   <!-- Leaflet.markercluster plugin stylesheet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" crossorigin="" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" crossorigin="" />
-  <link rel="stylesheet" href="{% static 'dist/BeerCrackerz.bundle.css' %}" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" crossorigin="">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" crossorigin="">
+  <link rel="stylesheet" href="{% static 'dist/BeerCrackerz.bundle.css' %}">
   <!-- Favicon zone -->
   <link rel="apple-touch-icon" sizes="57x57" href="{% static 'img/favicon/apple-icon-57x57.png' %}">
   <link rel="apple-touch-icon" sizes="60x60" href="{% static 'img/favicon/apple-icon-60x60.png' %}">
@@ -35,17 +33,17 @@
   <meta name="msapplication-TileImage" content="{% static 'img/favicon/ms-icon-144x144.png' %}">
   <meta name="theme-color" content="#FFFFFF">
   <!-- Open graph metas -->
-  <meta property="og:title" content="Beer Crackerz" />
-  <meta property="og:url" content="https://beercrackerz.org/" />
-  <meta property="og:image" content="{% static 'img/logo-social.png' %}" />
-  <meta property="og:description" content="The website for beer lover, to share the best spot to crack a beer, or to easily refill this beverage of the gods!" />
-  <meta property="og:site_name" content="Beer Crackerz" />
-  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Beer Crackerz">
+  <meta property="og:url" content="https://beercrackerz.org/">
+  <meta property="og:image" content="{% static 'img/logo-social.png' %}">
+  <meta property="og:description" content="The website for beer lover, to share the best spot to crack a beer, or to easily refill this beverage of the gods!">
+  <meta property="og:site_name" content="Beer Crackerz">
+  <meta property="og:type" content="website">
   <!-- Twitter card meta -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Beer Crackerz" />
-  <meta name="twitter:description" content="The website for beer lover, to share the best spot to crack a beer, or to easily refill this beverage of the gods!" />
-  <meta name="twitter:image:src" content="{% static 'img/logo-social.png' %}" />
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Beer Crackerz">
+  <meta name="twitter:description" content="The website for beer lover, to share the best spot to crack a beer, or to easily refill this beverage of the gods!">
+  <meta name="twitter:image:src" content="{% static 'img/logo-social.png' %}">
 </head>
 <body class="dark-theme">
   <div id="notification-wrapper" class="notification-wrapper">
@@ -77,8 +75,8 @@
   <!-- Leaflet.markercluster plugin script -->
   <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js" crossorigin=""></script>
   <!-- BeeCrackerz entry point -->
-  <script type="text/javascript" src="{% static 'dist/BeerCrackerz.bundle.js' %}"></script>
-  <script type="text/javascript">
+  <script src="{% static 'dist/BeerCrackerz.bundle.js' %}"></script>
+  <script>
     if (window.location.href.indexOf('?debug') !== -1) { window.DEBUG = true; }
     window.BeerCrackerz = new BeerCrackerz();
   </script>

@@ -2,6 +2,7 @@ import './BeerCrackerzAuth.scss';
 import Kom from './js/core/Kom.js';
 import LangManager from './js/core/LangManager.js';
 
+import VisuHelper from './js/ui/VisuHelper.js';
 import ZoomSlider from './js/ui/component/ZoomSlider.js';
 
 import Utils from './js/utils/Utils.js';
@@ -81,11 +82,9 @@ class BeerCrackerzAuth {
      * @type {Object}
      * @private
      **/
-    this._lang = new LangManager(
-      window.navigator.language.substring(0, 2),
-      this._init.bind(this),
-      this._fatalError.bind(this)
-    );
+    this._lang = new LangManager();
+
+    this._init();
   }
 
 
@@ -110,6 +109,7 @@ class BeerCrackerzAuth {
    * </blockquote>
    **/
   _init() {
+    this.nls.updateLang(Utils.getPreference('selected-lang')).then(() => {
     // By default, the template contains the login aside, no need to fetch it
     this._handleLoginAside();
     this._kom = new Kom();
@@ -132,8 +132,8 @@ class BeerCrackerzAuth {
 
       this._initMap()
         .then(this._initGeolocation.bind(this))
-        .then(this._initEvents.bind(this))
         .then(this._initMarkers.bind(this))
+        .then(this._initEvents.bind(this))
         .catch(this._fatalError.bind(this));
     } else {
       this._fatalError({
@@ -141,6 +141,7 @@ class BeerCrackerzAuth {
         msg: (this._kom.csrf === null) ? `The CSRF token doesn't exists in cookies` : `The headers amount is invalid`
       });
     }
+    });
   }
 
 
@@ -227,49 +228,6 @@ class BeerCrackerzAuth {
   /**
    * @method
    * @async
-   * @name _initEvents
-   * @private
-   * @memberof BeerCrackerzAuth
-   * @author Arthur Beaulieu
-   * @since September 2022
-   * @description
-   * <blockquote>
-   * The _initEvents() method will listen to all required events to manipulate the map. Those events
-   * are both for commands and for map events (click, drag, zoom and layer change).
-   * </blockquote>
-   * @returns {Promise} A Promise resolved when preferences are set
-   **/
-  _initEvents() {
-    return new Promise(resolve => {
-      // Map is dragged by user mouse/finger
-      this._map.on('drag', () => {
-        // Constrain pan to the map bounds
-        this._map.panInsideBounds(MapEnum.mapBounds, { animate: true });
-      });
-      // Auto hide labels if zoom level is too high (and restore it when needed)
-      this._map.on('zoomend', () => {
-        if (this._map.getZoom() < 15) {
-          this._setMarkerLabels(this._marks.spot, false);
-          this._setMarkerLabels(this._marks.shop, false);
-          this._setMarkerLabels(this._marks.bar, false);
-        } else {
-          this._setMarkerLabels(this._marks.spot, true);
-          this._setMarkerLabels(this._marks.shop, true);
-          this._setMarkerLabels(this._marks.bar, true);
-        }
-      });
-      // Center on command
-      document.getElementById('center-on').addEventListener('click', () => {
-        this._map.flyTo([this._user.lat, this._user.lng], 18);
-      });
-      resolve();
-    });
-  }
-
-
-  /**
-   * @method
-   * @async
    * @name _initMarkers
    * @private
    * @memberof BeerCrackerzAuth
@@ -320,6 +278,53 @@ class BeerCrackerzAuth {
         }
       });
 
+      resolve();
+    });
+  }
+
+
+  /**
+   * @method
+   * @async
+   * @name _initEvents
+   * @private
+   * @memberof BeerCrackerzAuth
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * <blockquote>
+   * The _initEvents() method will listen to all required events to manipulate the map. Those events
+   * are both for commands and for map events (click, drag, zoom and layer change).
+   * </blockquote>
+   * @returns {Promise} A Promise resolved when preferences are set
+   **/
+   _initEvents() {
+    return new Promise(resolve => {
+      // Map is dragged by user mouse/finger
+      this._map.on('drag', () => {
+        // Constrain pan to the map bounds
+        this._map.panInsideBounds(MapEnum.mapBounds, { animate: true });
+      });
+      // Auto hide labels if zoom level is too high (and restore it when needed)
+      this._map.on('zoomend', () => {
+        if (this._map.getZoom() < 15) {
+          this._setMarkerLabels(this._marks.spot, false);
+          this._setMarkerLabels(this._marks.shop, false);
+          this._setMarkerLabels(this._marks.bar, false);
+        } else {
+          this._setMarkerLabels(this._marks.spot, true);
+          this._setMarkerLabels(this._marks.shop, true);
+          this._setMarkerLabels(this._marks.bar, true);
+        }
+      });
+      // Clustering events
+      this._clusters.spot.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'spot'));
+      this._clusters.shop.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'shop'));
+      this._clusters.bar.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'bar'));
+      // Center on command
+      document.getElementById('center-on').addEventListener('click', () => {
+        this._map.flyTo([this._user.lat, this._user.lng], 18);
+      });
       resolve();
     });
   }

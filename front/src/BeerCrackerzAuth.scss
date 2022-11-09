@@ -11,7 +11,7 @@
 :root {
   --aside-width: 40rem;
   --aside-offset: 0rem;
-  --aside-transtion-duration: .5s;
+  --aside-transtion-duration: var(--transition-x2);
 }
 
 body {
@@ -23,11 +23,10 @@ body {
 }
 
 nav {
-  bottom: var(--font-size-l5);
-  box-shadow: 0 0 1rem var(--color-bg-a9);
   display: flex;
-  flex-direction: column;
+  bottom: 1rem;
   position: absolute;
+  height: 4.8rem;
   /* Force nav to stick to aside's left even when collapsed */
   right: calc(var(--aside-width) + var(--aside-offset) + 1rem);
   width: 4.8rem;
@@ -43,15 +42,17 @@ nav {
   }
 
   .cmd-bar {
+    display: flex;
+
     .cmd-wrapper {
       align-items: center;
-      background: var(--color-bg-a9);
+      background: var(--color-bg);
       background-clip: padding-box;
       border: 2px solid var(--color-bg-a1);
       border-radius: .5rem;
+      box-shadow: 0 0 1rem var(--color-bg-a9);
       display: flex;
       justify-content: center;
-      margin-top: 0;
       padding: .2rem;
 
       img {
@@ -80,7 +81,7 @@ nav {
   margin: 1rem;
   max-width: 90%;
   opacity: 0;
-  padding: 1rem;
+  padding: var(--font-size-l5);
   position: absolute;
   text-align: center;
   top: 0;
@@ -104,11 +105,6 @@ main.beer-crakerz-map {
 
   .leaflet-control-layers.leaflet-control {
     right: calc(var(--aside-width) + var(--aside-offset) + 5.8rem);
-    transition: right var(--aside-transtion-duration);
-  }
-  /* Endure attribution and layers controls are stiking to aside when collapsing/expanding*/
-  .leaflet-control-attribution.leaflet-control {
-    right: calc(var(--aside-width) + var(--aside-offset));
     transition: right var(--aside-transtion-duration);
   }
 }
@@ -148,7 +144,7 @@ aside {
     margin-top: 5rem;
   }
 
-  main {
+  div {
     margin: 0 4rem;
     text-align: left;
 

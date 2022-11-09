@@ -1,5 +1,6 @@
 :root {
   --transition: .2s;
+  --transition-x2: calc(2 * var(--transition));
 
   --color-primary: #ffa800;
   --color-primary-a9: rgba(255, 168, 0, .9);
