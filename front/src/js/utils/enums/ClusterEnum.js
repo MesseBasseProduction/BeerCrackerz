@@ -12,6 +12,13 @@ export default Object.freeze({
           <span class="cluster-label">${cluster.getChildCount()}</span>
         `
       });
+    },
+    polygonOptions: {
+      fillColor: '#3ABC30',
+      color: '#3ABC30',
+      weight: 0.5,
+      opacity: 1,
+      fillOpacity: 0.4
     }
   }),
   shop: new window.L.MarkerClusterGroup({
@@ -27,6 +34,13 @@ export default Object.freeze({
           <span class="cluster-label">${cluster.getChildCount()}</span>
         `
       });
+    },
+    polygonOptions: {
+      fillColor: '#4295CF',
+      color: '#4295CF',
+      weight: 0.5,
+      opacity: 1,
+      fillOpacity: 0.4
     }
   }),
   bar: new window.L.MarkerClusterGroup({
@@ -42,6 +56,13 @@ export default Object.freeze({
           <span class="cluster-label">${cluster.getChildCount()}</span>
         `
       });
+    },
+    polygonOptions: {
+      fillColor: '#D0465D',
+      color: '#D0465D',
+      weight: 0.5,
+      opacity: 1,
+      fillOpacity: 0.4
     }
   })
 });

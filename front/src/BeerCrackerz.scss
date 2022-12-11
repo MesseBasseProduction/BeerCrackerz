@@ -25,7 +25,7 @@ nav {
   position: absolute;
   right: 0;
   bottom: 0;
-  height: 5.8rem;
+  height: 16.8rem;
   z-index: 20;
 
   img {
@@ -37,6 +37,7 @@ nav {
 
   .cmd-bar {
     display: flex;
+    flex-direction: column;
 
     .cmd-wrapper {
       align-items: center;
@@ -46,13 +47,17 @@ nav {
       border-radius: .5rem;
       box-shadow: 0 0 1rem var(--color-bg-a9);
       display: flex;
+      height: 46px; /* Match leaflet map layers height */
       justify-content: center;
       margin-bottom: 1rem;
       margin-right: 1rem;
       padding: .2rem;
+      width: 46px; /* Match leaflet map layers width */
 
       img {
         box-shadow: inherit;
+        height: 100%;
+        width: 100%;
         transition: all .2s;
 
         &:active,
