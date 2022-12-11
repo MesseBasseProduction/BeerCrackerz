@@ -6,4 +6,5 @@ from .user import get_default_user
 
 
 class Bar(Point):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_default_user), related_name='bar')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_default_user), related_name='bar',
+                             editable=False)

@@ -6,5 +6,5 @@ from .user import get_default_user
 
 
 class Shop(Point):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_default_user), related_name='shops')
-
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_default_user), related_name='shops',
+                             editable=False)
