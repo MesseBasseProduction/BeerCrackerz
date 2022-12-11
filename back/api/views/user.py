@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from api.serializers.user import UserSerializer, UserRegisterSerializer, UserProfilePictureSerializer
@@ -10,8 +10,8 @@ from app.models import User
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
 
     @action(detail=True, methods=['patch'], url_path='profile-picture', url_name='user-profile-picture')
     def profile_picture(self, request, pk):
@@ -27,6 +27,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 class UserRegisterView(CreateAPIView):
     serializer_class = UserRegisterSerializer
+    permission_classes = [AllowAny]
 
 
 @api_view()

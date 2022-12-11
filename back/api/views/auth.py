@@ -7,6 +7,7 @@ from django.views import View
 from django.views.decorators.cache import never_cache
 from rest_framework import status
 from rest_framework.exceptions import ParseError
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -15,6 +16,8 @@ from app.utils.token import decode_uid, check_token
 
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]
+
     # @method_decorator(sensitive_post_parameters())
     # @method_decorator(csrf_protect)
     @method_decorator(never_cache)
@@ -34,6 +37,8 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
     @method_decorator(never_cache)
     def post(self, request):
         logout(request)
@@ -41,6 +46,8 @@ class LogoutView(APIView):
 
 
 class ActivationView(View):
+    permission_classes = [AllowAny]
+
     def get(self, request):
         user_model = get_user_model()
 
@@ -67,6 +74,8 @@ class ActivationView(View):
 
 
 class PasswordResetRequest(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
         user_model = get_user_model()
 
@@ -86,6 +95,8 @@ class PasswordResetRequest(APIView):
 
 
 class PasswordReset(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
         user_model = get_user_model()
 
@@ -111,8 +122,3 @@ class PasswordReset(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
-
-
-
-
-

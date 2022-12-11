@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from api.serializers.bar import BarExtendedSerializer, BarSerializer
 from app.models.bar import Bar
@@ -7,7 +6,6 @@ from app.models.bar import Bar
 
 class BarViewSet(viewsets.ModelViewSet):
     queryset = Bar.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):
         if hasattr(self, 'action'):
