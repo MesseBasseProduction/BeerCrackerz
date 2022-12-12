@@ -4,9 +4,12 @@ from app.models.bar import Bar
 
 
 class BarSerializer(serializers.ModelSerializer):
+    modifiers = serializers.MultipleChoiceField(choices=Bar.Modifiers.choices)
+    types = serializers.MultipleChoiceField(choices=Bar.Types.choices)
+
     class Meta:
         model = Bar
-        fields = ('id', 'name', 'description', 'lng', 'lat')
+        fields = ('id', 'name', 'description', 'lng', 'lat', 'modifiers', 'types')
 
     def create(self, validated_data):
         user = self.context['request'].user

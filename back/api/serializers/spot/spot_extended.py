@@ -12,4 +12,6 @@ class SpotExtendedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Spot
-        fields = ('id', 'type', 'name', 'description', 'lng', 'lat', 'rate', 'user', 'userId', 'creationDate')
+        fields = (
+            'id', 'type', 'name', 'description', 'lng', 'lat', 'rate', 'modifiers', 'types', 'user', 'userId',
+            'creationDate')
