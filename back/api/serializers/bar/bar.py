@@ -6,6 +6,7 @@ from app.models.bar import Bar
 class BarSerializer(serializers.ModelSerializer):
     modifiers = serializers.MultipleChoiceField(choices=Bar.Modifiers.choices, required=False)
     types = serializers.MultipleChoiceField(choices=Bar.Types.choices, required=False)
+    price = serializers.IntegerField(min_value=1, max_value=3)
 
     # Read only fields
     type = serializers.CharField(default='bar', read_only=True)
@@ -17,7 +18,7 @@ class BarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bar
         fields = (
-            'id', 'type', 'name', 'description', 'lng', 'lat', 'rate', 'modifiers', 'types', 'user', 'userId',
+            'id', 'type', 'name', 'description', 'lng', 'lat', 'rate', 'price', 'modifiers', 'types', 'user', 'userId',
             'creationDate')
 
     def create(self, validated_data):

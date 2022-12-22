@@ -6,6 +6,7 @@ from app.models.shop import Shop
 class ShopSerializer(serializers.ModelSerializer):
     modifiers = serializers.MultipleChoiceField(choices=Shop.Modifiers.choices, required=False)
     types = serializers.MultipleChoiceField(choices=Shop.Types.choices, required=False)
+    price = serializers.IntegerField(min_value=1, max_value=3)
 
     # Read only fields
     type = serializers.CharField(default='shop', read_only=True)
@@ -17,7 +18,7 @@ class ShopSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shop
         fields = (
-            'id', 'type', 'name', 'description', 'lng', 'lat', 'rate', 'modifiers', 'types', 'user', 'userId',
+            'id', 'type', 'name', 'description', 'lng', 'lat', 'rate', 'price', 'modifiers', 'types', 'user', 'userId',
             'creationDate')
 
     def create(self, validated_data):

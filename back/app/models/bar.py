@@ -26,3 +26,4 @@ class Bar(Point):
     modifiers = MultiSelectField(choices=Modifiers.choices, max_length=100, null=True, blank=True)
     # Set max_length because max_length calcul is broken https://github.com/goinnn/django-multiselectfield/issues/131
     types = MultiSelectField(choices=Types.choices, max_length=100, null=True, blank=True)
+    price = models.PositiveIntegerField()
