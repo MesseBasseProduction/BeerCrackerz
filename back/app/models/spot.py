@@ -26,6 +26,6 @@ class Spot(Point):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_default_user), related_name='spots',
                              editable=False)
     # Set max_length because max_length calcul is broken https://github.com/goinnn/django-multiselectfield/issues/131
-    modifiers = MultiSelectField(choices=Modifiers.choices, max_length=100, null=True, blank=True)
+    modifiers = MultiSelectField(choices=Modifiers.choices, max_length=100)
     # Set max_length because max_length calcul is broken https://github.com/goinnn/django-multiselectfield/issues/131
-    types = MultiSelectField(choices=Types.choices, max_length=100, null=True, blank=True)
+    types = MultiSelectField(choices=Types.choices, max_length=100)

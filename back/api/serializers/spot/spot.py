@@ -4,8 +4,8 @@ from app.models.spot import Spot
 
 
 class SpotSerializer(serializers.ModelSerializer):
-    modifiers = serializers.MultipleChoiceField(choices=Spot.Modifiers.choices, required=False)
-    types = serializers.MultipleChoiceField(choices=Spot.Types.choices, required=False)
+    modifiers = serializers.MultipleChoiceField(choices=Spot.Modifiers.choices)
+    types = serializers.MultipleChoiceField(choices=Spot.Types.choices)
 
     # Read only fields
     type = serializers.CharField(default='spot', read_only=True)
