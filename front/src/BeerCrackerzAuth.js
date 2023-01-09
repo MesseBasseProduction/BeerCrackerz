@@ -626,7 +626,7 @@ class BeerCrackerzAuth {
       }
       return true;
     };
-    const _backValidation = (response) => {
+    const _backValidation = () => {
       // Redirect aside to login
       this._loadLoginAside(true);
     };
@@ -692,7 +692,7 @@ class BeerCrackerzAuth {
       }
       return true;
     };
-    const _backValidation = (response) => {
+    const _backValidation = () => {
       // Check response and handle status codes
       error.classList.add('visible');
       error.innerHTML = this.nls.login('checkMail');
@@ -745,9 +745,9 @@ class BeerCrackerzAuth {
       }
       return true;
     };
-    const _backValidation = (response) => {
+    const _backValidation = () => {
       // Redirect aside to login
-      this._loadLoginAside(true);
+      this._loadLoginAside();
     };
     const _submit = () => {
       // Reset error css classes
