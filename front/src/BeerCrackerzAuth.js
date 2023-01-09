@@ -524,7 +524,7 @@ class BeerCrackerzAuth {
 
     if (checkMail === true) {
       error.classList.add('visible');
-      error.innerHTML = this.nls.login('checkMail');      
+      error.innerHTML = this.nls.login('checkMail');
     }
 
     // useful login method for field check and server response check
@@ -694,7 +694,8 @@ class BeerCrackerzAuth {
     };
     const _backValidation = (response) => {
       // Check response and handle status codes
-      console.log(response);
+      error.classList.add('visible');
+      error.innerHTML = this.nls.login('checkMail');
     };
     const _submit = () => {
       // Reset error css classes
@@ -703,7 +704,7 @@ class BeerCrackerzAuth {
       if (_frontFieldValidation()) {
         this._kom.post('/api/auth/password-reset-request/', {
           email: mail.value
-        }).then(_backValidation).catch(() => {
+        }, null).then(_backValidation).catch(() => {
           error.classList.add('visible');
           error.innerHTML = this.nls.forgotPassword('serverError');
         });
@@ -758,7 +759,7 @@ class BeerCrackerzAuth {
         this._kom.post(`/api/auth/password-reset/?uidb64=${params.uidb64}&token=${params.token}`, {
           password1: password1.value,
           password2: password2.value
-        }).then(_backValidation).catch(() => {
+        }, null).then(_backValidation).catch(() => {
           error.classList.add('visible');
           error.innerHTML = this.nls.resetPassword('serverError');
         });
