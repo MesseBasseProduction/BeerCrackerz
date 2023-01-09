@@ -445,8 +445,8 @@ class BeerCrackerzAuth {
    * The _loadLoginAside() method will load the login content into the aside
    * </blockquote>
    **/
-  _loadLoginAside() {
-    this._loadAside('login').then(this._handleLoginAside.bind(this)).catch(err => {
+  _loadLoginAside(checkMail = false) {
+    this._loadAside('login').then(this._handleLoginAside.bind(this, checkMail)).catch(err => {
       err.msg = `Couldn't fetch or build the login aside`;
       this._fatalError(err);
     });
@@ -513,7 +513,7 @@ class BeerCrackerzAuth {
    * then it will handle its i18n, and all of its interactivity to submit login form to the server.
    * </blockquote>
    **/
-  _handleLoginAside() {
+  _handleLoginAside(checkMail = false) {
     // Update page nls according to browser language
     document.title = this.nls.login('headTitle');
     this.nls.handleLoginAside(document.getElementById('aside'));
@@ -521,6 +521,12 @@ class BeerCrackerzAuth {
     const error = document.getElementById('login-error');
     const username = document.getElementById('username');
     const password = document.getElementById('password');
+
+    if (checkMail === true) {
+      error.classList.add('visible');
+      error.innerHTML = this.nls.login('checkMail');      
+    }
+
     // useful login method for field check and server response check
     const _frontFieldValidation = () => {
       error.className = 'error';
@@ -621,8 +627,8 @@ class BeerCrackerzAuth {
       return true;
     };
     const _backValidation = (response) => {
-      // Check response and handle status codes
-      console.log(response);
+      // Redirect aside to login
+      this._loadLoginAside(true);
     };
     const _submit = () => {
       // Reset error css classes
@@ -637,7 +643,7 @@ class BeerCrackerzAuth {
           email: mail.value,
           password1: password1.value,
           password2: password2.value
-        }).then(_backValidation).catch(() => {
+        }).then(_backValidation).catch((a) => {
           error.classList.add('visible');
           error.innerHTML = this.nls.register('serverError');
         });
@@ -739,8 +745,8 @@ class BeerCrackerzAuth {
       return true;
     };
     const _backValidation = (response) => {
-      // Check response and handle status codes
-      console.log(response);
+      // Redirect aside to login
+      this._loadLoginAside(true);
     };
     const _submit = () => {
       // Reset error css classes

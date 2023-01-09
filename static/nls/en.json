@@ -181,7 +181,8 @@
       "bothEmpty": "Veuillez saisir un nom d'utilisateur et un mot de passe",
       "usernameEmpty": "Veuillez saisir un nom d'utilisateur",
       "passwordEmpty": "Veuillez saisir votre mot de passe",
-      "serverError": "Une erreur serveur est survenue, contactez le support"
+      "serverError": "Une erreur serveur est survenue, contactez le support",
+      "checkMail": "An email has been sent so you can proceed"
     },
     "register": {
       "headTitle": "S'inscrire | BeerCrackerz",
