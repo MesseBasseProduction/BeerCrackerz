@@ -421,7 +421,7 @@ class BeerCrackerzAuth {
   _loadAside(type) {
     return new Promise((resolve, reject) => {
       this._kom.getTemplate(`/aside/${type}`).then(dom => {
-        document.body.className = ''; // Clear previous css class
+        //document.body.className = 'login dark-theme'; // Clear previous css class
         document.body.classList.add(type); // Update body class with current aside view
         // We need to get aside at the last moment because of nls that changed HTML content
         this._aside = document.getElementById('aside');
