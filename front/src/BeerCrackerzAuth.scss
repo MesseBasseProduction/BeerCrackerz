@@ -1,0 +1,190 @@
+@import 'scss/utils/base';
+
+/*  ----------------------------------------------------------  *
+ * The BeerCrackerzAuth style bundle                            *
+ * Elements have given z-index :                                *
+ * 10 : Main map, that occupies the whole page                  *
+ * 20 : The page header, only displayed when aside is collapsed *
+ * 30 : The Aside that must be over everything at anytime       *
+ *  ----------------------------------------------------------  */
+
+:root {
+  --aside-width: 40rem;
+  --aside-offset: 0rem;
+  --aside-transtion-duration: var(--transition-x2);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-txt);
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+nav {
+  display: flex;
+  bottom: 1rem;
+  position: absolute;
+  height: 4.8rem;
+  /* Force nav to stick to aside's left even when collapsed */
+  right: calc(var(--aside-width) + var(--aside-offset) + 1rem);
+  width: 4.8rem;
+  z-index: 20;
+
+  transition: right var(--aside-transtion-duration);
+
+  img {
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0px 0px 1rem var(--color-bg);
+    width: 100%;
+  }
+
+  .cmd-bar {
+    display: flex;
+
+    .cmd-wrapper {
+      align-items: center;
+      background: var(--color-bg);
+      background-clip: padding-box;
+      border: 2px solid var(--color-bg-a1);
+      border-radius: .5rem;
+      box-shadow: 0 0 1rem var(--color-bg-a9);
+      display: flex;
+      justify-content: center;
+      padding: .2rem;
+
+      img {
+        box-shadow: inherit;
+        transition: all var(--transition);
+
+        &:active,
+        &:focus,
+        &:hover {
+          border: solid 1px rgb(185, 185, 185);
+          border-radius: .5rem;
+          padding: .2rem;
+
+          filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
+        }
+      }
+    }
+  }
+}
+
+.page-header {
+  background-color: var(--color-bg-a9);
+  border: 2px solid var(--color-bg);
+  border-radius: .5rem;
+  left: 50%;
+  margin: 1rem;
+  max-width: 90%;
+  opacity: 0;
+  padding: var(--font-size-l5);
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 40rem;
+  z-index: 20;
+
+  transform: translateX(-50%);
+  transition: opacity var(--aside-transtion-duration);
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
+main.beer-crakerz-map {
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+
+  transition: width var(--aside-transtion-duration);
+
+  .leaflet-control-layers.leaflet-control {
+    right: calc(var(--aside-width) + var(--aside-offset) + 5.8rem);
+    transition: right var(--aside-transtion-duration);
+  }
+}
+
+aside {
+  background-color: var(--color-bg-a9);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  max-width: var(--aside-width);
+  position: absolute;
+  right: var(--aside-offset);
+  text-align: center;
+  top: 0;
+  width: 100%;
+  z-index: 30;
+
+  transition: all var(--aside-transtion-duration);
+
+  .aside-expander {
+    cursor: pointer;
+    height: 4.8rem;
+    left: 0;
+    position: absolute;
+    top: 0;
+    filter: drop-shadow(0 0 1px var(--color-bg));
+
+    transition: left var(--transition);
+  }
+
+  h1 {
+    margin-bottom: 0;
+  }
+
+  header {
+    margin-top: 5rem;
+  }
+
+  div {
+    margin: 0 4rem;
+    text-align: left;
+
+    button {
+      margin: 2.9rem auto var(--font-size);
+    }
+
+    p {
+      margin-bottom: .5rem;
+      text-align: right;
+
+      &[class*="error"] {
+        color: transparent;
+        font-style: italic;
+        font-weight: bold;
+        text-align: center;
+  
+        transition: color var(--transition);
+  
+        &.visible {
+          color: var(--color-primary);
+        }
+
+        &.success {
+          color: #a1ff86;
+        }
+      }
+    }
+  }
+
+  footer {
+    margin-bottom: 5rem;
+  }
+}
+
+@import 'scss/utils/overlay';
+@import 'scss/component/zoomslider';
+@import 'scss/utils/leaflet';
+
+.zoom-slider.opened {
+  /* Force slider to stick to aside's left even when collapsed */
+  right: calc(var(--aside-width) + var(--aside-offset) + 1rem);
+}

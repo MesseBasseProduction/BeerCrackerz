@@ -1,0 +1,24 @@
+/* BeerCrackerz is responsive firt, these rules are mostly Desktop */
+@media (min-width: 720px) {
+  .overlay [class$="-modal"] {
+    max-width: 70%;
+  }
+
+  .overlay [class$=-modal] {
+    padding: 3rem 4rem;
+  }
+}
+
+@media (min-width: 1080px) {
+  :root {
+    --font-size: 1.2rem;
+    --font-size-l1: 1.3rem;
+    --font-size-l2: 1.4rem;
+    --font-size-l3: 1.6rem;
+    --font-size-l4: 2rem;
+  }
+
+  .overlay [class$="-modal"] {
+    max-width: 50%;
+  }
+}

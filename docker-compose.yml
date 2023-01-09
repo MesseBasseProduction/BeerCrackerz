@@ -1,0 +1,75 @@
+version: "3.9"
+
+services:
+  nginx:
+    container_name: ${NGINX_NAME}
+    build:
+      context: .
+      dockerfile: ./.conf/development/nginx/Dockerfile
+    ports:
+      - ${SERVER_HTTP_PORT}:${SERVER_HTTP_PORT}
+    environment:
+      SERVER_HTTP_PORT: ${SERVER_HTTP_PORT}
+      BACKEND_NAME: ${BACKEND_NAME}
+      BACKEND_PORT: ${BACKEND_PORT}
+    volumes:
+      - ./static:/vol/static
+      - beer_crackerz_media:/vol/media
+    depends_on:
+      - backend
+  backend:
+    container_name: ${BACKEND_NAME}
+    build:
+      context: .
+      dockerfile: ./.conf/development/back/Dockerfile
+    environment:
+      BACKEND_PORT: ${BACKEND_PORT}
+      SERVER_URL: http://${SERVER_HOST}:${SERVER_HTTP_PORT}
+      SECRET_KEY: ${BACKEND_SECRET_KEY}
+      DEBUG: ${BACKEND_DEBUG}
+      ALLOWED_HOSTS: ${BACKEND_ALLOWED_HOSTS}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      BACKEND_USE_EMAIL_FILE_SYSTEM: ${BACKEND_USE_EMAIL_FILE_SYSTEM}
+      MAILJET_API_KEY: ${MAILJET_API_KEY}
+      MAILJET_API_SECRET: ${MAILJET_API_SECRET}
+    volumes:
+      - ./back:/back
+      - beer_crackerz_media:/vol/media
+    depends_on:
+      - db
+  db:
+    image: postgres:${DB_POSTGRES_VERSION}
+    container_name: ${DB_HOST}
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:${DB_CONTAINER_PORT}
+    volumes:
+      - beer_crakerz_db:/var/lib/postgresql/data
+  #  email:
+  #    image: juanluisbaptiste/postfix:alpine
+  #    container_name: ${EMAIL_HOST}
+  #    expose:
+  #      - ${EMAIL_PORT}
+  #    environment:
+  #      SMTP_SERVER: ${EMAIL_HOST}
+  #      SMTP_PORT: ${EMAIL_PORT}
+  ##      SMTP_USERNAME: ${EMAIL_USERNAME}
+  ##      SMTP_PASSWORD: ${EMAIL_PASSWORD}
+  #      SERVER_HOSTNAME: ${EMAIL_HOST}
+  adminer:
+    container_name: ${DB_ADMINER_NAME}
+    image: adminer
+    ports:
+      - ${DB_ADMINER_PORT}:${DB_ADMINER_CONTAINER_PORT}
+volumes:
+  beer_crakerz_db:
+    name: beer_crakerz_db
+  beer_crackerz_media:
+    name: beer_crackerz_media

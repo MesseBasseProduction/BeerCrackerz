@@ -1,0 +1,84 @@
+.user-profile-modal {
+  .user-info {
+    border-bottom: solid 1px var(--color-txt-a25);
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--font-size-l4);
+    padding-bottom: var(--font-size-l4);
+    width: 100%;
+
+    .drop-user-pp {
+      box-shadow: 0 0 3rem var(--color-txt-a1);
+      cursor: pointer;
+      height: 12rem;
+      margin-right: 2rem;
+      width: 12rem;
+    }
+
+    img {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  .item {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem auto;
+    max-width: 25rem;
+
+    img {
+      margin-right: 2rem;
+      height: 2rem;
+    }
+
+    label {
+      margin-bottom: 0;
+      margin-right: 2rem;
+    }
+
+    input {
+      margin: 0;
+      width: auto;
+    }
+  }
+
+  .update-pp-wrapper {
+    border-radius: .5rem;
+    padding: 1rem;
+
+    input {
+      cursor: pointer;
+    }
+
+    .update-pp-error {
+      color: var(--color-primary);
+      font-style: italic;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.update-pp-modal {
+  align-items: center;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 2rem);
+  justify-content: center;
+  position: absolute;
+  width: calc(100% - 2rem);
+  z-index: 50; /* Highest value, must be on top user profile modal */
+
+  .wip-pp-wrapper {
+    overflow: hidden;
+    position: relative;
+
+    img {
+      max-height: 500px;
+      max-width: 500px;
+      width: 100%;
+    }      
+  }
+}

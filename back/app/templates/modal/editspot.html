@@ -1,0 +1,26 @@
+{% load static %}
+<div class="edit-mark-modal">
+  <p id="modal-close" class="modal-close">&times;</p>
+  <h1 id="nls-spot-title">{SPOT_TITLE}</h1>
+  <p id="nls-spot-subtitle">{SPOT_SUBTITLE}</p>
+  <label id="nls-spot-name" for="spot-name">{SPOT_NAME} :</label>
+  <input id="spot-name" type="text">
+  <label id="nls-spot-type" for="spot-types">{SPOT_TYPE} :</label>
+  <div id="spot-types" class="types"></div>
+  <label id="nls-spot-desc" for="spot-desc">{SPOT_DESC} :</label>
+  <textarea id="spot-desc" name="spot-desc" rows="4" style="resize:none"></textarea>
+  <label id="nls-spot-modifiers">{SPOT_MODIFIERS} :</label>
+  <div id="spot-modifiers" class="modifiers"></div>
+  <label id="nls-spot-rate" for="star-rating">{SPOT_RATE} :</label>
+  <div id="spot-rating" class="rating" data-rate="0">
+    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="0" class="active">
+    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="1">
+    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="2">
+    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="3">
+    <img src="{% static 'img/logo/star.svg' %}" alt="rating-star" data-id="4">
+  </div>
+  <div class="button-wrapper">
+    <button id="spot-close" class="cancel">{SPOT_CANCEL}</button>
+    <button id="spot-submit" class="validate">{SPOT_SUBMIT}</button>
+  </div>
+</div>

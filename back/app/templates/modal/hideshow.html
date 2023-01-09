@@ -1,0 +1,39 @@
+{% load static %}
+<div class="hide-show-modal">
+  <p id="modal-close" class="modal-close">&times;</p>
+  <h1 id="nls-hideshow-modal-title">{MODAL_TITLE}</h1>
+  <div class="view-options-wrapper">
+    <div class="view-options">
+      <div class="item" id="labels-toggle" data-type="label">
+        <img src="{% static 'img/logo/label.svg' %}" alt="label-toggle" data-type="label">
+        <label id="nls-hideshow-modal-labels" for="label-toggle" data-type="label">{LABELS_HIDESHOW_MODAL}</label>
+        <input type="checkbox" id="label-toggle" name="labels" data-type="label">
+      </div>
+      <div class="item" id="circles-toggle" data-type="circle">
+        <img src="{% static 'img/logo/circle.svg' %}" alt="circles-toggle" data-type="circle">
+        <label id="nls-hideshow-modal-circles" for="circles-toggle" data-type="circle">{CIRCLES_HIDESHOW_MODAL}</label>
+        <input type="checkbox" id="circle-toggle" name="circles-toggle" data-type="circle">
+      </div>
+      <div class="item" id="spots-toggle" data-type="spot">
+        <img src="{% static 'img/marker/marker-icon-green.png' %}" alt="show-spots" data-type="spot">
+        <label id="nls-hideshow-modal-spots" for="show-spots" data-type="spot">{SPOTS_HIDESHOW_MODAL}</label>
+        <input type="checkbox" id="show-spots" name="show-spots" data-type="spot">
+      </div>
+      <div class="item" id="shops-toggle" data-type="shop">
+        <img src="{% static 'img/marker/marker-icon-blue.png' %}" alt="show-shops" data-type="shop">
+        <label id="nls-hideshow-modal-shops" for="show-shops" data-type="shop">{SHOPS_HIDESHOW_MODAL}</label>
+        <input type="checkbox" id="show-shops" name="show-shops" data-type="shop">
+      </div>
+      <div class="item" id="bars-toggle" data-type="bar">
+        <img src="{% static 'img/marker/marker-icon-red.png' %}" alt="show-bars" data-type="bar">
+        <label id="nls-hideshow-modal-bars" for="show-bars" data-type="bar">{BARS_HIDESHOW_MODAL}</label>
+        <input type="checkbox" id="show-bars" name="show-bars" data-type="bar">
+      </div>
+    </div>
+    <div class="view-helper">
+      <p id="nls-view-helper-label">{HELPER_LABEL}</p>
+      <p id="nls-viewer-helper"></p>
+    </div>
+  </div>
+  <button id="modal-close-button" class="validate">{MODAL_CLOSE}</button>
+</div>

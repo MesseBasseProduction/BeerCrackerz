@@ -4,11 +4,11 @@
 
 ### Création de spot
 
-- [ ] tags (liste finie ; chill, view, animated, nature, city, parc, seeside, sea; port (a elargir au besoin))
+- [x] tags (liste finie ; chill, view, animated, nature, city, parc, seeside, sea; port (a elargir au besoin))
 - [ ] photo (pas obligatoire)
 - [x] note
 - [x] description (faculattive)
-- [ ] type de posage ; bench, chair, on the floor, camping chair required, toilet nearby, trash nearby
+- [x] type de posage ; bench, chair, on the floor, camping chair required, toilet nearby, trash nearby
 - [ ] availability : often use, often free
 
 ### Affichage de spot
@@ -25,8 +25,8 @@
 
 ### Création de vendeur
 
-- [ ] tags (epicerie, maasin, etc)
-- [ ] dispose de frigo
+- [x] tags (epicerie, maasin, etc)
+- [x] dispose de frigo
 - [x] prix cher, moy ou pas
 
 ### Affichage du Vendeur
@@ -41,11 +41,11 @@
 - [ ] le plus proche de moi (fonction recherche dans modal, calc distance)
 - [x] cmd profil (voir interface) :
 - [x] clusters
-- [ ] modal qui display profil user, + stats
+- [x] modal qui display profil user, + stats
 - [ ] bières bues, spots ajoutés, vendeurs ajoutés, score
 - [ ] accès au classement par score des beercrackerz
 - [ ] mes contributions
-- [ ] update pp, mail etc classique user syst
+- [x] update pp, mail etc classique user syst
 
 ### Scoring
 
@@ -58,7 +58,7 @@
 - [x] fond de carte plus smooth, moins informatif
 - [x] ajouter pp user en haut droite pour accéder profil
 - [x] ajouter BeerCrackerz a coté pp coté gauche
-- [ ] logo beercrackerz
+- [x] logo beercrackerz
 
 
 En vrac :

@@ -1,0 +1,71 @@
+.new-mark-modal,
+.edit-mark-modal {
+  width: calc(100% - 2rem);
+
+  h1, p {
+    text-align: center;
+  }
+
+  .types, .modifiers {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: .5rem auto var(--font-size);
+
+    p {
+      align-items: center;
+      border: solid 1px var(--color-txt);
+      border-radius: .5rem;
+      color: var(--color-txt);
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      margin: .5rem;
+      padding: .5rem 1rem;
+      user-select: none;
+
+      transition: color .2s;
+
+      &.selected {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        
+        img {
+          filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
+        }
+      }
+    }
+
+    img {
+      margin-right: 1rem;
+      user-select: none;
+      width: var(--font-size-l4);
+    }
+  }
+
+  .votes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .rating, .pricing {
+    user-select: none;
+
+    img {
+      cursor: pointer;
+      height: var(--font-size-l4);
+      margin: 0 .25rem;
+      width: var(--font-size-l4);
+
+      &.active {
+        filter: invert(53%) sepia(30%) saturate(1977%) hue-rotate(155deg) brightness(88%) contrast(102%);
+
+        &.selected {
+          filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
+        }
+      }
+    }
+  }
+}

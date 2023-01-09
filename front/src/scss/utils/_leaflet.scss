@@ -1,0 +1,125 @@
+/* Needs to override some leaflet styles to match BeerCrackerz interface */
+.leaflet-popup-content-wrapper {
+  background-color: var(--color-bg-a9);
+}
+
+.leaflet-popup-tip-container .leaflet-popup-tip {
+  background-color: var(--color-bg-a9);    
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  &:active,
+  &:focus,
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.leaflet-control-layers.leaflet-control {
+  background: var(--color-bg);
+  background-clip: padding-box;
+  border: 2px solid var(--color-bg-a1);
+  border-radius: .5rem;
+  bottom: 16.8rem;
+  box-shadow: 0 0 1rem var(--color-bg-a9);
+  position: absolute;
+  right: 0;
+
+  a {
+    margin-bottom: 0;
+  }
+}
+
+.leaflet-control-layers-expanded {
+  padding: 2rem !important;
+  width: 16rem;
+
+  label {
+    margin: 0;
+
+    div {
+      align-items: center;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+
+      input {
+        width: auto;
+      }
+
+      input, p {
+        margin: 0;
+      }
+
+      p {
+        margin-right: 1rem;
+      }
+    }
+  }
+}
+
+.leaflet-control-scale {
+  bottom: 20px;  
+}
+
+.leaflet-control-scale-line {
+  background-color: var(--color-bg-a75);
+  border: solid 2px var(--color-txt-a5);
+  color: var(--color-txt);
+}
+
+.leaflet-control-attribution.leaflet-control {
+  background-color: var(--color-bg-a75);
+  color: var(--color-txt);
+  position: fixed;
+  left: 0;
+  bottom: 0;
+
+  a {
+    color: var(--color-txt);
+    transition: color .2s;
+
+    &:active,
+    &:focus,
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+}
+
+.leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive {
+  filter: drop-shadow(0 0 .25rem #424242);
+  transition: transform .2s, filter .2s;
+
+  &:active,
+  &:focus,
+  &:hover {
+    filter: drop-shadow(0 0 .33rem #A8A8A8);
+  }
+}
+
+.marker-tooltip {
+  background-color: var(--color-bg-a9);
+  color: var(--color-txt);
+  cursor: pointer;
+  pointer-events: auto;
+  font-style: italic;
+  text-align: center;
+  top: 2rem;
+
+  p {
+    margin: 0;
+  }
+
+  .label-pricing {
+    bottom: -2.4rem;
+    position: absolute;
+    left: -1.2rem;
+    right: -1.2rem;
+
+    img {
+      filter: invert(69%) sepia(10%) saturate(2908%) hue-rotate(72deg) brightness(107%) contrast(74%) drop-shadow(0 0 1px var(--color-txt));
+      width: var(--font-size-l2);
+    }
+  }
+}

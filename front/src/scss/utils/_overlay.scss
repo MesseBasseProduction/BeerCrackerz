@@ -1,0 +1,193 @@
+.overlay {
+  align-items: center;
+  background: var(--color-bg-a75);
+  display: none;
+  height: 100%;
+  justify-content: center;
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  width: 100%;
+  z-index: 30;
+
+  transition: opacity .3s;
+
+  [class$="-modal"] {
+    background: var(--color-bg-a9);
+    border-radius: .5rem;
+    box-shadow: 0 0 1rem var(--color-bg-a5);
+    padding: 2rem;
+    position: relative;
+    text-align: center;
+
+    h1 {
+      margin-bottom: 3rem;
+    }
+
+    button {
+      margin-top: 3rem;
+    }
+
+    .modal-close {
+      color: var(--color-txt);
+      cursor: pointer;
+      font-size: 2.2rem;
+      font-weight: bold;
+      line-height: var(--font-size-l2); /* Because the cross symbol doesn't fit font height */
+      right: 1rem;
+      position: absolute;
+      top: 1rem;
+
+      transition: color .2s;
+
+      &:active,
+      &:focus,
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+
+    .button-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      button {
+        margin-left: 1rem;
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  @import '../modal/mark';
+  @import '../modal/hideshow';
+  @import '../modal/userprofile';
+}
+
+.debug-container {
+  background-color: var(--color-bg-a9);
+  border-radius: .5rem;
+  left: 1rem;
+  padding: 1rem;
+  position: absolute;
+  top: 1rem;
+  z-index: 20;
+
+  h1 {
+    font-size: var(--font-size-l3);
+    margin-bottom: var(--font-size);
+    text-align: center;
+  }
+
+  p {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .2rem;
+
+    b {
+      margin-right: 2rem;
+    }
+  }
+
+  button {
+    margin-top: var(--font-size);
+  }
+}
+
+.popup {
+  h1, h2, p {
+    color: var(--color-txt);
+    margin: 0;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: var(--font-size);
+  }
+
+  .rating {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    img {
+      height: var(--font-size);
+
+      &.active {
+        filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
+      }
+    }
+
+    p {
+      font-style: inherit;
+      margin-left: .5rem;
+    }
+  }
+
+  p {
+    font-style: italic;
+  }
+
+  h2 {
+    font-size: var(--font-size-l1);
+    font-weight: inherit;
+    margin-top: var(--font-size);
+  }
+
+  footer {
+    align-items: center;
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    margin-top: var(--font-size);
+
+    img {
+      cursor: pointer;
+      height: 2rem;
+      margin-left: .5rem;
+    }
+  }
+}
+
+.cluster-icon-wrapper {
+  position: relative;
+
+  .cluster-icon {
+    width: auto;
+    height: 50px;
+    line-height: 50px;
+    margin-left: -21px;
+    margin-top: -13px;
+    filter: drop-shadow(0 0 .25rem var(--color-bg));
+    transition: transform .2s, filter .2s;
+
+    &:active,
+    &:focus,
+    &:hover {
+      filter: drop-shadow(0 0 .33rem var(--color-txt));
+      transform: scale(1.066);
+    }
+  }
+
+  .cluster-label {
+    background-color: var(--color-bg-a9);
+    border: solid var(--color-bg) 1px;
+    border-radius: .75rem;
+    box-shadow: 0 0 1rem var(--color-bg);
+    color: var(--color-txt);
+    font-size: 1.1rem;
+    font-weight: bold;
+    left: 15px;
+    padding: .1rem .4rem;
+    position: absolute;
+    top: -15px;
+
+    &:active,
+    &:focus,
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+}

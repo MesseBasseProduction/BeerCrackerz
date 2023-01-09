@@ -1,0 +1,90 @@
+.image-resizer {
+  display: block;
+
+  img {
+    user-select: none;
+  }
+
+  .container {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  .resizer {
+    border: solid 3px var(--color-bg-a1);
+    bottom: 0;
+    box-shadow: 0px 0px 500px 500px rgba(86, 68, 40, .7);
+    display: flex;
+    left: 0;
+    position: absolute;
+    resize: both;
+    right: 0;
+    top: 0;
+
+    .tl-grab, .tr-grab, .br-grab, .bl-grab {
+      background-color: #c99458;
+      height: 9px;
+      position: absolute;
+      width: 9px;
+    }
+
+    .tl-grab {
+      cursor: nwse-resize;
+      left: -3px;
+      top: -3px;
+    }
+    .tr-grab {
+      cursor: nesw-resize;
+      right: -3px;
+      top: -3px;
+    }
+    .br-grab {
+      cursor: nwse-resize;
+      right: -3px;
+      bottom: -3px;
+    }
+    .bl-grab {
+      cursor: nesw-resize;
+      left: -3px;
+      bottom: -3px;
+    }
+
+    .l-grab, .r-grab {
+      background-color: #ffa800;
+      cursor: ew-resize;
+      height: calc(100% - 12px);
+      position: absolute;
+      width: 3px;
+    }
+
+    .t-grab, .b-grab {
+      background-color: #ffa800; /* rgba(255, 168, 40, .7) #ffa800 */
+      cursor: ns-resize;
+      height: 3px;
+      position: absolute;
+      width: calc(100% - 12px);
+    }
+
+    .l-grab {
+      left: -3px;
+      top: 6px;
+    }
+
+    .t-grab {
+      top: -3px;
+      left: 6px;
+    }
+
+    .r-grab {
+      right: -3px;
+      top: 6px;
+    }
+
+    .b-grab {
+      bottom: -3px;
+      right: 6px;
+    }
+  }
+}

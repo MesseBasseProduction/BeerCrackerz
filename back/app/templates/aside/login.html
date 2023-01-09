@@ -1,0 +1,20 @@
+{% load static %}
+<div id="aside-expander" class="aside-expander"><img src="{% static 'img/logo/right.svg' %}" id="aside-expander-icon"></div>
+<header>
+  <h1>BeerCrackerz</h1>
+  <h2><i>{LOGIN_SUBTITLE}</i></h2>
+</header>
+<main>
+  <p id="login-error" class="login-error">{LOGIN_HIDDEN_ERROR}</p>
+  <label>{LOGIN_USERNAME_LABEL}</label>
+  <input id="username" type="text">
+  <label>{LOGIN_USERNAME_PASSWORD}</label>
+  <input id="password" type="password">
+  <button id="login-submit" class="validate">{LOGIN_BUTTON}</button>
+  <p><i>{LOGIN_NOT_REGISTERED} <a href="#" id="register-aside" alt="register">{LOGIN_REGISTER}</a></i></p>
+  <p><i>{LOGIN_FORGOT_PASSWORD} <a href="#" id="forgot-password" alt="forgot-password">{LOGIN_PASSWORD_RESET}</a></i></p>
+</main>
+<footer>
+  <a href="https://messe-basse-production.com" target="_blank" rel="noopener noreferrer" alt="software-editor-website">Messe Basse Production</a>
+  <p>2022 – GPL-3.0</p>
+</footer>

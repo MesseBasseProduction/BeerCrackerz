@@ -1,0 +1,11 @@
+Django==4.1.2
+django-cors-headers==3.13.0
+djangorestframework==3.14.0
+django-multiselectfield
+pytz==2022.5
+django-filter==22.1
+django_extensions==3.2.1
+django-mailjet
+Pillow==9.2.0
+psycopg2>=2.8.6,<2.8.7
+uWSGI>=2.0.19.1,<2.1
