@@ -6,7 +6,7 @@ from app.models.shop import Shop
 class ShopSerializer(serializers.ModelSerializer):
     types = serializers.MultipleChoiceField(choices=Shop.Types.choices)
     modifiers = serializers.MultipleChoiceField(choices=Shop.Modifiers.choices, required=False)
-    price = serializers.IntegerField(min_value=1, max_value=3)
+    price = serializers.IntegerField(min_value=0, max_value=2)
 
     # Read only fields
     type = serializers.CharField(default='shop', read_only=True)
