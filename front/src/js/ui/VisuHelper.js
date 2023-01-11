@@ -475,7 +475,7 @@ class VisuHelper {
       VisuHelper.toggleFocusLock();
     }
     // Actual fly to the marker
-    window.BeerCrackerz.map.flyTo([options.lat, options.lng], 18);    
+    window.BeerCrackerz.map.flyTo([options.lat, options.lng], window.BeerCrackerz.map.getZoom());
   }
 
 

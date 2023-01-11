@@ -53,13 +53,16 @@ class MarkModal extends BaseModal {
       icon.dataset.type = type.dataset.type;
       icon.src = `/static/img/logo/${MarkInfosEnum[this._opts.type].types[i]}.svg`;
       type.innerHTML = window.BeerCrackerz.nls[this._opts.type](`${MarkInfosEnum[this._opts.type].types[i]}Type`);
+      if (this._opts.types && this._opts.types.indexOf(MarkInfosEnum[this._opts.type].types[i]) !== -1) {
+        type.classList.add('selected');
+      }
       type.insertBefore(icon, type.firstChild);
       types.appendChild(type);
       this._evtIds.push(window.Evts.addEvent('click', type, _elementChecked, this));
     }
     // Mark description
     this._description = this._rootElement.querySelector(`#${this._opts.type}-desc`);
-    // Handle shop modifiers
+    // Handle mark modifiers
     const modifiers = this._rootElement.querySelector(`#${this._opts.type}-modifiers`);
     for (let i = 0; i < MarkInfosEnum[this._opts.type].modifiers.length; ++i) {
       const modifier = document.createElement('P');
@@ -68,6 +71,9 @@ class MarkModal extends BaseModal {
       icon.dataset.type = modifier.dataset.type;
       icon.src = `/static/img/logo/${MarkInfosEnum[this._opts.type].modifiers[i]}.svg`;
       modifier.innerHTML = window.BeerCrackerz.nls[this._opts.type](`${MarkInfosEnum[this._opts.type].modifiers[i]}Modifier`);
+      if (this._opts.modifiers && this._opts.modifiers.indexOf(MarkInfosEnum[this._opts.type].modifiers[i]) !== -1) {
+        modifier.classList.add('selected');
+      }
       modifier.insertBefore(icon, modifier.firstChild);
       modifiers.appendChild(modifier);
       this._evtIds.push(window.Evts.addEvent('click', modifier, _elementChecked, this));

@@ -558,7 +558,7 @@ class BeerCrackerz {
       const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [event.latlng.lat, event.latlng.lng]);
       if (distance < MapEnum.newMarkRange) {
         this.addMarkPopup(event.latlng);
-      } else {
+      } else if (this._map.getZoom() >= 10) {
         this.notification.raise(this.nls.notif('newMarkerOutside'));
       }
     }

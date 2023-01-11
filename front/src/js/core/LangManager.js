@@ -187,7 +187,7 @@ class LangManager {
     Utils.replaceString(dom.querySelector(`#nls-${type}-rate`), `{${type.toUpperCase()}_RATE}`, this[type]('rateLabel'));
     Utils.replaceString(dom.querySelector(`#nls-${type}-type`), `{${type.toUpperCase()}_TYPE}`, this[type]('typeLabel'));
     Utils.replaceString(dom.querySelector(`#nls-${type}-modifiers`), `{${type.toUpperCase()}_MODIFIERS}`, this[type]('modifiersLabel'));
-    Utils.replaceString(dom.querySelector(`#${type}-submit`), `{${type.toUpperCase()}_SUBMIT}`, this.nav('add'));
+    Utils.replaceString(dom.querySelector(`#${type}-submit`), `{${type.toUpperCase()}_SUBMIT}`, this.nav(action));
     Utils.replaceString(dom.querySelector(`#${type}-close`), `{${type.toUpperCase()}_CANCEL}`, this.nav('cancel'));    
     if (dom.querySelector(`#nls-${type}-price`)) {
       Utils.replaceString(dom.querySelector(`#nls-${type}-price`), `{${type.toUpperCase()}_PRICE}`, this[type]('priceLabel'));
@@ -245,7 +245,7 @@ class LangManager {
     Utils.replaceString(dom, `{${options.type.toUpperCase()}_FOUND_BY}`, this.popup(`${options.type}FoundBy`));
     Utils.replaceString(dom, `{${options.type.toUpperCase()}_FOUND_WHEN}`, this.popup(`${options.type}FoundWhen`));
     Utils.replaceString(dom, `{${options.type.toUpperCase()}_FOUND_DATE}`, options.date);
-    Utils.replaceString(dom, `{${options.type.toUpperCase()}_RATE}`, options.rate + 1);
+    Utils.replaceString(dom, `{${options.type.toUpperCase()}_RATE}`, `${options.rate + 1}`);
     Utils.replaceString(dom, `{${options.type.toUpperCase()}_DESC}`, options.desc);    
   }
 

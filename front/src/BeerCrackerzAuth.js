@@ -643,7 +643,7 @@ class BeerCrackerzAuth {
           email: mail.value,
           password1: password1.value,
           password2: password2.value
-        }).then(_backValidation).catch((a) => {
+        }).then(_backValidation).catch(() => {
           error.classList.add('visible');
           error.innerHTML = this.nls.register('serverError');
         });
@@ -889,6 +889,7 @@ class BeerCrackerzAuth {
           desc: desc,
           date: date
         });
+
         // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
         const rate = element.querySelector(`#${options.type}-rating`);
         for (let i = 0; i < options.rate + 1; ++i) {

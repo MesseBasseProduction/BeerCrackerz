@@ -57,6 +57,30 @@ class MarkPopup {
         desc: desc,
         date: date
       });
+      // Handle mark types
+      const types = this._popup.querySelector(`#${this._opts.type}-types`);  
+      for (let i = 0; i < this._opts.types.length; ++i) {
+        const type = document.createElement('P');
+        const icon = document.createElement('IMG');
+        type.dataset.type = this._opts.types[i];
+        icon.dataset.type = type.dataset.type;
+        icon.src = `/static/img/logo/${this._opts.types[i]}.svg`;
+        type.innerHTML = window.BeerCrackerz.nls[this._opts.type](`${this._opts.types[i]}Type`);
+        type.insertBefore(icon, type.firstChild);
+        types.appendChild(type);
+      }
+      // Handle mark modifiers
+      const modifiers = this._popup.querySelector(`#${this._opts.type}-modifiers`);
+      for (let i = 0; i < this._opts.modifiers.length; ++i) {
+        const modifier = document.createElement('P');
+        const icon = document.createElement('IMG');
+        modifier.dataset.type = this._opts.modifiers[i];
+        icon.dataset.type = modifier.dataset.type;
+        icon.src = `/static/img/logo/${this._opts.modifiers[i]}.svg`;
+        modifier.innerHTML = window.BeerCrackerz.nls[this._opts.type](`${this._opts.modifiers[i]}Modifier`);
+        modifier.insertBefore(icon, modifier.firstChild);
+        modifiers.appendChild(modifier);
+      }
       // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
       const rate = this._popup.querySelector(`#${this._opts.type}-rating`);
       for (let i = 0; i < this._opts.rate + 1; ++i) {
@@ -105,6 +129,10 @@ class MarkPopup {
         this._opts.tooltip.removeFrom(window.BeerCrackerz.map);
       }
 
+      this._popupElement = window.L.popup({
+        maxWidth: 900
+      }).setContent(this._popup);
+
       resolve();
     });
   }
@@ -135,7 +163,7 @@ class MarkPopup {
 
 
   _ready() {
-    this._cb(this._popup);
+    this._cb(this._popupElement);
   }
 
 

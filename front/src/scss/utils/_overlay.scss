@@ -95,6 +95,8 @@
 }
 
 .popup {
+  width: 30rem;
+
   h1, h2, p {
     color: var(--color-txt);
     margin: 0;
@@ -104,6 +106,49 @@
   h1 {
     font-size: 2rem;
     margin-bottom: var(--font-size);
+  }
+
+  .types, .modifiers {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: .5rem auto var(--font-size);
+
+    p {
+      align-items: center;
+      border: solid 1px var(--color-txt);
+      border-radius: .5rem;
+      color: var(--color-txt);
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      margin: .5rem;
+      padding: .5rem 1rem;
+      user-select: none;
+
+      transition: color .2s;
+
+      &.selected {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        
+        img {
+          filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
+        }
+      }
+    }
+
+    img {
+      margin-right: .5rem;
+      user-select: none;
+      width: var(--font-size-l4);
+    }
+  }
+
+  .modifiers {
+    margin: var(--font-size) auto .5rem;
   }
 
   .rating {
