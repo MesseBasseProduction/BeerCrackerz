@@ -1,9 +1,5 @@
 /* BeerCrackerz is responsive firt, these rules are mostly Desktop */
 @media (min-width: 720px) {
-  .overlay [class$="-modal"] {
-    max-width: 70%;
-  }
-
   .overlay [class$=-modal] {
     padding: 3rem 4rem;
   }

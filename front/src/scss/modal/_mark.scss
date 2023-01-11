@@ -1,5 +1,6 @@
 .new-mark-modal,
 .edit-mark-modal {
+  height: calc(100% - 2rem);
   width: calc(100% - 2rem);
 
   h1, p {
