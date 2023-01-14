@@ -23,7 +23,9 @@ class DeleteMarkModal extends BaseModal {
 
   _events() {
     this._evtIds.push(window.Evts.addEvent('click', this._footerCancelButton, this.close, this));
+    this._evtIds.push(window.Evts.addEvent('touchend', this._footerCancelButton, this.close, this));
     this._evtIds.push(window.Evts.addEvent('click', this._footerSubmitButton, this.submit, this));
+    this._evtIds.push(window.Evts.addEvent('touchend', this._footerSubmitButton, this.submit, this));
   }
 
 

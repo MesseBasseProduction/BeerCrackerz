@@ -70,7 +70,9 @@ class UserModal extends BaseModal {
     this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#lang-select'), window.BeerCrackerz.updateLang, window.BeerCrackerz));
     this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#update-pp'), this.updateProfilePicture, this));
     this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector('#user-pp'), this.updateProfilePicture, this));
+    this._evtIds.push(window.Evts.addEvent('touchend', this._rootElement.querySelector('#user-pp'), this.updateProfilePicture, this));
     this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector('#logout'), this.logout, this));
+    this._evtIds.push(window.Evts.addEvent('touchend', this._rootElement.querySelector('#logout'), this.logout, this));
   }
 
 

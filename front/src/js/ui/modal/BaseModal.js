@@ -107,7 +107,9 @@ class BaseModal {
 
   open() {
     this._evtIds.push(window.Evts.addEvent('click', this._modalOverlay, this.close, this));
+    this._evtIds.push(window.Evts.addEvent('touchend', this._modalOverlay, this.close, this));
     this._evtIds.push(window.Evts.addEvent('click', this._closeButton, this.close, this));
+    this._evtIds.push(window.Evts.addEvent('touchend', this._closeButton, this.close, this));
     this._modalOverlay.appendChild(this._rootElement);
     this._modalOverlay.style.display = 'flex';
     setTimeout(() => this._modalOverlay.style.opacity = 1, 50);

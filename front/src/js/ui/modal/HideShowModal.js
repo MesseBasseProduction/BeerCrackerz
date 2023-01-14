@@ -56,6 +56,7 @@ class HideShowModal extends BaseModal {
     this._evtIds.push(window.Evts.addEvent('mouseover', this._rootElement.querySelector('#shops-toggle'), this._updateHelper, this));
     this._evtIds.push(window.Evts.addEvent('mouseover', this._rootElement.querySelector('#bars-toggle'), this._updateHelper, this));
     this._evtIds.push(window.Evts.addEvent('click', this._footerCancelButton, this.close, this));
+    this._evtIds.push(window.Evts.addEvent('touchend', this._footerCancelButton, this.close, this));
   }
 
 

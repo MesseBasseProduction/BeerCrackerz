@@ -97,7 +97,9 @@ class MarkModal extends BaseModal {
    * content to send it to the backend if needed.</blockquote> **/
   _events() {
     this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector(`#${this._opts.type}-close`), this.close, this));
+    this._evtIds.push(window.Evts.addEvent('touchend', this._rootElement.querySelector(`#${this._opts.type}-close`), this.close, this));
     this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector(`#${this._opts.type}-submit`), this.submit, this));
+    this._evtIds.push(window.Evts.addEvent('touchend', this._rootElement.querySelector(`#${this._opts.type}-submit`), this.submit, this));
   }
 
 
