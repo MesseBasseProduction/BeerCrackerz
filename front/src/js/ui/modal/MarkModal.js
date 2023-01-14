@@ -107,6 +107,10 @@ class MarkModal extends BaseModal {
     this._rootElement.querySelector(`#nls-${this._opts.type}-name`).classList.remove('error');
     this._name.classList.remove('error');
     this._rootElement.querySelector(`#nls-${this._opts.type}-type`).classList.remove('error');
+    this._rootElement.querySelector(`#nls-${this._opts.type}-rate`).classList.remove('error');
+    if (this._rootElement.querySelector(`#nls-${this._opts.type}-price`)) {
+      this._rootElement.querySelector(`#nls-${this._opts.type}-price`).classList.remove('error');      
+    }
     if (this._name.value === '') {
       this._rootElement.querySelector(`#nls-${this._opts.type}-name`).classList.add('error');
       this._name.classList.add('error');
@@ -115,6 +119,14 @@ class MarkModal extends BaseModal {
     } else if (this.getTypes().length === 0) {
       this._rootElement.querySelector(`#nls-${this._opts.type}-type`).classList.add('error');
       window.BeerCrackerz.notification.raise(window.BeerCrackerz.nls.notif('markTypeEmpty'));
+      allowed = false;
+    } else if (this._rating.currentRate === -1) {
+      this._rootElement.querySelector(`#nls-${this._opts.type}-rate`).classList.add('error');
+      window.BeerCrackerz.notification.raise(window.BeerCrackerz.nls.notif('markRateEmpty'));
+      allowed = false;
+    } else if (this._pricing !== null && this._pricing.currentRate === -1) {
+      this._rootElement.querySelector(`#nls-${this._opts.type}-price`).classList.add('error');
+      window.BeerCrackerz.notification.raise(window.BeerCrackerz.nls.notif('markPriceEmpty'));
       allowed = false;
     }
     return allowed;

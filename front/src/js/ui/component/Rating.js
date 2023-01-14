@@ -4,7 +4,7 @@ class Rating {
   constructor(domList, rate) {
     this._container = null;
     this._items = [];
-    this._currentRate = rate || 0; // Mostly for hover operations
+    this._currentRate = rate || -1; // Mostly for hover operations
     this._clicked = rate || - 1; // To know when user clicked on a given star
 
     this._init(domList);

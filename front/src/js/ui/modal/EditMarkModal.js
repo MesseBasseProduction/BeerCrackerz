@@ -19,7 +19,7 @@ class EditMarkModal extends MarkModal {
       this._pricing.updateRate(this._opts.price);
     }
     requestAnimationFrame(() => {
-      this._rating.updateVisu();      
+      this._rating.updateVisu();
       if (this._opts.price) {
         this._pricing.updateVisu();
       }

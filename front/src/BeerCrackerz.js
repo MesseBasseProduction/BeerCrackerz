@@ -722,11 +722,14 @@ class BeerCrackerz {
       if (options.lat === this._marks[options.type][i].lat && options.lng === this._marks[options.type][i].lng) {
         this._marks[options.type][i].name = options.name.value;
         this._marks[options.type][i].description = options.description.value;
-        this._marks[options.type][i].rate = options.rating.currentRate;
+        this._marks[options.type][i].rate = options.rating;
+        if (options.price) {
+          this._marks[options.type][i].price = options.price;
+        }
         options.tooltip.removeFrom(this.map);
         const popup = new MarkPopup(options, dom => {
           options.dom = dom;
-          options.marker.setPopupContent(options.dom);
+          options.marker.setPopupContent(popup.dom);
           options.popup = popup;
           // Send data to server
           this._kom[`${options.type}Edited`](options.id, Utils.formatMarker(options)).then(data => {

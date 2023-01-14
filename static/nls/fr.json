@@ -35,6 +35,8 @@
     "barNotDeleted": "Impossible de supprimer le bar",
     "markNameEmpty": "Préciser un nom pour le point",
     "markTypeEmpty": "Préciser un type pour le point",
+    "markRateEmpty": "Donnez une note pour le point",
+    "markPriceEmpty": "Donnez un prix pour le point",
     "lockFocusOn": "Centrer et verrouiller sur la position",
     "unlockFocusOn": "Fin du verrouillage de la position",
     "uploadPPSuccess": "Photo de profil téléversée avec succès",

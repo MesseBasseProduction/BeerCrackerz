@@ -35,6 +35,8 @@
     "barNotDeleted": "Bar konnte nicht gelöscht werden",
     "markNameEmpty": "Sie haben keinen namen für die marke angegeben",
     "markTypeEmpty": "Sie haben keinen typ für die marke angegeben",
+    "markRateEmpty": "Sie haben keinen bewertung für die marke angegeben",
+    "markPriceEmpty": "Sie haben keinen preis für die Marke angegeben",
     "lockFocusOn": "Zentrieren und sperren der ansicht auf ihre Position",
     "unlockFocusOn": "Positionssperre beendet",
     "uploadPPSuccess": "Profilbild aktualisiert",

@@ -35,6 +35,8 @@
     "barNotDeleted": "Couldn't delete bar",
     "markNameEmpty": "You didn't specified a name for the mark",
     "markTypeEmpty": "You didn't specified a type for the mark",
+    "markRateEmpty": "You didn't specified a rate for the mark",
+    "markPriceEmpty": "You didn't specified a price for the mark",
     "lockFocusOn": "Centering and locking view on your position",
     "unlockFocusOn": "Position locking ended",
     "uploadPPSuccess": "Profile picture updated",

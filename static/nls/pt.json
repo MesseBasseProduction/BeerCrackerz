@@ -35,6 +35,8 @@
     "barNotDeleted": "Não foi possível excluir a barra",
     "markNameEmpty": "Você não especificou um nome para a marca",
     "markTypeEmpty": "Você não especificou um tipo para a marca",
+    "markRateEmpty": "Você não especificou uma taxa para a marca",
+    "markPriceEmpty": "Você não especificou um preço para a marca",
     "lockFocusOn": "Centralizando e bloqueando a visualização em sua posição",
     "unlockFocusOn": "Bloqueio de posição finalizado",
     "uploadPPSuccess": "Foto do perfil atualizada",

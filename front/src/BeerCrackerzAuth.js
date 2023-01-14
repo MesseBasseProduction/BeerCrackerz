@@ -550,9 +550,8 @@ class BeerCrackerzAuth {
       }
       return true;
     };
-    const _backValidation = response => {
+    const _backValidation = () => {
       // Check response and handle status codes
-      console.log(response);
       // If all front and back tests are ok, redirect to auth
       // If the user manually force redirection to authindex,
       // the server should reject the request as the user is not authenticated
@@ -755,7 +754,6 @@ class BeerCrackerzAuth {
       password1.classList.remove('error');
       password2.classList.remove('error');
       if (_frontFieldValidation()) {
-        console.log(params)
         this._kom.post(`/api/auth/password-reset/?uidb64=${params.uidb64}&token=${params.token}`, {
           password1: password1.value,
           password2: password2.value
