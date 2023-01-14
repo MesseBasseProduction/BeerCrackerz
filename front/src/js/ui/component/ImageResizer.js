@@ -87,7 +87,9 @@ class ImageResizer {
 
     this._dom.wrapper.appendChild(this._dom.container);
     this._dom.wrapper.appendChild(this._dom.resizer);
-
+    // Force wrapper to take image aspect ratio (avoid invalid calculus when sending coordinates)
+    this._dom.wrapper.style.aspectRatio = `${this._width} / ${this._height}`;
+    // Refresh and init resizer
     requestAnimationFrame(() => {
       this.containerRect = this._dom.container.getBoundingClientRect();
       this._initResizer();
@@ -109,13 +111,15 @@ class ImageResizer {
   _initResizer() {
     if (this._width > this._height) { // Landscape
       const bRect = this._dom.resizer.getBoundingClientRect();
-      this._dom.resizer.style.left = (bRect.width - bRect.height) / 2;
-      this._dom.resizer.style.right = (bRect.width - bRect.height) / 2;
+      this._dom.resizer.style.left = `${(bRect.width - bRect.height) / 2}px`;
+      this._dom.resizer.style.right = `${(bRect.width - bRect.height) / 2}px`;
     } else if (this._width < this._height) { // Portrait
       const bRect = this._dom.resizer.getBoundingClientRect();
-      this._dom.resizer.style.top = (bRect.height - bRect.width) / 2;
-      this._dom.resizer.style.bottom = (bRect.height - bRect.width) / 2;
+      this._dom.resizer.style.top = `${(bRect.height - bRect.width) / 2}px`;
+      this._dom.resizer.style.bottom = `${(bRect.height - bRect.width) / 2}px`;
     }
+
+    this._dom.resizer.style.aspectRatio = '1 / 1';
   }
 
 

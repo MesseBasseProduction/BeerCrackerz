@@ -790,6 +790,7 @@ class BeerCrackerz {
       maxX: Math.round(options.imageResizer.getMaxPoint().x),
       maxY: Math.round(options.imageResizer.getMaxPoint().y)
     }).then(() => {
+      this._modal.close(null, true);
       this.notification.raise(this.nls.notif('uploadPPSuccess'));
     }).catch(err => {
       this.notification.raise(this.nls.notif('uploadPPFailed'));
