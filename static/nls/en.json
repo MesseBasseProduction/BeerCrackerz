@@ -54,13 +54,12 @@
     "newShop": "Add a shop",
     "newBar": "Add a bar",
     "planLayerOSM": "Plan OSM",
-    "planStadiaOut": "Plan Stadia Outdoor",
     "satLayerEsri": "Satellite ESRI"
   },
   "spot": {
     "addTitle": "New spot",
     "editTitle": "Edit spot",
-    "subtitle": "A spot is a remarkable place to crack a beer ! Share it with the community, wether it is for the astonishing view of for whatever it is enjoyable to drink a beer!",
+    "subtitle": "A spot is a remarkable place to crack a beer ! Share it with the community, wether it is for the astonishing view or for whatever it is enjoyable to drink a beer!",
     "nameLabel": "Name that spot",
     "descLabel": "Why don't you describe it",
     "rateLabel": "Give it a note",
@@ -125,7 +124,7 @@
     "darkThemePref": "Dark theme",
     "userDebugPref": "Debug interface",
     "langPref": "Interface language",
-    "langFr": "🇫🇷 Français",
+    "langFr": "🇫🇷 French",
     "langEn": "🇬🇧 English",
     "langEs": "🇪🇸 Spanish",
     "langDe": "🇩🇪 German",
