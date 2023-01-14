@@ -1,10 +1,25 @@
 {% autoescape off %}
-Bienvenue {{ user.username | capfirst }} !
-
-Bla bla bla
-
-Pour te connecter il faut que tu actives ton compte :
-{{ link }}
-
-L'équipe Beer Crackez
+<p>
+  <strong>
+    <span style="font-size: 12pt;">Bonjour et surtout bienvenu sur BeerCrackerz, {{ user.username | capfirst }},</span>
+  </strong>
+  <span style="font-size: 12pt;"></span>
+</p>
+<p>&nbsp;</p>
+<p>
+  <span style="font-size: 11pt;">Nous vous remercions de votre inscription et esp&eacute;rons que BeerCrackerz saura combler vos meilleures vir&eacute;e houblon&eacute;es. Cette carte communautaire recense les meilleurs endroits pour se d&eacute;lecter d'une bi&egrave;re, mais &eacute;galement pour trouver de quoi se ravitailler!</span>
+</p>
+<p>
+  <span style="font-size: 11pt;">Tout ce qu'il vous reste &agrave; faire pour utiliser BeerCrackerz, c'est de suivre le lien suivant pour valider votre adresse mail (et ainsi v&eacute;rifier votre compte).</span>
+</p>
+<p>
+  <span style="font-size: 11pt;"><a href="test" target="_blank" rel="noopener">{{ link }}</a></span>
+</p>
+<p>
+  <span style="font-size: 11pt;">&Agrave; vos, spots!<br /></span>
+</p>
+<p>&nbsp;</p>
+<p>
+  <span style="font-size: 12pt;"><strong><em>L'&Eacute;quipe BeerCrackerz</em></strong></span>
+</p>
 {% endautoescape %}
