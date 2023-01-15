@@ -193,11 +193,3 @@ aside {
   /* Force slider to stick to aside's left even when collapsed */
   right: calc(var(--aside-width) + var(--aside-offset) + 1rem);
 }
-
-@media (max-width: 520px) {
-  aside {
-    max-width: inherit;
-    width: 100%;
-  }
-}
-
