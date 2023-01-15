@@ -8,7 +8,6 @@
     width: 100%;
 
     .drop-user-pp {
-      box-shadow: 0 0 3rem var(--color-txt-a1);
       cursor: pointer;
       height: 12rem;
       margin-right: 2rem;
@@ -16,6 +15,7 @@
     }
 
     img {
+      filter: drop-shadow(0 0 .5rem var(--color-txt-a5));
       height: 100%;
       width: 100%;
     }

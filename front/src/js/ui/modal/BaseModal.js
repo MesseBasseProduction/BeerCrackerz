@@ -42,7 +42,7 @@ class BaseModal {
    * calling this method, to make the destruction process complete.</blockquote> **/
   destroy() {
     for (let i = 0; i < this._evtIds.length; ++i) {
-      window.Evts.removeEvent(this._evtIts);
+      window.Evts.removeEvent(this._evtIds[i]);
     }
     Object.keys(this).forEach(key => {
       delete this[key];
@@ -123,10 +123,13 @@ class BaseModal {
     }
 
     if (force === true || event.target.id === 'overlay' || event.target.id.indexOf('close') !== -1) {
+      if (event && event.type === 'touchend' && event.preventDefault) {
+        event.preventDefault();
+      }
+  
       this._modalOverlay.style.opacity = 0;
       setTimeout(() => {
-        this._modalOverlay.style.display = 'none';
-        this._modalOverlay.innerHTML = '';
+        document.body.removeChild(this._modalOverlay);
         this.destroy();
       }, 200);
     }

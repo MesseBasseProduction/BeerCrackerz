@@ -778,7 +778,10 @@ class BeerCrackerz {
 
 
   updateProfilePicture(options) {
-    this._modal = ModalFactory.build('UpdateProfilePicture', options);
+    this._modal.close(null, true);
+    setTimeout(() => {
+      this._modal = ModalFactory.build('UpdateProfilePicture', options);
+    }, 200);
   }
 
 
@@ -790,15 +793,16 @@ class BeerCrackerz {
       maxX: Math.round(options.imageResizer.getMaxPoint().x),
       maxY: Math.round(options.imageResizer.getMaxPoint().y)
     }).then(() => {
-      this._modal.close(null, true);
       this.notification.raise(this.nls.notif('uploadPPSuccess'));
-    }).catch(err => {
+    }).catch(() => {
       this.notification.raise(this.nls.notif('uploadPPFailed'));
-      console.error(err)
     }).finally(() => {
+      this._modal.close(null, true);
       // Reload user from server with new path and close modal
       this._initUser().then(() => {
-        this._modal.close(null, true);
+        setTimeout(() => {
+          this.userProfile();
+        }, 200);
       });
     });
   }

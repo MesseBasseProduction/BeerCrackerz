@@ -8,8 +8,15 @@ class UpdateProfilePictureModal extends BaseModal {
   constructor(options) {
     super('updatepp');
     this._opts = options;
+    this._imageResizer = null;
     this._footerCancelButton = null;
     this._footerSubmitButton = null;
+  }
+
+
+  destroy() {
+    this._imageResizer.destroy();
+    super.destroy();
   }
 
 

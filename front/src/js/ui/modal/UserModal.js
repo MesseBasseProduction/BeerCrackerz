@@ -17,7 +17,10 @@ class UserModal extends BaseModal {
 
   _fillAttributes() {
     window.BeerCrackerz.nls.userProfileModal(this._rootElement);
-    this._rootElement.querySelector(`#user-pp`).src = window.BeerCrackerz.user.pp;
+    if (window.BeerCrackerz.user.pp) {
+      this._rootElement.querySelector(`#user-pp`).src = window.BeerCrackerz.user.pp;
+    }
+
     this._rootElement.querySelector(`#user-name`).innerHTML = window.BeerCrackerz.user.username;
     this._rootElement.querySelector(`#user-email`).innerHTML = window.BeerCrackerz.user.email;
 

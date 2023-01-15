@@ -127,7 +127,8 @@ class VisuHelper {
       const user = window.BeerCrackerz.user;
       const bc = window.BeerCrackerz;
       const lang = bc.nls.debug.bind(bc.nls);
-      const updates = parseInt(element.querySelector('.debug-updates-amount').innerHTML.split(' ')[1]) + 1;
+      const updateSplittedString = element.querySelector('.debug-updates-amount').innerHTML.split(' ');
+      const updates = parseInt(updateSplittedString[updateSplittedString.length - 1]) + 1;
       const marks = bc.marks.spot.length + bc.marks.shop.length + bc.marks.bar.length;
       element.querySelector('.debug-user-lat').innerHTML = `<b>${lang('lat')}</b> ${user.lat}`;
       element.querySelector('.debug-user-lng').innerHTML = `<b>${lang('lng')}</b> ${user.lng}`;

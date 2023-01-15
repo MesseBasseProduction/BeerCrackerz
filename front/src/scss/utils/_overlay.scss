@@ -16,6 +16,8 @@
     background: var(--color-bg-a9);
     border-radius: .5rem;
     box-shadow: 0 0 1rem var(--color-bg-a5);
+    max-height: calc(100% - 2rem);
+    max-width: calc(100% - 2rem);
     padding: 2rem;
     position: relative;
     text-align: center;
