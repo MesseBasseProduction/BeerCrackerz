@@ -26,12 +26,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'secret')
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
 ALLOWED_HOSTS = []
-ALLOWED_HOSTS.extend(
-    filter(
-        None,
-        os.environ.get('ALLOWED_HOSTS', '').split(';')
-    )
-)
+ALLOWED_HOSTS.extend(filter(None, os.environ.get('ALLOWED_HOSTS', '').split(';')))
+
+CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS.extend(filter(None, os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(';')))
 
 SERVER_URL = os.environ.get('SERVER_URL')
 
@@ -123,19 +121,12 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = "app.User"
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication'],
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticatedOrReadOnly'],
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8080', 'http://127.0.0.1:8080']
-
-EXTENDED_PAGINATION_DEFAULT_SIZE = 20
-EXTENDED_PAGINATION_DEFAULT_SIZE_QUERY_PARAM = 'size'
-
-DEFAULT_FROM_EMAIL = 'raphael.beekmann@gmail.com'
+DEFAULT_FROM_EMAIL = 'no-reply@beercrackerz.org'
 
 if bool(int(os.environ.get('BACKEND_USE_EMAIL_FILE_SYSTEM', 0))):
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
@@ -144,13 +135,6 @@ else:
     EMAIL_BACKEND = 'django_mailjet.backends.MailjetBackend'
     MAILJET_API_KEY = os.environ.get('MAILJET_API_KEY')
     MAILJET_API_SECRET = os.environ.get('MAILJET_API_SECRET')
-
-    # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    # EMAIL_HOST = os.environ.get('EMAIL_HOST')
-    # EMAIL_PORT = os.environ.get('EMAIL_PORT')
-    # EMAIL_HOST_USER = os.environ.get('EMAIL_USERNAME')
-    # EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
-    # EMAIL_USE_TLS = False
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
