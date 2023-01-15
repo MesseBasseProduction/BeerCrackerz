@@ -113,10 +113,10 @@ class ImageResizer {
   _events() {
     this._evtIds.push(window.Evts.addEvent('mousedown', this._dom.resizer, this._mouseDown, this));
     this._evtIds.push(window.Evts.addEvent('mousemove', document.body, this._mouseMove, this));
-    this._evtIds.push(window.Evts.addEvent('mouseup', document.body, this._mouseUp, this));
+    this._evtIds.push(window.Evts.addEvent('mouseup', this._dom.resizer, this._mouseUp, this));
     this._evtIds.push(window.Evts.addEvent('touchstart', this._dom.resizer, this._mouseDown, this));
     this._evtIds.push(window.Evts.addEvent('touchmove', document.body, this._mouseMove, this));
-    this._evtIds.push(window.Evts.addEvent('touchend', document.body, this._mouseUp, this));
+    this._evtIds.push(window.Evts.addEvent('touchend', this._dom.resizer, this._mouseUp, this));
   }
 
 
@@ -152,220 +152,217 @@ class ImageResizer {
 
 
   _mouseMove(event) {
-    requestAnimationFrame(() => {
-      if (this._isGrabbed()) {
-        if (event.touches && event.touches.length) {
-          event.pageX = event.touches[0].clientX;
-          event.pageY = event.touches[0].clientY;        
+    if (this._isGrabbed()) {
+      if (event.touches && event.touches.length) {
+        event.pageX = event.touches[0].clientX;
+        event.pageY = event.touches[0].clientY;        
+      }
+
+      let offsetX = event.pageX - this.containerRect.x;
+      let offsetY = event.pageY - this.containerRect.y;
+
+      if (offsetX < 0) {
+        offsetX = 0;
+      }
+      if (offsetX > this.containerRect.width) {
+        offsetX = this.containerRect.width;
+      }
+      if (offsetY < 0) {
+        offsetY = 0;
+      }
+      if (offsetY > this.containerRect.height) {
+        offsetY = this.containerRect.height;
+      }
+
+      const offsetL = this.resizerRect.x - this.containerRect.x;
+      const offsetT = this.resizerRect.y - this.containerRect.y;
+      const offsetR = this.resizerRect.x + this.resizerRect.width - this.containerRect.x;
+      const offsetB = this.resizerRect.y + this.resizerRect.height - this.containerRect.y;
+      const minWidth = this.containerRect.width - (512 * this.containerRect.width / this._width);
+      const minHeight = this.containerRect.height - (512 * this.containerRect.height / this._height);
+
+      if (this._grab.tl) { // Top/Left
+        if (offsetT + (offsetX - offsetL) < 0) { // Top blocking
+          const offset = this._dom.resizer.style.top.slice(0, -2);
+          this._dom.resizer.style.top = 0;
+          this._dom.resizer.style.left = `${this._dom.resizer.style.left.slice(0, -2) - offset}px`;
+          return;
+        } else if (offsetT + (offsetX - offsetL) > minHeight) {
+          return;
         }
-  
-        let offsetX = event.pageX - this.containerRect.x;
-        let offsetY = event.pageY - this.containerRect.y;
-  
-        if (offsetX < 0) {
-          offsetX = 0;
+        this._dom.resizer.style.left = `${offsetL + (offsetX - offsetL)}px`;
+        this._dom.resizer.style.top = `${offsetT + (offsetX - offsetL)}px`;
+      } else if (this._grab.tr) { // Top/Right
+        if (offsetT + (offsetR - offsetX) < 0) { // Top blocking
+          const offset = this._dom.resizer.style.top.slice(0, -2);
+          this._dom.resizer.style.top = 0;
+          this._dom.resizer.style.right = `${this._dom.resizer.style.right.slice(0, -2) - offset}px`;
+          return;
+        } else if (offsetT + (offsetR - offsetX) > minHeight) {
+          return;
         }
-        if (offsetX > this.containerRect.width) {
-          offsetX = this.containerRect.width;
+        this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + offsetR - offsetX}px`;
+        this._dom.resizer.style.top = `${offsetT + (offsetR - offsetX)}px`;
+      } else if (this._grab.br) { // Bottom/Right
+        if ((this.containerRect.height - offsetB) + offsetR - offsetX < 0) { // Bottom blocking
+          const offset = this._dom.resizer.style.bottom.slice(0, -2);
+          this._dom.resizer.style.bottom = 0;
+          this._dom.resizer.style.right = `${this._dom.resizer.style.right.slice(0, -2) - offset}px`;
+          return;
+        } else if ((this.containerRect.height - offsetB) + offsetR - offsetX > minHeight) {
+          return;
         }
-        if (offsetY < 0) {
-          offsetY = 0;
+        this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + offsetR - offsetX}px`;
+        this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + offsetR - offsetX}px`;
+      } else if (this._grab.bl) { // Bottom/Left
+        if ((this.containerRect.height - offsetB) + (offsetX - offsetL) < 0) { // Bottom blocking
+          const offset = this._dom.resizer.style.bottom.slice(0, -2);
+          this._dom.resizer.style.bottom = 0;
+          this._dom.resizer.style.left = `${this._dom.resizer.style.left.slice(0, -2) - offset}px`;
+          return;
+        } else if ((this.containerRect.height - offsetB) + (offsetX - offsetL) > minHeight) {
+          return;
         }
-        if (offsetY > this.containerRect.height) {
-          offsetY = this.containerRect.height;
+        this._dom.resizer.style.left = `${offsetL + (offsetX - offsetL)}px`;
+        this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + (offsetX - offsetL)}px`;
+      } else if (this._grab.l) { // Left
+        if (offsetT + ((offsetX - offsetL) / 2) < 0) { // Top
+          const offset = this._dom.resizer.style.top.slice(0, -2);
+          this._dom.resizer.style.top = 0;
+          this._dom.resizer.style.left = `${this._dom.resizer.style.left.slice(0, -2) - offset}px`;
+          this._dom.resizer.style.bottom = `${this._dom.resizer.style.bottom.slice(0, -2) - offset}px`;
+          return;
+        } else if ((this.containerRect.height - offsetB) + ((offsetX - offsetL) / 2) < 0) { // Bottom
+          const offset = this._dom.resizer.style.bottom.slice(0, -2);
+          this._dom.resizer.style.bottom = 0;
+          this._dom.resizer.style.top = `${this._dom.resizer.style.top.slice(0, -2) - (offset / 2)}px`;
+          this._dom.resizer.style.left = `${this._dom.resizer.style.left.slice(0, -2) - (offset / 2)}px`;
+          return;
+        } else if (offsetL + (offsetX - offsetL) > minWidth) {
+          return;
         }
-  
-        const offsetL = this.resizerRect.x - this.containerRect.x;
-        const offsetT = this.resizerRect.y - this.containerRect.y;
-        const offsetR = this.resizerRect.x + this.resizerRect.width - this.containerRect.x;
-        const offsetB = this.resizerRect.y + this.resizerRect.height - this.containerRect.y;
-        const minWidth = this.containerRect.width - (512 * this.containerRect.width / this._width);
-        const minHeight = this.containerRect.height - (512 * this.containerRect.height / this._height);
-  
-        if (this._grab.tl) { // Top/Left
-          if (offsetT + (offsetX - offsetL) < 0) { // Top blocking
-            const offset = this._dom.resizer.style.top.slice(0, -2);
-            this._dom.resizer.style.top = 0;
-            this._dom.resizer.style.left = `${this._dom.resizer.style.left.slice(0, -2) - offset}px`;
-            return;
-          } else if (offsetT + (offsetX - offsetL) > minHeight) {
+        this._dom.resizer.style.left = `${offsetL + (offsetX - offsetL)}px`;
+        this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + ((offsetX - offsetL) / 2)}px`;
+        this._dom.resizer.style.top = `${offsetT + ((offsetX - offsetL) / 2)}px`;
+      } else if (this._grab.t) { // Top
+        if (offsetL + ((offsetY - offsetT) / 2) < 0) { // Left
+          const offset = this._dom.resizer.style.left.slice(0, -2);
+          this._dom.resizer.style.left = 0;
+          this._dom.resizer.style.right = `${this._dom.resizer.style.right.slice(0, -2) - (offset / 2)}px`;
+          this._dom.resizer.style.top = `${this._dom.resizer.style.top.slice(0, -2) - (offset / 2)}px`;
+          return;
+        } else if ((this.containerRect.width - offsetR) + ((offsetY - offsetT) / 2) < 0) { // Right
+          const offset = this._dom.resizer.style.right.slice(0, -2);
+          this._dom.resizer.style.right = 0;
+          this._dom.resizer.style.top = `${this._dom.resizer.style.top.slice(0, -2) - (offset / 2)}px`;
+          this._dom.resizer.style.left = `${this._dom.resizer.style.left.slice(0, -2) - (offset / 2)}px`;
+          return;
+        } else if (offsetT + (offsetY - offsetT) > minHeight) {
+          return;
+        }
+        this._dom.resizer.style.top = `${offsetT + (offsetY - offsetT)}px`;
+        this._dom.resizer.style.left = `${offsetL + ((offsetY - offsetT) / 2)}px`;
+        this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + ((offsetY - offsetT) / 2)}px`;
+      } else if (this._grab.r) { // Right
+        if (offsetT + (offsetR - offsetX) / 2 < 0) { // Top
+          const offset = this._dom.resizer.style.top.slice(0, -2);
+          this._dom.resizer.style.top = 0;
+          this._dom.resizer.style.right = `${this._dom.resizer.style.right.slice(0, -2) - (offset / 2)}px`;
+          this._dom.resizer.style.bottom = `${this._dom.resizer.style.bottom.slice(0, -2) - (offset / 2)}px`;
+          return;
+        } else if ((this.containerRect.height - offsetB) + (offsetR - offsetX) / 2 < 0) { // Bottom
+          const offset = this._dom.resizer.style.bottom.slice(0, -2);
+          this._dom.resizer.style.bottom = 0;
+          this._dom.resizer.style.top = `${this._dom.resizer.style.top.slice(0, -2) - (offset / 2)}px`;
+          this._dom.resizer.style.right = `${this._dom.resizer.style.right.slice(0, -2) - (offset / 2)}px`;
+          return;
+        } else if ((this.containerRect.width - offsetR) + offsetR - offsetX > minWidth) {
+          return;
+        }
+        this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + offsetR - offsetX}px`;
+        this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + (offsetR - offsetX) / 2}px`;
+        this._dom.resizer.style.top = `${offsetT + (offsetR - offsetX) / 2}px`;
+      } else if (this._grab.b) { // Bottom
+        if (offsetL + (offsetB - offsetY) / 2 < 0) { // Left
+          const offset = this._dom.resizer.style.left.slice(0, -2);
+          this._dom.resizer.style.left = 0;
+          this._dom.resizer.style.right = `${this._dom.resizer.style.right.slice(0, -2) - (offset / 2)}px`;
+          this._dom.resizer.style.bottom = `${this._dom.resizer.style.bottom.slice(0, -2) - (offset / 2)}px`;
+          return;
+        } else if ((this.containerRect.width - offsetR) + (offsetB - offsetY) / 2 < 0) { // Right
+          const offset = this._dom.resizer.style.right.slice(0, -2);
+          this._dom.resizer.style.right = 0;
+          this._dom.resizer.style.bottom = `${this._dom.resizer.style.bottom.slice(0, -2) - (offset / 2)}px`;
+          this._dom.resizer.style.left = `${this._dom.resizer.style.left.slice(0, -2) - (offset / 2)}px`;
+          return;
+        } else if ((this.containerRect.height - offsetB) + offsetB - offsetY > minHeight) {
+          return;
+        }
+        this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + offsetB - offsetY}px`;
+        this._dom.resizer.style.left = `${offsetL + (offsetB - offsetY) / 2}px`;
+        this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + (offsetB - offsetY) / 2}px`;
+      } else if (this._grab.resizer) { // Resizer grabbed
+        if (this._pointer.x - offsetX > 0) { // Towards left
+          // Blocking return condition, resizer is on an edge
+          if (this._dom.resizer.style.left === '0px') {
             return;
           }
-          this._dom.resizer.style.left = `${offsetL + (offsetX - offsetL)}px`;
-          this._dom.resizer.style.top = `${offsetT + (offsetX - offsetL)}px`;
-        } else if (this._grab.tr) { // Top/Right
-          if (offsetT + (offsetR - offsetX) < 0) { // Top blocking
-            const offset = this._dom.resizer.style.top.slice(0, -2);
-            this._dom.resizer.style.top = 0;
-            this._dom.resizer.style.right = `${this._dom.resizer.style.right.slice(0, -2) - offset}px`;
-            return;
-          } else if (offsetT + (offsetR - offsetX) > minHeight) {
-            return;
-          }
-          this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + offsetR - offsetX}px`;
-          this._dom.resizer.style.top = `${offsetT + (offsetR - offsetX)}`;
-        } else if (this._grab.br) { // Bottom/Right
-          if ((this.containerRect.height - offsetB) + offsetR - offsetX < 0) { // Bottom blocking
-            const offset = this._dom.resizer.style.bottom.slice(0, -2);
-            this._dom.resizer.style.bottom = 0;
-            this._dom.resizer.style.right = `${this._dom.resizer.style.right.slice(0, -2) - offset}px`;
-            return;
-          } else if ((this.containerRect.height - offsetB) + offsetR - offsetX > minHeight) {
-            return;
-          }
-          this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + offsetR - offsetX}px`;
-          this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + offsetR - offsetX}px`;
-        } else if (this._grab.bl) { // Bottom/Left
-          if ((this.containerRect.height - offsetB) + (offsetX - offsetL) < 0) { // Bottom blocking
-            const offset = this._dom.resizer.style.bottom.slice(0, -2);
-            this._dom.resizer.style.bottom = 0;
-            this._dom.resizer.style.left = `${this._dom.resizer.style.left.slice(0, -2) - offset}px`;
-            return;
-          } else if ((this.containerRect.height - offsetB) + (offsetX - offsetL) > minHeight) {
-            return;
-          }
-          this._dom.resizer.style.left = `${offsetL + (offsetX - offsetL)}px`;
-          this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + (offsetX - offsetL)}px`;
-        } else if (this._grab.l) { // Left
-          if (offsetT + ((offsetX - offsetL) / 2) < 0) { // Top
-            const offset = this._dom.resizer.style.top.slice(0, -2);
-            this._dom.resizer.style.top = 0;
-            this._dom.resizer.style.left = `${this._dom.resizer.style.left.slice(0, -2) - offset}px`;
-            this._dom.resizer.style.bottom = `${this._dom.resizer.style.bottom.slice(0, -2) - offset}px`;
-            return;
-          } else if ((this.containerRect.height - offsetB) + ((offsetX - offsetL) / 2) < 0) { // Bottom
-            const offset = this._dom.resizer.style.bottom.slice(0, -2);
-            this._dom.resizer.style.bottom = 0;
-            this._dom.resizer.style.top = `${this._dom.resizer.style.top.slice(0, -2) - (offset / 2)}px`;
-            this._dom.resizer.style.left = `${this._dom.resizer.style.left.slice(0, -2) - (offset / 2)}px`;
-            return;
-          } else if (offsetL + (offsetX - offsetL) > minWidth) {
-            return;
-          }
-          this._dom.resizer.style.left = `${offsetL + (offsetX - offsetL)}px`;
-          this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + ((offsetX - offsetL) / 2)}px`;
-          this._dom.resizer.style.top = `${offsetT + ((offsetX - offsetL) / 2)}px`;
-        } else if (this._grab.t) { // Top
-          if (offsetL + ((offsetY - offsetT) / 2) < 0) { // Left
-            const offset = this._dom.resizer.style.left.slice(0, -2);
+          if (offsetL - (this._pointer.x - offsetX) < 0) {
+            const offset = parseFloat(this._dom.resizer.style.left.slice(0, -2));
             this._dom.resizer.style.left = 0;
-            this._dom.resizer.style.right = `${this._dom.resizer.style.right.slice(0, -2) - (offset / 2)}px`;
-            this._dom.resizer.style.top = `${this._dom.resizer.style.top.slice(0, -2) - (offset / 2)}px`;
-            return;
-          } else if ((this.containerRect.width - offsetR) + ((offsetY - offsetT) / 2) < 0) { // Right
-            const offset = this._dom.resizer.style.right.slice(0, -2);
-            this._dom.resizer.style.right = 0;
-            this._dom.resizer.style.top = `${this._dom.resizer.style.top.slice(0, -2) - (offset / 2)}px`;
-            this._dom.resizer.style.left = `${this._dom.resizer.style.left.slice(0, -2) - (offset / 2)}px`;
-            return;
-          } else if (offsetT + (offsetY - offsetT) > minHeight) {
+            this._dom.resizer.style.right = `${parseFloat(this._dom.resizer.style.right.slice(0, -2)) + offset}px`;
+          } else {
+            this._dom.resizer.style.left = `${offsetL - (this._pointer.x - offsetX)}px`;
+            this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + (this._pointer.x - offsetX)}px`;
+          }
+        } else { // Towards right
+          // Blocking return condition, resizer is on an edge
+          if (this._dom.resizer.style.right === '0px') {
             return;
           }
-          this._dom.resizer.style.top = `${offsetT + (offsetY - offsetT)}px`;
-          this._dom.resizer.style.left = `${offsetL + ((offsetY - offsetT) / 2)}px`;
-          this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + ((offsetY - offsetT) / 2)}px`;
-        } else if (this._grab.r) { // Right
-          if (offsetT + (offsetR - offsetX) / 2 < 0) { // Top
-            const offset = this._dom.resizer.style.top.slice(0, -2);
+          if ((this.containerRect.width - offsetR) + (this._pointer.x - offsetX) < 0) {
+            const offset = parseFloat(this._dom.resizer.style.right.slice(0, -2));
+            this._dom.resizer.style.right = 0;
+            this._dom.resizer.style.left = `${parseFloat(this._dom.resizer.style.left.slice(0, -2)) + offset}px`;
+          } else {
+            this._dom.resizer.style.left = `${offsetL - (this._pointer.x - offsetX)}px`;
+            this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + (this._pointer.x - offsetX)}px`;
+          }
+        } 
+
+        if (this._pointer.y - offsetY > 0) { // Towards top
+          // Blocking return condition, resizer is on an edge
+          if (this._dom.resizer.style.top === '0px') {
+            return;
+          }
+          if (offsetT - (this._pointer.y - offsetY) < 0) {
+            const offset = parseFloat(this._dom.resizer.style.top.slice(0, -2));
             this._dom.resizer.style.top = 0;
-            this._dom.resizer.style.right = `${this._dom.resizer.style.right.slice(0, -2) - (offset / 2)}px`;
-            this._dom.resizer.style.bottom = `${this._dom.resizer.style.bottom.slice(0, -2) - (offset / 2)}px`;
+            this._dom.resizer.style.bottom = `${parseFloat(this._dom.resizer.style.bottom.slice(0, -2)) + offset}px`;
+          } else {
+            this._dom.resizer.style.top = `${offsetT - (this._pointer.y - offsetY)}px`;
+            this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + (this._pointer.y - offsetY)}px`;            
+          }
+        } else { // Towards bottom
+          // Blocking return condition, resizer is on an edge
+          if (this._dom.resizer.style.bottom === '0px') {
             return;
-          } else if ((this.containerRect.height - offsetB) + (offsetR - offsetX) / 2 < 0) { // Bottom
-            const offset = this._dom.resizer.style.bottom.slice(0, -2);
+          }
+          if ((this.containerRect.height - offsetB) + (this._pointer.y - offsetY) < 0) {
+            const offset = parseFloat(this._dom.resizer.style.bottom.slice(0, -2));
             this._dom.resizer.style.bottom = 0;
-            this._dom.resizer.style.top = `${this._dom.resizer.style.top.slice(0, -2) - (offset / 2)}px`;
-            this._dom.resizer.style.right = `${this._dom.resizer.style.right.slice(0, -2) - (offset / 2)}px`;
-            return;
-          } else if ((this.containerRect.width - offsetR) + offsetR - offsetX > minWidth) {
-            return;
-          }
-          this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + offsetR - offsetX}px`;
-          this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + (offsetR - offsetX) / 2}px`;
-          this._dom.resizer.style.top = `${offsetT + (offsetR - offsetX) / 2}px`;
-        } else if (this._grab.b) { // Bottom
-          if (offsetL + (offsetB - offsetY) / 2 < 0) { // Left
-            const offset = this._dom.resizer.style.left.slice(0, -2);
-            this._dom.resizer.style.left = 0;
-            this._dom.resizer.style.right = `${this._dom.resizer.style.right.slice(0, -2) - (offset / 2)}px`;
-            this._dom.resizer.style.bottom = `${this._dom.resizer.style.bottom.slice(0, -2) - (offset / 2)}px`;
-            return;
-          } else if ((this.containerRect.width - offsetR) + (offsetB - offsetY) / 2 < 0) { // Right
-            const offset = this._dom.resizer.style.right.slice(0, -2);
-            this._dom.resizer.style.right = 0;
-            this._dom.resizer.style.bottom = `${this._dom.resizer.style.bottom.slice(0, -2) - (offset / 2)}px`;
-            this._dom.resizer.style.left = `${this._dom.resizer.style.left.slice(0, -2) - (offset / 2)}px`;
-            return;
-          } else if ((this.containerRect.height - offsetB) + offsetB - offsetY > minHeight) {
-            return;
-          }
-          this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + offsetB - offsetY}px`;
-          this._dom.resizer.style.left = `${offsetL + (offsetB - offsetY) / 2}px`;
-          this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + (offsetB - offsetY) / 2}px`;
-        } else if (this._grab.resizer) { // Resizer grabbed
-          if (this._pointer.x - offsetX > 0) { // Left
-            // Blocking return condition, resizer is on an edge
-            if (this._dom.resizer.style.left === '0px') {
-              return;
-            }
-            if (offsetL - (this._pointer.x - offsetX) < 0) {
-              const offset = parseFloat(this._dom.resizer.style.left.slice(0, -2));
-              this._dom.resizer.style.left = 0;
-              this._dom.resizer.style.right = `${parseFloat(this._dom.resizer.style.right.slice(0, -2)) + offset}px`;
-            } else {
-              this._dom.resizer.style.left = `${offsetL - (this._pointer.x - offsetX)}px`;
-              this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + (this._pointer.x - offsetX)}px`;
-            }
-          } else { // Right
-            // Blocking return condition, resizer is on an edge
-            if (this._dom.resizer.style.right === '0px') {
-              return;
-            }
-            if ((this.containerRect.width - offsetR) + (this._pointer.x - offsetX) < 0) {
-              const offset = parseFloat(this._dom.resizer.style.right.slice(0, -2));
-              this._dom.resizer.style.right = 0;
-              this._dom.resizer.style.left = `${parseFloat(this._dom.resizer.style.left.slice(0, -2)) + offset}px`;
-            } else {
-              this._dom.resizer.style.left = `${offsetL - (this._pointer.x - offsetX)}px`;
-              this._dom.resizer.style.right = `${(this.containerRect.width - offsetR) + (this._pointer.x - offsetX)}px`;
-            }
-          } 
-  
-          if (this._pointer.y - offsetY > 0) { // Top
-            // Blocking return condition, resizer is on an edge
-            if (this._dom.resizer.style.top === '0px') {
-              return;
-            }
-            if (offsetT - (this._pointer.y - offsetY) < 0) {
-              const offset = parseFloat(this._dom.resizer.style.top.slice(0, -2));
-              this._dom.resizer.style.top = 0;
-              this._dom.resizer.style.bottom = `${parseFloat(this._dom.resizer.style.bottom.slice(0, -2)) + offset}px`;
-            } else {
-              this._dom.resizer.style.top = `${offsetT - (this._pointer.y - offsetY)}px`;
-              this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + (this._pointer.y - offsetY)}px`;            
-            }
-          } else { // Bottom
-            // Blocking return condition, resizer is on an edge
-            if (this._dom.resizer.style.bottom === '0px') {
-              return;
-            }
-            if ((this.containerRect.height - offsetB) + (this._pointer.y - offsetY) < 0) {
-              const offset = parseFloat(this._dom.resizer.style.bottom.slice(0, -2));
-              this._dom.resizer.style.bottom = 0;
-              this._dom.resizer.style.top = `${parseFloat(this._dom.resizer.style.top.slice(0, -2)) + offset}px`;
-            } else {
-              this._dom.resizer.style.top = `${offsetT - (this._pointer.y - offsetY)}px`;
-              this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + (this._pointer.y - offsetY)}px`;
-            }
+            this._dom.resizer.style.top = `${parseFloat(this._dom.resizer.style.top.slice(0, -2)) + offset}px`;
+          } else {
+            this._dom.resizer.style.top = `${offsetT - (this._pointer.y - offsetY)}px`;
+            this._dom.resizer.style.bottom = `${(this.containerRect.height - offsetB) + (this._pointer.y - offsetY)}px`;
           }
         }
-      }      
-    });
+      }
+    }
   }
 
 
-  _mouseUp(event) {
-    event.preventDefault();
+  _mouseUp() {
     this._grab.tl = false;
     this._grab.tr = false;
     this._grab.br = false;
