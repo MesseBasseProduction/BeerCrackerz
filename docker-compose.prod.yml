@@ -3,28 +3,36 @@ version: "3.9"
 services:
   nginx:
     container_name: ${NGINX_NAME}
+    restart: always
     build:
       context: .
-      dockerfile: ./.conf/development/nginx/Dockerfile
+      dockerfile: ./.conf/production/nginx/Dockerfile
     ports:
       - ${SERVER_HTTP_PORT}:${SERVER_HTTP_PORT}
+      - ${SERVER_HTTPS_PORT}:${SERVER_HTTPS_PORT}
     environment:
+      SERVER_HOST: ${SERVER_HOST}
       SERVER_HTTP_PORT: ${SERVER_HTTP_PORT}
-      BACKEND_NAME: ${BACKEND_NAME}
-      BACKEND_PORT: ${BACKEND_PORT}
+      SERVER_HTTPS_PORT: ${SERVER_HTTPS_PORT}
+      BACKEND_PROXY: ${BACKEND_NAME}:${BACKEND_PORT}
+      CERTBOT_EMAIL: ${CERTBOT_EMAIL}
+      CERT_NAME: ${CERT_NAME}
+      STAGING: ${CERTBOT_STAGING}
+      USE_LOCAL_CA: ${CERTBOT_LOCAL_CA}
     volumes:
-      - ./static:/vol/static
-      - bc_media:/vol/media
+      - bc_static_files:/vol
+      - bc_nginx_secret:/etc/letsencrypt
     depends_on:
       - backend
   backend:
     container_name: ${BACKEND_NAME}
+    restart: always
     build:
       context: .
-      dockerfile: ./.conf/development/back/Dockerfile
+      dockerfile: ./.conf/production/back/Dockerfile
     environment:
       BACKEND_PORT: ${BACKEND_PORT}
-      SERVER_URL: http://${SERVER_HOST}:${SERVER_HTTP_PORT}
+      SERVER_URL: ${SERVER_PROTOCOL}://${SERVER_HOST}
       SECRET_KEY: ${BACKEND_SECRET_KEY}
       DEBUG: ${BACKEND_DEBUG}
       ALLOWED_HOSTS: ${BACKEND_ALLOWED_HOSTS}
@@ -37,13 +45,13 @@ services:
       MAILJET_API_KEY: ${MAILJET_API_KEY}
       MAILJET_API_SECRET: ${MAILJET_API_SECRET}
     volumes:
-      - ./back:/back
-      - bc_media:/vol/media
+      - bc_static_files:/vol
     depends_on:
       - db
   db:
     image: postgres:${DB_POSTGRES_VERSION}
     container_name: ${DB_HOST}
+    restart: always
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -52,13 +60,10 @@ services:
       - ${DB_PORT}:${DB_PORT}
     volumes:
       - bc_db:/var/lib/postgresql/data
-  adminer:
-    container_name: ${DB_ADMINER_NAME}
-    image: adminer
-    ports:
-      - ${DB_ADMINER_PORT}:${DB_ADMINER_CONTAINER_PORT}
 volumes:
   bc_db:
     name: bc_db
-  bc_media:
-    name: bc_media
+  bc_static_files:
+    name: bc_static_files
+  bc_nginx_secret:
+    name: bc_nginx_secret
