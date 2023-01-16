@@ -155,7 +155,18 @@
     "deleteMarkDesc": "Möchten sie diese markierung wirklich löschen?<br>Diese aktion ist dauerhaft und kann nicht rückgängig gemacht werden.",
     "spotEditTitle": "Spot bearbeiten",
     "shopEditTitle": "Laden bearbeiten",
-    "barEditTitle": "Bar bearbeiten"
+    "barEditTitle": "Bar bearbeiten",
+    "helpTitle": "Entdecken Sie BeerCrackerz",
+    "helpNavNext": "Navigieren sie zur nächsten seite oder verlassen sie dieses hilfemenü!",
+    "helpNavNextPrev": "Navigieren sie zur nächsten oder vorherigen seite oder verlassen sie dieses hilfemenü!",
+    "helpNavEnd": "Sie können diesen assistenten jetzt schließen!",
+    "helpPage1": "Willkommen bei BeerCrackerz!<br>Mal sehen, wie die Karte funktioniert; Ihre Position wird durch das Symbol <img src=\"/static/img/marker/user-position.png\" alt=\"user-position\"> gekennzeichnet. Um ihre position herum zeigt ein <span class=\"blue-precision\">blauer kreis</span> die aktuelle Genauigkeit Ihrer Position an. Um sie herum gibt es auch einen <span class=\"gold-range\">goldenen kreis</span> ; Dies ist die maximale entfernung, für die sie einen neuen spot, ein laden oder eine bar deklarieren können.",
+    "helpPage2": "Ein spot wird durch das symbol <img src=\"/static/img/marker/marker-icon-green.png\" alt=\"spot-mark\"> dargestellt. Spot sind perfekte orte, um eine bierdose zu genießen. Jeder spot hat seine besonderheiten, es liegt an ihnen, sie zu entdecken. Um den spot herum befindet sich ein <span class=\"green-spot\">grüner kreis</span> ; es stellt den bereich dar, in dem sie das recht haben, vor spot abzustimmen oder kommentare abzugeben.",
+    "helpPage3": "Ein laden wird durch das symbol <img src=\"/static/img/marker/marker-icon-blue.png\" alt=\"shop-mark\"> dargestellt. Laden sind der ideale ort, um sich mit bierdosen einzudecken. Jeder laden hat seine besonderheiten, es liegt an ihnen, sie zu entdecken. Um den laden herum befindet sich ein <span class=\"blue-shop\">blue circle</span> ; ; es stellt den bereich dar, in dem sie das recht haben, vor laden abzustimmen oder kommentare abzugeben.",
+    "helpPage4": "Ein bar wird durch das symbol <img src=\"/static/img/marker/marker-icon-red.png\" alt=\"bar-mark\"> dargestellt. Bars sind freundliche orte, die frische und gute biere servieren. Jeder bar hat seine besonderheiten, es liegt an ihnen, sie zu entdecken. Um den bar herum befindet sich ein <span class=\"red-bar\">red circle</span> ; ; es stellt den bereich dar, in dem sie das recht haben, vor bar abzustimmen oder kommentare abzugeben.",
+    "helpPage5": "Es stehen mehrere befehle zur verfügung: 1. auswahl der basiskarte, 2. zentrieren und sperren der Karte auf ihrer position, 3. ein oder ausblenden von kartenelementen und 4. ihr konto.",
+    "helpQuit": "Aufhören",
+    "helpQuitNoSee": "Aufhören und nie wieder sehen"
   },
   "popup": {
     "spotFoundBy": "Eine spot, die von entdeckt wurde",

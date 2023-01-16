@@ -155,7 +155,18 @@
     "deleteMarkDesc": "Ètes vous sûr de vouloir supprimer ce point?<br>Cette action est permanente et irréversible.",
     "spotEditTitle": "Éditer le spot",
     "shopEditTitle": "Éditer le magasin",
-    "barEditTitle": "Éditer le bar"
+    "barEditTitle": "Éditer le bar",
+    "helpTitle": "Découvrir BeerCrackerz",
+    "helpNavNext": "Naviguez jusqu'à la page suivante, ou quittez ce menu d'aide!",
+    "helpNavNextPrev": "Naviguez jusqu'à la page suivante ou précèdante, ou quittez ce menu d'aide!",
+    "helpNavEnd": "Vous pouvez maintenant fermer cet assistant!",
+    "helpPage1": "Bienvenue sur BeerCrackerz!<br>Voyons comment marche la carte ; votre position est marquée par le symbole <img src=\"/static/img/marker/user-position.png\" alt=\"user-position\">. Autour de votre position, un <span class=\"blue-precision\">cercle bleu</span> ; ce dernier représente la précision actuelle de votre position. Autour de vous, il y a également un <span class=\"gold-range\">cercle doré</span> ; c'est la distance maximale pour laquelle vous pouvez déclarer un nouveau spot, un magasin ou un bar.",
+    "helpPage2": "Un spot est représenté par le symbole <img src=\"/static/img/marker/marker-icon-green.png\" alt=\"spot-mark\">. Les spots sont les endroit ideaux pour deguster une cannette. Chaque spot à ses specificité, a vous de les découvrir. Autour du spot se trouve un <span class=\"green-spot\">cercle vert</span> ; ce dernier représente la zone dans laquelle vous avez le droit de voter ou de laisser des commentaires sur le spot.",
+    "helpPage3": "Un magasin est représenté par le symbole <img src=\"/static/img/marker/marker-icon-blue.png\" alt=\"shop-mark\">. Les spots sont les endroit ideaux pour se ravitailler en cannettes. Chaque magasin à ses specificités, à vous de les découvrir. Autour du magasin se trouve un <span class=\"blue-shop\">cercle bleu</span> ; ce dernier représente la zone dans laquelle vous avez le droit de voter ou de laisser des commentaires sur le magasin.",
+    "helpPage4": "Un bar est représenté par le symbole <img src=\"/static/img/marker/marker-icon-red.png\" alt=\"bar-mark\">. Les bars sont des endroit conviviaux qui servent de fraîche et bonnes bières. Chaque bar à ses specificités, à vous de les découvrir. Autour du bar se trouve un <span class=\"red-bar\">cercle rouge</span> ; ce dernier représente la zone dans laquelle vous avez le droit de voter ou de laisser des commentaires sur le magasin.",
+    "helpPage5": "Plusieurs commandes sont à votre disposition : 1. choix du fond de carte, 2. recentrer et vérouiller la carte sur votre position, 3. afficher ou cacher les éléments de la carte et 4. votre compte.",
+    "helpQuit": "Quitter",
+    "helpQuitNoSee": "Quitter et ne plus revoir"
   },
   "popup": {
     "spotFoundBy": "Un spot découvert par",

@@ -18,3 +18,43 @@
     max-width: 50%;
   }
 }
+
+@media (max-height: 750px) {
+  .overlay .startup-help-modal .helping-view-wrapper {
+    height: 39rem;
+
+    .page .doc-image {
+      max-height: 28rem;
+    }
+  }
+}
+
+@media (max-height: 600px) {
+  .overlay .startup-help-modal .helping-view-wrapper {
+    height: 29rem;
+
+    .page .doc-image {
+      max-height: 18rem;
+    }
+  }
+}
+
+@media (max-height: 500px) {
+  .overlay .startup-help-modal .helping-view-wrapper {
+    height: 19rem;
+
+    .page .doc-image {
+      max-height: 11rem;
+    }
+  }
+}
+
+@media (max-height: 400px) {
+  .overlay .startup-help-modal .helping-view-wrapper {
+    height: 14rem;
+
+    .page .doc-image {
+      max-height: 8rem;
+    }
+  }
+}

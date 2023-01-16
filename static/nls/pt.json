@@ -155,7 +155,18 @@
     "deleteMarkDesc": "Tem certeza de que deseja excluir esta marca?<br>Esta ação é permanente e não pode ser revertida.",
     "spotEditTitle": "Editar spot",
     "shopEditTitle": "Editar loja",
-    "barEditTitle": "Editar barra"
+    "barEditTitle": "Editar barra",
+    "helpTitle": "Descubra o BeerCrackerz",
+    "helpNavNext": "Navegue para a próxima página ou saia deste menu de ajuda!",
+    "helpNavNextPrev": "Navegue para a página seguinte ou anterior ou saia deste menu de ajuda!",
+    "helpNavEnd": "Agora você pode fechar este assistente!",
+    "helpPage1": "Bem-vindo ao BeerCrackerz!<br>Vamos ver como o mapa funciona; sua posição é marcada pelo símbolo <img src=\"/static/img/marker/user-position.png\" alt=\"user-position\">. Ao redor de sua posição, um <span class=\"blue-precision\">círculo azul</span> representa a precisão atual de sua posição. Ao seu redor, há também um <span class=\"gold-range\">círculo dourado</span> ; esta é a distância máxima para a qual você pode declarar um novo spot, uma loja ou um bar.",
+    "helpPage2": "Um spot é representado pelo símbolo <img src=\"/static/img/marker/marker-icon-green.png\" alt=\"spot-mark\">. Spots são lugares perfeitos para curtir uma lata de cerveja. Cada spot tem as suas especificidades, cabe-te a ti descobri-las. Ao redor do spot há um <span class=\"green-spot\">círculo verde</span> ; representa a área em que você tem o direito de votar ou deixar comentários no spot.",
+    "helpPage3": "Uma loja é representada pelo símbolo <img src=\"/static/img/marker/marker-icon-blue.png\" alt=\"shop-mark\">. As lojas são os locais ideais para estocar latas de cerveja. Cada loja tem suas especificidades, cabe a você descobri-las. Ao redor da loja há um <span class=\"blue-shop\">círculo azul</span> ; representa a área em que você tem direito de votar ou deixar comentários na loja.",
+    "helpPage4": "Uma barra é representada pelo símbolo <img src=\"/static/img/marker/marker-icon-red.png\" alt=\"bar-mark\">. Bares são lugares amigáveis ​​que servem cervejas frescas e boas. Cada barra tem suas especificidades, cabe a você descobri-las. Ao redor da barra há um <span class=\"red-bar\">círculo vermelho</span> ; representa a área em que você tem direito de votar ou deixar comentários na barra.",
+    "helpPage5": "Vários comandos estão disponíveis: 1. escolha do mapa base, 2. recentralizar e bloquear o mapa em sua posição, 3. mostrar ou ocultar itens do mapa e 4. sua conta.",
+    "helpQuit": "Saia",
+    "helpQuitNoSee": "Saia e não veja mais"
   },
   "popup": {
     "spotFoundBy": "Um spot descoberto por",

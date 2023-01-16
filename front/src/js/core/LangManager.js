@@ -239,6 +239,23 @@ class LangManager {
   }
 
 
+  startupHelpModal(dom) {
+    Utils.replaceString(dom.querySelector(`#nls-modal-title`), `{MODAL_TITLE}`, this.modal('helpTitle'));
+    Utils.replaceString(dom.querySelector(`#nls-modal-page-1-1`), `{MODAL_PAGE_1_1}`, this.modal('helpPage1'));
+    Utils.replaceString(dom.querySelector(`#nls-modal-page-1-2`), `{MODAL_PAGE_1_2}`, this.modal('helpNavNext'));
+    Utils.replaceString(dom.querySelector(`#nls-modal-page-2-1`), `{MODAL_PAGE_2_1}`, this.modal('helpPage2'));
+    Utils.replaceString(dom.querySelector(`#nls-modal-page-2-2`), `{MODAL_PAGE_2_2}`, this.modal('helpNavNextPrev'));
+    Utils.replaceString(dom.querySelector(`#nls-modal-page-3-1`), `{MODAL_PAGE_3_1}`, this.modal('helpPage3'));
+    Utils.replaceString(dom.querySelector(`#nls-modal-page-3-2`), `{MODAL_PAGE_3_2}`, this.modal('helpNavNextPrev'));
+    Utils.replaceString(dom.querySelector(`#nls-modal-page-4-1`), `{MODAL_PAGE_4_1}`, this.modal('helpPage4'));
+    Utils.replaceString(dom.querySelector(`#nls-modal-page-4-2`), `{MODAL_PAGE_4_2}`, this.modal('helpNavNextPrev'));
+    Utils.replaceString(dom.querySelector(`#nls-modal-page-5-1`), `{MODAL_PAGE_5_1}`, this.modal('helpPage5'));
+    Utils.replaceString(dom.querySelector(`#nls-modal-page-5-2`), `{MODAL_PAGE_5_2}`, this.modal('helpNavEnd'));
+    Utils.replaceString(dom.querySelector(`#modal-quit`), `{MODAL_QUIT}`, this.modal('helpQuit'));
+    Utils.replaceString(dom.querySelector(`#modal-quit-no-see`), `{MODAL_QUIT_NO_SEE}`, this.modal('helpQuitNoSee'));
+  }
+
+
   markPopup(dom, options) {
     Utils.replaceString(dom, `{${options.type.toUpperCase()}_NAME}`, Utils.stripDom(options.name));
     Utils.replaceString(dom, `{${options.type.toUpperCase()}_FINDER}`, options.user);

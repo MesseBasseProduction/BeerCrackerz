@@ -1,0 +1,90 @@
+.startup-help-modal {
+  .blue-precision {
+    color: #69E0D6;
+    font-weight: bold;
+  }
+
+  .gold-range {
+    color: #FFD87D;
+    font-weight: bold;
+  }
+
+  .green-spot {
+    color: #25A822;
+    font-weight: bold;
+  }
+
+  .blue-shop {
+    color: #247DC9;
+    font-weight: bold;
+  }
+
+  .red-bar {
+    color: #CA2A3D;
+    font-weight: bold;
+  }
+
+  .helping-view-wrapper {
+    display: flex;
+    height: 55rem;
+    overflow: hidden;
+    position: relative;
+
+    .previous,
+    .next {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+
+      &.disabled {
+        pointer-events: none;
+        filter: grayscale(1) opacity(.3);
+      }
+    }
+
+    .previous {
+      left: .5rem;
+    }
+
+    .next {
+      right: .5rem;
+    }
+
+    .page {
+      align-items: center;
+      display: flex;
+      flex-shrink: 0;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-around;
+      width: 100%;
+
+      p img {
+        height: var(--font-size);
+      }
+
+      .doc-image {
+        height: 100%;
+        max-height: 40rem;
+      }
+    }
+  }
+
+  .page-counter {
+    display: flex;
+    justify-content: center;
+
+    .page {
+      background-color: var(--color-txt);
+      border-radius: 50%;
+      height: var(--font-size);
+      margin: 0 .5rem;
+      width: var(--font-size);
+      transition: background-color .2s;
+
+      &.active {
+        background-color: var(--color-primary);
+      }
+    }
+  }
+}
