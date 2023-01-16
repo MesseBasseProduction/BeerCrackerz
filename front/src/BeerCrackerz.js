@@ -164,7 +164,8 @@ class BeerCrackerz {
       .then(this._initGeolocation.bind(this))
       .then(this._initMap.bind(this))
       .then(this._initMarkers.bind(this))
-      .then(this._initEvents.bind(this));
+      .then(this._initEvents.bind(this))
+      .then(this._startSession.bind(this));
   }
 
 
@@ -485,6 +486,15 @@ class BeerCrackerz {
 
       resolve();
     });
+  }
+
+
+  _startSession() {
+    if (Utils.getPreference(`startup-help`) === 'true') {
+      this._modal = ModalFactory.build('StartupHelp');
+    } else {
+      this.notification.raise(this.nls.notif('welcomeBack'));      
+    }
   }
 
 

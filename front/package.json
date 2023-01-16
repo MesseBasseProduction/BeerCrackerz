@@ -7,7 +7,6 @@
   "scripts": {
     "build": "webpack --config webpack/webpack.prod.js",
     "watch": "webpack --watch --config webpack/webpack.dev.js",
-    "server": "http-server -p 1337 -c-1 -o index.html",
     "doc": "jsdoc -c webpack/jsDoc.json",
     "test": "karma start test/karma.config.js",
     "test:dev": "karma start test/karma.config.js --dev=true",
@@ -39,7 +38,6 @@
     "eslint": "^8.32.0",
     "eslint-webpack-plugin": "^3.2.0",
     "file-loader": "^6.2.0",
-    "http-server": "^14.1.1",
     "jasmine": "^4.5.0",
     "jasmine-core": "^4.5.0",
     "jsdoc": "^4.0.0",

@@ -68,6 +68,10 @@ class HideShowModalView(TemplateView):
     template_name = 'modal/hideshow.html'
 
 
+class StartupHelpModalView(TemplateView):
+    template_name = 'modal/startuphelp.html'
+
+
 class NewBarModalView(TemplateView):
     template_name = 'modal/addbar.html'
 

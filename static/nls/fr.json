@@ -40,7 +40,8 @@
     "lockFocusOn": "Centrer et verrouiller sur la position",
     "unlockFocusOn": "Fin du verrouillage de la position",
     "uploadPPSuccess": "Photo de profil téléversée avec succès",
-    "uploadPPFailed": "Impossible de téléverser la photo de profil"
+    "uploadPPFailed": "Impossible de téléverser la photo de profil",
+    "welcomeBack": "Content de vous revoir sur BeerCrackerz!"
   },
   "nav": {
     "add": "Ajouter",

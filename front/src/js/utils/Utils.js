@@ -184,6 +184,10 @@ class Utils {
     if (Utils.getPreference('dark-theme') === null) {
       Utils.setPreference('dark-theme', true);
     }
+
+    if (Utils.getPreference('startup-help') === null) {
+      Utils.setPreference('startup-help', true);
+    }
   }
 
 

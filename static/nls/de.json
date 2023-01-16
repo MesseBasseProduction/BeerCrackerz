@@ -40,7 +40,8 @@
     "lockFocusOn": "Zentrieren und sperren der ansicht auf ihre Position",
     "unlockFocusOn": "Positionssperre beendet",
     "uploadPPSuccess": "Profilbild aktualisiert",
-    "uploadPPFailed": "Profilbild konnte nicht hochgeladen werden"
+    "uploadPPFailed": "Profilbild konnte nicht hochgeladen werden",
+    "welcomeBack": "Schön, dich wieder auf BeerCrackerz zu sehen!"
   },
   "nav": {
     "add": "Hinzufügen",

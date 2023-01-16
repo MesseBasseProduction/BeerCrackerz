@@ -40,7 +40,8 @@
     "lockFocusOn": "Centrar y bloquear la vista en su posición",
     "unlockFocusOn": "Finalizó el bloqueo de posición",
     "uploadPPSuccess": "Imagen de perfil actualizada",
-    "uploadPPFailed": "No se pudo cargar la foto de perfil"
+    "uploadPPFailed": "No se pudo cargar la foto de perfil",
+    "welcomeBack": "Encantado de verte de nuevo en BeerCrackerz!"
   },
   "nav": {
     "add": "Agregar",

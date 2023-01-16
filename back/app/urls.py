@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import IndexView, WelcomeView, ErrorView, LoginAsideView, RegisterAsideView, ForgotPasswordAsideView, ResetPasswordAsideView, SpotPopupView, ShopPopupView, BarPopupView, DeleteMarkModalView, EditBarModalView, EditShopModalView, EditSpotModalView, HideShowModalView, NewBarModalView, NewShopModalView, NewSpotModalView, UserModalView, UpdatePPModalView
+from .views import IndexView, WelcomeView, ErrorView, LoginAsideView, RegisterAsideView, ForgotPasswordAsideView, ResetPasswordAsideView, SpotPopupView, ShopPopupView, BarPopupView, DeleteMarkModalView, EditBarModalView, EditShopModalView, EditSpotModalView, HideShowModalView, NewBarModalView, NewShopModalView, NewSpotModalView, UserModalView, UpdatePPModalView, StartupHelpModalView
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
@@ -25,5 +25,6 @@ urlpatterns = [
     path('modal/addshop', NewShopModalView.as_view(), name='newShopModal'),
     path('modal/addspot', NewSpotModalView.as_view(), name='newSpotModal'),
     path('modal/user', UserModalView.as_view(), name='userModal'),
-    path('modal/updatepp', UpdatePPModalView.as_view(), name='updatePPModal')
+    path('modal/updatepp', UpdatePPModalView.as_view(), name='updatePPModal'),
+    path('modal/startuphelp', StartupHelpModalView.as_view(), name='startupHelpModal')
 ]

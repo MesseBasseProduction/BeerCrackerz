@@ -40,7 +40,8 @@
     "lockFocusOn": "Centering and locking view on your position",
     "unlockFocusOn": "Position locking ended",
     "uploadPPSuccess": "Profile picture updated",
-    "uploadPPFailed": "Failed to upload profile picture"
+    "uploadPPFailed": "Failed to upload profile picture",
+    "welcomeBack": "Glad to see you back on BeerCrackerz!"
   },
   "nav": {
     "add": "Add",

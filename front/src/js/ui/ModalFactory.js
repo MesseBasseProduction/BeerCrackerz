@@ -4,6 +4,7 @@ import EditMarkModal from './modal/EditMarkModal.js';
 import UserModal from './modal/UserModal.js';
 import UpdateProfilePictureModal from './modal/UpdateProfilePictureModal.js';
 import HideShowModal from './modal/HideShowModal.js';
+import StartupHelpModal from './modal/StartupHelpModal.js';
 
 
 const Classes = {
@@ -12,7 +13,8 @@ const Classes = {
   EditMarkModal,
   UserModal,
   UpdateProfilePictureModal,
-  HideShowModal
+  HideShowModal,
+  StartupHelpModal
 };
 
 

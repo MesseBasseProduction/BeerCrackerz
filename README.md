@@ -1,12 +1,26 @@
 # BeerCrackerz
 
-The website for beer lover, to share the best spots to crack a beer, or to easily refill this beverage of gods!
-Soon enough an alpha will be open for you to test this !
+Welcome, fellow beer lovers. BeerCrackerz is a community web app to list the best spots to drink a fresh one while you're outside. It provides a well-known map interface so it is really easy to browse, find or add unique spots!
 
-[LeafletJs](https://leafletjs.com/)
+You want to try it ? We are currently running an instance just so you can try (and add your personnal best places) :
 
-[Leaflet-MarkerCluster](https://github.com/Leaflet/Leaflet.markercluster)
+[https://beercrackerz.org](https://beercrackerz.org)
 
-[Leaflet-Color-Markers](https://github.com/pointhi/leaflet-color-markers)
+## Get Started
 
-[SVGRepo](https://www.svgrepo.com/)
+To run your instance, your need to install `docker`, `docker-compose` and `npm` on your system :
+
+- clone the repository on your system ;
+- set the `conf.env` values for ports, database users and pass and API keys
+- run `docker-compose build`
+- run `docker-compose up -d`
+- create super user with `docker exec -it beer_crackerz_back python manage.py createsuperuser`
+- configure your system web server (or reverse proxy) according to `conf.env` parameters
+
+## About
+
+BeerCrackerz is an open-source software edited and hosted by [Messe Basse Production](https://messe-basse-production.com/), developper by [Arthur Beaulieu]() and [Raphaël Beekmann]()
+
+#### Technologies
+
+[OpenStreetMap](https://www.openstreetmap.org/), [ESRI](https://www.esri.com), [LeafletJs](https://leafletjs.com/), [Leaflet-MarkerCluster](https://github.com/Leaflet/Leaflet.markercluster), [Leaflet-Color-Markers](https://github.com/pointhi/leaflet-color-markers), [SVGRepo](https://www.svgrepo.com/)
