@@ -42,6 +42,10 @@ class UserModal extends BaseModal {
       this._rootElement.querySelector('#dark-theme-toggle').checked = true;
     }
 
+    if (Utils.getPreference('startup-help') === 'true') {
+      this._rootElement.querySelector('#startup-help-toggle').checked = true;
+    }
+
     if (window.DEBUG === true || (Utils.getPreference('app-debug') === 'true')) {
       this._rootElement.querySelector('#debug-toggle').checked = true;
     }
@@ -70,6 +74,7 @@ class UserModal extends BaseModal {
     this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#high-accuracy-toggle'), window.BeerCrackerz.toggleHighAccuracy, window.BeerCrackerz));
     this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#dark-theme-toggle'), VisuHelper.toggleDarkTheme, VisuHelper));
     this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#debug-toggle'), VisuHelper.toggleDebug, VisuHelper));
+    this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#startup-help-toggle'), VisuHelper.toggleStartupHelp, VisuHelper));
     this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#lang-select'), window.BeerCrackerz.updateLang, window.BeerCrackerz));
     this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#update-pp'), this.updateProfilePicture, this));
     this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector('#user-pp'), this.updateProfilePicture, this));

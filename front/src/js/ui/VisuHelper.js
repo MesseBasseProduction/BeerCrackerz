@@ -480,6 +480,16 @@ class VisuHelper {
   }
 
 
+  static toggleStartupHelp() {
+    if (Utils.getPreference('startup-help') === 'true') {
+      Utils.setPreference('startup-help', 'false');
+    } else {
+      Utils.setPreference('startup-help', 'true');
+      window.location = '/'; // Force reload so user can see the startup help guide
+    }
+  }
+
+
   static checkClusteredMark(type) {
     if (Utils.getPreference('poi-show-label') === 'true') {
       const layers = window.BeerCrackerz.marks[type];

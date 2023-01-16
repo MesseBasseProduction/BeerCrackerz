@@ -30,6 +30,7 @@
 import Kom from './js/core/Kom.js';
 import LangManager from './js/core/LangManager.js';
 
+import VisuHelper from './js/ui/VisuHelper.js';
 import ZoomSlider from './js/ui/component/ZoomSlider.js';
 
 import Utils from './js/utils/Utils.js';
@@ -109,11 +110,9 @@ class BeerCrackerzAuth {
      * @type {Object}
      * @private
      **/
-    this._lang = new LangManager(
-      window.navigator.language.substring(0, 2),
-      this._init.bind(this),
-      this._fatalError.bind(this)
-    );
+    this._lang = new LangManager();
+
+    this._init();
   }
 
 
@@ -138,6 +137,7 @@ class BeerCrackerzAuth {
    * &lt;/blockquote>
    **/
   _init() {
+    this.nls.updateLang(Utils.getPreference('selected-lang')).then(() => {
     // By default, the template contains the login aside, no need to fetch it
     this._handleLoginAside();
     this._kom = new Kom();
@@ -160,8 +160,8 @@ class BeerCrackerzAuth {
 
       this._initMap()
         .then(this._initGeolocation.bind(this))
-        .then(this._initEvents.bind(this))
         .then(this._initMarkers.bind(this))
+        .then(this._initEvents.bind(this))
         .catch(this._fatalError.bind(this));
     } else {
       this._fatalError({
@@ -169,6 +169,7 @@ class BeerCrackerzAuth {
         msg: (this._kom.csrf === null) ? `The CSRF token doesn't exists in cookies` : `The headers amount is invalid`
       });
     }
+    });
   }
 
 
@@ -255,49 +256,6 @@ class BeerCrackerzAuth {
   /**
    * @method
    * @async
-   * @name _initEvents
-   * @private
-   * @memberof BeerCrackerzAuth
-   * @author Arthur Beaulieu
-   * @since September 2022
-   * @description
-   * &lt;blockquote>
-   * The _initEvents() method will listen to all required events to manipulate the map. Those events
-   * are both for commands and for map events (click, drag, zoom and layer change).
-   * &lt;/blockquote>
-   * @returns {Promise} A Promise resolved when preferences are set
-   **/
-  _initEvents() {
-    return new Promise(resolve => {
-      // Map is dragged by user mouse/finger
-      this._map.on('drag', () => {
-        // Constrain pan to the map bounds
-        this._map.panInsideBounds(MapEnum.mapBounds, { animate: true });
-      });
-      // Auto hide labels if zoom level is too high (and restore it when needed)
-      this._map.on('zoomend', () => {
-        if (this._map.getZoom() &lt; 15) {
-          this._setMarkerLabels(this._marks.spot, false);
-          this._setMarkerLabels(this._marks.shop, false);
-          this._setMarkerLabels(this._marks.bar, false);
-        } else {
-          this._setMarkerLabels(this._marks.spot, true);
-          this._setMarkerLabels(this._marks.shop, true);
-          this._setMarkerLabels(this._marks.bar, true);
-        }
-      });
-      // Center on command
-      document.getElementById('center-on').addEventListener('click', () => {
-        this._map.flyTo([this._user.lat, this._user.lng], 18);
-      });
-      resolve();
-    });
-  }
-
-
-  /**
-   * @method
-   * @async
    * @name _initMarkers
    * @private
    * @memberof BeerCrackerzAuth
@@ -348,6 +306,53 @@ class BeerCrackerzAuth {
         }
       });
 
+      resolve();
+    });
+  }
+
+
+  /**
+   * @method
+   * @async
+   * @name _initEvents
+   * @private
+   * @memberof BeerCrackerzAuth
+   * @author Arthur Beaulieu
+   * @since September 2022
+   * @description
+   * &lt;blockquote>
+   * The _initEvents() method will listen to all required events to manipulate the map. Those events
+   * are both for commands and for map events (click, drag, zoom and layer change).
+   * &lt;/blockquote>
+   * @returns {Promise} A Promise resolved when preferences are set
+   **/
+   _initEvents() {
+    return new Promise(resolve => {
+      // Map is dragged by user mouse/finger
+      this._map.on('drag', () => {
+        // Constrain pan to the map bounds
+        this._map.panInsideBounds(MapEnum.mapBounds, { animate: true });
+      });
+      // Auto hide labels if zoom level is too high (and restore it when needed)
+      this._map.on('zoomend', () => {
+        if (this._map.getZoom() &lt; 15) {
+          this._setMarkerLabels(this._marks.spot, false);
+          this._setMarkerLabels(this._marks.shop, false);
+          this._setMarkerLabels(this._marks.bar, false);
+        } else {
+          this._setMarkerLabels(this._marks.spot, true);
+          this._setMarkerLabels(this._marks.shop, true);
+          this._setMarkerLabels(this._marks.bar, true);
+        }
+      });
+      // Clustering events
+      this._clusters.spot.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'spot'));
+      this._clusters.shop.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'shop'));
+      this._clusters.bar.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'bar'));
+      // Center on command
+      document.getElementById('center-on').addEventListener('click', () => {
+        this._map.flyTo([this._user.lat, this._user.lng], 18);
+      });
       resolve();
     });
   }
@@ -444,7 +449,7 @@ class BeerCrackerzAuth {
   _loadAside(type) {
     return new Promise((resolve, reject) => {
       this._kom.getTemplate(`/aside/${type}`).then(dom => {
-        document.body.className = ''; // Clear previous css class
+        //document.body.className = 'login dark-theme'; // Clear previous css class
         document.body.classList.add(type); // Update body class with current aside view
         // We need to get aside at the last moment because of nls that changed HTML content
         this._aside = document.getElementById('aside');
@@ -468,8 +473,8 @@ class BeerCrackerzAuth {
    * The _loadLoginAside() method will load the login content into the aside
    * &lt;/blockquote>
    **/
-  _loadLoginAside() {
-    this._loadAside('login').then(this._handleLoginAside.bind(this)).catch(err => {
+  _loadLoginAside(checkMail = false) {
+    this._loadAside('login').then(this._handleLoginAside.bind(this, checkMail)).catch(err => {
       err.msg = `Couldn't fetch or build the login aside`;
       this._fatalError(err);
     });
@@ -536,7 +541,7 @@ class BeerCrackerzAuth {
    * then it will handle its i18n, and all of its interactivity to submit login form to the server.
    * &lt;/blockquote>
    **/
-  _handleLoginAside() {
+  _handleLoginAside(checkMail = false) {
     // Update page nls according to browser language
     document.title = this.nls.login('headTitle');
     this.nls.handleLoginAside(document.getElementById('aside'));
@@ -544,6 +549,12 @@ class BeerCrackerzAuth {
     const error = document.getElementById('login-error');
     const username = document.getElementById('username');
     const password = document.getElementById('password');
+
+    if (checkMail === true) {
+      error.classList.add('visible');
+      error.innerHTML = this.nls.login('checkMail');
+    }
+
     // useful login method for field check and server response check
     const _frontFieldValidation = () => {
       error.className = 'error';
@@ -567,9 +578,8 @@ class BeerCrackerzAuth {
       }
       return true;
     };
-    const _backValidation = response => {
+    const _backValidation = () => {
       // Check response and handle status codes
-      console.log(response);
       // If all front and back tests are ok, redirect to auth
       // If the user manually force redirection to authindex,
       // the server should reject the request as the user is not authenticated
@@ -643,9 +653,9 @@ class BeerCrackerzAuth {
       }
       return true;
     };
-    const _backValidation = (response) => {
-      // Check response and handle status codes
-      console.log(response);
+    const _backValidation = () => {
+      // Redirect aside to login
+      this._loadLoginAside(true);
     };
     const _submit = () => {
       // Reset error css classes
@@ -709,9 +719,10 @@ class BeerCrackerzAuth {
       }
       return true;
     };
-    const _backValidation = (response) => {
+    const _backValidation = () => {
       // Check response and handle status codes
-      console.log(response);
+      error.classList.add('visible');
+      error.innerHTML = this.nls.login('checkMail');
     };
     const _submit = () => {
       // Reset error css classes
@@ -720,7 +731,7 @@ class BeerCrackerzAuth {
       if (_frontFieldValidation()) {
         this._kom.post('/api/auth/password-reset-request/', {
           email: mail.value
-        }).then(_backValidation).catch(() => {
+        }, null).then(_backValidation).catch(() => {
           error.classList.add('visible');
           error.innerHTML = this.nls.forgotPassword('serverError');
         });
@@ -761,9 +772,9 @@ class BeerCrackerzAuth {
       }
       return true;
     };
-    const _backValidation = (response) => {
-      // Check response and handle status codes
-      console.log(response);
+    const _backValidation = () => {
+      // Redirect aside to login
+      this._loadLoginAside();
     };
     const _submit = () => {
       // Reset error css classes
@@ -771,11 +782,10 @@ class BeerCrackerzAuth {
       password1.classList.remove('error');
       password2.classList.remove('error');
       if (_frontFieldValidation()) {
-        console.log(params)
         this._kom.post(`/api/auth/password-reset/?uidb64=${params.uidb64}&amp;token=${params.token}`, {
           password1: password1.value,
           password2: password2.value
-        }).then(_backValidation).catch(() => {
+        }, null).then(_backValidation).catch(() => {
           error.classList.add('visible');
           error.innerHTML = this.nls.resetPassword('serverError');
         });
@@ -905,6 +915,7 @@ class BeerCrackerzAuth {
           desc: desc,
           date: date
         });
+
         // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
         const rate = element.querySelector(`#${options.type}-rating`);
         for (let i = 0; i &lt; options.rate + 1; ++i) {
@@ -1021,7 +1032,7 @@ export default BeerCrackerzAuth;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Tue Nov 08 2022 16:57:00 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Jan 16 2023 21:18:23 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

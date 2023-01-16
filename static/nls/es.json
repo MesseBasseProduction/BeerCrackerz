@@ -41,18 +41,7 @@
     "unlockFocusOn": "Finalizó el bloqueo de posición",
     "uploadPPSuccess": "Imagen de perfil actualizada",
     "uploadPPFailed": "No se pudo cargar la foto de perfil",
-    "welcomeBack": "Encantado de verte de nuevo en BeerCrackerz!",
-    "helpTitle": "Descubre BeerCrackerz",
-    "helpNavNext": "¡Navegue a la página siguiente o salga de este menú de ayuda!",
-    "helpNavNextPrev": "¡Navegue a la página siguiente o anterior, o salga de este menú de ayuda!",
-    "helpNavEnd": "¡Ya puede cerrar este asistente!",
-    "helpPage1": "¡Bienvenido a BeerCrackerz!<br>Veamos cómo funciona el mapa; su posición está marcada por el símbolo <img src=\"/static/img/marker/user-position.png\" alt=\"user-position\">. Alrededor de su posición, un <span class=\"blue-precision\">círculo azul</span> representa la precisión actual de su posición. A tu alrededor, también hay un <span class=\"gold-range\">círculo dorado</span> ; esta es la distancia máxima por la que puedes declarar un nuevo lugar, una tienda o un bar.",
-    "helpPage2": "Un spot está representado por el símbolo <img src=\"/static/img/marker/marker-icon-green.png\" alt=\"spot-mark\">. Los spots son lugares perfectos para disfrutar de una lata de cerveza. Cada spot tiene sus especificidades, depende de ti descubrirlas. Alrededor del spot hay un <span class=\"green-spot\">círculo verde</span> ; representa el área en la que tiene derecho a votar o dejar comentarios en el acto.",
-    "helpPage3": "Una tienda está representada por el símbolo <img src=\"/static/img/marker/marker-icon-blue.png\" alt=\"shop-mark\">. Las tiendas son los lugares ideales para abastecerse de latas de cerveza. Cada tienda tiene sus especificidades, depende de ti descubrirlas. Rodeando la tienda hay un <span class=\"blue-shop\">círculo azul</span> ; representa el área en la que tienes derecho a votar o dejar comentarios en la tienda.",
-    "helpPage4": "Una tienda barra representada por el símbolo <img src=\"/static/img/marker/marker-icon-red.png\" alt=\"bar-mark\">. Los bares son lugares acogedores que sirven cervezas frescas y buenas. Cada barra tiene sus especificidades, depende de ti descubrirlas. Alrededor de la barra hay un <span class=\"red-bar\">círculo rojo</span> ; representa el área en la que tienes derecho a votar o dejar comentarios en la barra.",
-    "helpPage5": "Hay varios comandos disponibles: 1. elección del mapa base, 2. volver a centrar y bloquear el mapa en su posición, 3. mostrar u ocultar elementos del mapa y 4. su cuenta.",
-    "helpQuit": "Sal",
-    "helpQuitNoSee": "Sal y no vuelvas a ver"
+    "welcomeBack": "Encantado de verte de nuevo en BeerCrackerz!"
   },
   "nav": {
     "add": "Agregar",
@@ -137,6 +126,7 @@
     "userAccuracyPref": "Alta precisión",
     "darkThemePref": "Tema oscuro",
     "userDebugPref": "Interfaz de depuración",
+    "startupHelp": "Empezando",
     "langPref": "Lenguaje de interfaz",
     "langFr": "🇫🇷 Francés",
     "langEn": "🇬🇧 Inglés",
@@ -166,7 +156,18 @@
     "deleteMarkDesc": "¿Está seguro de que desea eliminar esta marca?<br>Esta acción es permanente y no se puede revertir.",
     "spotEditTitle": "Editar spot",
     "shopEditTitle": "Editar tienda",
-    "barEditTitle": "Editar barra"
+    "barEditTitle": "Editar barra",
+    "helpTitle": "Descubre BeerCrackerz",
+    "helpNavNext": "¡Navegue a la página siguiente o salga de este menú de ayuda!",
+    "helpNavNextPrev": "¡Navegue a la página siguiente o anterior, o salga de este menú de ayuda!",
+    "helpNavEnd": "¡Ya puede cerrar este asistente!",
+    "helpPage1": "¡Bienvenido a BeerCrackerz!<br>Veamos cómo funciona el mapa; su posición está marcada por el símbolo <img src=\"/static/img/marker/user-position.png\" alt=\"user-position\">. Alrededor de su posición, un <span class=\"blue-precision\">círculo azul</span> representa la precisión actual de su posición. A tu alrededor, también hay un <span class=\"gold-range\">círculo dorado</span> ; esta es la distancia máxima por la que puedes declarar un nuevo lugar, una tienda o un bar.",
+    "helpPage2": "Un spot está representado por el símbolo <img src=\"/static/img/marker/marker-icon-green.png\" alt=\"spot-mark\">. Los spots son lugares perfectos para disfrutar de una lata de cerveza. Cada spot tiene sus especificidades, depende de ti descubrirlas. Alrededor del spot hay un <span class=\"green-spot\">círculo verde</span> ; representa el área en la que tiene derecho a votar o dejar comentarios en el acto.",
+    "helpPage3": "Una tienda está representada por el símbolo <img src=\"/static/img/marker/marker-icon-blue.png\" alt=\"shop-mark\">. Las tiendas son los lugares ideales para abastecerse de latas de cerveza. Cada tienda tiene sus especificidades, depende de ti descubrirlas. Rodeando la tienda hay un <span class=\"blue-shop\">círculo azul</span> ; representa el área en la que tienes derecho a votar o dejar comentarios en la tienda.",
+    "helpPage4": "Una tienda barra representada por el símbolo <img src=\"/static/img/marker/marker-icon-red.png\" alt=\"bar-mark\">. Los bares son lugares acogedores que sirven cervezas frescas y buenas. Cada barra tiene sus especificidades, depende de ti descubrirlas. Alrededor de la barra hay un <span class=\"red-bar\">círculo rojo</span> ; representa el área en la que tienes derecho a votar o dejar comentarios en la barra.",
+    "helpPage5": "Hay varios comandos disponibles: 1. elección del mapa base, 2. volver a centrar y bloquear el mapa en su posición, 3. mostrar u ocultar elementos del mapa y 4. su cuenta.",
+    "helpQuit": "Sal",
+    "helpQuitNoSee": "Sal y no vuelvas a ver"
   },
   "popup": {
     "spotFoundBy": "Un spot descubierto por",

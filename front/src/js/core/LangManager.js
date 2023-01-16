@@ -208,6 +208,7 @@ class LangManager {
     Utils.replaceString(dom.querySelector(`#nls-user-high-accuracy`), `{ACCURACY_USER_CHECK}`, this.modal('userAccuracyPref'));
     Utils.replaceString(dom.querySelector(`#nls-user-dark-theme`), `{DARK_THEME_CHECK}`, this.modal('darkThemePref'));
     Utils.replaceString(dom.querySelector(`#nls-user-debug`), `{DEBUG_USER_CHECK}`, this.modal('userDebugPref'));
+    Utils.replaceString(dom.querySelector(`#nls-startup-help`), `{STARTUP_HELP}`, this.modal('startupHelp'));
     Utils.replaceString(dom.querySelector(`#nls-lang-select`), `{LANG_SELECT}`, this.modal('langPref'));
     Utils.replaceString(dom.querySelector(`#nls-lang-fr`), `{LANG_FR}`, this.modal('langFr'));
     Utils.replaceString(dom.querySelector(`#nls-lang-en`), `{LANG_EN}`, this.modal('langEn'));

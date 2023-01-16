@@ -126,6 +126,7 @@
     "userAccuracyPref": "High precision",
     "darkThemePref": "Dark theme",
     "userDebugPref": "Debug interface",
+    "startupHelp": "Starting help",
     "langPref": "Interface language",
     "langFr": "🇫🇷 French",
     "langEn": "🇬🇧 English",
