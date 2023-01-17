@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
 
@@ -11,6 +12,12 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
 class WelcomeView(TemplateView):
     template_name = 'welcome.html'
+
+    # Redirect to index view if the user is already logged in.
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ErrorView(TemplateView):
