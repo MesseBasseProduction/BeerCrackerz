@@ -19,10 +19,8 @@ RUN apk add --update --no-cache postgresql-client zlib-dev jpeg-dev libwebp-dev 
     mkdir -p /vol/static && \
     chmod -R +x /scripts
 
-
-
 COPY ./back .
-COPY ./static /vol/static
+COPY ./static /back/static
 
 RUN chown -R back:back /vol && \
     chmod -R 755 /vol && \

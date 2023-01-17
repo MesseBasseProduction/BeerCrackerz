@@ -20,7 +20,8 @@ services:
       STAGING: ${CERTBOT_STAGING}
       USE_LOCAL_CA: ${CERTBOT_LOCAL_CA}
     volumes:
-      - bc_static_files:/vol
+      - bc_static_files:/vol/static
+      - bc_media:/vol/media
       - bc_nginx_secret:/etc/letsencrypt
     depends_on:
       - backend
@@ -46,7 +47,8 @@ services:
       MAILJET_API_KEY: ${MAILJET_API_KEY}
       MAILJET_API_SECRET: ${MAILJET_API_SECRET}
     volumes:
-      - bc_static_files:/vol
+      - bc_static_files:/vol/static
+      - bc_media:/vol/media
     depends_on:
       - db
   db:
@@ -66,5 +68,7 @@ volumes:
     name: bc_db
   bc_static_files:
     name: bc_static_files
+  bc_media:
+    name: bc_media
   bc_nginx_secret:
     name: bc_nginx_secret
