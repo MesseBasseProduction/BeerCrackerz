@@ -30,7 +30,7 @@ class EmailService:
         context = {'user': user, 'link': link}
 
         html_template = get_template('email/html/user-creation.html')
-        text_template = get_template('email/text/user-creation.html')
+        text_template = get_template('email/text/user-creation.txt')
         html_body = html_template.render(context)
         text_body = text_template.render(context)
 
@@ -47,7 +47,7 @@ class EmailService:
         context = {'user': user, 'link': link}
 
         html_template = get_template('email/html/password-reset.html')
-        text_template = get_template('email/text/password-reset.html')
+        text_template = get_template('email/text/password-reset.txt')
         html_body = html_template.render(context)
         text_body = text_template.render(context)
 
