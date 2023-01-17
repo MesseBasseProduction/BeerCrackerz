@@ -1,0 +1,10 @@
+Bonjour et surtout bienvenu sur BeerCrackerz, {{ user.username | capfirst }},
+
+Nous vous remercions de votre inscription et espérons que BeerCrackerz saura combler vos meilleures virée houblonées. Cette carte communautaire recense les meilleurs endroits pour se délecter d'une bière, mais également pour trouver de quoi se ravitailler!
+
+Tout ce qu'il vous reste à faire pour utiliser BeerCrackerz, c'est de suivre le lien suivant pour valider votre adresse mail (et ainsi vérifier votre compte).
+
+{{ link }}
+
+À vos, spots!
+L'Équipe BeerCrackerz

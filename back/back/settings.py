@@ -126,7 +126,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
-DEFAULT_FROM_EMAIL = 'no-reply@beercrackerz.org'
+DEFAULT_FROM_EMAIL = '"BeerCrackerz" <no-reply@beercrackerz.org>'
 
 if bool(int(os.environ.get('BACKEND_USE_EMAIL_FILE_SYSTEM', 0))):
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
