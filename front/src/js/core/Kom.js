@@ -476,7 +476,7 @@ class Kom {
 
   _getMarks(type) {
     return new Promise((resolve, reject) => {
-      this.get(`http://localhost:8080/api/${type}`).then(resolve).catch(reject);
+      this.get(`/api/${type}`).then(resolve).catch(reject);
     });
   }
 
@@ -497,7 +497,7 @@ class Kom {
 
 
   _saveMark(type, data) {
-    return this.post(`http://localhost:8080/api/${type}/`, data, this._resolveAsJSON.bind(this));
+    return this.post(`/api/${type}/`, data, this._resolveAsJSON.bind(this));
   }
 
 
@@ -518,7 +518,7 @@ class Kom {
 
   _editMark(type, id, data) {
     if (!type || !id || !data) { Promise.reject(); }
-    return this.patch(`http://localhost:8080/api/${type}/${id}/`, data, this._resolveAsJSON.bind(this));
+    return this.patch(`/api/${type}/${id}/`, data, this._resolveAsJSON.bind(this));
   }
 
 
@@ -539,7 +539,7 @@ class Kom {
 
   _deleteMark(type, id, data) {
     if (!type || !id || !data) { Promise.reject(); }
-    return this.delete(`http://localhost:8080/api/${type}/${id}/`, data, null);
+    return this.delete(`/api/${type}/${id}/`, data, null);
   }
 
 
