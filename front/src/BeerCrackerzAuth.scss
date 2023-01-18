@@ -43,6 +43,7 @@ nav {
 
   .cmd-bar {
     display: flex;
+    width: 100%;
 
     .cmd-wrapper {
       align-items: center;
@@ -54,6 +55,7 @@ nav {
       display: flex;
       justify-content: center;
       padding: .2rem;
+      width: 100%;
 
       img {
         box-shadow: inherit;
