@@ -32,7 +32,7 @@ class StartupHelpModal extends BaseModal {
     this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector('#previous-page'), this._previousPage, this));
     this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector('#next-page'), this._nextPage, this));
     this._evtIds.push(window.Evts.addEvent('click', this._footerQuitButton, this._quitStartupHelp, this));
-    this._evtIds.push(window.Evts.addEvent('touchend', this._footerQuitNoSeeButton, this._quitStartupHelp, this));
+    this._evtIds.push(window.Evts.addEvent('click', this._footerQuitNoSeeButton, this._quitStartupHelp, this));
   }
 
 
