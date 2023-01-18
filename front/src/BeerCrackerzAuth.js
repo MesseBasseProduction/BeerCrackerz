@@ -109,6 +109,10 @@ class BeerCrackerzAuth {
    * </blockquote>
    **/
   _init() {
+    // Force default language to english for first page loading
+    if (Utils.getPreference('selected-lang') === null) {
+      Utils.setPreference('selected-lang', 'en');
+    }
     this.nls.updateLang(Utils.getPreference('selected-lang')).then(() => {
     // By default, the template contains the login aside, no need to fetch it
     this._handleLoginAside();
