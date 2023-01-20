@@ -11,13 +11,13 @@ const MiniCssExtractPlugin = new _MiniCssExtractPlugin({
 
 const StyleLintPlugin = new _StyleLintPlugin({
   configFile: path.resolve(__dirname, 'stylelint.config.js'),
-  context: path.resolve(__dirname, '../src'),
+  context: path.resolve(__dirname, './src'),
   files: '**/*.scss',
 });
 
 const ESLintPlugin = new _ESLintPlugin({
   overrideConfigFile: path.resolve(__dirname, '.eslintrc'),
-  context: path.resolve(__dirname, '../src/'),
+  context: path.resolve(__dirname, './src/'),
   files: '**/*.js'
 });
 

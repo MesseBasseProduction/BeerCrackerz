@@ -5,8 +5,8 @@ const plugins = require('./plugins');
 
 module.exports = {
   entry: {
-    BeerCrackerz: ['./src/BeerCrackerz.js'],
-    BeerCrackerzAuth: ['./src/BeerCrackerzAuth.js']
+    BeerCrackerz: ['./front/src/BeerCrackerz.js'],
+    BeerCrackerzAuth: ['./front/src/BeerCrackerzAuth.js']
   },
   module: {
     rules: [loaders.JSLoader, loaders.CSSLoader, loaders.FontLoader],

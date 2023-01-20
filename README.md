@@ -1,5 +1,8 @@
 # BeerCrackerz
 
+[![License](https://img.shields.io/github/license/BeerCrackerz/BeerCrackerz.svg)](https://github.com/BeerCrackerz/BeerCrackerz/blob/master/LICENSE.md)
+![](https://badgen.net/badge/version/0.1.0/blue)
+
 Welcome, fellow beer lovers. BeerCrackerz is a community web app to list the best spots to drink a fresh one while you're outside. It provides a well-known map interface so it is really easy to browse, find or add unique spots!
 
 You want to try it ? We are currently running an instance just so you can try (and add your personnal best places) :

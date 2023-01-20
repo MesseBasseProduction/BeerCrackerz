@@ -1,4 +1,4 @@
-node_modules
+node_modules/
 .env
 .idea
 .DS_Store
@@ -8,3 +8,7 @@ __pycache__/
  *$py.class
 
 tmp/
+
+.conf/development/*.env
+.conf/production/*.env
+*.env
