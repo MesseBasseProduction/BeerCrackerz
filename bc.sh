@@ -276,16 +276,16 @@ elif [ "$1" = '-b' ] || [ "$1" = '--build' ]; then
   else
     if [ "$2" = "dev" ]; then
       echo -e "Building BeerCrackerz in development mode"
-      eval "docker-compose --file $basedir/docker-compose.yml --env-file $basedir/.conf/development/conf.env build"
       eval "npm run build"
+      eval "docker-compose --file $basedir/docker-compose.yml --env-file $basedir/.conf/development/conf.env build"
     elif [ "$2" = "prod" ]; then
       echo -e "Building BeerCrackerz in production mode"
-      eval "docker-compose --file $basedir/docker-compose.prod.yml --env-file $basedir/.conf/production/conf.server.env build"
       eval "npm run build"
+      eval "docker-compose --file $basedir/docker-compose.prod.yml --env-file $basedir/.conf/production/conf.server.env build"
     elif [ "$2" = "locprod" ]; then
       echo -e "Building BeerCrackerz in local production mode"
-      eval "docker-compose --file $basedir/docker-compose.prod.yml --env-file $basedir/.conf/production/conf.local.env build"
       eval "npm run build"
+      eval "docker-compose --file $basedir/docker-compose.prod.yml --env-file $basedir/.conf/production/conf.local.env build"
     else
       echo -e "\e[31mERROR\e[39m $2 is not a supported argument to build BeerCrackerz"
       echo -e "      Check command help for available arguments: ./bc.sh --help"
@@ -426,7 +426,7 @@ elif [ "$1" = '-h' ] || [ "$1" = '--help' ]; then
   echo -e "Usage : ./bc.sh [command] [argument]\n"
   echo -e "  -i, --install  [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
   echo -e "                     Configure environment file and install BeerCrackerz on the system\n"
-  echo -e "  -e, --edit  [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "  -e, --edit     [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
   echo -e "                     Edit the environment file\n"
   echo -e "  -b, --build    [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
   echo -e "                     Build the docker containers\n"
