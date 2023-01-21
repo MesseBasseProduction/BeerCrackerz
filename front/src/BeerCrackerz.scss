@@ -22,22 +22,26 @@ main.beer-crakerz-map {
 
 nav {
   display: flex;
+  bottom: 1rem;
   position: absolute;
-  right: 0;
-  bottom: 0;
-  height: 16.8rem;
+  right: 1rem;
+  width: 4.8rem;
   z-index: 20;
+
+  transition: right var(--aside-transtion-duration);
 
   img {
     cursor: pointer;
     border-radius: 50%;
-    box-shadow: 0px 0px 1rem var(--color-bg-a5);
-    height: 100%;
+    box-shadow: 0px 0px 1rem var(--color-bg);
+/*box-shadow: 0px 0px 1rem var(--color-bg-a5);*/
+    width: 100%;
   }
 
   .cmd-bar {
     display: flex;
     flex-direction: column;
+    width: 100%;
 
     .cmd-wrapper {
       align-items: center;
@@ -47,12 +51,18 @@ nav {
       border-radius: .5rem;
       box-shadow: 0 0 1rem var(--color-bg-a9);
       display: flex;
-      height: 46px; /* Match leaflet map layers height */
       justify-content: center;
-      margin-bottom: 1rem;
-      margin-right: 1rem;
+      margin: .2rem 0;
       padding: .2rem;
-      width: 46px; /* Match leaflet map layers width */
+      width: 100%;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
 
       img {
         box-shadow: inherit;
