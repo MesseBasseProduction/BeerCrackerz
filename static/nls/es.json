@@ -140,6 +140,7 @@
     "updatePPDimensionError": "El tamaño mínimo de la imagen es 512x512",
     "updatePPTitle": "Nueva foto de perfil foto",
     "updatePPDesc": "¡Recorta la imagen si es necesario y listo!",
+    "logout": "Desconectarse",
     "hideShowTitle": "Opciones de mapa",
     "hideShowLabels": "Etiquetas",
     "hideShowCircles": "Círculos",

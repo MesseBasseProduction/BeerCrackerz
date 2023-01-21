@@ -14,14 +14,6 @@
   --aside-transtion-duration: var(--transition-x2);
 }
 
-body {
-  background: var(--color-bg);
-  color: var(--color-txt);
-  height: 100%;
-  position: relative;
-  width: 100%;
-}
-
 nav {
   display: flex;
   bottom: 1rem;
@@ -75,23 +67,19 @@ nav {
   }
 }
 
-.page-header {
+.expander-back {
   background-color: var(--color-bg-a9);
   border: 2px solid var(--color-bg);
   border-radius: .5rem;
-  left: 50%;
-  margin: 1rem;
-  max-width: 90%;
+  height: 4.8rem;
   opacity: 0;
-  padding: var(--font-size-l5);
   position: absolute;
-  text-align: center;
-  top: 0;
-  width: 40rem;
+  right: 1rem;
+  top: 1rem;
+  width: 4.8rem;
   z-index: 20;
 
-  transform: translateX(-50%);
-  transition: opacity var(--aside-transtion-duration);
+  transition: opacity var(--transition);
 
   &.visible {
     opacity: 1;
@@ -133,7 +121,7 @@ aside {
     left: 0;
     margin: 0;
     position: absolute;
-    top: 0;
+    top: 1rem;
     filter: drop-shadow(0 0 1px var(--color-bg));
 
     transition: left var(--transition);

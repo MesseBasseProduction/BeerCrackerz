@@ -228,7 +228,7 @@ if [ "$1" = "-i" ] || [ "$1" = "--install" ]; then
       exit 0
     fi
     echo # Line break
-    echo -e "\n\e[32mSUCCESS\e[39m BeerCrackerz installed!"
+    echo -e "\e[32mSUCCESS\e[39m BeerCrackerz installed!"
   fi
 
 
@@ -261,7 +261,7 @@ elif [ "$1" = '-e' ] || [ "$1" = '--edit' ]; then
       echo -e "      Check command help for available arguments: ./bc.sh --help"
       exit 0
     fi
-    echo -e "\n\e[32mSUCCESS\e[39m BeerCrackerz edited!"
+    echo -e "\e[32mSUCCESS\e[39m BeerCrackerz edited!"
   fi
 
 

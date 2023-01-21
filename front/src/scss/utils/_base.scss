@@ -56,7 +56,8 @@ body.light-theme {
   .rating img, .pricing img,
   .types p img, .modifiers p img,
   .item[data-type="label"] img, .item[data-type="circle"] img,
-  .item img {
+  .item img,
+  .user-info img {
     filter: invert(1);
   }
 }
@@ -79,7 +80,9 @@ body {
   color: var(--color-txt);
   font-family: sans-serif;
   font-size: 1.4rem;
+  height: 100%;
   position: relative;
+  width: 100%;
 }
 
 h1 {

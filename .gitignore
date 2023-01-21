@@ -1,14 +1,15 @@
-node_modules/
-.env
 .idea
 .DS_Store
 
-__pycache__/
 *.py[cod]
- *$py.class
+*$py.class
 
-tmp/
+back/tmp/
+node_modules/
+__pycache__/
 
-.conf/development/*.env
-.conf/production/*.env
-*.env
+static/dist/*.js
+static/dist/*.css
+.conf/development/conf.env
+.conf/production/conf.server.env
+.conf/production/conf.local.env

@@ -140,6 +140,7 @@
     "updatePPDimensionError": "Die minimale bildgröße beträgt 512x512",
     "updatePPTitle": "Neues profilbild",
     "updatePPDesc": "Schneiden Sie das bild bei bedarf zu und legen sie los!",
+    "logout": "Ausloggen",
     "hideShowTitle": "Kartenoptionen",
     "hideShowLabels": "Etiketten",
     "hideShowCircles": "Kreise",

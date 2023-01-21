@@ -394,14 +394,14 @@ class BeerCrackerzAuth {
       this._isAsideExpanded = false;
       document.documentElement.style.setProperty('--aside-offset', '-40rem');
       document.getElementById('aside-expander-icon').src = '/static/img/logo/left.svg';
-      document.getElementById('page-header').classList.add('visible');
-      setTimeout(() => document.getElementById('aside-expander').style.left = '-5rem', 300);
+      document.getElementById('expander-back').classList.add('visible');
+      setTimeout(() => document.getElementById('aside-expander').style.left = '-6rem', 300);
     } else { // Expanding aside
       this._isAsideExpanded = true;
       document.documentElement.style.setProperty('--aside-offset', '0rem');
       document.getElementById('aside-expander-icon').src = '/static/img/logo/right.svg';
       document.getElementById('aside-expander').style.left = '0';
-      document.getElementById('page-header').classList.remove('visible');
+      document.getElementById('expander-back').classList.remove('visible');
     }
   }
 

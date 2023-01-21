@@ -140,6 +140,7 @@
     "updatePPDimensionError": "The minimum image size is 512x512",
     "updatePPTitle": "New profile picture pic",
     "updatePPDesc": "Crop the picture if needed and go!",
+    "logout": "Sign out",
     "hideShowTitle": "Map options",
     "hideShowLabels": "Labels",
     "hideShowCircles": "Circles",
