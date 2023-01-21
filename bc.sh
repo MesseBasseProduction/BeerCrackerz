@@ -111,7 +111,7 @@ if [ "$1" = "-i" ] || [ "$1" = "--install" ]; then
     echo "DB_HOST=beer_crackerz_db"
     echo "DB_PORT=5432"
     echo "DB_NAME=beer_crackerz"
-    echo "DB_USER=postgres"
+    echo "DB_USER=$dbuser"
     echo "DB_PASSWORD=$dbpassword"
     echo ""
     echo "# ADMINER"
@@ -150,7 +150,7 @@ if [ "$1" = "-i" ] || [ "$1" = "--install" ]; then
     echo "DB_HOST=beer_crackerz_db"
     echo "DB_PORT=5432"
     echo "DB_NAME=beer_crackerz"
-    echo "DB_USER=postgres"
+    echo "DB_USER=$dbuser"
     echo "DB_PASSWORD=$dbpassword"
     echo ""
     echo "# BACKEND"
@@ -272,7 +272,7 @@ elif [ "$1" = '-s' ] || [ "$1" = '--start' ]; then
 elif [ "$1" = '-q' ] || [ "$1" = '--quit' ]; then
   echo -e "bc.sh $1 $2 : Quit BeerCrackerz application\n"
   echo -e "Stoping BeerCrackerz containers"
-  eval "docker-compose down"
+  eval "docker-compose --file ./docker-compose.prod.yml --env-file ./.conf/production/conf.server.env down"
 
 
 # Reset BeerCrackerz, clear database files and docker images
