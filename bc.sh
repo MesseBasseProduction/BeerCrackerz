@@ -180,7 +180,7 @@ if [ $# -eq 0 ]; then
 fi
 
 # Initialization sequence, fill .env file to fit user inputs and build docker images in either dev, prod or local prod mode
-if [ "$1" = "-i" ] || [ "$1" = "--install" ]; then
+if [ "$1" = "-i" ] || [ "$1" = "--install" ] || [ "$1" = "i" ] || [ "$1" = "install" ]; then
   echo -e "bc.sh $1 $2 : BeerCrackerz installation\n"
   # Check if all dependencies are installed before doing anything
   for COMMAND in "docker" "docker-compose" "npm"; do
@@ -233,7 +233,7 @@ if [ "$1" = "-i" ] || [ "$1" = "--install" ]; then
 
 
 # Edit BeerCrackerz configuration
-elif [ "$1" = '-e' ] || [ "$1" = '--edit' ]; then
+elif [ "$1" = '-e' ] || [ "$1" = '--edit' ] || [ "$1" = 'e' ] || [ "$1" = 'edit' ]; then
   echo -e "bc.sh $1 $2 : BeerCrackerz configuration edit\n"
   # No arguments provided
   if [ -z "$2" ]; then
@@ -266,7 +266,7 @@ elif [ "$1" = '-e' ] || [ "$1" = '--edit' ]; then
 
 
 # Building BeerCrackerz containers in either dev, prod or local prod mode
-elif [ "$1" = '-b' ] || [ "$1" = '--build' ]; then
+elif [ "$1" = '-b' ] || [ "$1" = '--build' ] || [ "$1" = 'b' ] || [ "$1" = 'build' ]; then
   echo -e "bc.sh $1 $2 : Build BeerCrackerz\n"
   # No arguments provided
   if [ -z "$2" ]; then
@@ -296,7 +296,7 @@ elif [ "$1" = '-b' ] || [ "$1" = '--build' ]; then
 
 
 # Start BeerCrackerz application in either dev, prod or local prod mode
-elif [ "$1" = '-s' ] || [ "$1" = '--start' ]; then
+elif [ "$1" = '-s' ] || [ "$1" = '--start' ] || [ "$1" = 's' ] || [ "$1" = 'start' ]; then
   echo -e "bc.sh $1 $2 : Start BeerCrackerz application\n"
   # No arguments provided
   if [ -z "$2" ]; then
@@ -326,7 +326,7 @@ elif [ "$1" = '-s' ] || [ "$1" = '--start' ]; then
 
 
 # Start BeerCrackerz application in either dev, prod or local prod mode
-elif [ "$1" = '-q' ] || [ "$1" = '--quit' ]; then
+elif [ "$1" = '-q' ] || [ "$1" = '--quit' ] || [ "$1" = 'q' ] || [ "$1" = 'quit' ]; then
   echo -e "bc.sh $1 $2 : Quit BeerCrackerz application\n"
   # No arguments provided
   if [ -z "$2" ]; then
@@ -354,7 +354,7 @@ elif [ "$1" = '-q' ] || [ "$1" = '--quit' ]; then
 
 
 # Reset BeerCrackerz, clear database files and docker images
-elif [ "$1" = "-r" ] || [ "$1" = "--reset" ]; then
+elif [ "$1" = "-r" ] || [ "$1" = "--reset" ] || [ "$1" = "r" ] || [ "$1" = "reset" ]; then
   echo -e "bc.sh $1 $2 : Reset BeerCrackerz instance\n"
   # Warn user that the command will remove database and images
   echo -e "\e[93mWARNING\e[39m This command will erase any existing database and BeerCrackerz' docker images"
@@ -391,7 +391,7 @@ elif [ "$1" = "-r" ] || [ "$1" = "--reset" ]; then
 
 
 # Gource version control visualization
-elif [ "$1" = '-g' ] || [ "$1" = '--gource' ]; then
+elif [ "$1" = '-g' ] || [ "$1" = '--gource' ] || [ "$1" = 'g' ] || [ "$1" = 'gource' ]; then
   echo -e "bc.sh $1 $2 : Gource visualization\n"
   # Check if gource is installed on the system
   isInstalled "gource"
@@ -416,12 +416,12 @@ elif [ "$1" = '-g' ] || [ "$1" = '--gource' ]; then
 
 
 # About BeerCrackerz
-elif [ "$1" = '-a' ] || [ "$1" = '--about' ]; then
+elif [ "$1" = '-a' ] || [ "$1" = '--about' ] || [ "$1" = 'a' ] || [ "$1" = 'about' ]; then
   echo -e "bc.sh $1 : About BeerCrackerz\n"
 
 
 # Command help and usage
-elif [ "$1" = '-h' ] || [ "$1" = '--help' ]; then
+elif [ "$1" = '-h' ] || [ "$1" = '--help' ] || [ "$1" = 'h' ] || [ "$1" = 'help' ]; then
   echo -e "bc.sh $1 : Command help\n"
   echo -e "Usage : ./bc.sh [command] [argument]\n"
   echo -e "  -i, --install  [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
