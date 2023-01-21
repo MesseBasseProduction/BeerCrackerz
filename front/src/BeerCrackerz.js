@@ -17,7 +17,7 @@ import ProvidersEnum from './js/utils/enums/ProviderEnum.js';
 import MapEnum from './js/utils/enums/MapEnum.js';
 
 
-window.VERSION = '0.0.2';
+window.VERSION = '0.1.0';
 window.Evts = new CustomEvents();
 
 
