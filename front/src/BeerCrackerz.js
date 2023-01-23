@@ -102,6 +102,8 @@ class BeerCrackerz {
      * @private
      **/
     this._newMarker = null;
+
+    this._popupOpened = false;
     /**
      * The debug DOM object
      * @type {Object}
@@ -469,6 +471,7 @@ class BeerCrackerz {
         const px = this._map.project(event.target._popup._latlng);
         px.y -= event.target._popup._container.clientHeight / 2;
         this._map.panTo(this._map.unproject(px), { animate: true });
+        this._popupOpened = true;
       });
 
       // Clustering events
@@ -567,11 +570,13 @@ class BeerCrackerz {
    * @param {Event} event The click event
    **/
   mapClicked(event) {
-    if (this._newMarker && this._newMarker.popupClosed) {
-      // Avoid to open new marker right after popup closing
+    if (this._newMarker && this._newMarker.popupClosed) { // Avoid to open new marker right after popup closing
       this._newMarker = null;
-    } else if (this._newMarker === null || !this._newMarker.isBeingDefined) {
-      // Only create new marker if none is in progress, and that click is max range to add a marker
+      this._popupOpened = false;
+    } else if (this._popupOpened === true) { // Do not open new mark if popup previously opened
+      this._popupOpened = false;
+    } else if (this._newMarker === null || !this._newMarker.isBeingDefined) { // Check for new mark
+      // Only create new marker if click is in range to add a mark
       const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [event.latlng.lat, event.latlng.lng]);
       if (distance < MapEnum.newMarkRange) { // In range to create new mark
         this.addMarkPopup(event.latlng);
