@@ -364,7 +364,7 @@ class BeerCrackerz {
       this._clusters.spot = ClustersEnum.spot;
       this._clusters.shop = ClustersEnum.shop;
       this._clusters.bar = ClustersEnum.bar;
-      // Append clusters to the map depending on user preferences
+
       if (Utils.getPreference(`poi-show-spot`) === 'true') {
         this._map.addLayer(this._clusters.spot);
       }
@@ -374,7 +374,7 @@ class BeerCrackerz {
       if (Utils.getPreference(`poi-show-bar`) === 'true') {
         this._map.addLayer(this._clusters.bar);
       }
-      // Load data from local storage, later to be fetched from server
+
       const iterateMarkers = mark => {
         const popup = new MarkPopup(mark, dom => {
           mark.dom = dom;

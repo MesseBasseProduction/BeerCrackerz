@@ -3,14 +3,20 @@ import Kom from './js/core/Kom.js';
 import LangManager from './js/core/LangManager.js';
 
 import VisuHelper from './js/ui/VisuHelper.js';
+import MarkPopup from './js/ui/MarkPopup';
 import ZoomSlider from './js/ui/component/ZoomSlider.js';
 
+import CustomEvents from './js/utils/CustomEvents.js';
 import Utils from './js/utils/Utils.js';
 import AccuracyEnum from './js/utils/enums/AccuracyEnum.js';
 import ClustersEnum from './js/utils/enums/ClusterEnum.js';
 import ProvidersEnum from './js/utils/enums/ProviderEnum.js';
 import MapEnum from './js/utils/enums/MapEnum.js';
 import MarkersEnum from './js/utils/enums/MarkerEnum.js';
+
+
+window.VERSION = '0.1.0';
+window.Evts = new CustomEvents();
 
 
 class BeerCrackerzAuth {
@@ -114,37 +120,37 @@ class BeerCrackerzAuth {
       Utils.setPreference('selected-lang', 'en');
     }
     this.nls.updateLang(Utils.getPreference('selected-lang')).then(() => {
-    // By default, the template contains the login aside, no need to fetch it
-    this._handleLoginAside();
-    this._kom = new Kom();
-    // We ensure the Kom layer is valid and ready to go any further
-    if (this._kom.isValid === true) {
-      const urlSearchParams = new URLSearchParams(window.location.search);
-      const params = Object.fromEntries(urlSearchParams.entries());
-      if (params.activate) {
-        const error = document.getElementById('login-error');
-        error.classList.add('visible');
-        if (params.activate === 'True') {
-          error.classList.add('success');
-          error.innerHTML = this.nls.register('activationSuccess');
-        } else {
-          error.innerHTML = this.nls.register('activationError');
+      // By default, the template contains the login aside, no need to fetch it
+      this._handleLoginAside();
+      this._kom = new Kom();
+      // We ensure the Kom layer is valid and ready to go any further
+      if (this._kom.isValid === true) {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        if (params.activate) {
+          const error = document.getElementById('login-error');
+          error.classList.add('visible');
+          if (params.activate === 'True') {
+            error.classList.add('success');
+            error.innerHTML = this.nls.register('activationSuccess');
+          } else {
+            error.innerHTML = this.nls.register('activationError');
+          }
+        } else if (params.uidb64 && params.token) {
+          this._loadForgotPasswordAside(params);
         }
-      } else if (params.uidb64 && params.token) {
-        this._loadForgotPasswordAside(params);
-      }
 
-      this._initMap()
-        .then(this._initGeolocation.bind(this))
-        .then(this._initMarkers.bind(this))
-        .then(this._initEvents.bind(this))
-        .catch(this._fatalError.bind(this));
-    } else {
-      this._fatalError({
-        file: 'Kom.js',
-        msg: (this._kom.csrf === null) ? `The CSRF token doesn't exists in cookies` : `The headers amount is invalid`
-      });
-    }
+        this._initMap()
+          .then(this._initGeolocation.bind(this))
+          .then(this._initMarkers.bind(this))
+          .then(this._initEvents.bind(this))
+          .catch(this._fatalError.bind(this));
+      } else {
+        this._fatalError({
+          file: 'Kom.js',
+          msg: (this._kom.csrf === null) ? `The CSRF token doesn't exists in cookies` : `The headers amount is invalid`
+        });
+      }
     });
   }
 
@@ -256,9 +262,10 @@ class BeerCrackerzAuth {
       this._map.addLayer(this._clusters.bar);
 
       const iterateMarkers = mark => {
-        this._markPopupFactory(mark).then(dom => {
+        const popup = new MarkPopup(mark, dom => {
           mark.dom = dom;
-          mark.marker = this._createMarker(mark);
+          mark.marker = VisuHelper.addMark(mark);
+          mark.popup = popup;
           this._marks[mark.type].push(mark);
           this._clusters[mark.type].addLayer(mark.marker);
         });
@@ -302,7 +309,7 @@ class BeerCrackerzAuth {
    * </blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
-   _initEvents() {
+  _initEvents() {
     return new Promise(resolve => {
       // Map is dragged by user mouse/finger
       this._map.on('drag', () => {
@@ -798,122 +805,10 @@ class BeerCrackerzAuth {
   _drawUserMarker() {
     if (!this.user.marker) { // Create user marker if not existing
       this.user.type = 'user';
-      this.user.marker = this._createMarker(this.user);
+      this.user.marker = VisuHelper.addMark(this.user);
     } else { // Update user marker position, range, and accuracy circle
       this.user.marker.setLatLng(this.user);
     }
-  }
-
-
-  /**
-   * @method
-   * @name _createMarker
-   * @private
-   * @memberof BeerCrackerzAuth
-   * @author Arthur Beaulieu
-   * @since September 2022
-   * @description
-   * <blockquote>
-   * The _createMarker() method will create all BeerCrackerz kind of markers (spot/shop/bar/user),
-   * will create if needed its popup (if provided in options) and will make it interactive to click.
-   * </blockquote>
-   * @param {Object} options - The marker options
-   * @param {String} options.type - The marker type in spot/shop/bar/user
-   * @param {Float} options.lat - The marker latitude
-   * @param {Float} options.lng - The marker longitude
-   * @param {HTMLElement} [options.dom] - The marker popup content
-   * @returns {HTMLElement} The Leaflet marker extended with option properties
-  **/
-   _createMarker(options) {
-    let icon = MarkersEnum.black;
-    if (options.type === 'spot') {
-      icon = MarkersEnum.green;
-    } else if (options.type === 'shop') {
-      icon = MarkersEnum.blue;
-    } else if (options.type === 'bar') {
-      icon = MarkersEnum.red;
-    } else if (options.type === 'user') {
-      icon = MarkersEnum.user;
-    }
-
-    const marker = window.L.marker([options.lat, options.lng], { icon: icon }).on('click', () => {
-      // Actual fly to the marker
-      this.map.flyTo([options.lat, options.lng], 18);
-    });
-
-    if (options.dom) {
-      marker.bindPopup(options.dom);
-    }
-    // All markers that are not spot/shop/bar should be appended to the map
-    if (['spot', 'shop', 'bar'].indexOf(options.type) === -1) {
-      marker.addTo(this.map);
-    }
-
-    return marker;
-  }
-
-
-  /**
-   * @method
-   * @async
-   * @name _markPopupFactory
-   * @private
-   * @memberof BeerCrackerzAuth
-   * @author Arthur Beaulieu
-   * @since September 2022
-   * @description
-   * <blockquote>
-   * The _markPopupFactory() method will create the associated popup DOM for a given mark. It will
-   * fetch the popup template, replace its content with its i18n and provide its tooltip.
-   * </blockquote>
-   * @param {Object} options - The marker options
-   * @param {String} options.type - The marker type in spot/shop/bar/user
-   * @param {Float} options.lat - The marker latitude
-   * @param {Float} options.lng - The marker longitude
-   * @param {String} options.user - The user that discovered the marker
-   * @param {String} options.description - The marker description
-   * @param {Float} options.rate - The marker rate
-   * @returns {Promise} A promise resolved with the popup DOM element
-  **/
-  _markPopupFactory(options) {
-    return new Promise(resolve => {
-      this._kom.getTemplate(`/popup/${options.type}`).then(dom => {
-        const element = document.createElement('DIV');
-        element.appendChild(dom);
-        const user = options.user;
-        const desc = Utils.stripDom(options.description) || this.nls.popup(`${options.type}NoDesc`);
-        const date = new Intl.DateTimeFormat(this.nls.fullLang, { dateStyle: 'long' }).format(new Date(options.creationDate));
-        this.nls.markPopup(element, {
-          type: options.type,
-          name: options.name,
-          user: user,
-          rate: options.rate,
-          desc: desc,
-          date: date
-        });
-
-        // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
-        const rate = element.querySelector(`#${options.type}-rating`);
-        for (let i = 0; i < options.rate + 1; ++i) {
-          rate.children[i].classList.add('active');
-        }
-        // Remove edition buttons if marker is not user's one, this does not replace a server test for edition...
-        element.querySelector('#popup-social').parentNode.removeChild(element.querySelector('#popup-social'));
-        element.querySelector('#popup-edit').parentNode.removeChild(element.querySelector('#popup-edit'));
-        // Create label for new marker
-        options.tooltip = window.L.tooltip({
-          permanent: true,
-          direction: 'center',
-          className: 'marker-tooltip',
-          interactive: true
-        }).setContent(options.name)
-          .setLatLng(options); // Lat/Lng are embeded in options
-        // Make tooltip visible if preference is to true
-        options.tooltip.addTo(this.map);
-        // Send back the popup
-        resolve(element);
-      });
-    });
   }
 
 
@@ -946,6 +841,11 @@ class BeerCrackerzAuth {
   // ======================================================================== //
   // ---------------------------- Class accessors --------------------------- //
   // ======================================================================== //
+
+
+  get kom() {
+    return this._kom;
+  }
 
 
   /**
