@@ -328,6 +328,12 @@ class BeerCrackerzAuth {
           this._setMarkerLabels(this._marks.bar, true);
         }
       });
+      // Update map view for big popups
+      this._map.on('popupopen', event => {
+        const px = this._map.project(event.target._popup._latlng);
+        px.y -= event.target._popup._container.clientHeight / 2;
+        this._map.panTo(this._map.unproject(px), { animate: true });
+      });
       // Clustering events
       this._clusters.spot.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'spot'));
       this._clusters.shop.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'shop'));

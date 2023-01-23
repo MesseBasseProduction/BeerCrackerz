@@ -464,6 +464,13 @@ class BeerCrackerz {
       this._map.on('baselayerchange', event => {
         Utils.setPreference('map-plan-layer', Utils.stripDom(event.name));
       });
+      // Update map view for big popups
+      this._map.on('popupopen', event => {
+        const px = this._map.project(event.target._popup._latlng);
+        px.y -= event.target._popup._container.clientHeight / 2;
+        this._map.panTo(this._map.unproject(px), { animate: true });
+      });
+
       // Clustering events
       this._clusters.spot.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'spot'));
       this._clusters.shop.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'shop'));
@@ -566,9 +573,10 @@ class BeerCrackerz {
     } else if (this._newMarker === null || !this._newMarker.isBeingDefined) {
       // Only create new marker if none is in progress, and that click is max range to add a marker
       const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [event.latlng.lat, event.latlng.lng]);
-      if (distance < MapEnum.newMarkRange) {
+      if (distance < MapEnum.newMarkRange) { // In range to create new mark
         this.addMarkPopup(event.latlng);
-      } else if (this._map.getZoom() >= 10) {
+        this._newMarker.openPopup();
+      } else if (this._map.getZoom() >= 10) { // Avoid poluting UI when strong dezoom applied
         this.notification.raise(this.nls.notif('newMarkerOutside'));
       }
     }
@@ -606,7 +614,7 @@ class BeerCrackerz {
     // Update popup content with DOM elements
     options.dom = dom.wrapper;
     // Create temporary mark with wrapper content and open it to offer user the creation menu
-    this._newMarker = VisuHelper.addMark(options).openPopup();
+    this._newMarker = VisuHelper.addMark(options);
     options.marker = this._newMarker; // Attach marker to option so it can be manipulated in clicked callbacks
     // Callback on button clicked (to open modal and define a new mark)
     const _prepareNewMark = e => {
