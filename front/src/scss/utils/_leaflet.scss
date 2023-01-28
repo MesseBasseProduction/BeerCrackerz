@@ -8,6 +8,10 @@
 }
 
 .leaflet-container a.leaflet-popup-close-button {
+  font-size: 2.8rem;
+  right: .5rem;
+  top: .5rem;
+
   &:active,
   &:focus,
   &:hover {
@@ -59,13 +63,16 @@
 }
 
 .leaflet-control-scale {
-  bottom: 20px;  
+  bottom: 20px;
 }
 
 .leaflet-control-scale-line {
   background-color: var(--color-bg-a75);
   border: solid 2px var(--color-txt-a5);
   color: var(--color-txt);
+  font-size: var(--font-size-s2);
+  padding-top: .5rem;
+  text-shadow: none;
 }
 
 .leaflet-control-attribution.leaflet-control {

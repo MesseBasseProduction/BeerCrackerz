@@ -15,7 +15,7 @@ class ZoomSlider {
     // Map callback events
     this._map.on('zoomstart', this._zoomStart.bind(this));
     this._map.on('zoomend', this._zoomEnd.bind(this));
-    this._map.on('zoom', () => this._zoom.bind(this));
+    this._map.on('zoom', this._zoom.bind(this));
     // DOM mouse events
     this._container.addEventListener('mouseover', this._clearTimeout.bind(this));
     this._container.querySelector('#slider-wrapper').addEventListener('click', this._relativeZoom.bind(this));

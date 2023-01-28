@@ -470,7 +470,7 @@ class BeerCrackerz {
       this._map.on('popupopen', event => {
         const px = this._map.project(event.target._popup._latlng);
         px.y -= event.target._popup._container.clientHeight / 2;
-        this._map.panTo(this._map.unproject(px), { animate: true });
+        this._map.flyTo(this._map.unproject(px), this._map.getZoom());
         this._popupOpened = true;
       });
 
