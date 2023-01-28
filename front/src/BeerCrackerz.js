@@ -466,15 +466,20 @@ class BeerCrackerz {
       this._map.on('baselayerchange', event => {
         Utils.setPreference('map-plan-layer', Utils.stripDom(event.name));
       });
+
       // Update map view for big popups
       this._map.on('popupopen', event => {
         const px = this._map.project(event.target._popup._latlng);
         px.y -= event.target._popup._container.clientHeight / 2;
         this._map.flyTo(this._map.unproject(px), this._map.getZoom());
         this._popupOpened = true;
+        this._zoomSlider.hide();
       });
 
       // Clustering events
+      this._clusters.spot.on('clusterclick', this._zoomSlider.hide.bind(this._zoomSlider));
+      this._clusters.shop.on('clusterclick', this._zoomSlider.hide.bind(this._zoomSlider));
+      this._clusters.bar.on('clusterclick', this._zoomSlider.hide.bind(this._zoomSlider));
       this._clusters.spot.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'spot'));
       this._clusters.shop.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'shop'));
       this._clusters.bar.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'bar'));

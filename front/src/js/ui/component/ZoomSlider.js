@@ -79,6 +79,12 @@ class ZoomSlider {
   }
 
 
+  hide() {
+    this._container.classList.remove('opened');
+    this._clearTimeout();
+  }
+
+
 }
 
 

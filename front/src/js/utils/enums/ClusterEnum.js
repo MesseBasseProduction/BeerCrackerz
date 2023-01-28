@@ -3,7 +3,7 @@ export default Object.freeze({
     animateAddingMarkers: true,
     disableClusteringAtZoom: 18,
     spiderfyOnMaxZoom: false,
-    maxClusterRadius: 360,
+    maxClusterRadius: 300,
     iconCreateFunction: cluster => {
       return window.L.divIcon({
         className: 'cluster-icon-wrapper',
@@ -25,7 +25,7 @@ export default Object.freeze({
     animateAddingMarkers: true,
     disableClusteringAtZoom: 18,
     spiderfyOnMaxZoom: false,
-    maxClusterRadius: 360,
+    maxClusterRadius: 300,
     iconCreateFunction: cluster => {
       return window.L.divIcon({
         className: 'cluster-icon-wrapper',
@@ -47,7 +47,7 @@ export default Object.freeze({
     animateAddingMarkers: true,
     disableClusteringAtZoom: 18,
     spiderfyOnMaxZoom: false,
-    maxClusterRadius: 360,
+    maxClusterRadius: 300,
     iconCreateFunction: cluster => {
       return window.L.divIcon({
         className: 'cluster-icon-wrapper',
