@@ -22,6 +22,8 @@ function usage(){
   echo -e "                     Build the docker containers\n"
   echo -e "  -s, --start    [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
   echo -e "                     Start BeerCrackerz application\n"
+  echo -e "  -u, --update   [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "                     Quit, pull, build and start aplication"
   echo -e "  -q, --quit     [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
   echo -e "                     Stop any running BeerCrackerz application\n"
   echo -e "  -r, --reset    [\e[32mhard\e[39m] – \e[32mOptional\e[39m"
@@ -352,7 +354,16 @@ function gourceControl(){
     echo -e "Exporting gource visualization as a mp4 file"
     eval "gource $gourceOptions $ffmpegOptions"
   fi
+}
 
+function updateApp(){
+  echo -e "Start updating BeerCrackerz!"
+  quitApp ${1}
+  eval "git pull"
+  buildApp ${1}
+  startApp ${1}
+
+  echo -e "\e[32mSUCCESS\e[39m BeerCrackerz updated!"
 }
 
 # Script header
@@ -414,6 +425,15 @@ do
       fi
       startApp ${2}
       shift
+    ;;
+    -u|u|--update|update)
+      if [[ ! ${2} == @(dev|prod|locprod) ]]; then
+        echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to update BeerCrackerz."
+        echo -e "      Check command help for available arguments: ./bc.sh --help"
+        exit 1
+      fi
+      updateApp ${2}
+      exit 0
     ;;
     -q|q|--quit|quit)
       if [[ ! ${2} == @(dev|prod|locprod) ]]; then
