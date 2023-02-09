@@ -69,6 +69,7 @@
     "typeLabel": "Quel est le type du spot",
     "forestType": "Fôret",
     "riverType": "Rivière",
+    "cliffType": "Falaise",
     "mountainType": "Montagne",
     "beachType": "Plage",
     "cityType": "Ville",

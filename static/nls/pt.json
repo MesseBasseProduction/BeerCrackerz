@@ -69,6 +69,7 @@
     "typeLabel": "Que tipo de spot é",
     "forestType": "Floresta",
     "riverType": "Rio",
+    "cliffType": "Penhasco",
     "mountainType": "Montanha",
     "beachType": "Praia",
     "cityType": "Cidade",

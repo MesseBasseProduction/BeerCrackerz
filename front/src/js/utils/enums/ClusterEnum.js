@@ -2,8 +2,9 @@ export default Object.freeze({
   spot: new window.L.MarkerClusterGroup({
     animateAddingMarkers: true,
     disableClusteringAtZoom: 18,
+    showCoverageOnHover: false,
     spiderfyOnMaxZoom: false,
-    maxClusterRadius: 300,
+    maxClusterRadius: 40,
     iconCreateFunction: cluster => {
       return window.L.divIcon({
         className: 'cluster-icon-wrapper',
@@ -18,14 +19,15 @@ export default Object.freeze({
       color: '#3ABC30',
       weight: 0.5,
       opacity: 1,
-      fillOpacity: 0.4
+      fillOpacity: 0.3
     }
   }),
   shop: new window.L.MarkerClusterGroup({
     animateAddingMarkers: true,
     disableClusteringAtZoom: 18,
+    showCoverageOnHover: false,
     spiderfyOnMaxZoom: false,
-    maxClusterRadius: 300,
+    maxClusterRadius: 40,
     iconCreateFunction: cluster => {
       return window.L.divIcon({
         className: 'cluster-icon-wrapper',
@@ -40,14 +42,15 @@ export default Object.freeze({
       color: '#4295CF',
       weight: 0.5,
       opacity: 1,
-      fillOpacity: 0.4
+      fillOpacity: 0.3
     }
   }),
   bar: new window.L.MarkerClusterGroup({
     animateAddingMarkers: true,
     disableClusteringAtZoom: 18,
+    showCoverageOnHover: false,
     spiderfyOnMaxZoom: false,
-    maxClusterRadius: 300,
+    maxClusterRadius: 40,
     iconCreateFunction: cluster => {
       return window.L.divIcon({
         className: 'cluster-icon-wrapper',
@@ -62,7 +65,7 @@ export default Object.freeze({
       color: '#D0465D',
       weight: 0.5,
       opacity: 1,
-      fillOpacity: 0.4
+      fillOpacity: 0.3
     }
   })
 });

@@ -1,6 +1,6 @@
 export default Object.freeze({
   spot: {
-    types: ['forest', 'river', 'mountain', 'beach', 'city', 'pov'],
+    types: ['forest', 'river', 'cliff', 'mountain', 'beach', 'city', 'pov'],
     modifiers: ['bench', 'covered', 'toilet', 'store', 'trash', 'parking']
   },
   shop: {

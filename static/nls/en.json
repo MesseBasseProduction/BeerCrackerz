@@ -69,6 +69,7 @@
     "typeLabel": "What kind of spot it is",
     "forestType": "Forest",
     "riverType": "River",
+    "cliffType": "Cliff",
     "mountainType": "Mountain",
     "beachType": "Beach",
     "cityType": "City",

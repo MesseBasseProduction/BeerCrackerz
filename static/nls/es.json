@@ -69,6 +69,7 @@
     "typeLabel": "Que tipo de spot es",
     "forestType": "Bosque",
     "riverType": "Río",
+    "cliffType": "Acantilado",
     "mountainType": "Montaña",
     "beachType": "Playa",
     "cityType": "Ciudad",

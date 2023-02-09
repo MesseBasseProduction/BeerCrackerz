@@ -425,7 +425,7 @@ class BeerCrackerz {
    * </blockquote>
    * @returns {Promise} A Promise resolved when preferences are set
    **/
-   _initEvents() {
+  _initEvents() {
     return new Promise(resolve => {
       // Subscribe to click event on map to react
       this._map.on('click', this.mapClicked.bind(this));

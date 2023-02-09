@@ -69,6 +69,7 @@
     "typeLabel": "Was ist das für ein spot",
     "forestType": "Wald",
     "riverType": "Fluss",
+    "cliffType": "Cliff",
     "mountainType": "Berg",
     "beachType": "Strand",
     "cityType": "Stadt",

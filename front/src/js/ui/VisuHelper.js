@@ -503,6 +503,15 @@ class VisuHelper {
         }
       }
     }
+
+    const clusters = window.BeerCrackerz.clusters[type]
+    clusters._featureGroup.eachLayer(layer => {
+      if (layer instanceof L.MarkerCluster && layer.getChildCount() > 2) {
+        clusters._showCoverage({ layer: layer });
+      } else {
+        clusters._hideCoverage();        
+      }
+    });
   }
 
 
