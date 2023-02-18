@@ -150,7 +150,6 @@
     "hideShowBars": "Bars",
     "hideShowHelperLabel": "Klicken sie auf ein symbol, um seine beschreibung anzuzeigen",
     "labelHelperHideShow": "Entweder möchten Sie den markennamen unter seinem pin anzeigen oder nicht.",
-    "circleHelperHideShow": "Zeigen sie radiuskreise um markierungen an (um zu wissen, ob sie nah genug sind, um sie zu bearbeiten) und um den benutzer herum, damit seine reichweite neue markierungen hinzufügen kann.",
     "spotHelperHideShow": "Zum ausblenden oder anzeigen aller spots auf der karte (es wird auch der zugehörige kreis ausgeblendet oder angezeigt).",
     "shopHelperHideShow": "Zum ausblenden oder anzeigen aller läden auf der karte (es wird auch der zugehörige kreis ausgeblendet oder angezeigt).",
     "barHelperHideShow": "Zum ausblenden oder anzeigen aller bar auf der karte (es wird auch der zugehörige kreis ausgeblendet oder angezeigt).",

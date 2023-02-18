@@ -270,7 +270,6 @@ class BeerCrackerz {
           // Only draw marker if map is already created
           if (this._map) {
             VisuHelper.drawUserMarker();
-            VisuHelper.updateMarkerCirclesVisibility();
             // Update map position if focus lock is active
             if (Utils.getPreference('map-center-on-user') === 'true' && !this._isZooming) {
               this._map.setView(this._user);
@@ -405,7 +404,6 @@ class BeerCrackerz {
         }
       });
 
-      VisuHelper.updateMarkerCirclesVisibility();
       resolve();
     });
   }
@@ -441,17 +439,9 @@ class BeerCrackerz {
       // Map events
       this._map.on('zoomstart', () => {
         this._isZooming = true;
-        if (Utils.getPreference('poi-show-circle') === 'true') {
-          VisuHelper.setMarkerCircles(false);
-        }
       });
       this._map.on('zoomend', () => {
         this._isZooming = false;
-        if (Utils.getPreference('poi-show-circle') === 'true') {
-          if (this._map.getZoom() >= 10) {
-            VisuHelper.setMarkerCircles(true);
-          }
-        }
         // Auto hide labels if zoom level is too high (and restore it when needed)
         if (Utils.getPreference('poi-show-label') === 'true') {
           if (this._map.getZoom() < 16) {
@@ -670,8 +660,6 @@ class BeerCrackerz {
         this._clusters[options.type].addLayer(options.marker);
         // Notify user that new marker has been saved
         this.notification.raise(this.nls.notif(`${options.type}Added`));
-        // Update marker circles visibility according to user position
-        VisuHelper.updateMarkerCirclesVisibility();
         // Clear new marker to let user add other stuff
         this._newMarker = null;
       }).catch(() => {

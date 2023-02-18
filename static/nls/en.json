@@ -150,7 +150,6 @@
     "hideShowBars": "Bars",
     "hideShowHelperLabel": "Click on an icon to display its description",
     "labelHelperHideShow": "Either you want to display or not the mark name under its pin.",
-    "circleHelperHideShow": "Display radius circles around marks (to know if you're close enough to edit) and around user for its range to add new marks.",
     "spotHelperHideShow": "To hide or show all spots on the map (it will also hide or show the associated circle).",
     "shopHelperHideShow": "To hide or show all shops on the map (it will also hide or show the associated circle).",
     "barHelperHideShow": "To hide or show all bars on the map (it will also hide or show the associated circle).",

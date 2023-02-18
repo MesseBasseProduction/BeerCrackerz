@@ -150,7 +150,6 @@
     "hideShowBars": "Barras",
     "hideShowHelperLabel": "Haga clic en un icono para mostrar su descripción",
     "labelHelperHideShow": "O desea mostrar o no el nombre de la marca debajo de su pin.",
-    "circleHelperHideShow": "Muestre círculos de radio alrededor de las marcas (para saber si está lo suficientemente cerca para editar) y alrededor del usuario para su rango para agregar nuevas marcas.",
     "spotHelperHideShow": "Para ocultar o mostrar todos los spots del mapa (también ocultará o mostrará el círculo asociado).",
     "shopHelperHideShow": "Para ocultar o mostrar todas las tiendas en el mapa (también ocultará o mostrará el círculo asociado).",
     "barHelperHideShow": "Para ocultar o mostrar todas las barras del mapa (también ocultará o mostrará el círculo asociado).",

@@ -153,10 +153,6 @@ class Utils {
       Utils.setPreference('poi-show-bar', true);
     }
 
-    if (Utils.getPreference('poi-show-circle') === null) {
-      Utils.setPreference('poi-show-circle', true);
-    }
-
     if (Utils.getPreference('poi-show-label') === null) {
       Utils.setPreference('poi-show-label', true);
     }

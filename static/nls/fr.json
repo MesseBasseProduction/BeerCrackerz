@@ -150,7 +150,6 @@
     "hideShowBars": "Bars",
     "hideShowHelperLabel": "Cliquer sur un icône pour en afficher la description",
     "labelHelperHideShow": "L'étiquette permet de voir le nom du point sans l'ouvrir.",
-    "circleHelperHideShow": "Afficher le rayons des cercles autour des points (proximité nécessaire pour éditer un point) et autour de l'utilisateur.",
     "spotHelperHideShow": "Pour cacher ou aficher tout les spots de la carte (cela cachera les cercles associés aux spots).",
     "shopHelperHideShow": "Pour cacher ou aficher tout les magasins de la carte (cela cachera les cercles associés aux magasins).",
     "barHelperHideShow": "Pour cacher ou aficher tout les bars de la carte (cela cachera les cercles associés aux bars).",

@@ -150,31 +150,16 @@ class VisuHelper {
       // Append circle around marker for accuracy and range for new marker
       window.BeerCrackerz.user.radius = window.BeerCrackerz.user.accuracy;
       window.BeerCrackerz.user.circle = VisuHelper.drawCircle(window.BeerCrackerz.user);
-      window.BeerCrackerz.user.range = VisuHelper.drawCircle({
-        lat: window.BeerCrackerz.user.lat,
-        lng: window.BeerCrackerz.user.lng,
-        radius: MapEnum.newMarkRange,
-        color: ColorEnum.newMarkRange
-      });
 
       window.BeerCrackerz.user.circle.addTo(window.BeerCrackerz.map);
-      window.BeerCrackerz.user.range.addTo(window.BeerCrackerz.map);
-      // Update circle opacity if pref is at true
-      if (Utils.getPreference('poi-show-circle') === 'true') {
-        window.BeerCrackerz.user.circle.setStyle({
-          opacity: 1,
-          fillOpacity: 0.1
-        });
-        window.BeerCrackerz.user.range.setStyle({
-          opacity: 1,
-          fillOpacity: 0.1
-        });
-      }
+      window.BeerCrackerz.user.circle.setStyle({
+        opacity: 1,
+        fillOpacity: 0.1
+      });
       // Callback on marker clicked to add marker on user position
       window.BeerCrackerz.user.marker.on('click', window.BeerCrackerz.mapClicked.bind(window.BeerCrackerz));
     } else { // Update user marker position, range, and accuracy circle
       window.BeerCrackerz.user.marker.setLatLng(window.BeerCrackerz.user);
-      window.BeerCrackerz.user.range.setLatLng(window.BeerCrackerz.user);
       window.BeerCrackerz.user.circle.setLatLng(window.BeerCrackerz.user);
       window.BeerCrackerz.user.circle.setRadius(window.BeerCrackerz.user.accuracy);
     }    
@@ -192,71 +177,19 @@ class VisuHelper {
   }
 
 
-  static setMarkerCircles(visible) {
-    const _updateCircle = list => {
-      for (let i = 0; i < list.length; ++i) {
-        // Here we update both opacity and add/remove circle from map
-        if (visible) {
-          list[i].circle.setStyle({
-            opacity: 1,
-            fillOpacity: 0.1
-          });
-          list[i].circle.addTo(window.BeerCrackerz.map);
-        } else {
-          list[i].circle.setStyle({
-            opacity: 0,
-            fillOpacity: 0
-          });
-          list[i].circle.removeFrom(window.BeerCrackerz.map);
-        }
-      }
-    };
-
-    const keys = Object.keys(window.BeerCrackerz.marks);
-    for (let i = 0; i < keys.length; ++i) {
-      _updateCircle(window.BeerCrackerz.marks[keys[i]]);
-    }
-
-    _updateCircle([ window.BeerCrackerz.user ]);
-    _updateCircle([{ circle: window.BeerCrackerz.user.range }]);
-  }
-
-
   static updateMarkerCirclesVisibility() {   
-    if (Utils.getPreference('poi-show-circle') === 'true') {
-      const _updateCircles = list => {
-        // Check spots in user's proximity
-        for (let i = 0; i < list.length; ++i) {
-          // Only update circles that are in user view
-          if (window.BeerCrackerz.map.getBounds().contains(list[i].marker.getLatLng())) {
-            const marker = list[i].marker;
-            const distance = Utils.getDistanceBetweenCoords(
-              [ window.BeerCrackerz.user.lat, window.BeerCrackerz.user.lng ],
-              [ marker.getLatLng().lat, marker.getLatLng().lng ]
-            );
-            // Only show if user distance to marker is under circle radius
-            if (distance < MapEnum.socialMarkRange && !list[i].circle.visible) {
-              list[i].circle.visible = true;
-              list[i].circle.setStyle({
-                opacity: 1,
-                fillOpacity: 0.1
-              });
-            } else if (distance >= MapEnum.socialMarkRange && list[i].circle.visible) {
-              list[i].circle.visible = false;
-              list[i].circle.setStyle({
-                opacity: 0,
-                fillOpacity: 0
-              });
-            }
-          }
-        }
-      };
-
-      // Update circle visibility according to user distance to them
-      _updateCircles(window.BeerCrackerz.marks.spot);
-      _updateCircles(window.BeerCrackerz.marks.shop);
-      _updateCircles(window.BeerCrackerz.marks.bar);
-      _updateCircles([ window.BeerCrackerz.user ]);
+    // Only update circles that are in user view
+    if (window.BeerCrackerz.map.getBounds().contains(window.BeerCrackerz.user.marker.getLatLng())) {
+      const marker = window.BeerCrackerz.user.marker;
+      const distance = Utils.getDistanceBetweenCoords(
+        [ window.BeerCrackerz.user.lat, window.BeerCrackerz.user.lng ],
+        [ marker.getLatLng().lat, marker.getLatLng().lng ]
+      );
+      window.BeerCrackerz.user.circle.visible = true;
+      window.BeerCrackerz.user.circle.setStyle({
+        opacity: 1,
+        fillOpacity: 0.1
+      });
     }
   }
 
@@ -338,27 +271,6 @@ class VisuHelper {
     const visible = !(Utils.getPreference('poi-show-label') === 'true');
     VisuHelper.setMarkerLabels(visible);
     Utils.setPreference('poi-show-label', visible);
-  }
-
-
-  /**
-   * @method
-   * @name toggleCircle
-   * @public
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since January 2022
-   * @description
-   * <blockquote>
-   * The toggleCircle() method will, depending on user preference, display or not
-   * the circles around the spots/shops/bars marks. This circle indicates the minimal
-   * distance which allow the user to make updates on the mark information
-   * </blockquote>
-   **/
-  static toggleCircle() {
-    const visible = !(Utils.getPreference('poi-show-circle') === 'true');
-    VisuHelper.setMarkerCircles(visible);
-    Utils.setPreference('poi-show-circle', visible);
   }
 
 
