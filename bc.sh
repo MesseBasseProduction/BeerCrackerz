@@ -120,7 +120,7 @@ prodInstall() {
   { echo "# NGINX"
     echo "NGINX_NAME=beer_crackerz_nginx"
     echo "SERVER_HOST=${5}"
-    echo "SERVER_PORT=80"
+    echo "SERVER_PORT=8081"
     echo "SERVER_PROTOCOL=https"
     echo ""
     echo "# DATABASE"
