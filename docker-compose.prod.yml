@@ -8,17 +8,11 @@ services:
       context: .
       dockerfile: ./.conf/production/nginx/Dockerfile
     ports:
-      - ${SERVER_HTTP_PORT}:${SERVER_HTTP_PORT}
-      - ${SERVER_HTTPS_PORT}:${SERVER_HTTPS_PORT}
+      - ${SERVER_PORT}:${SERVER_PORT}
     environment:
       SERVER_HOST: ${SERVER_HOST}
-      SERVER_HTTP_PORT: ${SERVER_HTTP_PORT}
-      SERVER_HTTPS_PORT: ${SERVER_HTTPS_PORT}
+      SERVER_PORT: ${SERVER_PORT}
       BACKEND_PROXY: ${BACKEND_NAME}:${BACKEND_PORT}
-      CERTBOT_EMAIL: ${CERTBOT_EMAIL}
-      CERT_NAME: ${CERT_NAME}
-      STAGING: ${CERTBOT_STAGING}
-      USE_LOCAL_CA: ${CERTBOT_LOCAL_CA}
     volumes:
       - bc_static_files:/vol/static
       - bc_media:/vol/media

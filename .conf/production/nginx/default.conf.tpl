@@ -1,6 +1,5 @@
 server {
-    listen          ${SERVER_HTTPS_PORT} ssl;
-    listen     [::]:${SERVER_HTTPS_PORT} ssl;
+    listen          ${SERVER_PORT};
     server_name     ${SERVER_HOST};
 
     access_log      /var/log/nginx/back/access.log;
@@ -19,9 +18,4 @@ server {
     location /media {
         alias /vol/media;
     }
-
-    ssl_certificate         /etc/letsencrypt/live/${CERT_NAME}/fullchain.pem;
-    ssl_certificate_key     /etc/letsencrypt/live/${CERT_NAME}/privkey.pem;
-    ssl_trusted_certificate /etc/letsencrypt/live/${CERT_NAME}/chain.pem;
-    ssl_dhparam             /etc/letsencrypt/ssl-dhparams.pem;
 }

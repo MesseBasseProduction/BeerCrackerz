@@ -116,17 +116,12 @@ devInstall() {
 
 # production .env file creation method
 prodInstall() {
-  touch "${basedir}"/.conf/production/conf.server.env
+  touch "${basedir}"/.conf/production/conf.env
   { echo "# NGINX"
     echo "NGINX_NAME=beer_crackerz_nginx"
     echo "SERVER_HOST=${5}"
-    echo "SERVER_HTTP_PORT=80"
-    echo "SERVER_HTTPS_PORT=443"
+    echo "SERVER_PORT=80"
     echo "SERVER_PROTOCOL=https"
-    echo "CERTBOT_EMAIL=${4}"
-    echo "CERT_NAME=beer_crackerz"
-    echo "CERTBOT_STAGING=0"
-    echo "CERTBOT_LOCAL_CA=0"
     echo ""
     echo "# DATABASE"
     echo "DB_POSTGRES_VERSION=14.2-alpine"
@@ -148,44 +143,7 @@ prodInstall() {
     echo "# MAILJET"
     echo "MAILJET_API_KEY=${6}"
     echo "MAILJET_API_SECRET=${7}"
-  } >> "${basedir}"/.conf/production/conf.server.env
-}
-
-# local production .env file creation method
-locprodInstall() {
-  touch "${basedir}"/.conf/production/conf.local.env
-  { echo "# NGINX"
-    echo "NGINX_NAME=beer_crackerz_nginx"
-    echo "SERVER_HOST=localhost"
-    echo "SERVER_HTTP_PORT=80"
-    echo "SERVER_HTTPS_PORT=443"
-    echo "SERVER_PROTOCOL=https"
-    echo "CERTBOT_EMAIL=${4}"
-    echo "CERT_NAME=beer_crackerz"
-    echo "CERTBOT_STAGING=1"
-    echo "CERTBOT_LOCAL_CA=1"
-    echo ""
-    echo "# DATABASE"
-    echo "DB_POSTGRES_VERSION=14.2-alpine"
-    echo "DB_HOST=beer_crackerz_db"
-    echo "DB_PORT=5432"
-    echo "DB_NAME=beer_crackerz"
-    echo "DB_USER=${2}"
-    echo "DB_PASSWORD=${3}"
-    echo ""
-    echo "# BACKEND"
-    echo "BACKEND_NAME=beer_crackerz_back"
-    echo "BACKEND_PORT=8000"
-    echo "BACKEND_DEBUG=1"
-    echo "BACKEND_ALLOWED_HOSTS=localhost"
-    echo "BACKEND_USE_EMAIL_FILE_SYSTEM=1"
-    echo "BACKEND_SECRET_KEY=${1}"
-    echo "CSRF_TRUSTED_ORIGINS=https://localhost;http://127.0.0.1"
-    echo ""
-    echo "# MAILJET"
-    echo "MAILJET_API_KEY=${5}"
-    echo "MAILJET_API_SECRET=${6}"
-  } >> "${basedir}"/.conf/production/conf.local.env
+  } >> "${basedir}"/.conf/production/conf.env
 }
 
 function createConfFile() {
@@ -196,7 +154,7 @@ function createConfFile() {
   done
   
   #  # Check for previous existing .env files, ensure user want to override existing configuration
-    if [[ -f "${basedir}"/.conf/development/conf.env || -f "${basedir}"/.conf/production/conf.server.env || -f "${basedir}"/.conf/production/conf.local.env ]]; then
+    if [[ -f "${basedir}"/.conf/development/conf.env || -f "${basedir}"/.conf/production/conf.env ]]; then
       echo -e "\e[93mWARNING\e[39m BeerCrackerz has at least one configuration file which might be overriden"
       replaceconf="bc" # Can't init to blank to get in while read loop
       # Wait for user to send yY/nN or blank
@@ -221,13 +179,9 @@ function createConfFile() {
       echo "Creating configuration file for development mode."
       devInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${mailjetapi}" "${mailjetsecret}"
     elif [ "${1}" = "prod" ]; then
-      rm -rf "${basedir}"/.conf/production/conf.server.env
+      rm -rf "${basedir}"/.conf/production/conf.env
       echo "Creating configuration file for production mode."
       prodInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${email}" "${domain}" "${mailjetapi}" "${mailjetsecret}"
-    elif [ "${1}" = "locprod" ]; then
-      rm -rf "${basedir}"/.conf/production/conf.local.env
-      echo "Creating configuration file for local production mode."
-      locprodInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${email}" "${mailjetapi}" "${mailjetsecret}"
     fi
     echo # Line break
     echo -e "\e[32mSUCCESS\e[39m BeerCrackerz installed!"
@@ -244,12 +198,8 @@ function editConfFile() {
     devInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${mailjetapi}" "${mailjetsecret}"
   elif [ "${1}" = "prod" ]; then
     echo -e "Editing BeerCrackerz in production mode"
-    rm -rf "${basedir}"/.conf/production/conf.server.env
+    rm -rf "${basedir}"/.conf/production/conf.env
     prodInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${email}" "${domain}" "${mailjetapi}" "${mailjetsecret}"
-  elif [ "${1}" = "locprod" ]; then
-    echo -e "Editing BeerCrackerz in local production mode"
-    rm -rf "${basedir}"/.conf/production/conf.local.env
-    locprodInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${email}" "${mailjetapi}" "${mailjetsecret}"
   fi
 
   echo -e "\e[32mSUCCESS\e[39m BeerCrackerz edited!"
@@ -263,11 +213,7 @@ function buildApp(){
   elif [ "${1}" = "prod" ]; then
     echo -e "Building BeerCrackerz in production mode"
     eval "npm run build"
-    eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.server.env build"
-  elif [ "${1}" = "locprod" ]; then
-    echo -e "Building BeerCrackerz in local production mode"
-    eval "npm run build"
-    eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.local.env build"
+    eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env build"
   fi
 
   echo -e "\n\e[32mSUCCESS\e[39m BeerCrackerz built!"
@@ -279,10 +225,7 @@ function startApp(){
     eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env up -d"
   elif [ "${1}" = "prod" ]; then
     echo -e "Starting BeerCrackerz in production mode"
-    eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.server.env up -d"
-  elif [ "${1}" = "locprod" ]; then
-    echo -e "Starting BeerCrackerz in local production mode"
-    eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.local.env up -d"
+    eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env up -d"
   fi
 
   echo -e "\n\e[32mSUCCESS\e[39m BeerCrackerz started!"
@@ -296,10 +239,7 @@ function quitApp(){
     eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env down"
   elif [ "${1}" = "prod" ]; then
     echo -e "Stoping BeerCrackerz containers in production mode"
-    eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.server.env down"
-  elif [ "${1}" = "locprod" ]; then
-    echo -e "Stoping BeerCrackerz containers in local production mode"
-    eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.local.env down"
+    eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env down"
   fi
 
   echo -e "\n\e[32mSUCCESS\e[39m BeerCrackerz exited!"
@@ -326,8 +266,7 @@ function resetApp(){
   # Remove BeerCrackerz's related dockers
   echo -e "2/3. Removing BeerCrackerz containers"
   eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env down -v --rmi all --remove-orphans"
-  eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.server.env down -v --rmi all --remove-orphans"
-  eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.local.env down -v --rmi all --remove-orphans"
+  eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env down -v --rmi all --remove-orphans"
   echo # Line break
   # Reset hard argument
   if [ "${1}" = "hard" ]; then
@@ -391,7 +330,7 @@ do
       exit 0
     ;;
     -i|i|--install|install)
-      if [[ ! ${2} == @(dev|prod|locprod) ]]; then
+      if [[ ! ${2} == @(dev|prod) ]]; then
         echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to create BeerCrackerz configuration file."
         echo -e "      Check command help for available arguments: ./bc.sh --help"
         exit 1
@@ -400,7 +339,7 @@ do
       shift
     ;;
     -e|e|--edit|edit)
-      if [[ ! ${2} == @(dev|prod|locprod) ]]; then
+      if [[ ! ${2} == @(dev|prod) ]]; then
         echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to edit BeerCrackerz configuration file."
         echo -e "      Check command help for available arguments: ./bc.sh --help"
         exit 1
@@ -409,7 +348,7 @@ do
       shift
     ;;
     -b|b|--build|build)
-      if [[ ! ${2} == @(dev|prod|locprod) ]]; then
+      if [[ ! ${2} == @(dev|prod) ]]; then
         echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to build BeerCrackerz."
         echo -e "      Check command help for available arguments: ./bc.sh --help"
         exit 1
@@ -418,7 +357,7 @@ do
       shift
     ;;
     -s|s|--start|start)
-      if [[ ! ${2} == @(dev|prod|locprod) ]]; then
+      if [[ ! ${2} == @(dev|prod) ]]; then
         echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to start BeerCrackerz."
         echo -e "      Check command help for available arguments: ./bc.sh --help"
         exit 1
@@ -427,7 +366,7 @@ do
       shift
     ;;
     -u|u|--update|update)
-      if [[ ! ${2} == @(dev|prod|locprod) ]]; then
+      if [[ ! ${2} == @(dev|prod) ]]; then
         echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to update BeerCrackerz."
         echo -e "      Check command help for available arguments: ./bc.sh --help"
         exit 1
@@ -436,7 +375,7 @@ do
       exit 0
     ;;
     -q|q|--quit|quit)
-      if [[ ! ${2} == @(dev|prod|locprod) ]]; then
+      if [[ ! ${2} == @(dev|prod) ]]; then
         echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to stop BeerCrackerz."
         echo -e "      Check command help for available arguments: ./bc.sh --help"
         exit 1
