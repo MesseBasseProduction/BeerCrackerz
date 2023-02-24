@@ -13,10 +13,8 @@
     "beforecommit": "npm run doc && npm run test && npm run build",
     "docker:build": "docker-compose --file docker-compose.yml --env-file .conf/development/conf.env build",
     "docker:up": "docker-compose --file docker-compose.yml --env-file .conf/development/conf.env up",
-    "docker:build:prod": "docker-compose --file docker-compose.prod.yml --env-file .conf/production/conf.server.env build",
-    "docker:up:prod": "docker-compose --file docker-compose.prod.yml --env-file .conf/production/conf.server.env up",
-    "docker:build:prod:local": "docker-compose --file docker-compose.prod.yml --env-file .conf/production/conf.local.env build",
-    "docker:up:prod:local": "docker-compose --file docker-compose.prod.yml --env-file .conf/production/conf.local.env up"
+    "docker:build:prod": "docker-compose --file docker-compose.prod.yml --env-file .conf/production/conf.env build",
+    "docker:up:prod": "docker-compose --file docker-compose.prod.yml --env-file .conf/production/conf.env up"
   },
   "homepage": "https://github.com/MesseBasseProduction/BeerCrackerz/README.md",
   "repository": {

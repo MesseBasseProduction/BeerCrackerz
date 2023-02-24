@@ -16,6 +16,7 @@ services:
     volumes:
       - bc_static_files:/vol/static
       - bc_media:/vol/media
+      - bc_logs:/var/log/nginx/back
     depends_on:
       - backend
   backend:
@@ -52,8 +53,6 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - ${DB_PORT}:${DB_PORT}
     volumes:
       - bc_db:/var/lib/postgresql/data
 volumes:
@@ -63,3 +62,5 @@ volumes:
     name: bc_static_files
   bc_media:
     name: bc_media
+  bc_logs:
+    name: bc_logs
