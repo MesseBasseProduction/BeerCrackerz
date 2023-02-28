@@ -4,8 +4,7 @@ basedir=$(dirname "${0}")
 unset backsecretkey
 unset dbuser
 unset dbpassword
-unset email
-unset domain
+unset serverurl
 unset mailjetapi
 unset mailjetsecret
 
@@ -52,27 +51,23 @@ updateVariables() {
   while [ -z ${backsecretkey} ]; do
     read -rp "  1/7. The backend secret key : " backsecretkey
   done
-  # Database password (not empty and >4 characters)
+  # Database user
   while [ -z ${dbuser} ]; do
     read -rp "  2/7. The database username : " dbuser
   done
-  # Database password (not empty and >4 characters)
-  while [[ ${dbpassword} = "" || ${#dbpassword} -lt 4 ]]; do
-    read -rp "  3/7. The database password (> 4 characters) : " dbpassword
+  # Database password (not empty and >10 characters)
+  while [[ ${dbpassword} = "" || ${#dbpassword} -lt 10 ]]; do
+    read -rp "  3/7. The database password (> 10 characters) : " dbpassword
   done
-  # Database password (not empty and >4 characters)
-  while [ -z ${email} ]; do
-    read -rp "  4/7. The administrator email : " email
+  # Server url with protocol
+  while [ -z ${serverurl} ]; do
+    read -rp "  5/7. The production server url: " serverurl
   done
-  # Database password (not empty and >4 characters)
-  while [ -z ${domain} ]; do
-    read -rp "  5/7. The production domain (without http/https) : " domain
-  done
-  # Library path (not empty and an existing directory on system)
+  # Mailjet API key
   while [ -z ${mailjetapi} ]; do
     read -rp "  6/7. The MailJet API key : " mailjetapi
   done
-  # Resources path (not empty and an existing directory on system)
+  # Mailjet API secret
   while [ -z ${mailjetsecret} ]; do
     read -rp "  7/7. The MailJet API secret : " mailjetsecret
   done
@@ -119,9 +114,9 @@ prodInstall() {
   touch "${basedir}"/.conf/production/conf.env
   { echo "# NGINX"
     echo "NGINX_NAME=beer_crackerz_nginx"
-    echo "SERVER_HOST=${5}"
+    echo "SERVER_HOST=127.0.0.1"
     echo "SERVER_PORT=8081"
-    echo "SERVER_PROTOCOL=https"
+    echo "SERVER_URL=${4}"
     echo ""
     echo "# DATABASE"
     echo "DB_POSTGRES_VERSION=14.2-alpine"
@@ -135,14 +130,14 @@ prodInstall() {
     echo "BACKEND_NAME=beer_crackerz_back"
     echo "BACKEND_PORT=8000"
     echo "BACKEND_DEBUG=0"
-    echo "BACKEND_ALLOWED_HOSTS=${5}"
+    echo "BACKEND_ALLOWED_HOSTS=127.0.0.1"
     echo "BACKEND_USE_EMAIL_FILE_SYSTEM=0"
     echo "BACKEND_SECRET_KEY=${1}"
-    echo "CSRF_TRUSTED_ORIGINS=https://${5}"
+    echo "CSRF_TRUSTED_ORIGINS=${4}"
     echo ""
     echo "# MAILJET"
-    echo "MAILJET_API_KEY=${6}"
-    echo "MAILJET_API_SECRET=${7}"
+    echo "MAILJET_API_KEY=${5}"
+    echo "MAILJET_API_SECRET=${6}"
   } >> "${basedir}"/.conf/production/conf.env
 }
 
@@ -181,7 +176,7 @@ function createConfFile() {
     elif [ "${1}" = "prod" ]; then
       rm -rf "${basedir}"/.conf/production/conf.env
       echo "Creating configuration file for production mode."
-      prodInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${email}" "${domain}" "${mailjetapi}" "${mailjetsecret}"
+      prodInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${serverurl}" "${mailjetapi}" "${mailjetsecret}"
     fi
     echo # Line break
     echo -e "\e[32mSUCCESS\e[39m BeerCrackerz installed!"
@@ -199,7 +194,7 @@ function editConfFile() {
   elif [ "${1}" = "prod" ]; then
     echo -e "Editing BeerCrackerz in production mode"
     rm -rf "${basedir}"/.conf/production/conf.env
-    prodInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${email}" "${domain}" "${mailjetapi}" "${mailjetsecret}"
+    prodInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${serverurl}" "${mailjetapi}" "${mailjetsecret}"
   fi
 
   echo -e "\e[32mSUCCESS\e[39m BeerCrackerz edited!"

@@ -27,7 +27,7 @@ services:
       dockerfile: ./.conf/production/back/Dockerfile
     environment:
       BACKEND_PORT: ${BACKEND_PORT}
-      SERVER_URL: ${SERVER_PROTOCOL}://${SERVER_HOST}
+      SERVER_URL: ${SERVER_URL}
       SECRET_KEY: ${BACKEND_SECRET_KEY}
       DEBUG: ${BACKEND_DEBUG}
       ALLOWED_HOSTS: ${BACKEND_ALLOWED_HOSTS}
