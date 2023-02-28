@@ -10,11 +10,7 @@
     "doc": "jsdoc -c front/webpack/jsDoc.json",
     "test": "karma start front/test/karma.config.js",
     "test:dev": "karma start front/test/karma.config.js --dev=true",
-    "beforecommit": "npm run doc && npm run test && npm run build",
-    "docker:build": "docker-compose --file docker-compose.yml --env-file .conf/development/conf.env build",
-    "docker:up": "docker-compose --file docker-compose.yml --env-file .conf/development/conf.env up",
-    "docker:build:prod": "docker-compose --file docker-compose.prod.yml --env-file .conf/production/conf.env build",
-    "docker:up:prod": "docker-compose --file docker-compose.prod.yml --env-file .conf/production/conf.env up"
+    "beforecommit": "npm run doc && npm run test && npm run build"
   },
   "homepage": "https://github.com/MesseBasseProduction/BeerCrackerz/README.md",
   "repository": {

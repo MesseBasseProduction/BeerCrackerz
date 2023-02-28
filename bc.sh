@@ -293,7 +293,6 @@ function gourceControl(){
 function updateApp(){
   echo -e "Start updating BeerCrackerz!"
   quitApp ${1}
-  eval "git pull"
   buildApp ${1}
   startApp ${1}
 
