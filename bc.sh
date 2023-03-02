@@ -399,7 +399,7 @@ do
       shift
     ;;
     -a|a|--about|about)
-      echo -e "bc.sh ${1} : About BeerCrackerz\n"
+      echo -e "bc.sh ${1} : About BeerCrackerz\nWelcome, fellow beer lovers.\nBeerCrackerz is a community web app to list the best spots to drink a fresh one while you're outside.\nIt provides a well-known map interface so it is really easy to browse, find or add unique spots!"
       exit 0
     ;;
     "")
