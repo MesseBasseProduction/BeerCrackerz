@@ -151,7 +151,8 @@ function createConfFile() {
   #  # Check for previous existing .env files, ensure user want to override existing configuration
     if [[ -f "${basedir}"/.conf/development/conf.env || -f "${basedir}"/.conf/production/conf.env ]]; then
       echo -e "\e[93mWARNING\e[39m BeerCrackerz has at least one configuration file which might be overriden"
-      replaceconf="bc" # Can't init to blank to get in while read loop
+      # Can't init to blank to get in while read loop
+      replaceconf="bc" 
       # Wait for user to send yY/nN or blank
       while [[ "${replaceconf}" != "" && "${replaceconf}" != "y" && "${replaceconf}" != "Y" && "${replaceconf}" != "n" && "${replaceconf}" != "N" ]]; do
         read -rp "        Do you still want to proceed? [y/N] " replaceconf
