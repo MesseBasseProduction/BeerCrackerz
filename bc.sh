@@ -13,17 +13,17 @@ unset mailjetsecret
 function usage(){
   echo -e "bc.sh ${1} : Command help\n"
   echo -e "Usage : ./bc.sh [command] [argument]\n"
-  echo -e "  -i, --install  [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "  -i, --install  [\e[33mdev\e[39m/\e[33mprod\e[39m] – \e[33mMandatory\e[39m"
   echo -e "                     Configure environment file and install BeerCrackerz on the system\n"
-  echo -e "  -e, --edit     [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "  -e, --edit     [\e[33mdev\e[39m/\e[33mprod\e[39m] – \e[33mMandatory\e[39m"
   echo -e "                     Edit the environment file\n"
-  echo -e "  -b, --build    [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "  -b, --build    [\e[33mdev\e[39m/\e[33mprod\e[39m] – \e[33mMandatory\e[39m"
   echo -e "                     Build the docker containers\n"
-  echo -e "  -s, --start    [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "  -s, --start    [\e[33mdev\e[39m/\e[33mprod\e[39m] – \e[33mMandatory\e[39m"
   echo -e "                     Start BeerCrackerz application\n"
-  echo -e "  -u, --update   [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
-  echo -e "                     Quit, pull, build and start aplication"
-  echo -e "  -q, --quit     [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mlocprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "  -u, --update   [\e[33mdev\e[39m/\e[33mprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "                     Quit, pull, build and start aplication\n"
+  echo -e "  -q, --quit     [\e[33mdev\e[39m/\e[33mprod\e[39m] – \e[33mMandatory\e[39m"
   echo -e "                     Stop any running BeerCrackerz application\n"
   echo -e "  -r, --reset    [\e[32mhard\e[39m] – \e[32mOptional\e[39m"
   echo -e "                     Remove existing database and docker images, hard argument will docker prune"
@@ -172,11 +172,11 @@ function createConfFile() {
     # Runtime mode to configure
     if [ "${1}" = "dev" ]; then
       rm -rf "${basedir}"/.conf/development/conf.env
-      echo "Creating configuration file for development mode."
+      echo "Creating configuration file for development environment."
       devInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${mailjetapi}" "${mailjetsecret}"
     elif [ "${1}" = "prod" ]; then
       rm -rf "${basedir}"/.conf/production/conf.env
-      echo "Creating configuration file for production mode."
+      echo "Creating configuration file for production environment."
       prodInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${serverurl}" "${mailjetapi}" "${mailjetsecret}"
     fi
     echo # Line break
@@ -185,29 +185,46 @@ function createConfFile() {
 }
 
 function editConfFile() {
-  # Request info from user
-  updateVariables
   # Runtime mode to configure
-  if [ "${1}" = "dev" ]; then
-    echo -e "Editing BeerCrackerz configuration in development mode"
-    rm -rf "${basedir}"/.conf/development/conf.env
-    devInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${mailjetapi}" "${mailjetsecret}"
-  elif [ "${1}" = "prod" ]; then
-    echo -e "Editing BeerCrackerz in production mode"
-    rm -rf "${basedir}"/.conf/production/conf.env
-    prodInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${serverurl}" "${mailjetapi}" "${mailjetsecret}"
-  fi
+  if [ ${1} == "prod" ]; then
+		confFile=$(echo $(pwd)/.conf/production/conf.env)
+	else
+		confFile=$(echo $(pwd)/.conf/development/conf.env)
+	fi
+	echo -e "You are going to modify \033[38;5;226m${confFile}\033[00m"
+	# Looping over all terms that will need to be updated in file
+	for envVar in "DB_USER" "DB_PASSWORD" "BACKEND_SECRET_KEY" "MAILJET_API_KEY" "MAILJET_API_SECRET" "CSRF_TRUSTED_ORIGINS" "SERVER_URL"; do
+		# Get whole line matching current envVar which need an update
+		tmp=$(grep ${envVar} ${confFile})
+		# Check if current envVar exists in file
+		# if yes, then update it or not
+		if [ $? -eq 0 ]; then
+			# Printing current value in file
+			echo "Currently ${tmp}"
+			# Can't start looping with an empty variable
+			replaceVar="bc"
+			while [[ ${replaceVar} != "" && ${replaceVar} != "y" && "${replaceVar}" != "Y" && "${replaceVar}" != "n" && "${replaceVar}" != "N" ]]; do
+				read -rp "	Do you want to replace ${envVar} current value ? [y/n] " replaceVar
+			done
+			# If var needs to be replaced then replace it
+			# Else continue to next var
+			if [[ ${replaceVar} == "y" || ${replaceVar} == "Y" ]]; then
+				read -rp "	${envVar} = " replaceVar
+				sed -i -e "s/${tmp}/${envVar}=${replaceVar}/g" ${confFile}
+			fi
+    fi
+	done
 
   echo -e "\e[32mSUCCESS\e[39m BeerCrackerz edited!"
 }
 
 function buildApp(){
   if [ "${1}" = "dev" ]; then
-    echo -e "Building BeerCrackerz in development mode"
+    echo -e "Building BeerCrackerz for development environment"
     eval "npm run build"
     eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env build"
   elif [ "${1}" = "prod" ]; then
-    echo -e "Building BeerCrackerz in production mode"
+    echo -e "Building BeerCrackerz for production environment"
     eval "npm run build"
     eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env build"
   fi
@@ -217,10 +234,10 @@ function buildApp(){
 
 function startApp(){
   if [ "${1}" = "dev" ]; then
-    echo -e "Starting BeerCrackerz in development mode"
+    echo -e "Starting BeerCrackerz in development environment"
     eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env up -d"
   elif [ "${1}" = "prod" ]; then
-    echo -e "Starting BeerCrackerz in production mode"
+    echo -e "Starting BeerCrackerz in production environment"
     eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env up -d"
   fi
 
@@ -231,10 +248,10 @@ function startApp(){
 
 function quitApp(){
   if [ "${1}" = "dev" ]; then
-    echo -e "Stoping BeerCrackerz containers in development mode"
+    echo -e "Stoping BeerCrackerz containers in development environment"
     eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env down"
   elif [ "${1}" = "prod" ]; then
-    echo -e "Stoping BeerCrackerz containers in production mode"
+    echo -e "Stoping BeerCrackerz containers in production environment"
     eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env down"
   fi
 
