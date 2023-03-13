@@ -725,7 +725,7 @@ class BeerCrackerz {
    * </blockquote>
    * @param {Object} options The mark options to edit
    **/
-   editMark(options) {
+  editMark(options) {
     this._map.closePopup();
     this._modal = ModalFactory.build('EditMark', options);
   }
