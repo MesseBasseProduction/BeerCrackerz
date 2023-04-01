@@ -123,6 +123,18 @@ class BeerCrackerz {
      **/
     this._isZooming = false;
     /**
+     * Whether the user is double clicking the map
+     * @type {Boolean}
+     * @private
+     **/
+    this._dbClick = false;
+    /**
+     * The timeout id for double click detection
+     * @type {Number}
+     * @private
+     **/
+    this._dbClickTimeoutId = -1;
+    /**
      * The communication manager to process all server call
      * @type {Object}
      * @private
@@ -566,20 +578,32 @@ class BeerCrackerz {
    * @param {Event} event The click event
    **/
   mapClicked(event) {
-    if (this._newMarker && this._newMarker.popupClosed) { // Avoid to open new marker right after popup closing
-      this._newMarker = null;
-      this._popupOpened = false;
-    } else if (this._popupOpened === true) { // Do not open new mark if popup previously opened
-      this._popupOpened = false;
-    } else if (this._newMarker === null || !this._newMarker.isBeingDefined) { // Check for new mark
-      // Only create new marker if click is in range to add a mark
-      const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [event.latlng.lat, event.latlng.lng]);
-      if (distance < MapEnum.newMarkRange) { // In range to create new mark
-        this.addMarkPopup(event.latlng);
-        this._newMarker.openPopup();
-      } else if (this._map.getZoom() >= 10) { // Avoid poluting UI when strong dezoom applied
-        this.notification.raise(this.nls.notif('newMarkerOutside'));
-      }
+    if (!this._dbClick) {
+      // On first click, we activate double click detection
+      // If no registered click in 300mx, handle standard click
+      this._dbClick = true;
+      this._dbClickTimeoutId = setTimeout(() => {
+        this._dbClick = false;
+        if (this._newMarker && this._newMarker.popupClosed) { // Avoid to open new marker right after popup closing
+          this._newMarker = null;
+          this._popupOpened = false;
+        } else if (this._popupOpened === true) { // Do not open new mark if popup previously opened
+          this._popupOpened = false;
+        } else if (this._newMarker === null || !this._newMarker.isBeingDefined) { // Check for new mark
+          // Only create new marker if click is in range to add a mark
+          const distance = Utils.getDistanceBetweenCoords([this._user.lat, this._user.lng], [event.latlng.lat, event.latlng.lng]);
+          if (distance < MapEnum.newMarkRange) { // In range to create new mark
+            this.addMarkPopup(event.latlng);
+            this._newMarker.openPopup();
+          } else if (this._map.getZoom() >= 10) { // Avoid poluting UI when strong dezoom applied
+            this.notification.raise(this.nls.notif('newMarkerOutside'));
+          }
+        }
+      }, 200);
+    } else {
+      // Second click close enough to the previous one to be qualified double click
+      this._dbClick = false;
+      clearTimeout(this._dbClickTimeoutId);
     }
   }
 

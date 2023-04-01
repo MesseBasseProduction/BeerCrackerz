@@ -1,7 +1,6 @@
 export default Object.freeze({
   blue: new window.L.Icon({
     iconUrl: '/static/img/marker/marker-icon-blue.png',
-    shadowUrl: '/static/img/marker/marker-shadow.png',
     iconSize: [25, 42],
     iconAnchor: [12, 42],
     popupAnchor: [1, -34],
@@ -9,7 +8,6 @@ export default Object.freeze({
   }),
   red: new window.L.Icon({
     iconUrl: '/static/img/marker/marker-icon-red.png',
-    shadowUrl: '/static/img/marker/marker-shadow.png',
     iconSize: [25, 42],
     iconAnchor: [12, 42],
     popupAnchor: [1, -34],
@@ -17,7 +15,6 @@ export default Object.freeze({
   }),
   green: new window.L.Icon({
     iconUrl: '/static/img/marker/marker-icon-green.png',
-    shadowUrl: '/static/img/marker/marker-shadow.png',
     iconSize: [25, 42],
     iconAnchor: [12, 42],
     popupAnchor: [1, -34],
@@ -25,7 +22,6 @@ export default Object.freeze({
   }),
   black: new window.L.Icon({
     iconUrl: '/static/img/marker/marker-icon-black.png',
-    shadowUrl: '/static/img/marker/marker-shadow.png',
     iconSize: [25, 42],
     iconAnchor: [12, 42],
     popupAnchor: [1, -34],
@@ -33,7 +29,6 @@ export default Object.freeze({
   }),
   user: new window.L.Icon({
     iconUrl: '/static/img/marker/user-position.png',
-    shadowUrl: '/static/img/marker/user-position-shadow.png',
     iconSize: [32, 32],
     iconAnchor: [16, 16],
     popupAnchor: [1, -34],
