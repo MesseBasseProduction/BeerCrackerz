@@ -186,7 +186,7 @@
       "headTitle": "Login | BeerCrackerz",
       "subtitle": "Login",
       "hiddenError": "Oh! A hidden text!",
-      "username": "Username or email adresse",
+      "username": "Username",
       "password": "Password",
       "login": "Login",
       "notRegistered": "Not registered yet?",

@@ -186,7 +186,7 @@
       "headTitle": "Connexion | BeerCrackerz",
       "subtitle": "Se connecter",
       "hiddenError": "Oh! Un texte caché!",
-      "username": "Nom d'utilisateur ou Email",
+      "username": "Nom d'utilisateur",
       "password": "Mot de passe",
       "login": "Se connecter",
       "notRegistered": "Pas encore inscrit?",
