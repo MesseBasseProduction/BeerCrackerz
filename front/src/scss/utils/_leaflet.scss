@@ -32,32 +32,32 @@
   a {
     margin-bottom: 0;
   }
-}
 
-.leaflet-control-layers-expanded {
-  padding: 2rem !important;
-  width: 160rem;
+  &.leaflet-control-layers-expanded {
+    padding: 2rem !important;
+    width: 18rem;
 
-  label {
-    margin: 0;
+    label {
+      margin: 0;
 
-    div {
-      align-items: center;
-      display: flex;
-      flex-direction: row-reverse;
-      justify-content: space-between;
-
-      input {
-        width: auto;
-      }
-
-      input, p {
-        margin: 0;
-      }
-
-      p {
-        margin-right: 1rem;
-      }
+      span {
+        align-items: center;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+  
+        input {
+          width: auto;
+        }
+  
+        input, p {
+          margin: 0;
+        }
+  
+        p {
+          margin-right: 1rem;
+        }
+      }      
     }
   }
 }
