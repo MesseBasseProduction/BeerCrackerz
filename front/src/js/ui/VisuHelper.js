@@ -388,7 +388,11 @@ class VisuHelper {
       VisuHelper.toggleFocusLock();
     }
     // Actual fly to the marker
-    window.BeerCrackerz.map.flyTo([options.lat, options.lng], window.BeerCrackerz.map.getZoom());
+    let zoom = options.zoom;
+    if (!options.zoom) {
+      zoom = window.BeerCrackerz.map.getZoom();
+    }
+    window.BeerCrackerz.map.flyTo([options.lat, options.lng], zoom);
   }
 
 

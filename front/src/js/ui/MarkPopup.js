@@ -150,11 +150,14 @@ class MarkPopup {
           window.Evts.publish('deleteMark', this._opts);
         }, this));
       }
-
-      this._evtIds.push(window.Evts.addEvent('click', this._opts.tooltip.getElement(), e => {
+      this._evtIds.push(window.Evts.addEvent('click', this._popup.querySelector('#center-on'), e => {
         e.preventDefault();
         e.stopPropagation();
-        window.Evts.publish('centerOn', this._opts);
+        window.Evts.publish('centerOn', {
+          lat: this._opts.lat,
+          lng: this._opts.lng,
+          zoom: 19
+        });
       }, this));
 
       resolve();
