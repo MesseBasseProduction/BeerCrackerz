@@ -7,7 +7,7 @@ from django.dispatch import receiver
 
 
 class User(AbstractUser):
-    profile_picture = models.ImageField(upload_to='profile_picture/', null=True)
+    profile_picture = models.ImageField(upload_to='profile_picture/', null=True, blank=True)
 
 
 @receiver(models.signals.pre_save, sender=User)
