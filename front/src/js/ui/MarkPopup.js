@@ -143,7 +143,7 @@ class MarkPopup {
   _events() {
     // Fire global event on buttons
     return new Promise(resolve => {
-      if (this._opts.user === window.BeerCrackerz.user.username || !window.BeerCrackerz.user.isStaff) {
+      if (this._opts.user === window.BeerCrackerz.user.username || window.BeerCrackerz.user.isStaff) {
         this._evtIds.push(window.Evts.addEvent('click', this._popup.querySelector('#edit-mark'), () => {
           window.Evts.publish('editMark', this._opts);
         }, this));
