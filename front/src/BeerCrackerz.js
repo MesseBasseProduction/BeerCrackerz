@@ -193,6 +193,7 @@ class BeerCrackerz {
         this._user.email = user.email;
         this._user.pp = user.profilePicture;
         this._user.isActive = user.isActive;
+        this._user.isStaff = user.isStaff;
         resolve();
       }).catch(reject);
     });

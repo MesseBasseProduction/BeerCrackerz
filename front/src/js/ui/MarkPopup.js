@@ -95,7 +95,7 @@ class MarkPopup {
         this._popup.querySelector('#popup-social').parentNode.removeChild(this._popup.querySelector('#popup-social'));
       }
       // Remove edition buttons if marker is not user's one, this does not replace a server test for edition...
-      if (user !== window.BeerCrackerz.user.username) {
+      if (user !== window.BeerCrackerz.user.username || !window.BeerCrackerz.user.isStaff) {
         this._popup.querySelector('#popup-edit').parentNode.removeChild(this._popup.querySelector('#popup-edit'));
       }
       // Append circle around marker
