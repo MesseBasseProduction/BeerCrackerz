@@ -198,6 +198,7 @@
       "bothEmpty": "Veuillez saisir un nom d'utilisateur et un mot de passe",
       "usernameEmpty": "Veuillez saisir un nom d'utilisateur",
       "passwordEmpty": "Veuillez saisir votre mot de passe",
+      "credsInvalid": "Nom d'utilisateur ou mot de passe incorrect",
       "serverError": "Une erreur serveur est survenue, contactez le support",
       "checkMail": "Consultez vos email avant de continuer"
     },

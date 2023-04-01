@@ -567,7 +567,7 @@ class BeerCrackerzAuth {
       }
       return true;
     };
-    const _backValidation = () => {
+    const _backValidation = (e) => {
       // Check response and handle status codes
       // If all front and back tests are ok, redirect to auth
       // If the user manually force redirection to authindex,
@@ -583,9 +583,13 @@ class BeerCrackerzAuth {
         this._kom.post('/api/auth/login/', {
           username: username.value,
           password: password.value
-        }).then(_backValidation).catch(() => {
+        }).then(_backValidation).catch(e => {
           error.classList.add('visible');
-          error.innerHTML = this.nls.login('serverError');
+          if (e.status === 401) {
+            error.innerHTML = this.nls.login('credsInvalid');
+          } else {
+            error.innerHTML = this.nls.login('serverError');
+          }
         });
       }
     };

@@ -158,7 +158,7 @@ class MarkPopup {
         window.Evts.publish('centerOn', {
           lat: this._opts.lat,
           lng: this._opts.lng,
-          zoom: 19
+          zoom: 17
         });
       }, this));
 

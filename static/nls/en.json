@@ -198,6 +198,7 @@
       "bothEmpty": "Please fill the username and password fields",
       "usernameEmpty": "Please fill the username field",
       "passwordEmpty": "Please fill your password field",
+      "credsInvalid": "Invalid credentials",
       "serverError": "Something wrong happened, contact support",
       "checkMail": "An email has been sent so you can proceed"
     },

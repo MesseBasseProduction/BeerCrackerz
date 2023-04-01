@@ -198,6 +198,7 @@
       "bothEmpty": "Bitte geben sie einen benutzernamen und ein passwort ein",
       "usernameEmpty": "Bitte geben sie einen benutzernamen ein",
       "passwordEmpty": "Bitte geben sie ihr passwort ein",
+      "credsInvalid": "Falscher Benutzername oder falsches Passwort",
       "serverError": "Ein serverfehler ist aufgetreten, wenden sie sich an den support",
       "checkMail": "Eine E-Mail wurde gesendet, damit sie fortfahren können"
     },
