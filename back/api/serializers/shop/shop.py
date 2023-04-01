@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
+from api.serializers.point.point import PointSerializer
 from app.models.shop import Shop
 
 
-class ShopSerializer(serializers.ModelSerializer):
+class ShopSerializer(PointSerializer):
     types = serializers.MultipleChoiceField(choices=Shop.Types.choices)
     modifiers = serializers.MultipleChoiceField(choices=Shop.Modifiers.choices, required=False)
     price = serializers.IntegerField(min_value=0, max_value=2)
@@ -13,7 +14,6 @@ class ShopSerializer(serializers.ModelSerializer):
     rate = serializers.SerializerMethodField()  # TODO : Set required
     user = serializers.CharField(source='user.username', read_only=True)
     userId = serializers.IntegerField(source='user.id', read_only=True)
-    creationDate = serializers.DateField(source='creation_date', read_only=True)
 
     class Meta:
         model = Shop

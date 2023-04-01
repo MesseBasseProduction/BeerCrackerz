@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
+from api.serializers.point.point import PointSerializer
 from app.models.spot import Spot
 
 
-class SpotSerializer(serializers.ModelSerializer):
+class SpotSerializer(PointSerializer):
     types = serializers.MultipleChoiceField(choices=Spot.Types.choices)
     modifiers = serializers.MultipleChoiceField(choices=Spot.Modifiers.choices, required=False)
 
@@ -12,7 +13,6 @@ class SpotSerializer(serializers.ModelSerializer):
     rate = serializers.SerializerMethodField()  # TODO : Set required
     user = serializers.CharField(source='user.username', read_only=True)
     userId = serializers.IntegerField(source='user.id', read_only=True)
-    creationDate = serializers.DateField(source='creation_date', read_only=True)
 
     class Meta:
         model = Spot
