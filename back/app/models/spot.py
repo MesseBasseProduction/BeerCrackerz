@@ -18,8 +18,11 @@ class Spot(Point):
     class Types(models.TextChoices):
         FOREST = 'forest'
         RIVER = 'river'
+        LAKE = 'lake'
+        CLIFF = 'cliff'
         MOUNTAIN = 'mountain'
         BEACH = 'beach'
+        SEA = 'sea'
         CITY = 'city'
         POV = 'pov'
 
