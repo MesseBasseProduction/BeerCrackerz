@@ -295,19 +295,11 @@ class VisuHelper {
     if (visible === true) {
       for (let i = 0; i < window.BeerCrackerz.marks[type].length; ++i) {
         window.BeerCrackerz.marks[type][i].visible = true;
-        window.BeerCrackerz.marks[type][i].circle.setStyle({
-          opacity: 1,
-          fillOpacity: 0.1
-        });
       }
       window.BeerCrackerz.map.addLayer(window.BeerCrackerz.clusters[type]);
     } else {
       for (let i = 0; i < window.BeerCrackerz.marks[type].length; ++i) {
         window.BeerCrackerz.marks[type][i].visible = false;
-        window.BeerCrackerz.marks[type][i].circle.setStyle({
-          opacity: 0,
-          fillOpacity: 0
-        });
       }
       window.BeerCrackerz.map.removeLayer(window.BeerCrackerz.clusters[type]);
     }
