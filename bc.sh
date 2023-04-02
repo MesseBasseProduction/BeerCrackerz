@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 vers="0.1.0" # Must match package.json and BeerCrackerz.js version number
 basedir=$(dirname "${0}")
 unset backsecretkey
