@@ -128,7 +128,7 @@ prodInstall() {
     echo ""
     echo "# BACKEND"
     echo "BACKEND_NAME=beer_crackerz_back"
-    echo "BACKEND_PORT=8001"
+    echo "BACKEND_PORT=8000"
     echo "BACKEND_DEBUG=0"
     echo "BACKEND_ALLOWED_HOSTS=127.0.0.1"
     echo "BACKEND_USE_EMAIL_FILE_SYSTEM=0"
