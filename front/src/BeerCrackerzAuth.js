@@ -316,18 +316,6 @@ class BeerCrackerzAuth {
         // Constrain pan to the map bounds
         this._map.panInsideBounds(MapEnum.mapBounds, { animate: true });
       });
-      // Auto hide labels if zoom level is too high (and restore it when needed)
-      this._map.on('zoomend', () => {
-        if (this._map.getZoom() < 15) {
-          this._setMarkerLabels(this._marks.spot, false);
-          this._setMarkerLabels(this._marks.shop, false);
-          this._setMarkerLabels(this._marks.bar, false);
-        } else {
-          this._setMarkerLabels(this._marks.spot, true);
-          this._setMarkerLabels(this._marks.shop, true);
-          this._setMarkerLabels(this._marks.bar, true);
-        }
-      });
       // Update map view for big popups
       this._map.on('popupopen', event => {
         const px = this._map.project(event.target._popup._latlng);
@@ -818,32 +806,6 @@ class BeerCrackerzAuth {
       this.user.marker = VisuHelper.addMark(this.user);
     } else { // Update user marker position, range, and accuracy circle
       this.user.marker.setLatLng(this.user);
-    }
-  }
-
-
-  /**
-   * @method
-   * @name _setMarkerLabels
-   * @private
-   * @memberof BeerCrackerzAuth
-   * @author Arthur Beaulieu
-   * @since September 2022
-   * @description
-   * <blockquote>
-   * The _setMarkerLabels() method will set the label visibility for an array of marks
-   * depending on the `visible` argument value.
-   * </blockquote>
-   * @param {Object[]} marks - The array of marks to edit visibility from
-   * @param {Boolean} visible - The labels visibility state to apply
-  **/
-  _setMarkerLabels(marks, visible) {
-    for (let i = 0; i < marks.length; ++i) {
-      if (visible) {
-        marks[i].tooltip.addTo(this.map);
-      } else {
-        marks[i].tooltip.removeFrom(this.map);
-      }
     }
   }
 

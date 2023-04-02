@@ -16,11 +16,7 @@ class StartupHelpModal extends BaseModal {
 
   _fillAttributes() {
     window.BeerCrackerz.nls.startupHelpModal(this._rootElement);
-/*
-    if (Utils.getPreference('poi-show-label') === 'true') {
-      //this._rootElement.querySelector('#label-toggle').checked = true;
-    }
-*/
+
     this._footerQuitButton = this._rootElement.querySelector('#modal-quit');
     this._footerQuitNoSeeButton = this._rootElement.querySelector('#modal-quit-no-see');
 

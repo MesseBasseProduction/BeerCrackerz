@@ -13,6 +13,11 @@ import MarkersEnum from '../utils/enums/MarkerEnum.js';
 class VisuHelper {
 
 
+  // ======================================================================== //
+  // ----------------------- Debug interface methods ------------------------ //
+  // ======================================================================== //
+
+
   /**
    * @method
    * @name initDebugUI
@@ -177,51 +182,7 @@ class VisuHelper {
   }
 
 
-  static updateMarkerCirclesVisibility() {   
-    // Only update circles that are in user view
-    if (window.BeerCrackerz.map.getBounds().contains(window.BeerCrackerz.user.marker.getLatLng())) {
-      const marker = window.BeerCrackerz.user.marker;
-      const distance = Utils.getDistanceBetweenCoords(
-        [ window.BeerCrackerz.user.lat, window.BeerCrackerz.user.lng ],
-        [ marker.getLatLng().lat, marker.getLatLng().lng ]
-      );
-      window.BeerCrackerz.user.circle.visible = true;
-      window.BeerCrackerz.user.circle.setStyle({
-        opacity: 1,
-        fillOpacity: 0.1
-      });
-    }
-  }
-
-
-  static setMarkerLabels(visible) {
-    const _updateTooltip = list => {
-      for (let i = 0; i < list.length; ++i) {
-        if (visible && list[i].clustered === false) {
-          list[i].tooltip.addTo(window.BeerCrackerz.map);
-        } else {
-          list[i].tooltip.removeFrom(window.BeerCrackerz.map);
-        }
-      }
-    };
-
-    const keys = Object.keys(window.BeerCrackerz.marks);
-    for (let i = 0; i < keys.length; ++i) {
-      _updateTooltip(window.BeerCrackerz.marks[keys[i]]);
-    }
-  }
-
-
   static removeMarkDecoration(mark) {
-    // Remove label
-    mark.tooltip.removeFrom(window.BeerCrackerz.map);
-    // Remove circle
-    mark.circle.setStyle({
-      opacity: 0,
-      fillOpacity: 0
-    });
-    mark.circle.removeFrom(window.BeerCrackerz.map);
-    // Call destroy on mark popup
     if (mark.popup) {
       mark.popup.destroy();
     } 
@@ -250,27 +211,6 @@ class VisuHelper {
     }
 
     return marker;
-  }
-
-
-  /**
-   * @method
-   * @name toggleLabel
-   * @public
-   * @memberof BeerCrackerz
-   * @author Arthur Beaulieu
-   * @since January 2022
-   * @description
-   * <blockquote>
-   * The toggleLabel() method will, depending on user preference, display or not
-   * the labels attached to spots/shops/bars marks. This label is basically the
-   * mark name given by its creator.
-   * </blockquote>
-   **/
-  static toggleLabel() {
-    const visible = !(Utils.getPreference('poi-show-label') === 'true');
-    VisuHelper.setMarkerLabels(visible);
-    Utils.setPreference('poi-show-label', visible);
   }
 
 
@@ -399,19 +339,6 @@ class VisuHelper {
 
 
   static checkClusteredMark(type) {
-    if (Utils.getPreference('poi-show-label') === 'true') {
-      const layers = window.BeerCrackerz.marks[type];
-      for (let i = 0; i < layers.length; ++i) {
-        const visible = window.BeerCrackerz.map.hasLayer(layers[i].marker);
-        layers[i].clustered = !visible;
-        if (visible) {
-          layers[i].tooltip.addTo(window.BeerCrackerz.map);
-        } else {
-          layers[i].tooltip.removeFrom(window.BeerCrackerz.map);
-        }
-      }
-    }
-
     const clusters = window.BeerCrackerz.clusters[type]
     clusters._featureGroup.eachLayer(layer => {
       if (layer instanceof L.MarkerCluster && layer.getChildCount() > 2) {

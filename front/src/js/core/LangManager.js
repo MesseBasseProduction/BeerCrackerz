@@ -214,6 +214,7 @@ class LangManager {
     Utils.replaceString(dom.querySelector(`#nls-lang-en`), `{LANG_EN}`, this.modal('langEn'));
     Utils.replaceString(dom.querySelector(`#nls-lang-es`), `{LANG_ES}`, this.modal('langEs'));
     Utils.replaceString(dom.querySelector(`#nls-lang-de`), `{LANG_DE}`, this.modal('langDe'));
+    Utils.replaceString(dom.querySelector(`#nls-lang-it`), `{LANG_IT}`, this.modal('langIt'));
     Utils.replaceString(dom.querySelector(`#nls-lang-pt`), `{LANG_PT}`, this.modal('langPt')); 
     Utils.replaceString(dom.querySelector(`#nls-about-desc`), `{BEERCRACKERZ_DESC}`, this.modal('aboutDesc'));
     Utils.replaceString(dom.querySelector(`.nls-user-logout`), `{USER_LOGOUT}`, this.modal('logout'));
@@ -231,8 +232,6 @@ class LangManager {
 
   hideShowModal(dom) {
     Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-title`), `{MODAL_TITLE}`, this.modal('hideShowTitle'));
-    Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-labels`), `{LABELS_HIDESHOW_MODAL}`, this.modal('hideShowLabels'));
-    Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-circles`), `{CIRCLES_HIDESHOW_MODAL}`, this.modal('hideShowCircles'));
     Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-spots`), `{SPOTS_HIDESHOW_MODAL}`, this.modal('hideShowSpots'));
     Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-shops`), `{SHOPS_HIDESHOW_MODAL}`, this.modal('hideShowShops'));
     Utils.replaceString(dom.querySelector(`#nls-hideshow-modal-bars`), `{BARS_HIDESHOW_MODAL}`, this.modal('hideShowBars'));

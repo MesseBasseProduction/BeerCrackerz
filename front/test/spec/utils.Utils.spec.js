@@ -149,7 +149,6 @@ describe('Utils unit test :', () => {
       'poi-show-spot': true,
       'poi-show-shop': true,
       'poi-show-bar': true,
-      'poi-show-label': true,
       'map-plan-layer': 'Plan OSM',
       'selected-lang': 'en',
       'app-debug': false,

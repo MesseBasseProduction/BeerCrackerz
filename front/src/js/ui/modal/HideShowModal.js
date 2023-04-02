@@ -17,10 +17,6 @@ class HideShowModal extends BaseModal {
   _fillAttributes() {
     window.BeerCrackerz.nls.hideShowModal(this._rootElement);
 
-    if (Utils.getPreference('poi-show-label') === 'true') {
-      this._rootElement.querySelector('#label-toggle').checked = true;
-    }
-
     if (Utils.getPreference('poi-show-spot') === 'true') {
       this._rootElement.querySelector('#show-spots').checked = true;
     }
@@ -40,12 +36,10 @@ class HideShowModal extends BaseModal {
 
   _events() {
     // Toggles
-    this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#label-toggle'), VisuHelper.toggleLabel, VisuHelper));
     this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#show-spots'), VisuHelper.toggleMarkers, VisuHelper));
     this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#show-shops'), VisuHelper.toggleMarkers, VisuHelper));
     this._evtIds.push(window.Evts.addEvent('change', this._rootElement.querySelector('#show-bars'), VisuHelper.toggleMarkers, VisuHelper));
     // Labels
-    this._evtIds.push(window.Evts.addEvent('mouseover', this._rootElement.querySelector('#labels-toggle'), this._updateHelper, this));
     this._evtIds.push(window.Evts.addEvent('mouseover', this._rootElement.querySelector('#spots-toggle'), this._updateHelper, this));
     this._evtIds.push(window.Evts.addEvent('mouseover', this._rootElement.querySelector('#shops-toggle'), this._updateHelper, this));
     this._evtIds.push(window.Evts.addEvent('mouseover', this._rootElement.querySelector('#bars-toggle'), this._updateHelper, this));

@@ -455,14 +455,6 @@ class BeerCrackerz {
       });
       this._map.on('zoomend', () => {
         this._isZooming = false;
-        // Auto hide labels if zoom level is too high (and restore it when needed)
-        if (Utils.getPreference('poi-show-label') === 'true') {
-          if (this._map.getZoom() < 16) {
-            VisuHelper.setMarkerLabels(false);
-          } else {
-            VisuHelper.setMarkerLabels(true);
-          }
-        }
         // Updating debug info
         VisuHelper.updateDebugUI();
       });
@@ -767,7 +759,6 @@ class BeerCrackerz {
         if (options.price) {
           this._marks[options.type][i].price = options.price;
         }
-        options.tooltip.removeFrom(this.map);
         const popup = new MarkPopup(options, dom => {
           options.dom = dom;
           options.marker.setPopupContent(popup.dom);
@@ -859,7 +850,7 @@ class BeerCrackerz {
    * @description
    * <blockquote>
    * The hidShowMenu() method will request the hide show modal, which all
-   * toggles for map elements ; labels/circles/spots/shops/bars
+   * toggles for map elements ; spots/shops/bars
    * </blockquote>
    **/
    hidShowMenu() {
