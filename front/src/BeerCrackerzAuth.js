@@ -322,10 +322,6 @@ class BeerCrackerzAuth {
         px.y -= event.target._popup._container.clientHeight / 2;
         this._map.panTo(this._map.unproject(px), { animate: true });
       });
-      // Clustering events
-      this._clusters.spot.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'spot'));
-      this._clusters.shop.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'shop'));
-      this._clusters.bar.on('animationend', VisuHelper.checkClusteredMark.bind(this, 'bar'));
       // Center on command
       document.getElementById('center-on').addEventListener('click', () => {
         this._map.flyTo([this._user.lat, this._user.lng], 18);

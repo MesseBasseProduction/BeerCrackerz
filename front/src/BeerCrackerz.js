@@ -883,6 +883,11 @@ class BeerCrackerz {
   }
 
 
+  /**
+   * @public
+   * @property {Object} clusters
+   * Clusters that holds spot/shop/bar marks as subkeys
+   **/  
   get clusters() {
     return this._clusters;
   }
@@ -898,11 +903,21 @@ class BeerCrackerz {
   }
 
 
+  /**
+   * @public
+   * @property {Object} kom
+   * The server communication component 
+   **/
   get kom() {
     return this._kom;
   }
 
 
+  /**
+   * @public
+   * @property {Object} notification
+   * The app notification handler 
+   **/
   get notification() {
     return this._notification;
   }
