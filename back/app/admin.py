@@ -10,21 +10,21 @@ admin.site.register(User)
 
 
 class SpotAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'user', 'types', 'modifiers')
+    list_display = ('pk', 'name', 'user', 'types', 'modifiers', 'creation_date')
 
 
 admin.site.register(Spot, SpotAdmin)
 
 
 class BarAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'user', 'types', 'modifiers')
+    list_display = ('pk', 'name', 'user', 'types', 'modifiers', 'creation_date')
 
 
 admin.site.register(Bar, BarAdmin)
 
 
 class ShopAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'user', 'types', 'modifiers')
+    list_display = ('pk', 'name', 'user', 'types', 'modifiers', 'creation_date')
 
 
 admin.site.register(Shop, ShopAdmin)
