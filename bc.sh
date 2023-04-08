@@ -261,7 +261,7 @@ function quitApp(){
 function resetApp(){
   # Reset BeerCrackerz, clear database files and docker images
   # Warn user that the command will remove database and images
-  echo -e "\e[93mWARNING\e[39m This command will erase any existing database and BeerCrackerz' docker images"
+  echo -e "\e[93mWARNING\e[39m This command will erase any existing BeerCrackerz' docker images"
   resetBc="bc" # Can't init to blank to get in while read loop
   # Wait for user to send yY/nN or blank
   while [[ "${resetBc}" != "" && "${resetBc}" != "y" && "${resetBc}" != "Y" && "${resetBc}" != "n" && "${resetBc}" != "N" ]]; do
@@ -278,8 +278,8 @@ function resetApp(){
   echo # Line break
   # Remove BeerCrackerz's related dockers
   echo -e "2/3. Removing BeerCrackerz containers"
-  eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env down -v --rmi all --remove-orphans"
-  eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env down -v --rmi all --remove-orphans"
+  eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env down --rmi all --remove-orphans"
+  eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env down  --rmi all --remove-orphans"
   echo # Line break
   # Reset hard argument
   if [ "${1}" = "hard" ]; then
