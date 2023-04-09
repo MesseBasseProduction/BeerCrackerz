@@ -326,6 +326,8 @@ class BeerCrackerzAuth {
       document.getElementById('center-on').addEventListener('click', () => {
         this._map.flyTo([this._user.lat, this._user.lng], 18);
       });
+
+      window.Evts.subscribe('centerOn', VisuHelper.centerOn.bind(VisuHelper));
       resolve();
     });
   }
