@@ -1,0 +1,43 @@
+@media (min-width: 720px) {
+  .overlay [class$=-modal] {
+    padding: 3rem 4rem;
+  }
+}
+
+@media (min-width: 1080px) {
+  .overlay [class$="-modal"] {
+    max-width: 50%;
+  }
+}
+/* Startup help modal rules */
+@media (max-height: 750px) {
+  .overlay .startup-help-modal .helping-view-wrapper {
+    .page .doc-image {
+      max-height: 28rem;
+    }
+  }
+}
+
+@media (max-height: 600px) {
+  .overlay .startup-help-modal .helping-view-wrapper {
+    .page .doc-image {
+      max-height: 18rem;
+    }
+  }
+}
+
+@media (max-height: 500px) {
+  .overlay .startup-help-modal .helping-view-wrapper {
+    .page .doc-image {
+      max-height: 11rem;
+    }
+  }
+}
+
+@media (max-height: 400px) {
+  .overlay .startup-help-modal .helping-view-wrapper {
+    .page .doc-image {
+      max-height: 8rem;
+    }
+  }
+}

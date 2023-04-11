@@ -1,15 +1,16 @@
 {
   "name": "beercrackerz",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "The website for beer lover, to share the best spot to crack a beer, or to easily refill this beverage of the gods!",
   "keywords": [],
-  "main": "src/BeerCrackerz.js",
+  "main": "front/src/BeerCrackerz.js",
   "scripts": {
-    "build": "webpack --config webpack/webpack.prod.js",
-    "watch": "webpack --watch --config webpack/webpack.dev.js",
-    "server": "http-server -p 1337 -c-1 -o index.html",
-    "doc": "jsdoc -c doc/jsDoc.json",
-    "beforecommit": "npm run doc && npm run build"
+    "build": "webpack --config front/webpack/webpack.prod.js",
+    "watch": "webpack --watch --config front/webpack/webpack.dev.js",
+    "doc": "jsdoc -c front/webpack/jsDoc.json",
+    "test": "karma start front/test/karma.config.js",
+    "test:dev": "karma start front/test/karma.config.js --dev=true",
+    "beforecommit": "npm run doc && npm run test && npm run build"
   },
   "homepage": "https://github.com/MesseBasseProduction/BeerCrackerz/README.md",
   "repository": {
@@ -19,32 +20,47 @@
   "bugs": {
     "url": "https://github.com/MesseBasseProduction/BeerCrackerz/issues"
   },
-  "author": "ArthurBeaulieu",
+  "author": "The BeerCrackerz Team",
+  "contributors": [
+    {
+      "name": "Arthur Beaulieu"
+    },
+    {
+      "name": "Raphaël Beekmann"
+    }
+  ],
   "license": "GPL-3.0",
   "devDependencies": {
-    "@babel/core": "^7.18.10",
-    "@babel/preset-env": "^7.18.10",
-    "babel-loader": "^8.2.5",
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.2",
     "clean-webpack-plugin": "^4.0.0",
-    "css-loader": "^6.7.1",
-    "cssnano": "^5.1.13",
-    "eslint": "^8.22.0",
-    "eslint-webpack-plugin": "^3.2.0",
+    "css-loader": "^6.7.3",
+    "cssnano": "^5.1.15",
+    "eslint": "^8.36.0",
+    "eslint-webpack-plugin": "^4.0.0",
     "file-loader": "^6.2.0",
-    "http-server": "^14.1.1",
-    "jsdoc": "^3.6.11",
-    "mini-css-extract-plugin": "^2.6.1",
-    "node-sass": "^7.0.1",
-    "postcss": "^8.4.16",
-    "postcss-import": "^14.1.0",
-    "postcss-loader": "^7.0.1",
-    "postcss-preset-env": "^7.8.0",
-    "sass-loader": "^13.0.2",
-    "stylelint": "^14.10.0",
-    "stylelint-webpack-plugin": "^3.3.0",
+    "jasmine": "^4.5.0",
+    "jasmine-core": "^4.5.0",
+    "jsdoc": "^4.0.2",
+    "karma": "^6.4.1",
+    "karma-firefox-launcher": "^2.1.2",
+    "karma-html2js-preprocessor": "~1.1",
+    "karma-jasmine": "^5.1.0",
+    "karma-jasmine-html-reporter": "^2.0.0",
+    "karma-webpack": "^5.0.0",
+    "mini-css-extract-plugin": "^2.7.3",
+    "node-sass": "^8.0.0",
+    "postcss": "^8.4.21",
+    "postcss-import": "^15.1.0",
+    "postcss-loader": "^7.0.2",
+    "postcss-preset-env": "^8.0.1",
+    "sass-loader": "^13.2.0",
+    "stylelint": "^15.2.0",
+    "stylelint-webpack-plugin": "^4.1.0",
     "url-loader": "^4.1.1",
-    "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0",
+    "webpack": "^5.76.1",
+    "webpack-cli": "^5.0.1",
     "webpack-merge": "^5.8.0"
   }
 }

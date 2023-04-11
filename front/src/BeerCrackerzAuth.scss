@@ -1,0 +1,186 @@
+@import 'scss/utils/base';
+
+/*  ----------------------------------------------------------  *
+ * The BeerCrackerzAuth style bundle                            *
+ * Elements have given z-index :                                *
+ * 10 : Main map, that occupies the whole page                  *
+ * 20 : The page header, only displayed when aside is collapsed *
+ * 30 : The Aside that must be over everything at anytime       *
+ *  ----------------------------------------------------------  */
+
+:root {
+  --aside-width: 40rem;
+  --aside-offset: 0rem;
+  --aside-transtion-duration: var(--transition-x2);
+}
+
+nav {
+  display: flex;
+  bottom: 1rem;
+  position: absolute;
+  height: 48px;
+  /* Force nav to stick to aside's left even when collapsed */
+  right: calc(var(--aside-width) + var(--aside-offset) + 1rem);
+  width: 48px;
+  z-index: 20;
+
+  transition: right var(--aside-transtion-duration);
+
+  img {
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0px 0px 1rem var(--color-bg);
+    width: 100%;
+  }
+
+  .cmd-bar {
+    display: flex;
+    width: 100%;
+
+    .cmd-wrapper {
+      align-items: center;
+      background: var(--color-bg);
+      background-clip: padding-box;
+      border: 2px solid var(--color-bg-a1);
+      border-radius: .5rem;
+      box-shadow: 0 0 1rem var(--color-bg-a9);
+      display: flex;
+      justify-content: center;
+      padding: .2rem;
+      width: 100%;
+
+      img {
+        box-shadow: inherit;
+        transition: all var(--transition);
+
+        &:active,
+        &:focus,
+        &:hover {
+          border: solid 1px rgb(185, 185, 185);
+          border-radius: .5rem;
+          padding: .2rem;
+
+          filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
+        }
+      }
+    }
+  }
+}
+
+.expander-back {
+  background-color: var(--color-bg-a9);
+  border: 2px solid var(--color-bg);
+  border-radius: .5rem;
+  height: 48px;
+  opacity: 0;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  width: 48px;
+  z-index: 20;
+
+  transition: opacity var(--transition);
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
+main.beer-crakerz-map {
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+
+  transition: width var(--aside-transtion-duration);
+
+  .leaflet-control-layers.leaflet-control {
+    right: calc(var(--aside-width) + var(--aside-offset) + 5.8rem);
+    transition: right var(--aside-transtion-duration);
+  }
+}
+
+aside {
+  background-color: var(--color-bg-a9);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  max-width: var(--aside-width);
+  position: absolute;
+  right: var(--aside-offset);
+  text-align: center;
+  top: 0;
+  width: 100%;
+  z-index: 30;
+
+  transition: all var(--aside-transtion-duration);
+
+  .aside-expander {
+    cursor: pointer;
+    height: 48px;
+    left: 0;
+    margin: 0;
+    position: absolute;
+    top: 1rem;
+    filter: drop-shadow(0 0 1px var(--color-bg));
+    width: 48px;
+
+    transition: left var(--transition);
+  }
+
+  h1 {
+    margin-bottom: 0;
+  }
+
+  header {
+    margin-top: 5rem;
+  }
+
+  main {
+    margin: 0 4rem;
+    text-align: left;
+
+    button {
+      margin: 2.9rem auto var(--font-size);
+    }
+
+    p {
+      margin-bottom: .5rem;
+      text-align: right;
+
+      &[class*="error"] {
+        color: transparent;
+        font-style: italic;
+        font-weight: bold;
+        text-align: center;
+  
+        transition: color var(--transition);
+  
+        &.visible {
+          color: var(--color-primary);
+        }
+
+        &.success {
+          color: #a1ff86;
+        }
+      }
+    }
+  }
+
+  footer {
+    margin-bottom: 5rem;
+  }
+}
+
+@import 'scss/utils/overlay';
+@import 'scss/component/zoomslider';
+@import 'scss/utils/leaflet';
+
+.leaflet-control-layers.leaflet-control {
+  bottom: 0;
+}
+
+.zoom-slider.opened {
+  /* Force slider to stick to aside's left even when collapsed */
+  right: calc(var(--aside-width) + var(--aside-offset) + 1rem);
+}

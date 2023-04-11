@@ -1,0 +1,49 @@
+{% load static %}
+<div class="startup-help-modal">
+  <p id="modal-close" class="modal-close">&times;</p>
+  <h1 id="nls-modal-title">{MODAL_TITLE}</h1>
+  <div class="helping-view-wrapper">
+    <div id="previous-page" class="previous disabled">
+      <img src="{% static 'img/logo/left.svg' %}" alt="previous">
+    </div>
+    <div id="next-page" class="next">
+      <img src="{% static 'img/logo/right.svg' %}" alt="next">
+    </div>
+    <div class="page">
+      <p id="nls-modal-page-1-1">{MODAL_PAGE_1_1}</p>
+      <img src="{% static 'img/doc/user-position.webp' %}" class="doc-image" alt="user-circles">
+      <p id="nls-modal-page-1-2">{MODAL_PAGE_1_2}</p>
+    </div>
+    <div class="page">
+      <p id="nls-modal-page-2-1">{MODAL_PAGE_2_1}</p>
+      <img src="{% static 'img/doc/spot-mark.webp' %}" class="doc-image" alt="spot-mark">
+      <p id="nls-modal-page-2-2">{MODAL_PAGE_2_2}</p>
+    </div>
+    <div class="page">
+      <p id="nls-modal-page-3-1">{MODAL_PAGE_3_1}</p>
+      <img src="{% static 'img/doc/shop-mark.webp' %}" class="doc-image" alt="shop-mark">
+      <p id="nls-modal-page-3-2">{MODAL_PAGE_3_2}</p>
+    </div>
+    <div class="page">
+      <p id="nls-modal-page-4-1">{MODAL_PAGE_4_1}</p>
+      <img src="{% static 'img/doc/bar-mark.webp' %}" class="doc-image" alt="bar-mark">
+      <p id="nls-modal-page-4-2">{MODAL_PAGE_4_2}</p>
+    </div>
+    <div class="page">
+      <p id="nls-modal-page-5-1">{MODAL_PAGE_5_1}</p>
+      <img src="{% static 'img/doc/commands.webp' %}" class="doc-image" alt="commands">
+      <p id="nls-modal-page-5-2">{MODAL_PAGE_5_2}</p>
+    </div>
+  </div>
+  <div class="page-counter">
+    <div class="page active"></div>
+    <div class="page"></div>
+    <div class="page"></div>
+    <div class="page"></div>
+    <div class="page"></div>
+  </div>
+  <div class="button-wrapper">
+    <button id="modal-quit" class="cancel">{MODAL_QUIT}</button>
+    <button id="modal-quit-no-see" class="validate">{MODAL_QUIT_NO_SEE}</button>
+  </div>
+</div>

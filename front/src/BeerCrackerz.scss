@@ -1,0 +1,101 @@
+@import 'scss/utils/base';
+
+main.beer-crakerz-map {
+  color: var(--color-txt);
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+
+  .new-poi {
+    text-align: center;
+
+    p {
+      font-size: var(--font-size-l3);
+      font-weight: bold;
+    }
+
+    button {
+      margin: var(--font-size) 0;
+    }
+  }
+}
+
+nav {
+  display: flex;
+  bottom: 1rem;
+  position: absolute;
+  right: 1rem;
+  width: 48px;
+  z-index: 20;
+
+  transition: right var(--aside-transtion-duration);
+
+  img {
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0px 0px 1rem var(--color-bg);
+/*box-shadow: 0px 0px 1rem var(--color-bg-a5);*/
+    width: 100%;
+  }
+
+  .cmd-bar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .cmd-wrapper {
+      align-items: center;
+      background: var(--color-bg);
+      background-clip: padding-box;
+      border: 2px solid var(--color-bg-a1);
+      border-radius: .5rem;
+      box-shadow: 0 0 1rem var(--color-bg-a9);
+      display: flex;
+      justify-content: center;
+      margin: 2px 0;
+      padding: 2px;
+      width: 100%;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      img {
+        box-shadow: inherit;
+        height: 100%;
+        width: 100%;
+        transition: all .2s;
+
+        &:active,
+        &:focus,
+        &:hover {
+          border: solid 1px var(--color-txt);
+          border-radius: .5rem;
+          padding: .2rem;
+          /* Blue filter */
+          filter: invert(53%) sepia(30%) saturate(1977%) hue-rotate(155deg) brightness(88%) contrast(102%);
+        }
+
+        &[class$="-on"] {
+          /* Filter for #ffa800 */
+          filter: invert(63%) sepia(54%) saturate(1053%) hue-rotate(359deg) brightness(100%) contrast(106%);
+        }
+      }
+
+      &.logo img {
+        padding: .1rem;
+      }
+    }
+  }
+}
+
+@import 'scss/utils/overlay';
+@import 'scss/component/notification';
+@import 'scss/component/zoomslider';
+@import 'scss/component/imageresizer';
+@import 'scss/utils/leaflet';
+@import 'scss/utils/responsive';

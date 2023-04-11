@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: js/utils/DropElement.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: js/utils/DropElement.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Utils from './Utils.js';
+
+
+class DropElement {
+
+
+    /** @summary &lt;h1>Make any DOM element drop friendly&lt;/h1>
+     * @author Arthur Beaulieu
+     * @since December 2020
+     * @description &lt;blockquote>This class will make any DOM element able to receive drop event. It propose an overlay
+     * when the target is hovered with a draggable element. It handle both the desktop and the mobile behavior. It must be
+     * used with a DragElement class for perfect compatibility!&lt;/blockquote>
+     * @param {object} options - The element to drop options
+     * @param {object} options.target - The element to allow dropping in **/
+    constructor(options) {
+      /** @private
+       * @member {object} - The element to make allow dropping in */
+      this._target = options.target; // Get given target from the DOM
+      /** @private
+       * @member {function} - The callback function to call on each drop event */
+      this._onDropCB = options.onDrop;
+      /** @private
+       * @member {number[]} - The event IDs for all mobile and desktop dropping events */
+      this._evtIds = [];
+      /** @private
+       * @member {number} - This counter helps to avoid enter/leave events to overlap when target has children */
+      this._movementCounter = 0;
+      /** @private
+       * @member {string} - The transparent border that must be added to avoid weird target resize on hover */
+      this._transparentBorder = '';
+      // Build DOM elements and subscribe to drag events
+      this._buildElements();
+      this._events();
+    }
+  
+  
+    /** @method
+     * @name destroy
+     * @public
+     * @memberof DropElement
+     * @author Arthur Beaulieu
+     * @since December 2020
+     * @description &lt;blockquote>This method will unsubscribe all drop events and remove all properties.&lt;/blockquote> **/
+    destroy() {
+//      Utils.clearAllEvents(this._evtIds);
+      Utils.removeAllObjectKeys(this);
+    }
+  
+  
+    /*  --------------------------------------------------------------------------------------------------------------- */
+    /*  ---------------------------------  DROPELEMENT INSTANTIATION SEQUENCE  ---------------------------------------  */
+    /*  --------------------------------------------------------------------------------------------------------------- */
+  
+  
+    /** @method
+     * @name _buildElements
+     * @private
+     * @memberof DropElement
+     * @author Arthur Beaulieu
+     * @since December 2020
+     * @description &lt;blockquote>This method will define the transparent border style and append this virtual border to the
+     * target DOM element.&lt;/blockquote> **/
+    _buildElements() {
+      this._transparentBorder = 'dashed 3px transparent';
+      this._target.style.border = this._transparentBorder;
+    }
+  
+  
+    /** @method
+     * @name _events
+     * @private
+     * @memberof DropElement
+     * @author Arthur Beaulieu
+     * @since December 2020
+     * @description &lt;blockquote>This method will subscribe to drop events, both for desktop and mobile.&lt;/blockquote> **/
+    _events() {
+      this._target.addEventListener('dragenter', this._dragEnter.bind(this));
+      this._target.addEventListener('dragover', this._dragOver.bind(this));
+      this._target.addEventListener('dragleave', this._dragLeave.bind(this));
+      this._target.addEventListener('drop', this._drop.bind(this));
+    }
+  
+  
+    /*  --------------------------------------------------------------------------------------------------------------- */
+    /*  -----------------------------------  DESKTOP DROP EVENTS METHODS  --------------------------------------------  */
+    /*  --------------------------------------------------------------------------------------------------------------- */
+  
+  
+    /** @method
+     * @name _dragEnter
+     * @private
+     * @memberof DropElement
+     * @author Arthur Beaulieu
+     * @since December 2020
+     * @description &lt;blockquote>This method will handle the entering of a dragged div over the target DOM element. When
+     * the target DOM element is hovered, a dashed border is made visible, replacing the transparent one to notify the
+     * user that the dragged div can be dropped.&lt;/blockquote>
+     * @param {object} event - The mouse event **/
+    _dragEnter(event) {
+      this._eventBehavior(event);
+      ++this._movementCounter;
+      this._target.style.border = 'dashed 3px #ffa800';
+    }
+  
+  
+    /** @method
+     * @name _dragOver
+     * @private
+     * @memberof DropElement
+     * @author Arthur Beaulieu
+     * @since December 2020
+     * @description &lt;blockquote>This method will handle the dragged div hovering the target DOM element.&lt;/blockquote>
+     * @param {object} event - The mouse event **/
+    _dragOver(event) {
+      this._eventBehavior(event);
+      event.dataTransfer.dropEffect = 'copy';
+    }
+  
+  
+    /** @method
+     * @name _dragLeave
+     * @private
+     * @memberof DropElement
+     * @author Arthur Beaulieu
+     * @since December 2020
+     * @description &lt;blockquote>This method will handle the event that is fired when the hovered div leaves the target
+     * DOM element. It require the movement counter to be equal to zero to restore the transparent border of the target
+     * DOM element.&lt;/blockquote>
+     * @param {object} event - The mouse event **/
+    _dragLeave(event) {
+      this._eventBehavior(event);
+      --this._movementCounter;
+      if (this._movementCounter === 0) {
+        this._target.style.border = this._transparentBorder;
+      }
+    }
+  
+  
+    /*  --------------------------------------------------------------------------------------------------------------- */
+    /*  ------------------------------  MOBILE AND DESKTOP DROP EVENTS METHODS  --------------------------------------  */
+    /*  --------------------------------------------------------------------------------------------------------------- */
+  
+  
+    /** @method
+     * @name _drop
+     * @private
+     * @memberof DropElement
+     * @author Arthur Beaulieu
+     * @since December 2020
+     * @description &lt;blockquote>This method will handle the dropping of a DragElement, to properly read the data it holds
+     * and send it to the drop callback provided in constructor.&lt;/blockquote>
+     * @param {object} event - The mouse or touch event **/
+    _drop(event) {
+      this._eventBehavior(event);
+      this._target.style.border = this._transparentBorder;
+      this._onDropCB(event.dataTransfer);
+    }
+  
+  
+    /*  --------------------------------------------------------------------------------------------------------------- */
+    /*  -------------------------------------------  UTILS METHODS  --------------------------------------------------  */
+    /*  --------------------------------------------------------------------------------------------------------------- */
+  
+  
+    /** @method
+     * @name _eventBehavior
+     * @private
+     * @memberof DropElement
+     * @author Arthur Beaulieu
+     * @since December 2020
+     * @description &lt;blockquote>This method will prevent the default behavior of given event, and will stop its
+     * propagation.&lt;/blockquote>
+     * @param {object} event - The mouse or touch event **/
+    _eventBehavior(event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  
+  
+    /** @method
+     * @name _isTouchEventInTarget
+     * @private
+     * @memberof DropElement
+     * @author Arthur Beaulieu
+     * @since December 2020
+     * @description &lt;blockquote>This method will compare a touch point to the target position and return true if the
+     * touch point is inside the target DOM element.&lt;/blockquote>
+     * @param {object} touchPosition - The touch event
+     * @return {boolean} Do the touch point is included in the target DOM element **/
+    _isTouchEventInTarget(touchPosition) {
+      const rect = this._target.getBoundingClientRect();
+      const inAxisX = touchPosition.pageX >= rect.x &amp;&amp; (touchPosition.pageX &lt;= rect.x + rect.width);
+      const inAxisY = touchPosition.pageY >= rect.y &amp;&amp; (touchPosition.pageY &lt;= rect.y + rect.height);
+      return (inAxisX &amp;&amp; inAxisY);
+    }
+  
+  
+  }
+  
+  
+  export default DropElement;
+  </code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BeerCrackerz.html">BeerCrackerz</a></li><li><a href="BeerCrackerzAuth.html">BeerCrackerzAuth</a></li><li><a href="CustomEvents.html">CustomEvents</a></li><li><a href="DropElement.html">DropElement</a></li><li><a href="Kom.html">Kom</a></li><li><a href="LangManager.html">LangManager</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VisuHelper.html">VisuHelper</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Jan 16 2023 21:18:23 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
