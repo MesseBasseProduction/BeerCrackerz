@@ -9,7 +9,7 @@ ENV PATH="/scripts:$PATH"
 
 COPY ./back/requirements.txt .
 
-RUN apk add --update --no-cache postgresql-client zlib-dev jpeg-dev libwebp-dev && \
+RUN apk add --update --no-cache postgresql-client zlib-dev jpeg-dev libwebp-dev libffi-dev && \
     apk add --update --no-cache --virtual .tmp-deps \
       build-base postgresql-dev musl-dev linux-headers  && \
     pip install -r requirements.txt && \

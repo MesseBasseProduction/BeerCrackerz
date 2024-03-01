@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
-from api.permissions import IsOwnerOrReadOnly
 from api.serializers.spot import SpotSerializer
 from app.models.spot import Spot
+from authentication.permissions import IsOwnerOrReadOnly
 
 
 class SpotViewSet(viewsets.ModelViewSet):

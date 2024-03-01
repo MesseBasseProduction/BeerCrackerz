@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
-from api.permissions import IsOwnerOrReadOnly
 from api.serializers.bar import BarSerializer
 from app.models.bar import Bar
+from authentication.permissions import IsOwnerOrReadOnly
 
 
 class BarViewSet(viewsets.ModelViewSet):
