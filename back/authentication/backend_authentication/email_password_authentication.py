@@ -5,14 +5,14 @@ from rest_framework.exceptions import AuthenticationFailed
 
 class EmailOrUsernamePasswordAuthentication(BaseAuthentication):
     def authenticate(self, request):
-        username = request.data.get('username')
-        email = request.data.get('email')
+        username_or_email = request.data.get('username')
         password = request.data.get('password')
 
-        if not password or not (username or email):
+        if not password or not username_or_email:
             raise AuthenticationFailed('No credentials provided')
 
-        user = authenticate(request, username=username, email=email, password=password)
+        # Will try on several auth backend to authenticate user
+        user = authenticate(request, username=username_or_email, password=password)
         if not user:
             raise AuthenticationFailed('Invalid credentials')
 
