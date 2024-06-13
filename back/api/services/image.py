@@ -10,7 +10,7 @@ def crop_image(image, box):
 
 
 def resize_image(image, size=(512, 512)):
-    return image.resize(size, Image.ANTIALIAS)
+    return image.resize(size, Image.Resampling.LANCZOS)
 
 
 def compress_image(image, name, quality=80, webp_method=6):
