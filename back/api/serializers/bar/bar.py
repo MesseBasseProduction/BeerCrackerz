@@ -7,7 +7,7 @@ from app.models.bar import Bar
 class BarSerializer(PointSerializer):
     types = serializers.MultipleChoiceField(choices=Bar.Types.choices)
     modifiers = serializers.MultipleChoiceField(choices=Bar.Modifiers.choices, required=False)
-    price = serializers.IntegerField(min_value=0, max_value=2)
+    price = serializers.IntegerField(min_value=1, max_value=3)
 
     # Read only fields
     type = serializers.CharField(default='bar', read_only=True)
