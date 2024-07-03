@@ -35,12 +35,17 @@ class UserProfilePictureSerializer(serializers.Serializer):
 
         # TODO : see to raise more specific error code
         if width < 512 or height < 512:
+            print(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_SIZE_ERROR - width {width}, height {height}')
             raise serializers.ValidationError('PROFILE_PICTURE_SIZE_ERROR')
         if maxX - minX < 512 or maxY - minY < 512:
+            print(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_SIZE_ERROR - width {maxX - minX}, height {maxX - minX}')
             raise serializers.ValidationError('PROFILE_PICTURE_SIZE_ERROR')
         if maxX - minX != maxY - minY:
+            print(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_DIMENSION_ERROR - picture is not a square')
             raise serializers.ValidationError('PROFILE_PICTURE_DIMENSION_ERROR')  # Picture is not a square
         if maxX > width or maxY > height:
+            print(
+                f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_DIMENSION_ERROR - maxX > width or maxY > height - {maxX} > {width} or {maxY} > {height}')
             raise serializers.ValidationError('PROFILE_PICTURE_DIMENSION_ERROR')
 
         data['box'] = (minX, minY, maxX, maxY)
