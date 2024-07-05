@@ -172,6 +172,8 @@ STATICFILES_DIRS = [
     '/back/static'
 ]
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10_000_000
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/vol/media'
 
