@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.generics import CreateAPIView
@@ -7,6 +9,8 @@ from rest_framework.response import Response
 from api.serializers.user import UserSerializer, UserRegisterSerializer, UserProfilePictureSerializer
 from app.models import User
 
+logger = logging.getLogger('beercrackerz.views.user')
+
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
@@ -15,6 +19,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
     @action(detail=True, methods=['patch'], url_path='profile-picture', url_name='user-profile-picture')
     def profile_picture(self, request, pk):
+        logger.info('update profile picture')
         user = self.get_object()
         serializer = UserProfilePictureSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -22,6 +27,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             user.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
+            logger.error(f'error updating profile picture : {serializer.errors}')
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
