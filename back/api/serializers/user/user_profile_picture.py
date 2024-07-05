@@ -1,5 +1,6 @@
 import base64
 import io
+import logging
 import uuid
 
 from PIL import Image
@@ -7,13 +8,15 @@ from rest_framework import serializers
 
 from api.services.image import resize_image, compress_image, crop_image
 
+logger = logging.getLogger('beercrackerz.serializerz.user_profile_picture')
+
 
 class UserProfilePictureSerializer(serializers.Serializer):
     profile_picture = serializers.CharField()
-    minX = serializers.IntegerField(allow_null=True)
-    minY = serializers.IntegerField(allow_null=True)
-    maxX = serializers.IntegerField(allow_null=True)
-    maxY = serializers.IntegerField(allow_null=True)
+    minX = serializers.IntegerField(allow_null=True, required=False)
+    minY = serializers.IntegerField(allow_null=True, required=False)
+    maxX = serializers.IntegerField(allow_null=True, required=False)
+    maxY = serializers.IntegerField(allow_null=True, required=False)
 
     def save(self):
         image = self.validated_data.get('profile_picture')
@@ -35,16 +38,19 @@ class UserProfilePictureSerializer(serializers.Serializer):
 
         # TODO : see to raise more specific error code
         if width < 512 or height < 512:
-            print(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_SIZE_ERROR - width {width}, height {height}')
+            logger.error(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_SIZE_ERROR - width {width}, height {height}')
             raise serializers.ValidationError('PROFILE_PICTURE_SIZE_ERROR')
+
+        # Todo : add optional test on min & max values
         if maxX - minX < 512 or maxY - minY < 512:
-            print(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_SIZE_ERROR - width {maxX - minX}, height {maxX - minX}')
+            logger.error(
+                f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_SIZE_ERROR - width {maxX - minX}, height {maxX - minX}')
             raise serializers.ValidationError('PROFILE_PICTURE_SIZE_ERROR')
         if maxX - minX != maxY - minY:
-            print(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_DIMENSION_ERROR - picture is not a square')
+            logger.error(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_DIMENSION_ERROR - picture is not a square')
             raise serializers.ValidationError('PROFILE_PICTURE_DIMENSION_ERROR')  # Picture is not a square
         if maxX > width or maxY > height:
-            print(
+            logger.error(
                 f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_DIMENSION_ERROR - maxX > width or maxY > height - {maxX} > {width} or {maxY} > {height}')
             raise serializers.ValidationError('PROFILE_PICTURE_DIMENSION_ERROR')
 
