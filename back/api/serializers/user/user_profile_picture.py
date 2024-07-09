@@ -13,16 +13,18 @@ logger = logging.getLogger('beercrackerz.serializerz.user_profile_picture')
 
 class UserProfilePictureSerializer(serializers.Serializer):
     profile_picture = serializers.CharField()
-    minX = serializers.IntegerField(allow_null=True, required=False)
-    minY = serializers.IntegerField(allow_null=True, required=False)
-    maxX = serializers.IntegerField(allow_null=True, required=False)
-    maxY = serializers.IntegerField(allow_null=True, required=False)
+    minX = serializers.IntegerField(required=False)
+    minY = serializers.IntegerField(required=False)
+    maxX = serializers.IntegerField(required=False)
+    maxY = serializers.IntegerField(required=False)
 
     def save(self):
         image = self.validated_data.get('profile_picture')
         box = self.validated_data.get('box')
-        cropped_image = crop_image(image, box)
-        resized_image = resize_image(cropped_image)
+        if box:
+            image = crop_image(image, box)
+
+        resized_image = resize_image(image)
         return compress_image(resized_image, name=f'${uuid.uuid4().hex}.webp')
 
     def validate_profile_picture(self, value):
@@ -34,25 +36,30 @@ class UserProfilePictureSerializer(serializers.Serializer):
     def validate(self, data):
         image = data.get('profile_picture')
         width, height = image.size
-        minX, minY, maxX, maxY = data.pop('minX'), data.pop('minY'), data.pop('maxX'), data.pop('maxY')
 
         # TODO : see to raise more specific error code
         if width < 512 or height < 512:
             logger.error(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_SIZE_ERROR - width {width}, height {height}')
             raise serializers.ValidationError('PROFILE_PICTURE_SIZE_ERROR')
 
-        # Todo : add optional test on min & max values
-        if maxX - minX < 512 or maxY - minY < 512:
-            logger.error(
-                f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_SIZE_ERROR - width {maxX - minX}, height {maxX - minX}')
-            raise serializers.ValidationError('PROFILE_PICTURE_SIZE_ERROR')
-        if maxX - minX != maxY - minY:
-            logger.error(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_DIMENSION_ERROR - picture is not a square')
-            raise serializers.ValidationError('PROFILE_PICTURE_DIMENSION_ERROR')  # Picture is not a square
-        if maxX > width or maxY > height:
-            logger.error(
-                f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_DIMENSION_ERROR - maxX > width or maxY > height - {maxX} > {width} or {maxY} > {height}')
-            raise serializers.ValidationError('PROFILE_PICTURE_DIMENSION_ERROR')
+        minX, minY, maxX, maxY = data.pop('minX'), data.pop('minY'), data.pop('maxX'), data.pop('maxY')
+        if minX and minY and maxX and maxY:
+            if maxX - minX < 512 or maxY - minY < 512:
+                logger.error(
+                    f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_SIZE_ERROR - width {maxX - minX}, height {maxX - minX}')
+                raise serializers.ValidationError('PROFILE_PICTURE_SIZE_ERROR')
+            if maxX - minX != maxY - minY:
+                logger.error(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_DIMENSION_ERROR - picture is not a square')
+                raise serializers.ValidationError('PROFILE_PICTURE_DIMENSION_ERROR')  # Picture is not a square
+            if maxX > width or maxY > height:
+                logger.error(
+                    f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_DIMENSION_ERROR - maxX > width or maxY > height - {maxX} > {width} or {maxY} > {height}')
+                raise serializers.ValidationError('PROFILE_PICTURE_DIMENSION_ERROR')
 
-        data['box'] = (minX, minY, maxX, maxY)
+            data['box'] = (minX, minY, maxX, maxY)
+        else:
+            if width != height:
+                logger.error(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_DIMENSION_ERROR - picture is not a square')
+                raise serializers.ValidationError('PROFILE_PICTURE_DIMENSION_ERROR')  # Picture is not a square
+
         return data
