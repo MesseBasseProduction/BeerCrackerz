@@ -33,8 +33,8 @@ class MarkPopup {
 
 
   _fetchTemplate() {
-    return new Promise((resolve, reject) => {
-      window.BeerCrackerz.kom.getTemplate(`/popup/${this._opts.type}`).then(resolve).catch(reject);
+    return new Promise(resolve => {
+      resolve(window.BeerCrackerz.domTemplate.popup[this._opts.type]);
     });
   }
 

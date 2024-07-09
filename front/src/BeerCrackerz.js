@@ -13,6 +13,7 @@ import Utils from './js/utils/Utils.js';
 import AccuracyEnum from './js/utils/enums/AccuracyEnum.js';
 import ClustersEnum from './js/utils/enums/ClusterEnum.js';
 import ColorEnum from './js/utils/enums/ColorEnum.js';
+import MarkInfosEnum from './js/utils/enums/MarkInfosEnum.js';
 import ProvidersEnum from './js/utils/enums/ProviderEnum.js';
 import MapEnum from './js/utils/enums/MapEnum.js';
 
@@ -85,6 +86,18 @@ class BeerCrackerz {
       spot: [],
       shop: [],
       bar: []
+    };
+    /**
+     * An object of DOM templates to be consumed in UIs
+     * @type {Object}
+     * @private
+     **/
+    this._domTemplate = {
+      popup: {
+        spot: null,
+        shop: null,
+        bar: null
+      }
     };
     /**
      * The stored clusters for markers, see Leaflet.markercluster plugin
@@ -177,6 +190,7 @@ class BeerCrackerz {
       .then(this._initPreferences.bind(this))
       .then(this._initGeolocation.bind(this))
       .then(this._initMap.bind(this))
+      .then(this._initTemplates.bind(this))
       .then(this._initMarkers.bind(this))
       .then(this._initEvents.bind(this))
       .then(this._startSession.bind(this));
@@ -354,6 +368,40 @@ class BeerCrackerz {
       // Init zoom slider when map has been created
       this._zoomSlider = new ZoomSlider(this._map);
       resolve();
+    });
+  }
+
+
+  /**
+   * @method
+   * @name _initTemplates
+   * @private
+   * @memberof BeerCrackerz
+   * @author Arthur Beaulieu
+   * @since July 2024
+   * @description
+   * <blockquote>
+   * Fetch any useful templates to be consumed by UI elements later
+   * </blockquote>
+   * @returns {Promise} A Promise resolved when templates are saved
+   **/
+  _initTemplates() {
+    return new Promise((resolve, reject) => {
+      const TYPES = Object.keys(MarkInfosEnum);
+      const pending = [];
+      // Stack internal promies until all marks templates are retrieved
+      for (let i = 0; i < TYPES.length; ++i) {
+        pending.push(new Promise((_resolve, _reject) => {
+          this.kom.getTemplate(`/popup/${TYPES[i]}`)
+            .then(dom => {
+              this._domTemplate.popup[TYPES[i]] = dom.firstElementChild;
+              _resolve();
+            })
+            .catch(_reject);
+        })
+        );
+      }
+      Promise.all(pending).then(resolve).catch(reject);
     });
   }
 
@@ -880,6 +928,16 @@ class BeerCrackerz {
    **/
   get marks() {
     return this._marks;
+  }
+
+
+  /**
+   * @public
+   * @property {Object} domTemplate
+   * App DOM templates
+   **/
+  get domTemplate() {
+    return this._domTemplate;
   }
 
 
