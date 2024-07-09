@@ -49,7 +49,7 @@ class UserProfilePictureSerializer(serializers.Serializer):
                     f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_SIZE_ERROR - width {maxX - minX}, height {maxX - minX}')
                 raise serializers.ValidationError('PROFILE_PICTURE_SIZE_ERROR')
             if maxX - minX != maxY - minY:
-                logger.error(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_DIMENSION_ERROR - picture is not a square')
+                logger.error(f'[UPDATE PROFILE PICTURE] - Box crop - picture is not a square')
                 raise serializers.ValidationError('PROFILE_PICTURE_DIMENSION_ERROR')  # Picture is not a square
             if maxX > width or maxY > height:
                 logger.error(
