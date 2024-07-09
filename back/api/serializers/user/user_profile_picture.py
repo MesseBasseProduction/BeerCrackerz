@@ -42,7 +42,8 @@ class UserProfilePictureSerializer(serializers.Serializer):
             logger.error(f'[UPDATE PROFILE PICTURE] - PROFILE_PICTURE_SIZE_ERROR - width {width}, height {height}')
             raise serializers.ValidationError('PROFILE_PICTURE_SIZE_ERROR')
 
-        minX, minY, maxX, maxY = data.pop('minX'), data.pop('minY'), data.pop('maxX'), data.pop('maxY')
+        minX, minY, maxX, maxY = data.pop('minX', None), data.pop('minY', None), data.pop('maxX', None), data.pop(
+            'maxY', None)
         if minX is not None and minY is not None and maxX is not None and maxY is not None:
             logger.info(
                 f'[UPDATE PROFILE PICTURE] Box crop : minX : {minX} - maxX : {maxX} - minY : {minY} - maxY : {maxY}')
