@@ -10,7 +10,7 @@ class ShopRating(Rating):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET(get_default_user),
-        related_name='shop_rating',
+        related_name='shop_rating_user',
         editable=False
     )
     shop = models.ForeignKey(

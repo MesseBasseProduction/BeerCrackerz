@@ -10,7 +10,7 @@ class BarRating(Rating):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET(get_default_user),
-        related_name='bar_rating',
+        related_name='bar_rating_user',
         editable=False
     )
     bar = models.ForeignKey(

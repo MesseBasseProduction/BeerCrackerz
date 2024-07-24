@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from multiselectfield import MultiSelectField
 
@@ -31,4 +30,3 @@ class Shop(Point):
     modifiers = MultiSelectField(choices=Modifiers.choices, max_length=100)
     # Set max_length because max_length calcul is broken https://github.com/goinnn/django-multiselectfield/issues/131
     types = MultiSelectField(choices=Types.choices, max_length=100)
-    price = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(3)])
