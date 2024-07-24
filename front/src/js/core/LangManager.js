@@ -263,7 +263,7 @@ class LangManager {
     Utils.replaceString(dom, `{${options.type.toUpperCase()}_FOUND_BY}`, this.popup(`${options.type}FoundBy`));
     Utils.replaceString(dom, `{${options.type.toUpperCase()}_FOUND_WHEN}`, this.popup(`${options.type}FoundWhen`));
     Utils.replaceString(dom, `{${options.type.toUpperCase()}_FOUND_DATE}`, options.date);
-    Utils.replaceString(dom, `{${options.type.toUpperCase()}_RATE}`, `${options.rate + 1}`);
+    Utils.replaceString(dom, `{${options.type.toUpperCase()}_RATE}`, `${options.rating}`);
     Utils.replaceString(dom, `{${options.type.toUpperCase()}_DESC}`, options.desc);    
   }
 

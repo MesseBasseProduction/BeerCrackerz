@@ -229,12 +229,12 @@ class Utils {
         }
       }
     }
-    // Only return if rate is not a number or not between 0 and 4
-    if (mark.rate && typeof mark.rate !== 'number' || mark.rate < 0 || mark.rate > 4) {
+    // Only return if rate is not a number or not between 1 and 5
+    if (mark.rating && typeof mark.rating !== 'number' || mark.rating < 1 || mark.rating > 5) {
       return null;
     }
-    // Only return if price is not a number or not between 0 and 2
-    if (mark.price && typeof mark.price !== 'number' || mark.price < 0 || mark.price > 2) {
+    // Only return if price is not a number or not between 1 and 3
+    if (mark.price && typeof mark.price !== 'number' || mark.price < 1 || mark.price > 3) {
       return null;
     }
     // Finally return formatted mark
@@ -245,7 +245,7 @@ class Utils {
       lng: mark.lng,
       description: mark.description,
       modifiers: mark.modifiers,
-      rate: mark.rate,
+      rating: mark.rating,
       price: mark.price
     };
   }

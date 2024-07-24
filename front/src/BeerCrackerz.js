@@ -803,7 +803,7 @@ class BeerCrackerz {
       if (options.lat === this._marks[options.type][i].lat && options.lng === this._marks[options.type][i].lng) {
         this._marks[options.type][i].name = options.name.value;
         this._marks[options.type][i].description = options.description.value;
-        this._marks[options.type][i].rate = options.rating;
+        this._marks[options.type][i].rating = options.rating;
         if (options.price) {
           this._marks[options.type][i].price = options.price;
         }

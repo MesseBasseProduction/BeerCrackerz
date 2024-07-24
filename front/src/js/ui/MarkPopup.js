@@ -53,7 +53,7 @@ class MarkPopup {
         type: this._opts.type,
         name: this._opts.name,
         user: user,
-        rate: this._opts.rate,
+        rating: this._opts.rating,
         desc: desc,
         date: date
       });
@@ -83,7 +83,7 @@ class MarkPopup {
       }
       // Fill mark rate (rating is in [0, 4] explaining the +1 in loop bound)
       const rate = this._popup.querySelector(`#${this._opts.type}-rating`);
-      for (let i = 0; i < this._opts.rate + 1; ++i) {
+      for (let i = 0; i < this._opts.rating; ++i) {
         rate.children[i].classList.add('active');
       }
       // Remove picture icon if user is not in range
