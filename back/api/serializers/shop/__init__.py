@@ -1,1 +1,1 @@
-from .shop import ShopSerializer
+from .shop import ShopSerializer, ShopPostSerializer, ShopPatchSerializer

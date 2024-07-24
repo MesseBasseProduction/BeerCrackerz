@@ -1,1 +1,1 @@
-from .spot import SpotSerializer
+from .spot import SpotSerializer, SpotPostSerializer, SpotPatchSerializer

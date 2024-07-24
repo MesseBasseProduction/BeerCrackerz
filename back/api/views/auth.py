@@ -15,6 +15,8 @@ from app.services.email import EmailService
 from app.utils.token import decode_uid, check_token
 
 
+# These views are used to log in with the session method.
+
 class LoginView(APIView):
     permission_classes = [AllowAny]
 

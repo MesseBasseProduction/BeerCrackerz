@@ -1,1 +1,1 @@
-from .bar import BarSerializer
+from .bar import BarSerializer, BarPostSerializer, BarPatchSerializer
