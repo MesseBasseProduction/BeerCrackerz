@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
 from api.serializers.shop import ShopSerializer, ShopPostSerializer, ShopPatchSerializer
-from app.models import Shop
+from app.models.shop import Shop
 from authentication.permissions import IsOwnerOrReadOnly
 
 

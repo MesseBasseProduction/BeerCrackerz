@@ -2,7 +2,7 @@ from django.db.models import Avg
 from rest_framework import serializers
 
 from api.serializers.common import ReadOnlyModelSerializer
-from app.models import ShopRating, Shop
+from app.models.shop import ShopRating, Shop
 
 
 class ShopSerializer(ReadOnlyModelSerializer):

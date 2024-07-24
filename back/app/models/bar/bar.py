@@ -1,30 +1,30 @@
 from django.conf import settings
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from multiselectfield import MultiSelectField
 
-from .point import Point
-from .user import get_default_user
+from app.models import get_default_user
+from app.models.abstract import Point
 
 
-class Shop(Point):
+class Bar(Point):
     class Modifiers(models.TextChoices):
-        BIO = 'bio'
-        CRAFT = 'craft'
-        FRESH = 'fresh'
+        TOBACCO = 'tobacco'
+        FOOD = 'food'
         CARD = 'card'
         CHOICE = 'choice'
+        OUTDOOR = 'outdoor'
 
     class Types(models.TextChoices):
-        STORE = 'store'
-        SUPER = 'super'
-        HYPER = 'hyper'
+        REGULAR = 'regular'
+        SNACK = 'snack'
         CELLAR = 'cellar'
+        ROOFTOP = 'rooftop'
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET(get_default_user),
-        related_name='shops',
+        related_name='bar',
         editable=False
     )
     # Set max_length because max_length calcul is broken https://github.com/goinnn/django-multiselectfield/issues/131

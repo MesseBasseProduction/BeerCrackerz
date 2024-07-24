@@ -2,7 +2,7 @@ from django.db.models import Avg
 from rest_framework import serializers
 
 from api.serializers.common import ReadOnlyModelSerializer
-from app.models import Spot, SpotRating
+from app.models.spot import Spot, SpotRating
 
 
 class SpotSerializer(ReadOnlyModelSerializer):

@@ -2,8 +2,8 @@ from django.conf import settings
 from django.db import models
 from multiselectfield import MultiSelectField
 
-from .point import Point
-from .user import get_default_user
+from app.models import get_default_user
+from app.models.abstract import Point
 
 
 class Spot(Point):
