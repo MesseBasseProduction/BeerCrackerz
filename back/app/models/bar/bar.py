@@ -24,7 +24,7 @@ class Bar(Point):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET(get_default_user),
-        related_name='bar',
+        related_name='bars',
         editable=False
     )
     # Set max_length because max_length calcul is broken https://github.com/goinnn/django-multiselectfield/issues/131
