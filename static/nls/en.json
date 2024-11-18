@@ -117,6 +117,7 @@
     "snackType": "Snack",
     "cellarType": "Brewery",
     "rooftopType": "Rooftop",
+    "restaurantType": "Restaurant",
     "modifiersLabel": "Has it any specific features",
     "tobaccoModifier": "Cigarets",
     "foodModifier": "Food",

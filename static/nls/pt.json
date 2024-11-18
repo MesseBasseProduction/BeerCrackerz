@@ -117,6 +117,7 @@
     "snackType": "Lanche",
     "cellarType": "Cervejaria",
     "rooftopType": "Cobertura",
+    "restaurantType": "Restaurant",
     "modifiersLabel": "Tem alguma característica específica",
     "tobaccoModifier": "Cigarros",
     "foodModifier": "Comida",

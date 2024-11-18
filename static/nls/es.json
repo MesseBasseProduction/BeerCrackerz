@@ -117,6 +117,7 @@
     "snackType": "Merienda",
     "cellarType": "Cervecería",
     "rooftopType": "Techo",
+    "restaurantType": "Restaurante",
     "modifiersLabel": "Tiene alguna caracteristica especifica",
     "tobaccoModifier": "Cigarrillos",
     "foodModifier": "Alimento",
