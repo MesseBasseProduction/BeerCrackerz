@@ -117,6 +117,7 @@
     "snackType": "Merenda",
     "cellarType": "Birrificio",
     "rooftopType": "Tetto",
+    "restaurantType": "Ristorante",
     "modifiersLabel": "Ha delle caratteristiche specifiche",
     "tobaccoModifier": "Sigarette",
     "foodModifier": "Cibo",

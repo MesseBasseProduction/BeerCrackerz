@@ -19,6 +19,7 @@ class Bar(Point):
         SNACK = 'snack'
         CELLAR = 'cellar'
         ROOFTOP = 'rooftop'
+        RESTAURANT = 'restaurant'
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
