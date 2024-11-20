@@ -58,7 +58,7 @@ class EmailService:
 
     @staticmethod
     def send_change_email_request(user, new_email, token):
-        link = f'{settings.SERVER_URL}confirm-email?token={token}'
+        link = f'{settings.SERVER_URL}/confirm-email?token={token}'
         context = {'user': user, 'link': link}
 
         html_template = get_template('email/html/request-change-email.html')
