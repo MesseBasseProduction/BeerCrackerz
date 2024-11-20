@@ -112,7 +112,10 @@ devInstall() {
 # production .env file creation method
 prodInstall() {
   touch "${basedir}"/.conf/production/conf.env
-  { echo "# NGINX"
+  { echo "# PROJECT"
+    echo "PROJECT_NAME=beer_crackerz"
+    echo ""
+    echo "# NGINX"
     echo "NGINX_NAME=beer_crackerz_nginx"
     echo "SERVER_HOST=127.0.0.1"
     echo "SERVER_PORT=8000"
@@ -138,13 +141,22 @@ prodInstall() {
     echo "# MAILJET"
     echo "MAILJET_API_KEY=${5}"
     echo "MAILJET_API_SECRET=${6}"
+    echo ""
+    echo "# VOLUMES"
+    echo "VOLUME_DB=bc_db"
+    echo "VOLUME_STATIC_FILES=bc_static_files"
+    echo "VOLUME_MEDIA=bc_media"
+    echo "VOLUME_LOGS=bc_logs"
   } >> "${basedir}"/.conf/production/conf.env
 }
 
 # preprod .env file creation method. The preprod use the production configuration
 preprodInstall() {
   touch "${basedir}"/.conf/production/conf.env
-  { echo "# NGINX"
+  { echo "# PROJECT"
+    echo "PROJECT_NAME=beer_crackerz_preprod"
+    echo ""
+    echo "# NGINX"
     echo "NGINX_NAME=beer_crackerz_nginx_preprod"
     echo "SERVER_HOST=127.0.0.1"
     echo "SERVER_PORT=7000"
@@ -170,6 +182,12 @@ preprodInstall() {
     echo "# MAILJET"
     echo "MAILJET_API_KEY=${5}"
     echo "MAILJET_API_SECRET=${6}"
+    echo ""
+    echo "# VOLUMES"
+    echo "VOLUME_DB=bc_db_preprod"
+    echo "VOLUME_STATIC_FILES=bc_static_files_preprod"
+    echo "VOLUME_MEDIA=bc_media_preprod"
+    echo "VOLUME_LOGS=bc_logs_preprod"
   } >> "${basedir}"/.conf/production/conf.env
 }
 

@@ -1,5 +1,5 @@
 version: "3.9"
-
+name: ${PROJECT_NAME}
 services:
   nginx:
     container_name: ${NGINX_NAME}
@@ -58,10 +58,10 @@ services:
       - bc_db:/var/lib/postgresql/data
 volumes:
   bc_db:
-    name: bc_db
+    name: ${VOLUME_DB}
   bc_static_files:
-    name: bc_static_files
+    name: ${VOLUME_STATIC_FILES}
   bc_media:
-    name: bc_media
+    name: ${VOLUME_MEDIA}
   bc_logs:
-    name: bc_logs
+    name: ${VOLUME_LOGS}
