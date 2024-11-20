@@ -1,0 +1,10 @@
+Bonjour {{ user.username | capfirst }}!
+
+Une demande de changement d'adresse email a été effectuée. Pour valider le changement,
+veuillez cliquer sur le lien ci-dessous :
+
+{{ link }}
+
+Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce mail.
+
+L'Équipe BeerCrackerz

@@ -1,9 +1,9 @@
 from django.contrib import admin
 
-from app.models import User
 from app.models.bar import Bar
 from app.models.shop import Shop
 from app.models.spot import Spot
+from app.models.user import User
 
 
 class UserAdmin(admin.ModelAdmin):

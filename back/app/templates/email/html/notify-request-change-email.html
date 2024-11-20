@@ -1,0 +1,16 @@
+{% autoescape off %}
+<p style="font-size: 14pt">
+    <strong>Bonjour {{ user.username | capfirst }}!</strong>
+</p>
+
+<p style="font-size: 11pt">
+    Une demande de changement d'adresse email a été effectuée pour votre compte. La nouvelle adresse est la suivante :
+    {{ new_email }}.<br/>
+    Une fois l'adresse email changée, vous ne pourrez plus vous connecter avec l'adresse actuelle.<br/>
+    Si vous n'êtes pas à l'origine de cette demande, veuillez contacter l'équipe BeerCrackerz au plus vite.
+</p>
+
+<p>
+    <span style="font-size: 11pt;"><strong><em>L'&Eacute;quipe BeerCrackerz</em></strong></span>
+</p>
+{% endautoescape %}

@@ -1,5 +1,6 @@
 from .check_password import CheckPasswordSerializer
 from .check_token import CheckTokenSerializer
+from .confirm_email_change import ConfirmEmailChangeSerializer
 from .resend_activation_email import ResendActivationEmailSerializer
 from .reset_password import ResetPasswordSerializer
 from .reset_password_request import ResetPasswordRequestSerializer

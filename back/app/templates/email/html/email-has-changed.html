@@ -1,0 +1,18 @@
+{% autoescape off %}
+<p style="font-size: 14pt">
+    <strong>Bonjour {{ user.username | capfirst }}!</strong>
+</p>
+
+<p style="font-size: 11pt">
+    Le changement de l'adresse email de votre compte a été effectuée. La nouvelle adresse est la suivante : {{
+    user.email }}<br/>
+    Si vous êtes à l'origine de ce changement, veuillez ignorer ce mail.<br/>
+    Dans le cas contraire, veuillez contacter l'équipe BeerCrackerz dans un délai d'un mois après reception de ce
+    mail.<br/>
+    Passer ce délai, nous ne pourrons assurer la récupération de votre compte.
+</p>
+
+<p>
+    <span style="font-size: 11pt;"><strong><em>L'&Eacute;quipe BeerCrackerz</em></strong></span>
+</p>
+{% endautoescape %}

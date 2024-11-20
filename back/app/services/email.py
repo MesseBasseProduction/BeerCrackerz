@@ -34,7 +34,7 @@ class EmailService:
         html_body = html_template.render(context)
         text_body = text_template.render(context)
 
-        subject = 'Beer Crackerz - Création de compte'
+        subject = 'BeerCrackerz - Création de compte'
         to = (user.email,)
 
         EmailService._send_mail_async(subject=subject, to=to, body=text_body, html_body=html_body)
@@ -51,7 +51,50 @@ class EmailService:
         html_body = html_template.render(context)
         text_body = text_template.render(context)
 
-        subject = 'Beer Crackerz - Réinitialisation de mot de passe'
+        subject = 'BeerCrackerz - Réinitialisation de mot de passe'
         to = (user.email,)
+
+        EmailService._send_mail_async(subject=subject, to=to, body=text_body, html_body=html_body)
+
+    @staticmethod
+    def send_change_email_request(user, new_email, token):
+        link = f'{settings.SERVER_URL}/confirm-email?token={token}'
+        context = {'user': user, 'link': link}
+
+        html_template = get_template('email/html/request-change-email.html')
+        text_template = get_template('email/text/request-change-email.txt')
+        html_body = html_template.render(context)
+        text_body = text_template.render(context)
+
+        subject = 'BeerCrackerz - Confirmez votre changement d\'adresse email'
+        to = (new_email,)
+
+        EmailService._send_mail_async(subject=subject, to=to, body=text_body, html_body=html_body)
+
+    @staticmethod
+    def notify_change_email_request(user, new_email):
+        context = {'user': user, 'new_email': new_email}
+
+        html_template = get_template('email/html/notify-request-change-email.html')
+        text_template = get_template('email/text/notify-request-change-email.txt')
+        html_body = html_template.render(context)
+        text_body = text_template.render(context)
+
+        subject = 'BeerCrackerz - Une demande de changement d\'adresse email a été effectuée.'
+        to = (user.email,)
+
+        EmailService._send_mail_async(subject=subject, to=to, body=text_body, html_body=html_body)
+
+    @staticmethod
+    def send_email_changed_email(user, previous_email):
+        context = {'user': user}
+
+        html_template = get_template('email/html/email-has-changed.html')
+        text_template = get_template('email/text/email-has-changed.txt')
+        html_body = html_template.render(context)
+        text_body = text_template.render(context)
+
+        subject = 'BeerCrackerz - Votre adresse email a été changée'
+        to = (previous_email,)
 
         EmailService._send_mail_async(subject=subject, to=to, body=text_body, html_body=html_body)

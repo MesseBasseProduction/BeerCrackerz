@@ -13,25 +13,25 @@ unset mailjetsecret
 function usage(){
   echo -e "bc.sh ${1} : Command help\n"
   echo -e "Usage : ./bc.sh [command] [argument]\n"
-  echo -e "  -i, --install  [\e[33mdev\e[39m/\e[33mprod\e[39m] – \e[33mMandatory\e[39m"
-  echo -e "                     Configure environment file and install BeerCrackerz on the system\n"
-  echo -e "  -e, --edit     [\e[33mdev\e[39m/\e[33mprod\e[39m] – \e[33mMandatory\e[39m"
-  echo -e "                     Edit the environment file\n"
-  echo -e "  -b, --build    [\e[33mdev\e[39m/\e[33mprod\e[39m] – \e[33mMandatory\e[39m"
-  echo -e "                     Build the docker containers\n"
-  echo -e "  -s, --start    [\e[33mdev\e[39m/\e[33mprod\e[39m] – \e[33mMandatory\e[39m"
-  echo -e "                     Start BeerCrackerz application\n"
-  echo -e "  -u, --update   [\e[33mdev\e[39m/\e[33mprod\e[39m] – \e[33mMandatory\e[39m"
-  echo -e "                     Quit, pull, build and start aplication\n"
-  echo -e "  -q, --quit     [\e[33mdev\e[39m/\e[33mprod\e[39m] – \e[33mMandatory\e[39m"
-  echo -e "                     Stop any running BeerCrackerz application\n"
-  echo -e "  -r, --reset    [\e[32mhard\e[39m] – \e[32mOptional\e[39m"
-  echo -e "                     Remove existing database and docker images, hard argument will docker prune"
-  echo -e "                     This command will not remove any .env configuration files\n"
-  echo -e "  -g, --gource   [\e[32msave\e[39m] – \e[32mOptional\e[39m"
-  echo -e "                     Review git history using gource, save argument to save output as mp4 in ./\n"
-  echo -e "  -a, --about    Information about BeerCrackerz project"
-  echo -e "  -h, --help     Display command usage\n"  
+  echo -e "  -i, i, --install, install  [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mpreprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "                               Configure environment file and install BeerCrackerz on the system\n"
+  echo -e "  -e, e, --edit, edit        [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mpreprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "                               Edit the environment file\n"
+  echo -e "  -b, b, --build, build      [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mpreprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "                               Build the docker containers\n"
+  echo -e "  -s, s, --start, start      [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mpreprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "                               Start BeerCrackerz application\n"
+  echo -e "  -u, u, --update, update    [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mpreprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "                               Quit, pull, build and start aplication\n"
+  echo -e "  -q, q, --quit, quit        [\e[33mdev\e[39m/\e[33mprod\e[39m/\e[33mpreprod\e[39m] – \e[33mMandatory\e[39m"
+  echo -e "                               Stop any running BeerCrackerz application\n"
+  echo -e "  -r, r, --reset, reset      [\e[32mhard\e[39m] – \e[32mOptional\e[39m"
+  echo -e "                               Remove existing database and docker images, hard argument will docker prune"
+  echo -e "                               This command will not remove any .env configuration files\n"
+  echo -e "  -g, g, --gource, gource    [\e[32msave\e[39m] – \e[32mOptional\e[39m"
+  echo -e "                               Review git history using gource, save argument to save output as mp4 in ./\n"
+  echo -e "  -a, a, --about, about      Information about BeerCrackerz project\n"
+  echo -e "  -h, h, --help, help        Display command usage\n"
 }
 
 # Method to check if given command is installed on the system
@@ -112,7 +112,10 @@ devInstall() {
 # production .env file creation method
 prodInstall() {
   touch "${basedir}"/.conf/production/conf.env
-  { echo "# NGINX"
+  { echo "# PROJECT"
+    echo "PROJECT_NAME=beer_crackerz"
+    echo ""
+    echo "# NGINX"
     echo "NGINX_NAME=beer_crackerz_nginx"
     echo "SERVER_HOST=127.0.0.1"
     echo "SERVER_PORT=8000"
@@ -138,6 +141,53 @@ prodInstall() {
     echo "# MAILJET"
     echo "MAILJET_API_KEY=${5}"
     echo "MAILJET_API_SECRET=${6}"
+    echo ""
+    echo "# VOLUMES"
+    echo "VOLUME_DB=bc_db"
+    echo "VOLUME_STATIC_FILES=bc_static_files"
+    echo "VOLUME_MEDIA=bc_media"
+    echo "VOLUME_LOGS=bc_logs"
+  } >> "${basedir}"/.conf/production/conf.env
+}
+
+# preprod .env file creation method. The preprod use the production configuration
+preprodInstall() {
+  touch "${basedir}"/.conf/production/conf.env
+  { echo "# PROJECT"
+    echo "PROJECT_NAME=beer_crackerz_preprod"
+    echo ""
+    echo "# NGINX"
+    echo "NGINX_NAME=beer_crackerz_nginx_preprod"
+    echo "SERVER_HOST=127.0.0.1"
+    echo "SERVER_PORT=7000"
+    echo "SERVER_URL=${4}"
+    echo ""
+    echo "# DATABASE"
+    echo "DB_POSTGRES_VERSION=14.2-alpine"
+    echo "DB_HOST=beer_crackerz_db_preprod"
+    echo "DB_PORT=7001"
+    echo "DB_NAME=beer_crackerz"
+    echo "DB_USER=${2}"
+    echo "DB_PASSWORD=${3}"
+    echo ""
+    echo "# BACKEND"
+    echo "BACKEND_NAME=beer_crackerz_back_preprod"
+    echo "BACKEND_PORT=7000"
+    echo "BACKEND_DEBUG=1"
+    echo "BACKEND_ALLOWED_HOSTS=127.0.0.1"
+    echo "BACKEND_USE_EMAIL_FILE_SYSTEM=1"
+    echo "BACKEND_SECRET_KEY=${1}"
+    echo "CSRF_TRUSTED_ORIGINS=${4}"
+    echo ""
+    echo "# MAILJET"
+    echo "MAILJET_API_KEY=${5}"
+    echo "MAILJET_API_SECRET=${6}"
+    echo ""
+    echo "# VOLUMES"
+    echo "VOLUME_DB=bc_db_preprod"
+    echo "VOLUME_STATIC_FILES=bc_static_files_preprod"
+    echo "VOLUME_MEDIA=bc_media_preprod"
+    echo "VOLUME_LOGS=bc_logs_preprod"
   } >> "${basedir}"/.conf/production/conf.env
 }
 
@@ -152,7 +202,7 @@ function createConfFile() {
     if [[ -f "${basedir}"/.conf/development/conf.env || -f "${basedir}"/.conf/production/conf.env ]]; then
       echo -e "\e[93mWARNING\e[39m BeerCrackerz has at least one configuration file which might be overriden"
       # Can't init to blank to get in while read loop
-      replaceconf="bc" 
+      replaceconf="bc"
       # Wait for user to send yY/nN or blank
       while [[ "${replaceconf}" != "" && "${replaceconf}" != "y" && "${replaceconf}" != "Y" && "${replaceconf}" != "n" && "${replaceconf}" != "N" ]]; do
         read -rp "        Do you still want to proceed? [y/N] " replaceconf
@@ -178,6 +228,10 @@ function createConfFile() {
       rm -rf "${basedir}"/.conf/production/conf.env
       echo "Creating configuration file for production environment."
       prodInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${serverurl}" "${mailjetapi}" "${mailjetsecret}"
+    elif [ "${1}" = "preprod" ]; then
+      rm -rf "${basedir}"/.conf/production/conf.env
+      echo "Creating configuration file for preprod environment."
+      preprodInstall "${backsecretkey}" "${dbuser}" "${dbpassword}" "${serverurl}" "${mailjetapi}" "${mailjetsecret}"
     fi
     echo # Line break
     echo -e "\e[32mSUCCESS\e[39m BeerCrackerz installed!"
@@ -186,7 +240,7 @@ function createConfFile() {
 
 function editConfFile() {
   # Runtime mode to configure
-  if [ ${1} == "prod" ]; then
+  if [ ${1} == "prod" ] || [ ${1} == "preprod" ]; then
 		confFile=$(echo $(pwd)/.conf/production/conf.env)
 	else
 		confFile=$(echo $(pwd)/.conf/development/conf.env)
@@ -223,8 +277,8 @@ function buildApp(){
     echo -e "Building BeerCrackerz for development environment"
     eval "npm run build"
     eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env build"
-  elif [ "${1}" = "prod" ]; then
-    echo -e "Building BeerCrackerz for production environment"
+  elif [ "${1}" = "prod" ] || [ ${1} == "preprod" ]; then
+    echo -e "Building BeerCrackerz for ${1} environment"
     eval "npm run build"
     eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env build"
   fi
@@ -236,8 +290,8 @@ function startApp(){
   if [ "${1}" = "dev" ]; then
     echo -e "Starting BeerCrackerz in development environment"
     eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env up -d"
-  elif [ "${1}" = "prod" ]; then
-    echo -e "Starting BeerCrackerz in production environment"
+  elif [ "${1}" = "prod" ] || [ ${1} == "preprod" ]; then
+    echo -e "Starting BeerCrackerz in ${1} environment"
     eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env up -d"
   fi
 
@@ -250,8 +304,8 @@ function quitApp(){
   if [ "${1}" = "dev" ]; then
     echo -e "Stoping BeerCrackerz containers in development environment"
     eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env down"
-  elif [ "${1}" = "prod" ]; then
-    echo -e "Stoping BeerCrackerz containers in production environment"
+  elif [ "${1}" = "prod" ] || [ ${1} == "preprod" ]; then
+    echo -e "Stoping BeerCrackerz containers in ${1} environment"
     eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env down"
   fi
 
@@ -342,7 +396,7 @@ do
       exit 0
     ;;
     -i|i|--install|install)
-      if [[ ! ${2} == @(dev|prod) ]]; then
+      if [[ ! ${2} == @(dev|prod|preprod) ]]; then
         echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to create BeerCrackerz configuration file."
         echo -e "      Check command help for available arguments: ./bc.sh --help"
         exit 1
@@ -351,7 +405,7 @@ do
       shift
     ;;
     -e|e|--edit|edit)
-      if [[ ! ${2} == @(dev|prod) ]]; then
+      if [[ ! ${2} == @(dev|prod|preprod) ]]; then
         echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to edit BeerCrackerz configuration file."
         echo -e "      Check command help for available arguments: ./bc.sh --help"
         exit 1
@@ -360,7 +414,7 @@ do
       shift
     ;;
     -b|b|--build|build)
-      if [[ ! ${2} == @(dev|prod) ]]; then
+      if [[ ! ${2} == @(dev|prod|preprod) ]]; then
         echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to build BeerCrackerz."
         echo -e "      Check command help for available arguments: ./bc.sh --help"
         exit 1
@@ -369,7 +423,7 @@ do
       shift
     ;;
     -s|s|--start|start)
-      if [[ ! ${2} == @(dev|prod) ]]; then
+      if [[ ! ${2} == @(dev|prod|preprod) ]]; then
         echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to start BeerCrackerz."
         echo -e "      Check command help for available arguments: ./bc.sh --help"
         exit 1
@@ -378,7 +432,7 @@ do
       shift
     ;;
     -u|u|--update|update)
-      if [[ ! ${2} == @(dev|prod) ]]; then
+      if [[ ! ${2} == @(dev|prod|preprod) ]]; then
         echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to update BeerCrackerz."
         echo -e "      Check command help for available arguments: ./bc.sh --help"
         exit 1
@@ -387,7 +441,7 @@ do
       exit 0
     ;;
     -q|q|--quit|quit)
-      if [[ ! ${2} == @(dev|prod) ]]; then
+      if [[ ! ${2} == @(dev|prod|preprod) ]]; then
         echo -e "\e[31mERROR\e[39m \"${2}\" is not a supported argument to stop BeerCrackerz."
         echo -e "      Check command help for available arguments: ./bc.sh --help"
         exit 1
