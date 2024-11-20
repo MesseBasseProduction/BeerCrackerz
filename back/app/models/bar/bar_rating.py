@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.db import models
 
-from app.models import get_default_user
 from app.models.abstract import Rating
 from app.models.bar.bar import Bar
+from app.models.user import get_default_user
 
 
 class BarRating(Rating):

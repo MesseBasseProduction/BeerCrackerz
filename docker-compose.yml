@@ -24,7 +24,7 @@ services:
       dockerfile: ./.conf/development/back/Dockerfile
     environment:
       BACKEND_PORT: ${BACKEND_PORT}
-      SERVER_URL: http://${SERVER_HOST}:${SERVER_HTTP_PORT}
+      SERVER_URL: http://${SERVER_HOST}:${SERVER_HTTP_PORT}/
       SECRET_KEY: ${BACKEND_SECRET_KEY}
       DEBUG: ${BACKEND_DEBUG}
       ALLOWED_HOSTS: ${BACKEND_ALLOWED_HOSTS}

@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from app.services.email import EmailService
 from authentication.backend_authentication.email_password_authentication import EmailOrUsernamePasswordAuthentication
 from authentication.serializers.authentication import ResendActivationEmailSerializer, ResetPasswordRequestSerializer, \
-    ResetPasswordSerializer, CheckTokenSerializer, CheckPasswordSerializer
+    ResetPasswordSerializer, CheckTokenSerializer, CheckPasswordSerializer, ConfirmEmailChangeSerializer
 from authentication.serializers.user import UserRegisterSerializer, UserActivationSerializer
 
 
@@ -86,6 +86,15 @@ class ValidatePasswordView(APIView):
             error_messages = error.messages
 
         return Response({'errors': error_messages})
+
+
+class ConfirmEmailView(CreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ConfirmEmailChangeSerializer
+
+    def post(self, request, *args, **kwargs):
+        super().post(request, *args, **kwargs)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CheckTokenView(APIView):

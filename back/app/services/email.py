@@ -55,3 +55,32 @@ class EmailService:
         to = (user.email,)
 
         EmailService._send_mail_async(subject=subject, to=to, body=text_body, html_body=html_body)
+
+    @staticmethod
+    def send_change_email_request_email(user, new_email, token):
+        link = f'{settings.SERVER_URL}confirm-email?token={token}'
+        context = {'user': user, 'link': link}
+
+        html_template = get_template('email/html/change-email.html')
+        text_template = get_template('email/text/change-email.txt')
+        html_body = html_template.render(context)
+        text_body = text_template.render(context)
+
+        subject = 'Beer Crackerz - Confirmez votre changement d\'adresse email'
+        to = (new_email,)
+
+        EmailService._send_mail_async(subject=subject, to=to, body=text_body, html_body=html_body)
+
+    @staticmethod
+    def send_email_changed_email(user, previous_email):
+        context = {'user': user}
+
+        html_template = get_template('email/html/email-has-changed.html')
+        text_template = get_template('email/text/email-has-changed.txt')
+        html_body = html_template.render(context)
+        text_body = text_template.render(context)
+
+        subject = 'Beer Crackerz - Votre adresse email a été changée'
+        to = (previous_email,)
+
+        EmailService._send_mail_async(subject=subject, to=to, body=text_body, html_body=html_body)

@@ -4,7 +4,7 @@ from rest_framework import routers
 
 from authentication.views import LoginView, UserRegisterView, UserActivationView, \
     ResendActivationEmailView, ResetPasswordRequestView, ResetPasswordView, ValidatePasswordView, \
-    CheckTokenView, CheckPasswordView
+    CheckTokenView, CheckPasswordView, ConfirmEmailView
 
 router = routers.DefaultRouter()
 
@@ -17,6 +17,7 @@ urlpatterns = [
     path('reset-password-request/', ResetPasswordRequestView.as_view(), name='reset_password_request'),
     path('reset-password/', ResetPasswordView.as_view(), name='reset_password'),
     path('validate-password/', ValidatePasswordView.as_view(), name='validate_password'),
+    path('confirm-email-change/', ConfirmEmailView.as_view(), name='confirm_email_change'),
     path('check-token/', CheckTokenView.as_view(), name='check_token'),
     path('check-password/', CheckPasswordView.as_view(), name='check_password'),
 ]
