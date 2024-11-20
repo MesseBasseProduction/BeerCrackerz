@@ -1,0 +1,7 @@
+Bonjour {{ user.username | capfirst }}!
+
+Une demande de changement d'adresse email a été effectuée pour votre compte. La nouvelle adresse est la suivante : {{ new_email }}.
+Une fois l'adresse email changée, vous ne pourrez plus vous connecter avec l'adresse actuelle.
+Si vous n'êtes pas à l'origine de cette demande, veuillez contacter l'équipe BeerCrackerz au plus vite.
+
+L'Équipe BeerCrackerz

@@ -1,6 +1,8 @@
 Bonjour {{ user.username | capfirst }}!
 
-Une demande de changement d'adresse email a été effectuée sur votre compte.
-Si vous n'êtes pas à l'origine de cette demande, veuillez contacter l'équipe de Beer Crackerz au plus vite.
+Le changement de l'adresse email de votre compte a été effectuée. La nouvelle adresse est la suivante : {{ user.email }}.
+Si vous êtes à l'origine de ce changement, veuillez ignorer ce mail.
+Dans le cas contraire, veuillez contacter l'équipe BeerCrackerz dans un délai d'un mois après reception de ce mail.
+Passer ce délai, nous ne pourrons assurer la récupération de votre compte.
 
 L'Équipe BeerCrackerz

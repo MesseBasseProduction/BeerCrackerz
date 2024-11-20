@@ -21,7 +21,6 @@ class ConfirmEmailChangeSerializer(serializers.Serializer):
         # TODO : see if we delete after a delay. To revert the changes.
         user_email_change.delete()
 
-        # TODO : change email message.
         EmailService.send_email_changed_email(user=user, previous_email=previous_email)
 
     def validate(self, data):

@@ -21,8 +21,8 @@ class UserEmailChangeSerializer(serializers.Serializer):
         user_email_change = UserEmailChange(user=user, new_email=new_email, token=token)
         user_email_change.save()
 
-        EmailService.send_change_email_request_email(user, new_email, token)
-        EmailService.send_email_changed_email(user, user.email)
+        EmailService.send_change_email_request(user, new_email, token)
+        EmailService.notify_change_email_request(user, new_email)
 
     def validate_email(self, email):
         user = self.context.get('user')
