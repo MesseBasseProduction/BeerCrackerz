@@ -218,6 +218,7 @@ class LangManager {
     Utils.replaceString(dom.querySelector(`#nls-lang-pt`), `{LANG_PT}`, this.modal('langPt')); 
     Utils.replaceString(dom.querySelector(`#nls-about-desc`), `{BEERCRACKERZ_DESC}`, this.modal('aboutDesc'));
     Utils.replaceString(dom.querySelector(`.nls-user-logout`), `{USER_LOGOUT}`, this.modal('logout'));
+    Utils.replaceString(dom.querySelector(`.nls-user-delete-account`), `{USER_DELETE_ACCOUNT}`, this.modal('deleteAccount'));
     Utils.replaceString(dom.querySelector(`#nls-update-pp`), `{UPDATE_PROFILE_PIC_LABEL}`, this.modal('updatePP'));    
   }
 

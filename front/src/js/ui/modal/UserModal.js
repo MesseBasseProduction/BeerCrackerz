@@ -81,6 +81,8 @@ class UserModal extends BaseModal {
     this._evtIds.push(window.Evts.addEvent('touchend', this._rootElement.querySelector('#user-pp'), this.updateProfilePicture, this));
     this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector('#logout'), this.logout, this));
     this._evtIds.push(window.Evts.addEvent('touchend', this._rootElement.querySelector('#logout'), this.logout, this));
+    this._evtIds.push(window.Evts.addEvent('click', this._rootElement.querySelector('#delete-account'), this.deleteAccount, this));
+    this._evtIds.push(window.Evts.addEvent('touchend', this._rootElement.querySelector('#delete-account'), this.deleteAccount, this));
   }
 
 
@@ -138,6 +140,12 @@ class UserModal extends BaseModal {
     window.BeerCrackerz.kom.post('api/auth/logout/', null).then(() => {
       window.location = '/welcome'
     });
+  }
+
+
+  deleteAccount() {
+    this.close(null, true); // Force current modal to be closed
+    window.BeerCrackerz.deleteAccountModal(); // Request delete account modal
   }
 
 

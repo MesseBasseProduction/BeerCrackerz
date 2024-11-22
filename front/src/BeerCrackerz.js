@@ -866,7 +866,7 @@ class BeerCrackerz {
 
 
   _onProfilePictureUpdated(options) {
-    this._kom.patchImage(`api/user/${this._user.id}/profile-picture/`, {
+    this._kom.patchImage(`api/user/me/profile-picture/`, {
       profile_picture: document.getElementById('wip-pp').src,
       minX: Math.round(options.imageResizer.getMinPoint().x),
       minY: Math.round(options.imageResizer.getMinPoint().y),
@@ -903,6 +903,11 @@ class BeerCrackerz {
    **/
    hidShowMenu() {
     this._modal = ModalFactory.build('HideShow');
+  }
+
+
+  deleteAccountModal() {
+    this._modal = ModalFactory.build('DeleteAccount');
   }
 
 

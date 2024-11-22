@@ -1,4 +1,5 @@
 import AddMarkModal from './modal/AddMarkModal.js';
+import DeleteAccountModal from './modal/DeleteAccountModal.js';
 import DeleteMarkModal from './modal/DeleteMarkModal.js';
 import EditMarkModal from './modal/EditMarkModal.js';
 import UserModal from './modal/UserModal.js';
@@ -9,6 +10,7 @@ import StartupHelpModal from './modal/StartupHelpModal.js';
 
 const Classes = {
   AddMarkModal,
+  DeleteAccountModal,
   DeleteMarkModal,
   EditMarkModal,
   UserModal,
