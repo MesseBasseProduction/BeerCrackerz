@@ -8,10 +8,9 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         backup = io.StringIO()
         call_command('dumpdata',
-                     all=True,
+                     exclude=['drf_api_logger', 'knox', 'sessions', 'auth', 'contenttypes'],
                      format='json',
                      natural_foreign=True,
-                     natural_primary=True,
                      stdout=backup)
 
         self.stdout.write(backup.getvalue())
