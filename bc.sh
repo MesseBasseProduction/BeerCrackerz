@@ -39,7 +39,7 @@ isInstalled() {
   command -v "${1}" >/dev/null 2>&1
   if [[ $? -ne 0 ]]; then
     echo -e "\e[31mERROR\e[39m ${1} is not installed on the system"
-    echo -e "      Ensure docker, docker-compose and npm are installed"
+    echo -e "      Ensure docker and npm are installed"
     echo -e "      On a production environment, nginx must be installed as well"
     echo -e "      -> https://github.com/MesseBasseProduction/BeerCrackerz/wiki"
     exit 0
@@ -194,7 +194,7 @@ preprodInstall() {
 function createConfFile() {
   # Initialization sequence, fill .env file to fit user inputs and build docker images in either dev, prod or local prod mode
   # Check if all dependencies are installed before doing anything
-  for COMMAND in "docker" "docker-compose" "npm"; do
+  for COMMAND in "docker" "npm"; do
     isInstalled "${COMMAND}"
   done
   
@@ -276,11 +276,11 @@ function buildApp(){
   if [ "${1}" = "dev" ]; then
     echo -e "Building BeerCrackerz for development environment"
     eval "npm run build"
-    eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env build"
+    eval "docker compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env build"
   elif [ "${1}" = "prod" ] || [ ${1} == "preprod" ]; then
     echo -e "Building BeerCrackerz for ${1} environment"
     eval "npm run build"
-    eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env build"
+    eval "docker compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env build"
   fi
 
   echo -e "\n\e[32mSUCCESS\e[39m BeerCrackerz built!"
@@ -289,10 +289,10 @@ function buildApp(){
 function startApp(){
   if [ "${1}" = "dev" ]; then
     echo -e "Starting BeerCrackerz in development environment"
-    eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env up -d"
+    eval "docker compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env up -d"
   elif [ "${1}" = "prod" ] || [ ${1} == "preprod" ]; then
     echo -e "Starting BeerCrackerz in ${1} environment"
-    eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env up -d"
+    eval "docker compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env up -d"
   fi
 
   echo -e "\n\e[32mSUCCESS\e[39m BeerCrackerz started!"
@@ -303,10 +303,10 @@ function startApp(){
 function quitApp(){
   if [ "${1}" = "dev" ]; then
     echo -e "Stoping BeerCrackerz containers in development environment"
-    eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env down"
+    eval "docker compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env down"
   elif [ "${1}" = "prod" ] || [ ${1} == "preprod" ]; then
     echo -e "Stoping BeerCrackerz containers in ${1} environment"
-    eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env down"
+    eval "docker compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env down"
   fi
 
   echo -e "\n\e[32mSUCCESS\e[39m BeerCrackerz exited!"
@@ -328,12 +328,12 @@ function resetApp(){
   # Ensure all docker are stopped
   echo # Line break
   echo -e "1/3. Stopping any BeerCrackerz containers"
-  eval "docker-compose stop"
+  eval "docker compose stop"
   echo # Line break
   # Remove BeerCrackerz's related dockers
   echo -e "2/3. Removing BeerCrackerz containers"
-  eval "docker-compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env down --rmi all --remove-orphans"
-  eval "docker-compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env down  --rmi all --remove-orphans"
+  eval "docker compose --file ${basedir}/docker-compose.yml --env-file ${basedir}/.conf/development/conf.env down --rmi all --remove-orphans"
+  eval "docker compose --file ${basedir}/docker-compose.prod.yml --env-file ${basedir}/.conf/production/conf.env down  --rmi all --remove-orphans"
   echo # Line break
   # Reset hard argument
   if [ "${1}" = "hard" ]; then
