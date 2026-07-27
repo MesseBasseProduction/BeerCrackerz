@@ -13,6 +13,8 @@ You want to try it ? We are currently running an instance just so you can try (a
 
 In order to install BeerCrackerz on your system and run your own instance, please refer the the [**Installation**](https://github.com/MesseBasseProduction/BeerCrackerz/wiki) wiki entry.
 
+If you're more of a mobile-first type of person, go check [BeerCrackersMobile](https://github.com/MesseBasseProduction/BeerCrackerzMobile)
+
 ## About
 
 BeerCrackerz is an open-source software edited and hosted by [Messe Basse Production](https://messe-basse-production.com/), developper by [Arthur Beaulieu](https://github.com/ArthurBeaulieu) and [Raphaël Beekmann](https://github.com/Asiberus)
